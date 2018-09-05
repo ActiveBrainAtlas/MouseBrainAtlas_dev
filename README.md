@@ -1,10 +1,8 @@
-## TEMPORARY 
+This repo is in development as scripts are still being stitched together and code is being tested on new brains. A pipeline is being constructed, beginning with the preprocessing steps of which there are about 14. These preprocessing steps are outlined below and the code can be found in `/preprocess_new/preprocess_cshl_ntb.ipynb` whic specifically is geared toward brains stained with NeuroTrace blue.
 
-The entire CodingDonky repo is going to be removed soon. It serves only as a testing ground for Alex Newberry.
-Everything will be cleaned up and ported over to the ActiveBrainAtlas repo. Some files I will need to be extra
-careful with as I have altered them significantly.
+For an in depth explanation of the code from the original developer look here at the [Original User Guide](doc/User%20Manuals/UserGuide.md). Inside is a link to `Preprocessing.md` which discusses the preprocessing steps in detail and the differences between different stain types. These files are intended to be replaced/altered in the coming weeks but remain the best reference for the code.
 
-Notebooks that have been altered:
+Notebooks that have been significantly altered from the original version:
   - preprocess_cshl_data_v2_neurotrace.ipynb
   - preprocess_ucsd_data_v2.ipynb
   - brightness_correction.ipynb
@@ -13,13 +11,17 @@ Notebooks that have been altered:
 
 <br><br>
 
+## Useful files
+
 #### File naming convensions
 
-MD662&661-F1-2017.06.02-17.07.55_MD662_1_0001
-<STACK_NAME>-<AA>-<DATECUT>-<DATESCANNED>-<STACK_NAME_2>_<N1>-<N2>
-  
-* STACK_NAME:  
-* AA:
+How different images are named can be found in [Image Naming Conventions](doc/User%20Manuals/user_guide_pages/imageNamingConventions.md)
+
+Every slice has four major identifiers:
+* image name: a string that uniquely identifies a physical section.
+* prep id: a number or word that identifies the spatial adjustment operations applied.
+* version: a word that specifies particular channel or appearance adjustment operations.
+* resolution: a word that specifies the pixel resolution.
 
 
 
@@ -65,6 +67,7 @@ Preprocessing Steps:
 * Doc: documentation
 * src: code
 
+
 ## Guides
 - [Alex User Guide](doc/RunningFiles.md)
   - Running Guide made by AlexN to assist with running the code [INC]
@@ -89,9 +92,3 @@ Preprocessing Steps:
   - Naming conventions in S3 storage [INC]
 - [Stack Directories](doc/Brain_stack_directories.md)
   - Description of every stack, all relevant information
-
-## Machine Learning Documents
-- [Bayesian Parameters](doc/writeup/bayesian.md)
-  - Parameters and associated uncertainty in Atlas building process
-- [Uncertainty](doc/writeup/zscore_hessian.md)
-  - Z-score and Hessians used to quantify uncertainty
