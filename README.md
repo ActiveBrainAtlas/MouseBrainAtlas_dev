@@ -11,9 +11,9 @@ Notebooks that have been significantly altered from the original version:
 
 <br><br>
 
-## Useful files
+## Useful documentation files
 
-#### File naming convensions
+### File naming convensions
 
 How different images are named can be found in [Image Naming Conventions](doc/User%20Manuals/user_guide_pages/imageNamingConventions.md)
 
@@ -25,7 +25,7 @@ Every slice has four major identifiers:
 
 
 
-#### Buckets and Directories
+### Buckets and Directories
 
  - `RAW`: All *\_raw.j2 are stored in Bucket mousebrainatlas-rawdata (as well *_lossy* files that are typically unused).
  - `DATA`: Bucket mousebrainatlas-data contains ALL other files.
@@ -45,7 +45,8 @@ STACKNAME = the unique identifier for every stack. Example: MD662
 
 folder naming conventions: STACKNAME_SUFFIX/
 
-Preprocessing Steps:
+### Preprocessing Steps:
+
 1) raw (.jp2) -> raw_Ntb (.tif): extract_a single channel
 2) raw_Ntb -> thumbnail_Ntb: rescale
 3) thumbnail_Ntb -> thumbnail_NtbNormalized: normalize_intensity
@@ -61,14 +62,12 @@ Preprocessing Steps:
 13) prep5_raw_NtbNormalizedAdaptiveInvertedGamma -> prep2_raw_NtbNormalizedAdaptiveInvertedGamma: crop
 14) prep2_raw_NtbNormalizedAdaptiveInvertedGamma -> prep2_raw_NtbNormalizedAdaptiveInvertedGammaJpeg: compress_jpeg
 
-<br><br>
-
-
 * Doc: documentation
 * src: code
 
+<br><br>
 
-## Guides
+## List of Guides
 - [Alex User Guide](doc/RunningFiles.md)
   - Running Guide made by AlexN to assist with running the code [INC]
 - **[Historical]** [Yuncong User Guide](doc/User%20Manuals/UserGuide.md)
