@@ -11,39 +11,7 @@ Notebooks that have been significantly altered from the original version:
 
 <br><br>
 
-## Useful documentation files
-
-### File naming convensions
-
-How different images are named can be found in [Image Naming Conventions](doc/User%20Manuals/user_guide_pages/imageNamingConventions.md)
-
-Every slice has four major identifiers:
-* image name: a string that uniquely identifies a physical section.
-* prep id: a number or word that identifies the spatial adjustment operations applied.
-* version: a word that specifies particular channel or appearance adjustment operations.
-* resolution: a word that specifies the pixel resolution.
-
-
-
-### Buckets and Directories
-
- - `RAW`: All *\_raw.j2 are stored in Bucket mousebrainatlas-rawdata (as well *_lossy* files that are typically unused).
- - `DATA`: Bucket mousebrainatlas-data contains ALL other files.
- 
-
-Naming conventions are the each file has a unique filename, FILENAME. Every different transform of the file will have the naming convention FILE_SUFFIX where SUFFIX is an abbreviated description of the file's state.
-
-`DATA` files will always be in *.tif form unless otherwise stated. One important exception is that the `RAW` files given to us are typically in the format *\_lossless.jp2.
-
-Examples:
-[FILENAME STEM] = `MD662&661-F1-2017.06.02-17.07.55_MD662_1_0001`
-- raw_input = `MD662&661-F1-2017.06.02-17.07.55_MD662_1_0001_lossless.jp2`
-- output_1 = `MD662&661-F1-2017.06.02-17.07.55_MD662_1_0001_raw_Ntb.tif`
-- output_2 = `MD662&661-F1-2017.06.02-17.07.55_MD662_1_0001_thumbnail_Ntb.tif`
-
-STACKNAME = the unique identifier for every stack. Example: MD662
-
-folder naming conventions: STACKNAME_SUFFIX/
+## Preprocessing details
 
 ### Preprocessing Steps:
 
@@ -65,7 +33,39 @@ folder naming conventions: STACKNAME_SUFFIX/
 * Doc: documentation
 * src: code
 
+### Buckets and Directories
+
+ - `RAW`: All *\_raw.j2 are stored in Bucket mousebrainatlas-rawdata (as well *_lossy* files that are typically unused).
+ - `DATA`: Bucket mousebrainatlas-data contains ALL other files.
+ 
+
+Naming conventions are the each file has a unique filename, FILENAME. Every different transform of the file will have the naming convention FILE_SUFFIX where SUFFIX is an abbreviated description of the file's state.
+
+`DATA` files will always be in *.tif form unless otherwise stated. One important exception is that the `RAW` files given to us are typically in the format *\_lossless.jp2.
+
+Examples:
+[FILENAME STEM] = `MD662&661-F1-2017.06.02-17.07.55_MD662_1_0001`
+- raw_input = `MD662&661-F1-2017.06.02-17.07.55_MD662_1_0001_lossless.jp2`
+- output_1 = `MD662&661-F1-2017.06.02-17.07.55_MD662_1_0001_raw_Ntb.tif`
+- output_2 = `MD662&661-F1-2017.06.02-17.07.55_MD662_1_0001_thumbnail_Ntb.tif`
+
+STACKNAME = the unique identifier for every stack. Example: MD662
+
+folder naming conventions: STACKNAME_SUFFIX/
+
+### File naming convensions
+
+How different images are named can be found in [Image Naming Conventions](doc/User%20Manuals/user_guide_pages/imageNamingConventions.md)
+
+Every slice has four major identifiers:
+* image name: a string that uniquely identifies a physical section.
+* prep id: a number or word that identifies the spatial adjustment operations applied.
+* version: a word that specifies particular channel or appearance adjustment operations.
+* resolution: a word that specifies the pixel resolution.
+
 <br><br>
+
+## Useful documentation files
 
 ## List of Guides
 - [Alex User Guide](doc/RunningFiles.md)
