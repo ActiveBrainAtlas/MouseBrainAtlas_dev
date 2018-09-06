@@ -182,7 +182,7 @@ elif hostname == 'yuncong-Precision-WorkStation-T7500' and username == 'alexn':
 
     ON_AWS = False
     S3_DATA_BUCKET = 'mousebrainatlas-data'
-    S3_RAWDATA_BUCKET = 'mousebrainatlas-rawdata-alexn'
+    S3_RAWDATA_BUCKET = 'mousebrainatlas-rawdata'
 
     REPO_DIR = os.environ['REPO_DIR']
 
