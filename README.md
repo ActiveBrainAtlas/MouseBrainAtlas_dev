@@ -34,6 +34,28 @@ As of right now about 9 of the steps have been consolidated into `/preprocess_ne
 * Doc: documentation
 * src: code
 
+### Organizing Preprocessing
+
+The previous 14 steps will be broken down even farthur into straightforward, easy to follow notebooks. These notebooks will in turn be broken down into executables but until then they work well organizing the code while being functional.
+
+##### Steps 1-3
+- raw files (CZI or JP2) are converted to raw tiff files and seperate the RGB channels. 
+- The raw tiff files are then downsampled 32X into thumbnail files. 
+- These thumbnail files are intensity normalized and then are reformatted from 16bit to 8bit
+  - Final output is `*_thumbnail_NtbNormalized.tif` files
+
+##### Steps 4-5
+- Pairwise transforms (denoted prep1) are generated through a program called Elastix. 
+  - Outputs saved in `~/Elastix_output/`
+- A GUI is run that allows the user to double check and make sure each transformation is correct (typically 3% will fail)
+  - Outputs saved in `~/custom_transform/` which will override the Elastix output transforms
+- An anchor file is selected that other images transform relative to
+  - `gui/preprocess_tool_v3.py` is run and `Anchor.txt` is created, only holding the name of the anchor file
+- Transformation matrices are generated for each file
+  - saved under `~/transformsTo_[ANCHOR]_.pkl`, stored as Python dictionary
+- `*_prep1_thumnail_normalized.tif` files generated from the transformations
+- The prep1 thumbnails are fed into the Active Contour Algorithm which generates prep1 thumbnail masks
+
 ### Buckets and Directories
 
  - `RAW`: All *\_raw.j2 are stored in Bucket mousebrainatlas-rawdata (as well *_lossy* files that are typically unused).
