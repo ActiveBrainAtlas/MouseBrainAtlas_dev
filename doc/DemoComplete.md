@@ -16,6 +16,7 @@ source demo/set_env_variables.sh
 - `$ ENABLE_UPLOAD_S3=0 ENABLE_DOWNLOAD_S3=0 ./compute_features_demo.py DEMO999 --section 151 --version NtbNormalizedAdaptiveInvertedGamma`
 
 ### Alex Running Notes
+For DOWNLOAD DEMO DATA:
 - Ran with `python demo/download_demo_data_compute_features.py --demo_data_dir /media/alexn/BstemAtlasDataBackup/demo/` to copy all files into the external hard drive. Only takes in 1 arg which is the download dir, otherwise defaults to ./demo_data. All files go into `[demo_data_dir]/CSHL_data_processed/DEMO999/`, Downloaded 4 files:
   - `DEMO999_sorted_filenames.txt`
   - `DEMO999_anchor.txt`
