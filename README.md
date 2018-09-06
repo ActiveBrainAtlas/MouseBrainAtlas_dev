@@ -9,8 +9,6 @@ Notebooks that have been significantly altered from the original version:
   - distributed_utilities.py
   - utilities2015.py
 
-<br><br>
-
 ## Preprocessing details
 
 ### Preprocessing Steps:
