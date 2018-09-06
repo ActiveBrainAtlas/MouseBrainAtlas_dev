@@ -18,8 +18,9 @@ As of right now about 9 of the steps have been consolidated into `/preprocess_ne
 1) raw (.jp2) -> raw_Ntb (.tif): extract_a single channel
 2) raw_Ntb -> thumbnail_Ntb: rescale
 3) thumbnail_Ntb -> thumbnail_NtbNormalized: normalize_intensity
-4) Compute transforms using thumbnail_NtbNormalized: align + compose
+4) Compute transforms using thumbnail_NtbNormalized: align + compose 
 5) Supply prep1_thumbnail_mask :
+  - use GUI with `prep1_thumbnail_normalized` images to check they are aligned properly
 6) prep1_thumbnail_mask -> thumbnail_mask: warp
 7) raw_Ntb -> raw_NtbNormalizedAdaptiveInvertedGamma: brightness_correction
 8) Compute prep5 (alignedWithMargin) cropping box based on prep1_thumbnail_mask
