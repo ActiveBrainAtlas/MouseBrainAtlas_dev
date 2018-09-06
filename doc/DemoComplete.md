@@ -24,7 +24,7 @@ For DOWNLOAD DEMO DATA:
   - `DEMO999_alignedTo_MD662&661-F116-2017.06.07-04.39.41_MD661_1_0346_prep2_cropbox.json`
   
 For COMPUTE FEATURE DEMO:
-- [IN PROGESS]
+- Running it gives me the following error: `IOError: [Errno 2] No such file or directory: '/home/alexn/mxnet_models/inception-bn-blue/mean_224.npy'`. Attempting to fix
 
 ## Generate probability volumes
 - Run `demo/download_demo_data_scoring.py`
