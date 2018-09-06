@@ -1,6 +1,4 @@
-This repo is in development as scripts are still being stitched together and code is being tested on new brains. A pipeline is being constructed, beginning with the preprocessing steps of which there are about 14. These preprocessing steps are outlined below and the code can be found in `/preprocess_new/preprocess_cshl_ntb.ipynb` whic specifically is geared toward brains stained with NeuroTrace blue.
-
-For an in depth explanation of the code from the original developer look here at the [Original User Guide](doc/User%20Manuals/UserGuide.md). Inside is a link to `Preprocessing.md` which discusses the preprocessing steps in detail and the differences between different stain types. These files are intended to be replaced/altered in the coming weeks but remain the best reference for the code.
+This repo is in development as scripts are still being stitched together and code is being tested on new brains. A pipeline is being constructed, beginning with the preprocessing steps of which there are about 14. These preprocessing steps are outlined below as well as a compilation of useful documentation.
 
 Notebooks that have been significantly altered from the original version:
   - preprocess_cshl_data_v2_neurotrace.ipynb
@@ -10,6 +8,10 @@ Notebooks that have been significantly altered from the original version:
   - utilities2015.py
 
 ## Preprocessing details
+
+For an in depth explanation of the code from the original developer look here at the [Original User Guide](doc/User%20Manuals/UserGuide.md). Inside is a link to `Preprocessing.md` which discusses the preprocessing steps in detail and the differences between different stain types. These files are intended to be replaced/altered in the coming weeks but remain the best reference for the code.
+
+As of right now about 9 of the steps have been consolidated into `/preprocess_new/preprocess_cshl_ntb.ipynb` which specifically is geared toward brains stained with NeuroTrace blue. Minor changes will need to be made when a new brain stain type comes in.
 
 ### Preprocessing Steps:
 
