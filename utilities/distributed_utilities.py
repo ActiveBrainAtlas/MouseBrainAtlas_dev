@@ -12,7 +12,7 @@ from metadata import *
 
 default_root = dict(localhost='/home/yuncong',
                     # workstation='/media/yuncong/BstemAtlasData',
-                    workstation='/data',
+                    workstation='/media/alexn/BstemAtlasDataBackup',
                     oasis='/home/yuncong/csd395', s3=S3_DATA_BUCKET, ec2='/shared', ec2scratch='/scratch', s3raw=S3_RAWDATA_BUCKET)
 
 def upload_to_s3(fp, local_root=None, is_dir=False):

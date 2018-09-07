@@ -165,6 +165,7 @@ elif hostname == 'yuncong-Precision-WorkStation-T7500' and username == 'alexn':
         ROOT_DIR = os.environ['ROOT_DIR']
     else:
         ROOT_DIR = '/home/alexn/'
+    ROOT_DIR = '/media/alexn/BstemAtlasDataBackup'
 
     if 'DATA_ROOTDIR' in os.environ:
         DATA_ROOTDIR = os.environ['DATA_ROOTDIR']
@@ -217,7 +218,6 @@ elif hostname == 'yuncong-Precision-WorkStation-T7500' and username == 'alexn':
     DETECTOR_SETTINGS_CSV = os.path.join(REPO_DIR, 'learning', 'detector_settings.csv')
 
     MXNET_MODEL_ROOTDIR = os.path.join(ROOT_DIR, 'mxnet_models')
-    #MXNET_MODEL_ROOTDIR = os.path.join('/media','alexn','BstemAtlasDataBackup','demo', 'mxnet_models')
 
     ELASTIX_BIN = 'elastix'
 

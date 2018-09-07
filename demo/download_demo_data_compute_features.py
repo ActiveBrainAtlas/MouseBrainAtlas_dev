@@ -27,24 +27,22 @@ def download_to_demo(fp):
     return demo_fp
     
 # For compute features demo.
+# Retrieve 4 files and save them relative to path given by the user
 
 # Downloads CSHL_data_processed/DEMO999/DEMO999_sorted_filenames.txt
 fp = DataManager.get_sorted_filenames_filename(stack='DEMO999')
 rel_fp = relative_to_local(fp, local_root=DATA_ROOTDIR)
 download_to_demo(rel_fp)
-
 # Downloads CSHL_data_processed/DEMO999/DEMO999_anchor.txt
 fp = DataManager.get_anchor_filename_filename(stack='DEMO999')
 rel_fp = relative_to_local(fp, local_root=DATA_ROOTDIR)
 anchor_fp_demo = download_to_demo(rel_fp)
 
 anchor_fn = DataManager.load_anchor_filename(stack='DEMO999')
-
 # Downloads DEMO999_alignedTo_MD662&661-F116-2017.06.07-04.39.41_MD661_1_0346_prep2_sectionLimits.json
 fp = DataManager.get_section_limits_filename_v2(stack='DEMO999', anchor_fn=anchor_fn)
 rel_fp = relative_to_local(fp, local_root=DATA_ROOTDIR)
 download_to_demo(rel_fp)
-
 # Downloads DEMO999_alignedTo_MD662&661-F116-2017.06.07-04.39.41_MD661_1_0346_prep2_cropbox.json
 fp = DataManager.get_cropbox_filename_v2(stack='DEMO999', prep_id='alignedBrainstemCrop', anchor_fn=anchor_fn)
 rel_fp = relative_to_local(fp, local_root=DATA_ROOTDIR)
@@ -52,6 +50,11 @@ download_to_demo(rel_fp)
 
 
 for sec in range(85, 357):
+    print ''
+    print '*******************************'
+    print fp
+    print rel_fp
+    print ''
     fp = DataManager.get_image_filepath_v2(stack='DEMO999', prep_id='alignedPadded', resol='thumbnail', version='mask', section=sec)
     rel_fp = relative_to_local(fp, local_root=DATA_ROOTDIR)
     download_to_demo(rel_fp)

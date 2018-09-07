@@ -35,6 +35,8 @@ if hasattr(args, 'section') and args.section is not None:
     sections = [args.section]
 else:
     sections = metadata_cache['valid_sections'][stack]
+
+#sys.exit()
 win_id = args.win_id
 version = args.version
     
@@ -46,7 +48,22 @@ model, mean_img = load_mxnet_model(model_dir_name=model_dir_name, model_name=mod
                                    num_gpus=1, batch_size=batch_size)
 
 for sec in sections:
-
+    print '\n'
+    print 'docstrang'
+    print '\n'
+    print compute_and_save_features_one_section.__doc__
+    print '\n'
+    
+    print 'version:',version
+    print 'win_id:',win_id
+    print 'stack:',stack
+    print 'sec:',sec
+    print 'model:',model
+    print 'model_name:',model_name
+    print 'mean_img:',mean_img
+    print 'batch_size:',batch_size
+    
+    # defined in learning_utilities aroung line 2929
     compute_and_save_features_one_section(
                                 version=version,
 #                                 scheme='normalize_mu_region_sigma_wholeImage_(-1,5)', 

@@ -256,9 +256,7 @@ def plot_pr_curve(precision_allthresh, recall_allthresh, optimal_th, title=''):
     plt.show();
 
 def load_mxnet_model(model_dir_name, model_name, num_gpus=8, batch_size = 256, output_symbol_name='flatten_output'):
-    print ''
-    print os.path.join(MXNET_MODEL_ROOTDIR, model_dir_name)
-    print ''
+    
     download_from_s3(os.path.join(MXNET_MODEL_ROOTDIR, model_dir_name), is_dir=True)
     model_iteration = 0
     # output_symbol_name = 'flatten_output'
@@ -278,7 +276,6 @@ def load_mxnet_model(model_dir_name, model_name, num_gpus=8, batch_size = 256, o
     model.bind(data_shapes=[('data', (batch_size,1,224,224))], for_training=False)
     model.set_params(arg_params=arg_params, aux_params=aux_params, allow_missing=True)
     return model, mean_img
-
 
 def get_glcm_feature_vector(patch, levels):
 
@@ -3030,6 +3027,7 @@ def compute_and_save_features_one_section(scheme, win_id, stack=None, prep_id=2,
 
         t = time.time()
         if method == 'cnn':
+            # save_dnn_features_v2() on dataManager line 4292
             DataManager.save_dnn_features_v2(features=features, locations=locations_roi,
                                          stack=stack, sec=sec, fn=fn, prep_id=prep_id,
                                          win_id=win_id, normalization_scheme=scheme,
