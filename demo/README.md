@@ -1,8 +1,6 @@
-This document details the registration demo in detail. The other 3 available demos can be found at [the DemoComplete.md document](https://github.com/ActiveBrainAtlas/MouseBrainAtlas_dev/blob/master/doc/DemoComplete.md).
-
 ## Demo of MouseBrainAtlas registration
 
-The following has been tested on Linux Ubuntu 16.04 and might not work on other operating systems.
+The following has been tested on Ubuntu 16.04 and might not work on other operating systems.
 
 This demo assumes a subject brain (DEMO999) is roughly globally aligned with the atlas (atlasV7).
 It shows how one can:
