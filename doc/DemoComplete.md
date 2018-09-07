@@ -26,11 +26,7 @@ For DOWNLOAD DEMO DATA:
 For COMPUTE FEATURE DEMO:
 - Running it gives me the following error: `IOError: [Errno 2] No such file or directory: '/home/alexn/mxnet_models/inception-bn-blue/mean_224.npy'`. Attempting to fix
   - MXNET_MODEL_ROOTDIR set as ROOT_DIR/mxnet_models. I am changing that to be in BstemAtlasDataBackup 
-    - I continue to get errors because the code will insert /data/ at the beginning on my filepath each time
-    - Error fixed, root filepath set to never be automatically chosen. distributed_utilities.py around line 148
-    - Getting a bunch more errors... Seems to remove/add filepaths to the one I specify seemingly at random, this also spans at the bare minimum 6 different scripts
-    - Now that I actually got the download statement for mxnet models to target my /media directory it is now trying to assert that there must be a media directory in S3...
-    - It is now clear that the code is not at all equipped to handle downloading to or uploading from filepaths that Yuncong hasn't already specifically used. There are references hidden across a dozen variables over a dozen files that are juggled
+    - Omitting a few hours of juggling bugs
   - All problematic changes I implemented. Trying to make them work has already eaten up hours and hours. The specific problem is how learning_utilities.load_mxnet_model() is designed, it is used to download 'mxnet models' from S3 but does not accept a download filepath, instead it assumes where you want to put them based on what Yuncong hardcoded in the past. I will need to rewrite this function as well as a few others with similar problems for this to work.
  
 ## Generate probability volumes
