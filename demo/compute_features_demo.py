@@ -41,6 +41,7 @@ version = args.version
 batch_size = 256
 model_dir_name = 'inception-bn-blue'
 model_name = 'inception-bn-blue'
+# mxnet model downloads specified in learning_utilities.py
 model, mean_img = load_mxnet_model(model_dir_name=model_dir_name, model_name=model_name, 
                                    num_gpus=1, batch_size=batch_size)
 

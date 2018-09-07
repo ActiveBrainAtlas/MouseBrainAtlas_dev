@@ -93,7 +93,7 @@ def transfer_data(from_fp, to_fp, from_hostname, to_hostname, is_dir, include_on
     if from_hostname in ['localhost', 'ec2', 'workstation', 'ec2scratch']:
         # upload
         if to_hostname in ['s3', 's3raw']:
-
+            
             if is_dir:
                 if includes is not None:
                     execute_command('aws s3 cp --recursive \"%(from_fp)s\" \"s3://%(to_fp)s\" --exclude \"*\" %(includes_str)s' % dict(from_fp=from_fp, to_fp=to_fp, includes_str=" ".join(['--include ' + incl for incl in includes])))
@@ -130,6 +130,7 @@ def transfer_data(from_fp, to_fp, from_hostname, to_hostname, is_dir, include_on
                     execute_command('aws s3 cp --recursive \"s3://%(from_fp)s\" \"%(to_fp)s\"' % dict(from_fp=from_fp, to_fp=to_fp))
             else:
                 execute_command('aws s3 cp \"s3://%(from_fp)s\" \"%(to_fp)s\"' % dict(from_fp=from_fp, to_fp=to_fp))
+                print '\nEXECUTING THIS COMMAND: '+'aws s3 cp \"s3://%(from_fp)s\" \"%(to_fp)s\"' % dict(from_fp=from_fp, to_fp=to_fp)+'\n'
         else:
             execute_command("scp -r %(from_hostname)s:\"%(from_fp)s\" \"%(to_fp)s\"" % dict(from_fp=from_fp, to_fp=to_fp, from_hostname=from_hostname))
     else:
@@ -139,18 +140,21 @@ def transfer_data(from_fp, to_fp, from_hostname, to_hostname, is_dir, include_on
 
 def transfer_data_synced(fp_relative, from_hostname, to_hostname, is_dir, from_root=None, to_root=None, include_only=None, exclude_only=None, includes=None, s3_bucket=None):
     #print 'from_root: '+str(from_root)
-    #print 'to_root: '+str(to_root)
+    print 'to_root: '+str(to_root)
     if from_root is None:
         from_root = default_root[from_hostname]
         #print 'new from_root: '+str(from_root)
     if to_root is None:
         to_root = default_root[to_hostname]
+        # Maybe need to set this to '/media' in the future???
+        # Set to_root to this if your download location is an absolute filepath
+        #to_root = '/'
         #print 'new to_root: '+str(to_root)
 
     from_fp = os.path.join(from_root, fp_relative)
     to_fp = os.path.join(to_root, fp_relative)
     #print 'from: '+from_fp
-    #print 'to  : '+to_fp
+    print 'finally to  : '+to_fp
     transfer_data(from_fp=from_fp, to_fp=to_fp, from_hostname=from_hostname, to_hostname=to_hostname, is_dir=is_dir, include_only=include_only, exclude_only=exclude_only, includes=includes)
 
 

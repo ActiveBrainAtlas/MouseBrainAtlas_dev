@@ -217,6 +217,7 @@ elif hostname == 'yuncong-Precision-WorkStation-T7500' and username == 'alexn':
     DETECTOR_SETTINGS_CSV = os.path.join(REPO_DIR, 'learning', 'detector_settings.csv')
 
     MXNET_MODEL_ROOTDIR = os.path.join(ROOT_DIR, 'mxnet_models')
+    #MXNET_MODEL_ROOTDIR = os.path.join('/media','alexn','BstemAtlasDataBackup','demo', 'mxnet_models')
 
     ELASTIX_BIN = 'elastix'
 

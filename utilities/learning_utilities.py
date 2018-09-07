@@ -256,6 +256,9 @@ def plot_pr_curve(precision_allthresh, recall_allthresh, optimal_th, title=''):
     plt.show();
 
 def load_mxnet_model(model_dir_name, model_name, num_gpus=8, batch_size = 256, output_symbol_name='flatten_output'):
+    print ''
+    print os.path.join(MXNET_MODEL_ROOTDIR, model_dir_name)
+    print ''
     download_from_s3(os.path.join(MXNET_MODEL_ROOTDIR, model_dir_name), is_dir=True)
     model_iteration = 0
     # output_symbol_name = 'flatten_output'
