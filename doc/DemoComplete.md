@@ -24,10 +24,14 @@ For DOWNLOAD DEMO DATA:
   - `DEMO999_alignedTo_MD662&661-F116-2017.06.07-04.39.41_MD661_1_0346_prep2_cropbox.json`
   
 For COMPUTE FEATURE DEMO:
-- Running it gives me the following error: `IOError: [Errno 2] No such file or directory: '/home/alexn/mxnet_models/inception-bn-blue/mean_224.npy'`. Attempting to fix
+- Personal notes
   - MXNET_MODEL_ROOTDIR set as ROOT_DIR/mxnet_models. I am changing that to be in BstemAtlasDataBackup 
     - Omitting a few hours of juggling bugs
-  - All problematic changes I implemented. Trying to make them work has already eaten up hours and hours. The specific problem is how learning_utilities.load_mxnet_model() is designed, it is used to download 'mxnet models' from S3 but does not accept a download filepath, instead it assumes where you want to put them based on what Yuncong hardcoded in the past. I will need to rewrite this function as well as a few others with similar problems for this to work.
+    - Changed env variables to match my new fp setup. Seems to work now
+- Downloads mxnet_models
+    - `inception-bn-blue-0000.params`
+    - `inception-bn-blue-symbol.json`
+    - `mean_224.npy`
  
 ## Generate probability volumes
 - Run `demo/download_demo_data_scoring.py`
