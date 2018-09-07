@@ -25,6 +25,7 @@ For DOWNLOAD DEMO DATA:
   
 For COMPUTE FEATURE DEMO:
 - Running it gives me the following error: `IOError: [Errno 2] No such file or directory: '/home/alexn/mxnet_models/inception-bn-blue/mean_224.npy'`. Attempting to fix
+  - MXNET_MODEL_ROOTDIR set as ROOT_DIR/mxnet_models. I am changing that to be in BstemAtlasDataBackup 
 
 ## Generate probability volumes
 - Run `demo/download_demo_data_scoring.py`
