@@ -29,6 +29,7 @@ For COMPUTE FEATURE DEMO:
     - I continue to get errors because the code will insert /data/ at the beginning on my filepath each time
     - Error fixed, root filepath set to never be automatically chosen. distributed_utilities.py around line 148
     - Getting a bunch more errors... Seems to remove/add filepaths to the one I specify seemingly at random, this also spans at the bare minimum 6 different scripts
+    - Now that I actually got the download statement for mxnet models to work it says I don't have permission to access my own directory
 
 ## Generate probability volumes
 - Run `demo/download_demo_data_scoring.py`
