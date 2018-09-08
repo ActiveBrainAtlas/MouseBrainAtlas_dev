@@ -256,7 +256,6 @@ def plot_pr_curve(precision_allthresh, recall_allthresh, optimal_th, title=''):
     plt.show();
 
 def load_mxnet_model(model_dir_name, model_name, num_gpus=8, batch_size = 256, output_symbol_name='flatten_output'):
-    
     download_from_s3(os.path.join(MXNET_MODEL_ROOTDIR, model_dir_name), is_dir=True)
     model_iteration = 0
     # output_symbol_name = 'flatten_output'
@@ -276,6 +275,7 @@ def load_mxnet_model(model_dir_name, model_name, num_gpus=8, batch_size = 256, o
     model.bind(data_shapes=[('data', (batch_size,1,224,224))], for_training=False)
     model.set_params(arg_params=arg_params, aux_params=aux_params, allow_missing=True)
     return model, mean_img
+
 
 def get_glcm_feature_vector(patch, levels):
 
@@ -800,7 +800,7 @@ def extract_patches_given_locations(patch_size,
         patch_size (int): size of the square patch in pixel.
         locs ((n,2)-array): list of patch centers
         img: the image. If not given, must provide stack, sec, version and prep_id (default=2).
-        normalization_scheme (str): the normalization method applied to the patches.
+        normalization_scheme (str): patch normalization to be performed on top of input version images. Default is 'none' which means use input version directly without additional normalization.
 
     Returns:
         list of (patch_size, patch_size)-arrays.
@@ -2942,7 +2942,7 @@ def compute_and_save_features_one_section(scheme, win_id, stack=None, prep_id=2,
     Args:
         scheme (str): normalization scheme
         win_id (int): windowing id, determines patch size and spacing.
-        prep_id (int): the prep_id the `bbox` is relative to. Default to 2.
+        prep_id (int or str): the prep_id the `bbox` is relative to. Default to 2(alignedBrainstemCrop).
         bbox (4-tuple): (xmin, xmax, ymin, ymax) in raw resolution. If not given, use the whole image.
         feature (str): cnn or mean
         model_name (str): model name. For forming filename of saved features.
@@ -3027,7 +3027,6 @@ def compute_and_save_features_one_section(scheme, win_id, stack=None, prep_id=2,
 
         t = time.time()
         if method == 'cnn':
-            # save_dnn_features_v2() on dataManager line 4292
             DataManager.save_dnn_features_v2(features=features, locations=locations_roi,
                                          stack=stack, sec=sec, fn=fn, prep_id=prep_id,
                                          win_id=win_id, normalization_scheme=scheme,
