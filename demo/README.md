@@ -11,7 +11,7 @@ Each demo shows one essential step of the pipeline:
 
 Associated with each step are one download script and one work script.
 At each step, the work script generates **a subset** of the full outputs expected of that step.
-A download script is then used to download from S3 the **pre-computed** full outputs of the current step. These are then used by the work script of the next step.
+A download script is then used to download from S3 the full outputs that are **pre-computed**. They are then used by the work script of the next step.
 
 All generated and downloaded data are stored in `demo/demo_data/`.
 
