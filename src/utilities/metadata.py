@@ -10,44 +10,19 @@ import subprocess
 hostname = subprocess.check_output("hostname", shell=True).strip()
 username = subprocess.check_output("whoami", shell=True).strip()
 
-# if hostname.endswith('sdsc.edu'):
-#     print 'Setting environment for Gordon'
-#     ROOT_DIR = '/oasis/projects/nsf/csd395/yuncong'
-#     RAW_DATA_DIR = '/oasis/projects/nsf/csd395/yuncong/CSHL_data'
-#     data_dir = '/oasis/projects/nsf/csd395/yuncong/CSHL_data_processed'
-#     DATA_DIR = '/oasis/projects/nsf/csd395/yuncong/CSHL_data_processed'
-#     thumbnail_data_dir = data_dir
-#     THUMBNAIL_DATA_DIR = '/oasis/projects/nsf/csd395/yuncong/CSHL_data_processed'
-#     REGISTRATION_PARAMETERS_ROOTDIR = '/oasis/projects/nsf/csd395/yuncong/CSHL_registration_parameters'
-#     REGISTRATION_VIZ_ROOTDIR = '/oasis/projects/nsf/csd395/yuncong/CSHL_registration_visualization'
-#     VOLUME_ROOTDIR = '/oasis/projects/nsf/csd395/yuncong/CSHL_volumes'
-#     labelingViz_root = '/oasis/projects/nsf/csd395/yuncong/CSHL_annotationsViz'
-#     annotationViz_rootdir = '/oasis/projects/nsf/csd395/yuncong/CSHL_annotationsViz'
-#     annotation_rootdir = '/oasis/projects/nsf/csd395/yuncong/CSHL_data_labelings_losslessAlignCropped/'
-#     annotation_midbrainIncluded_v2_rootdir = '/oasis/projects/nsf/csd395/yuncong/CSHL_labelings_v3/'
-#     ANNOTATION_ROOTDIR = '/oasis/projects/nsf/csd395/yuncong/CSHL_labelings_v3/'
-#     patch_training_features_rootdir = '/home/yuncong/csd395/CSHL_patch_features_Sat16ClassFinetuned_v2_train'
-#     patch_rootdir = '/oasis/projects/nsf/csd395/yuncong/CSHL_data_patches/'
-#     CLF_ROOTDIR = '/oasis/projects/nsf/csd395/yuncong/CSHL_classifiers'
-#     CLF_NISSL_ROOTDIR = '/home/yuncong/csd395/CSHL_patch_features_Sat16ClassFinetuned_v2_classifiers'
-#     CLF_NTBLUE_ROOTDIR = '/home/yuncong/csd395/CSHL_patch_features_Sat16ClassFinetuned_v2_classifiers_neurotraceBlue'
-#     CELLS_ROOTDIR = '/home/yuncong/csd395/CSHL_cells_v2'
-#     DETECTED_CELLS_ROOTDIR = os.path.join(CELLS_ROOTDIR, 'detected_cells')
-#     CELL_EMBEDDING_ROOTDIR = os.path.join(CELLS_ROOTDIR, 'embedding')
-#     D3JS_ROOTDIR = os.path.join(CELLS_ROOTDIR, 'd3js')
-#     CELL_FEATURES_CLF_ROOTDIR = os.path.join(CELLS_ROOTDIR, 'classifiers')
+if 'ENABLE_UPLOAD_S3' in os.environ:
+    ENABLE_UPLOAD_S3 = bool(int(os.environ['ENABLE_UPLOAD_S3']))
+    sys.stderr.write("ENABLE_UPLOAD_S3 set to %s\n" % ENABLE_UPLOAD_S3)
+else:
+    ENABLE_UPLOAD_S3 = False
+    sys.stderr.write("ENABLE_UPLOAD_S3 is not set, default to False.\n")
 
-#     PATCH_FEATURES_ROOTDIR = '/oasis/projects/nsf/csd395/yuncong/CSHL_patch_features'
-#     SPARSE_SCORES_ROOTDIR = '/oasis/projects/nsf/csd395/yuncong/CSHL_sparse_scoremaps'
-#     SCOREMAPS_ROOTDIR = '/oasis/projects/nsf/csd395/yuncong/CSHL_dense_scoremaps'
-#     SCOREMAP_VIZ_ROOTDIR = '/oasis/projects/nsf/csd395/yuncong/CSHL_scoremap_viz'
-#     HESSIAN_ROOTDIR = '/oasis/projects/nsf/csd395/yuncong/CSHL_hessians'
-#     WORKSTATION_ROOTDIR = '/media/yuncong/BstemAtlasData/CSHL_data_processed'
-
-#     S3_DATA_BUCKET = 'mousebrainatlas-data'
-#     REPO_DIR = os.environ['REPO_DIR']
-#     ON_AWS = False
-#     ELASTIX_BIN = '/oasis/projects/nsf/csd395/yuncong/elastix_linux64_v4.7/bin/elastix'
+if 'ENABLE_DOWNLOAD_S3' in os.environ:
+    ENABLE_DOWNLOAD_S3 = bool(int(os.environ['ENABLE_DOWNLOAD_S3']))
+    sys.stderr.write("ENABLE_DOWNLOAD_S3 set to %s\n" % ENABLE_DOWNLOAD_S3)
+else:
+    ENABLE_DOWNLOAD_S3 = False
+    sys.stderr.write("ENABLE_DOWNLOAD_S3 is not set, default to False.\n")
 
 if hostname == 'yuncong-MacbookPro':
     print 'Setting environment for Local Macbook Pro'
@@ -55,9 +30,21 @@ if hostname == 'yuncong-MacbookPro':
 
     # REPO_DIR = '/home/yuncong/Brain' # use os.environ['REPO_DIR'] instead
     REPO_DIR = os.environ['REPO_DIR']
-    ROOT_DIR = '/home/yuncong'
-    DATA_ROOTDIR = '/media/yuncong/YuncongPublic/'
-    THUMBNAIL_DATA_ROOTDIR = ROOT_DIR
+
+    if 'ROOT_DIR' in os.environ:
+        ROOT_DIR = os.environ['ROOT_DIR']
+    else:
+        ROOT_DIR = '/home/yuncong'
+
+    if 'DATA_ROOTDIR' in os.environ:
+        DATA_ROOTDIR = os.environ['DATA_ROOTDIR']
+    else:
+        DATA_ROOTDIR = '/media/yuncong/YuncongPublic/'
+
+    if 'THUMBNAIL_DATA_ROOTDIR' in os.environ:
+        THUMBNAIL_DATA_ROOTDIR = os.environ['THUMBNAIL_DATA_ROOTDIR']
+    else:
+        THUMBNAIL_DATA_ROOTDIR = ROOT_DIR
 
     RAW_DATA_DIR = os.path.join(ROOT_DIR, 'CSHL_data')
     DATA_DIR = os.path.join(DATA_ROOTDIR, 'CSHL_data_processed')
@@ -65,8 +52,10 @@ if hostname == 'yuncong-MacbookPro':
 
     # VOLUME_ROOTDIR = '/home/yuncong/CSHL_volumes'
     VOLUME_ROOTDIR = os.path.join(DATA_ROOTDIR, 'CSHL_volumes')
-    MESH_ROOTDIR =  '/home/yuncong/CSHL_meshes'
-    REGISTRATION_PARAMETERS_ROOTDIR = '/home/yuncong/CSHL_registration_parameters'
+    # MESH_ROOTDIR =  '/home/yuncong/CSHL_meshes'
+    MESH_ROOTDIR = os.path.join(ROOT_DIR, 'CSHL_meshes')
+    # REGISTRATION_PARAMETERS_ROOTDIR = '/home/yuncong/CSHL_registration_parameters'
+    REGISTRATION_PARAMETERS_ROOTDIR = os.path.join(ROOT_DIR, 'CSHL_registration_parameters')
 
     PATCH_FEATURES_ROOTDIR = os.path.join(DATA_ROOTDIR, 'CSHL_patch_features')
 
@@ -127,7 +116,8 @@ elif hostname == 'yuncong-Precision-WorkStation-T7500' and username == 'yuncong'
 
     THUMBNAIL_DATA_DIR = os.path.join(THUMBNAIL_DATA_ROOTDIR, 'CSHL_data_processed')
     VOLUME_ROOTDIR = os.path.join(ROOT_DIR, 'CSHL_volumes')
-    MESH_ROOTDIR =  '/home/yuncong/CSHL_meshes'
+    # MESH_ROOTDIR =  '/home/yuncong/CSHL_meshes'
+    MESH_ROOTDIR = os.path.join(ROOT_DIR, 'CSHL_meshes')
 
     # annotation_rootdir =  os.path.join(ROOT_DIR, 'CSHL_data_labelings_losslessAlignCropped')
 #     annotation_midbrainIncluded_v2_rootdir = '/home/yuncong/CSHL_labelings_v3/'
@@ -165,25 +155,22 @@ elif hostname == 'yuncong-Precision-WorkStation-T7500' and username == 'alexn':
         ROOT_DIR = os.environ['ROOT_DIR']
     else:
         ROOT_DIR = '/home/alexn/'
-    ROOT_DIR = '/media/alexn/BstemAtlasDataBackup'
 
     if 'DATA_ROOTDIR' in os.environ:
         DATA_ROOTDIR = os.environ['DATA_ROOTDIR']
     else:
-        DATA_ROOTDIR = '/media/alexn/BstemAtlasDataBackup'
-        #DATA_ROOTDIR = '/media/alexn/data'
+        DATA_ROOTDIR = '/home/alexn/data'
 
-    if 'THUMBNAIL_DATA_ROOTDIR' in os.environ: # NOT True for AlexN , else is performed
+    if 'THUMBNAIL_DATA_ROOTDIR' in os.environ:
         THUMBNAIL_DATA_ROOTDIR = os.environ['THUMBNAIL_DATA_ROOTDIR']
-    else: 
-        THUMBNAIL_DATA_ROOTDIR = '/media/alexn/BstemAtlasDataBackup' # This executes
-        #THUMBNAIL_DATA_ROOTDIR = '/home/alexn/data'
+    else:
+        THUMBNAIL_DATA_ROOTDIR = '/home/alexn/data'
 
     RAW_DATA_DIR = os.path.join(DATA_ROOTDIR, 'CSHL_data')
 
     ON_AWS = False
-    S3_DATA_BUCKET = 'mousebrainatlas-data'
-    S3_RAWDATA_BUCKET = 'mousebrainatlas-rawdata'
+    S3_DATA_BUCKET = 'mousebrainatlas-data-alexn'
+    S3_RAWDATA_BUCKET = 'mousebrainatlas-rawdata-alexn'
 
     REPO_DIR = os.environ['REPO_DIR']
 
@@ -191,7 +178,8 @@ elif hostname == 'yuncong-Precision-WorkStation-T7500' and username == 'alexn':
 
     THUMBNAIL_DATA_DIR = os.path.join(THUMBNAIL_DATA_ROOTDIR, 'CSHL_data_processed')
     VOLUME_ROOTDIR = os.path.join(ROOT_DIR, 'CSHL_volumes')
-    MESH_ROOTDIR =  '/home/alexn/CSHL_meshes'
+    # MESH_ROOTDIR =  '/home/alexn/CSHL_meshes'
+    MESH_ROOTDIR = os.path.join(ROOT_DIR, 'CSHL_meshes')
 
     # annotation_rootdir =  os.path.join(ROOT_DIR, 'CSHL_data_labelings_losslessAlignCropped')
 #     annotation_midbrainIncluded_v2_rootdir = '/home/yuncong/CSHL_labelings_v3/'
@@ -299,7 +287,67 @@ elif hostname.startswith('ip'):
     CSHL_SPM_ROOTDIR = os.path.join(ROOT_DIR, 'CSHL_SPM')
 
 else:
-    print 'Setting environment for Brainstem workstation'
+
+    print 'Setting environment for an unknown machine. Global root paths must be set as env variables.'
+
+    assert 'ROOT_DIR' in os.environ, "Must set ROOT_DIR env variable"
+    ROOT_DIR = os.environ['ROOT_DIR']
+
+    assert 'DATA_ROOTDIR' in os.environ, "Must set DATA_ROOTDIR env variable"
+    DATA_ROOTDIR = os.environ['DATA_ROOTDIR']
+
+    assert 'THUMBNAIL_DATA_ROOTDIR' in os.environ, "Must set THUMBNAIL_DATA_ROOTDIR env variable"
+    THUMBNAIL_DATA_ROOTDIR = os.environ['THUMBNAIL_DATA_ROOTDIR']
+
+    # ON_AWS = False
+    S3_DATA_BUCKET = 'mousebrainatlas-data'
+    S3_RAWDATA_BUCKET = 'mousebrainatlas-rawdata'
+    S3_DATA_DIR = 'CSHL_data_processed'
+    REPO_DIR = os.environ['REPO_DIR']
+    RAW_DATA_DIR = os.path.join(ROOT_DIR, 'CSHL_data')
+    DATA_DIR = os.path.join(DATA_ROOTDIR, 'CSHL_data_processed')
+    THUMBNAIL_DATA_DIR = os.path.join(THUMBNAIL_DATA_ROOTDIR, 'CSHL_data_processed')
+    VOLUME_ROOTDIR = os.path.join(ROOT_DIR, 'CSHL_volumes')
+
+    MESH_ROOTDIR = os.path.join(ROOT_DIR, 'CSHL_meshes')
+
+    ANNOTATION_ROOTDIR = os.path.join(ROOT_DIR, 'CSHL_labelings_v3')
+    ANNOTATION_THALAMUS_ROOTDIR = os.path.join(ROOT_DIR, 'CSHL_labelings_thalamus')
+    ANNOTATION_VIZ_ROOTDIR = os.path.join(ROOT_DIR, 'CSHL_annotation_viz')
+    PATCH_FEATURES_ROOTDIR = os.path.join(DATA_ROOTDIR, 'CSHL_patch_features')
+    PATCH_LOCATIONS_ROOTDIR = os.path.join(DATA_ROOTDIR, 'CSHL_patch_locations')
+    SCOREMAP_ROOTDIR = os.path.join(ROOT_DIR, 'CSHL_scoremaps')
+    SCOREMAP_VIZ_ROOTDIR = os.path.join(ROOT_DIR, 'CSHL_scoremap_viz')
+    SPARSE_SCORES_ROOTDIR = os.path.join(ROOT_DIR, 'CSHL_patch_scores')
+    REGISTRATION_PARAMETERS_ROOTDIR = os.path.join(ROOT_DIR, 'CSHL_registration_parameters')
+    REGISTRATION_VIZ_ROOTDIR = os.path.join(ROOT_DIR, 'CSHL_registration_visualization')
+    ELASTIX_BIN = 'elastix'
+    #KDU_EXPAND_BIN = '/home/ubuntu/KDU79_Demo_Apps_for_Linux-x86-64_170108/kdu_expand'
+
+    if 'CELLS_ROOTDIR' in os.environ:
+        CELLS_ROOTDIR = os.environ['CELLS_ROOTDIR']
+    else:
+        CELLS_ROOTDIR = os.path.join(ROOT_DIR, 'CSHL_cells_v2')
+
+    DETECTED_CELLS_ROOTDIR = os.path.join(CELLS_ROOTDIR, 'detected_cells')
+    CELL_EMBEDDING_ROOTDIR = os.path.join(CELLS_ROOTDIR, 'embedding')
+    D3JS_ROOTDIR = os.path.join(CELLS_ROOTDIR, 'd3js')
+    CELL_FEATURES_CLF_ROOTDIR = os.path.join(CELLS_ROOTDIR, 'classifiers')
+
+    CLF_ROOTDIR = os.path.join(ROOT_DIR, 'CSHL_classifiers')
+
+    CLASSIFIER_SETTINGS_CSV = os.path.join(REPO_DIR, 'learning', 'classifier_settings.csv')
+    DATASET_SETTINGS_CSV = os.path.join(REPO_DIR, 'learning', 'dataset_settings.csv')
+    REGISTRATION_SETTINGS_CSV = os.path.join(REPO_DIR, 'registration', 'registration_settings.csv')
+    PREPROCESS_SETTINGS_CSV = os.path.join(REPO_DIR, 'preprocess', 'preprocess_settings.csv')
+    DETECTOR_SETTINGS_CSV = os.path.join(REPO_DIR, 'learning', 'detector_settings.csv')
+
+    MXNET_MODEL_ROOTDIR = os.path.join(ROOT_DIR, 'mxnet_models')
+
+    LABELED_NEURONS_ROOTDIR = os.path.join(ROOT_DIR, 'CSHL_labeled_neurons')
+
+    CSHL_SPM_ROOTDIR = os.path.join(ROOT_DIR, 'CSHL_SPM')
+
 
 
 #################### Resolution conversions ############
@@ -323,9 +371,9 @@ def convert_resolution_string_to_voxel_size(resolution, stack=None):
     elif resolution == 'lossless' or resolution == 'down1' or resolution == 'raw':
         assert stack is not None
         return planar_resolution[stack]
-    elif resolution == 'down8':
+    elif resolution.startswith('down'):
         assert stack is not None
-        return planar_resolution[stack] * 8.
+        return planar_resolution[stack] * int(resolution[4:])
     elif resolution == 'um':
         return 1.
     elif resolution.endswith('um'):
@@ -537,7 +585,8 @@ all_dk_ntb_stacks = ['CHATM2', 'CHATM3']
 all_alt_nissl_ntb_stacks = ['MD653', 'MD652', 'MD642']
 all_alt_nissl_tracing_stacks = ['MD657', 'MD658', 'MD661', 'MD662']
 # all_stacks = all_nissl_stacks + all_ntb_stacks
-all_stacks = all_nissl_stacks + all_ntb_stacks + all_alt_nissl_ntb_stacks + all_alt_nissl_tracing_stacks + all_dk_ntb_stacks
+all_stacks = all_nissl_stacks + all_ntb_stacks + all_alt_nissl_ntb_stacks + all_alt_nissl_tracing_stacks + all_dk_ntb_stacks \
+                + ['DEMO999']
 all_annotated_nissl_stacks = ['MD585', 'MD589', 'MD594']
 all_annotated_ntb_stacks = ['MD635']
 all_annotated_stacks = all_annotated_nissl_stacks + all_annotated_ntb_stacks
@@ -566,6 +615,7 @@ planar_resolution = {'MD585': XY_PIXEL_DISTANCE_LOSSLESS,
                      # 'DmaleAxioscan': XY_PIXEL_DISTANCE_LOSSLESS_AXIOSCAN,
                      'CHATM2': XY_PIXEL_DISTANCE_LOSSLESS_AXIOSCAN,
                      'CHATM3': XY_PIXEL_DISTANCE_LOSSLESS_AXIOSCAN,
+                     'DEMO999': XY_PIXEL_DISTANCE_LOSSLESS,
                     }
 
 ########################################
@@ -581,7 +631,41 @@ NUM_CORES = multiprocessing.cpu_count()
 
 ############## Colors ##############
 
-from utilities2015 import high_contrast_colors
+boynton_colors = dict(blue=(0,0,255),
+    red=(255,0,0),
+    green=(0,255,0),
+    yellow=(255,255,0),
+    magenta=(255,0,255),
+    pink=(255,128,128),
+    gray=(128,128,128),
+    brown=(128,0,0),
+    orange=(255,128,0))
+
+kelly_colors = dict(vivid_yellow=(255, 179, 0),
+                    strong_purple=(128, 62, 117),
+                    vivid_orange=(255, 104, 0),
+                    very_light_blue=(166, 189, 215),
+                    vivid_red=(193, 0, 32),
+                    grayish_yellow=(206, 162, 98),
+                    medium_gray=(129, 112, 102),
+
+                    # these aren't good for people with defective color vision:
+                    vivid_green=(0, 125, 52),
+                    strong_purplish_pink=(246, 118, 142),
+                    strong_blue=(0, 83, 138),
+                    strong_yellowish_pink=(255, 122, 92),
+                    strong_violet=(83, 55, 122),
+                    vivid_orange_yellow=(255, 142, 0),
+                    strong_purplish_red=(179, 40, 81),
+                    vivid_greenish_yellow=(244, 200, 0),
+                    strong_reddish_brown=(127, 24, 13),
+                    vivid_yellowish_green=(147, 170, 0),
+                    deep_yellowish_brown=(89, 51, 21),
+                    vivid_reddish_orange=(241, 58, 19),
+                    dark_olive_green=(35, 44, 22))
+
+high_contrast_colors = boynton_colors.values() + kelly_colors.values()
+
 hc_perm = [ 0,  5, 28, 26, 12, 11,  4,  8, 25, 22,  3,  1, 20, 19, 27, 13, 24,
        17, 16, 15,  7, 14, 21, 18, 23,  2, 10,  9,  6]
 high_contrast_colors = [high_contrast_colors[i] for i in hc_perm]

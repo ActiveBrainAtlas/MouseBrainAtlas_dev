@@ -5,9 +5,13 @@ import time
 try:
     import vtk
     from vtk.util import numpy_support
-    import mcubes # https://github.com/pmneila/PyMCubes
 except:
     sys.stderr.write('No vtk\n')
+
+try:
+    import mcubes # https://github.com/pmneila/PyMCubes
+except:
+    sys.stderr.write('No mcubes\n')
 
 from skimage.measure import marching_cubes, correct_mesh_orientation, mesh_surface_area
 
@@ -48,6 +52,9 @@ def rescale_polydata(polydata, factor):
     return mesh_to_polydata(v * factor, f)
 
 def transform_polydata(polydata, transform):
+    """
+    Apply transform to polydata.
+    """
     v, f = polydata_to_mesh(polydata)
     from registration_utilities import transform_points
     new_v = transform_points(transform=transform, pts=v)
@@ -875,17 +882,16 @@ def launch_vtk(actors, init_angle='45', window_name=None, window_size=None,
     renderer.SetActiveCamera(camera)
     renderer.ResetCamera()
 
-    # This must be before  renWin.render(), otherwise the animation is stuck.
+    # This must be before renWin.render(), otherwise the animation is stuck.
     iren = vtk.vtkRenderWindowInteractor()
     iren.SetRenderWindow(renWin)
-    int_style = MyInteractorStyle(iren=iren, renWin=renWin, snapshot_fn='/tmp/tmp.png', camera=camera)
-    iren.SetInteractorStyle(int_style) # Have problem closing window if use this
+
+    my_int_style = MyInteractorStyle(iren=iren, renWin=renWin, snapshot_fn='/tmp/tmp.png', camera=camera)
+    iren.SetInteractorStyle(my_int_style) # Have problem closing window if use this
 
     for actor in actors:
         if actor is not None:
             renderer.AddActor(actor)
-
-    renWin.Render()
 
     if window_name is not None:
         renWin.SetWindowName(window_name)
@@ -910,21 +916,26 @@ def launch_vtk(actors, init_angle='45', window_name=None, window_size=None,
 
     ##################
 
+    renWin.Render()
+    renWin.Finalize()
+
     if interactive:
         # if not animate:
         #     iren.Initialize()
         iren.Start()
     else:
+        iren.Start()
         take_screenshot(renWin, snapshot_fn, magnification=snapshot_magnification)
 
-    del int_style.iren
-    del int_style.renWin
+    del my_int_style.iren
+    del my_int_style.renWin
 
     if animate:
         if hasattr(cb, 'iren'):
             del cb.iren
         if hasattr(cb, 'win'):
             del cb.win
+
     # In order for window to successfully close, MUST MAKE SURE NO REFERENCE
     # TO IREN AND WIN still remain.
 
