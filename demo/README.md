@@ -19,19 +19,30 @@ cd setup
 sudo pip install -r requirements.txt
 source set_env_variables.sh
 cd ../demo
-./download_demo_data.py
 ```
-  * Pulling the Git repo takes 3-4 minutes with good Internet connection.
-  * Running `./download_demo_data.py` takes less than 1 minute.
+* Pulling the Git repo takes 3-4 minutes with good Internet connection.
 
-The input data are downloaded under `demo/demo_data/`.
+Each demo first download the necessary input data into `demo/demo_data/`, and then perform the task.
 
-## Register 12N individually
+## Compute patch features
+- `$ ./download_demo_data_compute_features.py`
+- `$ ./compute_features_demo.py DEMO999 --section 152 --version NtbNormalizedAdaptiveInvertedGamma`
+This demo is expected to finish in 1 minute.
+
+## Generate probability volumes
+- `$ ./download_demo_data_scoring.py`
+- `$ ENABLE_UPLOAD_S3=0 ENABLE_DOWNLOAD_S3=0 ./from_images_to_score_volumes_demo.py DEMO999 799 --structure_list [\"3N, 4N, 12N\"]`
+
+## Registration
+`$ ./download_demo_data.py`
+* Running `./download_demo_data.py` takes less than 1 minute.
+
+### Register 12N individually
 - `$ ./register_brains_demo_12N.py`
   - Expected runtime of about 8 minutes
   - Output displays 1000 iterations of gradient descent
 
-## Register 3N_R and 4N_R as a group
+### Register 3N_R and 4N_R as a group
 - `$ ./register_brains_demo_3N_R_4N_R.py`
   - Expected runtime of about 3 minutes
   - Output displays 1000 iterations of gradient descent
