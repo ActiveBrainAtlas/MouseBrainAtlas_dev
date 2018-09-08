@@ -1,11 +1,9 @@
-This document details the registration demo in detail. The other 3 available demos can be found at [the DemoComplete.md document](https://github.com/ActiveBrainAtlas/MouseBrainAtlas_dev/blob/master/doc/DemoComplete.md).
+# Demos
 
-## Demo of MouseBrainAtlas registration
-
-The following has been tested on Linux Ubuntu 16.04 and might not work on other operating systems.
-
-This demo assumes a subject brain (DEMO999) is roughly globally aligned with the atlas (atlasV7).
-It shows how one can:
+This demo suite shows how to align a subject brain (DEMO999) with the atlas (atlasV7). 
+Each demo shows one of the essential tasks of the pipeline:
+- extract features using a convolutional neural network
+- generate probability maps
 - register 12N (hypoglossal nucleus) individually.
 - register 3N_R (occulomotor, right) and 4N_R (trochlear, right) as a group.
 - visualize the aligned atlas overlaid on original images
@@ -13,6 +11,9 @@ It shows how one can:
 ---------------------------
 
 ## Install packages, setup environment variables and download input data
+
+The following has been tested on Linux Ubuntu 16.04 and might not work on other operating systems.
+
 ```
 sudo apt-get install wget python-pip python-tk
 cd setup
