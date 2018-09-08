@@ -1,7 +1,8 @@
 # Demos
 
 This demo suite shows how to align a subject brain (DEMO999) with the atlas (atlasV7). 
-Each demo shows one of the 5 essential tasks of the pipeline:
+Each demo shows one essential step of the pipeline:
+- preprocess the jpeg2000 stack (e.g. convert to tif and intra-stack align)
 - extract features using a convolutional neural network
 - generate probability maps
 - register 12N (hypoglossal nucleus) to the atlas individually.
