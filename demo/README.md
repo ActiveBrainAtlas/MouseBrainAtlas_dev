@@ -4,8 +4,8 @@ This demo suite shows how to align a subject brain (DEMO999) with the atlas (atl
 Each demo shows one of the 5 essential tasks of the pipeline:
 - extract features using a convolutional neural network
 - generate probability maps
-- register 12N (hypoglossal nucleus) individually.
-- register 3N_R (occulomotor, right) and 4N_R (trochlear, right) as a group.
+- register 12N (hypoglossal nucleus) to the atlas individually.
+- register 3N_R (occulomotor, right) and 4N_R (trochlear, right) to the atlas as a group.
 - visualize the aligned atlas overlaid on original images
 
 ---------------------------
