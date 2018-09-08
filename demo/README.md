@@ -9,6 +9,12 @@ Each demo shows one essential step of the pipeline:
 - register 3N_R (occulomotor, right) and 4N_R (trochlear, right) to the atlas as a group.
 - visualize the aligned atlas overlaid on original images
 
+Associated with each step are one download script and one work script.
+At each step, the work script generates **a subset** of the full outputs expected of that step.
+A download script is then used to download from S3 the **pre-computed** full outputs of the current step. These are then used by the work script of the next step.
+
+All generated and downloaded data are stored in `demo/demo_data/`.
+
 ---------------------------
 
 ## Install packages, setup environment variables and download input data
@@ -23,12 +29,6 @@ source set_env_variables.sh
 cd ../demo
 ```
 * Pulling the Git repo takes 3-4 minutes with good Internet connection.
-
-Associated with each pipeline step are one download script and one work script.
-At each step, the work script generates **a subset** of the full outputs expected of that step.
-A download script is then used to download from S3 the **pre-computed** full outputs of the current step. These are then used by the work script of the next step.
-
-All generated and downloaded data are stored in `demo/demo_data/`.
 
 ## Preprocess [not finished]
 - Run download_demo_data_preprocessing.py --step 1 to download an example JPEG2000 image.
