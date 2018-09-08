@@ -27,7 +27,7 @@ cd ../demo
 Each demo first download the necessary input data into `demo/demo_data/`, and then perform the task.
 
 
-## Preprocess
+## Preprocess [not finished]
 - Run download_demo_data_preprocessing.py --step 1 to download an example JPEG2000 image.
 - Run preprocess_demo.py --step 1
 - Run download_demo_data_preprocessing.py --step 2
