@@ -24,8 +24,11 @@ cd ../demo
 ```
 * Pulling the Git repo takes 3-4 minutes with good Internet connection.
 
-Each demo first download the necessary input data into `demo/demo_data/`, and then perform the task.
+Associated with each pipeline step are one download script and one work script.
+At each step, the work script generates **a subset** of the full outputs expected of that step.
+A download script is then used to download from S3 the **pre-computed** full outputs of the current step. These are then used by the work script of the next step.
 
+All generated and downloaded data are stored in `demo/demo_data/`.
 
 ## Preprocess [not finished]
 - Run download_demo_data_preprocessing.py --step 1 to download an example JPEG2000 image.
@@ -59,7 +62,7 @@ Note that the data needed to download for this demo is about 35G.
   - Expected runtime of about 3 minutes
   - Output displays 1000 iterations of gradient descent
 
-The outputs are also generated in `demo_data/` folder. The outputs include the transform parameters and transformed atlas structures.
+The outputs include the transform parameters and transformed atlas structures.
 
 
 ## Visualize registration results
