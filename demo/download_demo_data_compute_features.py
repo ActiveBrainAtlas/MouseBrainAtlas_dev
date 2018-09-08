@@ -46,6 +46,8 @@ fp = DataManager.get_cropbox_filename_v2(stack='DEMO999', prep_id='alignedBrains
 rel_fp = relative_to_local(fp, local_root=DATA_ROOTDIR)
 download_to_demo(rel_fp)
 
+# Now that we have DEMO999 meta files, refresh the metadata cache.
+generate_metadata_cache()
 
 for sec in range(85, 357):
     fp = DataManager.get_image_filepath_v2(stack='DEMO999', prep_id='alignedPadded', resol='thumbnail', version='mask', section=sec)
