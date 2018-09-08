@@ -32,6 +32,11 @@ cd ../demo
 
 ## Preprocess [not finished]
 - Run download_demo_data_preprocessing.py --step 1 to download an example JPEG2000 image.
+- `verify_input.py`: 
+  Using this we verify
+    - every image is in order list
+  this also generates the thumbnails `resize`. 
+    - orientations are correct
 - Run preprocess_demo.py --step 1
 - Run download_demo_data_preprocessing.py --step 2
 - `$ ./align.py DEMO999`
