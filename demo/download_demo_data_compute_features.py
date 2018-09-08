@@ -12,7 +12,6 @@ parser = argparse.ArgumentParser(
     formatter_class=argparse.RawDescriptionHelpFormatter,
     description='This script downloads input data for demo.')
 
-# Only takes 1 arg, the path to where you want the demo data downloaded
 parser.add_argument("-d", "--demo_data_dir", type=str, help="Directory to store demo input data", default='demo_data')
 args = parser.parse_args()
 
@@ -20,93 +19,81 @@ args = parser.parse_args()
 
 def download_to_demo(fp):
     demo_data_dir = args.demo_data_dir
-    s3_http_prefix = 'https://s3-us-west-1.amazonaws.com/mousebrainatlas-data/'     
-    url = s3_http_prefix + fp    
+    create_if_not_exists(demo_data_dir)
+    s3_http_prefix = 'https://s3-us-west-1.amazonaws.com/mousebrainatlas-data/'
+    url = s3_http_prefix + fp
     demo_fp = os.path.join(demo_data_dir, fp)
     execute_command('wget -N -P \"%s\" \"%s\"' % (os.path.dirname(demo_fp), url))
     return demo_fp
-    
-# For compute features demo.
-# Retrieve 4 files and save them relative to path given by the user
 
-# Downloads CSHL_data_processed/DEMO999/DEMO999_sorted_filenames.txt
+# For compute features demo.
+
 fp = DataManager.get_sorted_filenames_filename(stack='DEMO999')
 rel_fp = relative_to_local(fp, local_root=DATA_ROOTDIR)
 download_to_demo(rel_fp)
-# Downloads CSHL_data_processed/DEMO999/DEMO999_anchor.txt
+
 fp = DataManager.get_anchor_filename_filename(stack='DEMO999')
 rel_fp = relative_to_local(fp, local_root=DATA_ROOTDIR)
 anchor_fp_demo = download_to_demo(rel_fp)
 
 anchor_fn = DataManager.load_anchor_filename(stack='DEMO999')
-# Downloads DEMO999_alignedTo_MD662&661-F116-2017.06.07-04.39.41_MD661_1_0346_prep2_sectionLimits.json
+
 fp = DataManager.get_section_limits_filename_v2(stack='DEMO999', anchor_fn=anchor_fn)
 rel_fp = relative_to_local(fp, local_root=DATA_ROOTDIR)
 download_to_demo(rel_fp)
-# Downloads DEMO999_alignedTo_MD662&661-F116-2017.06.07-04.39.41_MD661_1_0346_prep2_cropbox.json
+
 fp = DataManager.get_cropbox_filename_v2(stack='DEMO999', prep_id='alignedBrainstemCrop', anchor_fn=anchor_fn)
 rel_fp = relative_to_local(fp, local_root=DATA_ROOTDIR)
 download_to_demo(rel_fp)
 
+# Now that we have DEMO999 meta files, refresh the metadata cache.
+generate_metadata_cache()
 
 for sec in range(85, 357):
-    print ''
-    print '*******************************'
-    print fp
-    print rel_fp
-    print ''
     fp = DataManager.get_image_filepath_v2(stack='DEMO999', prep_id='alignedPadded', resol='thumbnail', version='mask', section=sec)
     rel_fp = relative_to_local(fp, local_root=DATA_ROOTDIR)
     download_to_demo(rel_fp)
-print 'rel_fp3: '+rel_fp
 
-    
+
 for sec in [152]:
     fp = DataManager.get_image_filepath_v2(stack='DEMO999', prep_id='alignedBrainstemCrop', resol='raw', version='NtbNormalizedAdaptiveInvertedGamma', section=sec)
     rel_fp = relative_to_local(fp, local_root=DATA_ROOTDIR)
     download_to_demo(rel_fp)
-print 'rel_fp4: '+rel_fp
-    
-    
-# TODO: DOWNLOAD mxnet model  
+
+
+# TODO: DOWNLOAD mxnet model
 
 # For scoring and construct 3-d probability map.
-
-stack = 'DEMO999'
-prep_id = 'alignedBrainstemCrop'
-win_id = 7
-normalization_scheme = 'none'
-model_name = 'inception-bn-blue'
-timestamp = None
-
-for sec in range(85, 357):    
-    fp = DataManager.get_dnn_features_filepath_v2(stack=stack, sec=sec, prep_id=prep_id, win_id=win_id,
-                          normalization_scheme=normalization_scheme,
-                                         model_name=model_name, what='features', timestamp=timestamp)
-    fp = relative_to_local(fp, local_root=DATA_ROOTDIR)
-    download_to_demo(fp)
-    
-    if sec==100:
-        print 'fp: '+fp
-    
-    fp = DataManager.get_dnn_features_filepath_v2(stack=stack, sec=sec, prep_id=prep_id, win_id=win_id,
-                          normalization_scheme=normalization_scheme,
-                                         model_name=model_name, what='locations', timestamp=timestamp)
-    rel_fp = relative_to_local(fp, local_root=DATA_ROOTDIR)
-    download_to_demo(rel_fp)
-    
-    if sec==100:
-        print 'rel_fp: '+rel_fp
-    
+#
+# stack = 'DEMO999'
+# prep_id = 'alignedBrainstemCrop'
+# win_id = 7
+# normalization_scheme = 'none'
+# model_name = 'inception-bn-blue'
+# timestamp = None
+#
+# for sec in range(85, 357):
+#     fp = DataManager.get_dnn_features_filepath_v2(stack=stack, sec=sec, prep_id=prep_id, win_id=win_id,
+#                           normalization_scheme=normalization_scheme,
+#                                          model_name=model_name, what='features', timestamp=timestamp)
+#     fp = relative_to_local(fp, local_root=DATA_ROOTDIR)
+#     download_to_demo(fp)
+#
+#     fp = DataManager.get_dnn_features_filepath_v2(stack=stack, sec=sec, prep_id=prep_id, win_id=win_id,
+#                           normalization_scheme=normalization_scheme,
+#                                          model_name=model_name, what='locations', timestamp=timestamp)
+#     rel_fp = relative_to_local(fp, local_root=DATA_ROOTDIR)
+#     download_to_demo(rel_fp)
+#
 
 # download_to_demo(os.path.join('CSHL_simple_global_registration', 'DEMO999_T_atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol.bp'))
 
 # for name_s in ['3N_R', '4N_R', '12N']:
-    
+
 #     fp = DataManager.get_score_volume_filepath_v3(stack_spec={'name':'DEMO999', 'detector_id':799, 'resolution':'10.0um', 'vol_type':'score'}, structure=name_s)
 #     rel_fp = relative_to_local(fp, local_root=ROOT_DIR)
 #     download_to_demo(rel_fp)
-    
+
 #     fp = DataManager.get_score_volume_origin_filepath_v3(stack_spec={'name':'DEMO999', 'detector_id':799, 'resolution':'10.0um', 'vol_type':'score'}, structure=name_s, wrt='wholebrain')
 #     rel_fp = relative_to_local(fp, local_root=ROOT_DIR)
 #     download_to_demo(rel_fp)
@@ -116,18 +103,18 @@ for sec in range(85, 357):
 #     fp = DataManager.get_score_volume_filepath_v3(stack_spec={'name':'atlasV7', 'resolution':'10.0um', 'vol_type':'score'}, structure=name_s)
 #     rel_fp = relative_to_local(fp, local_root=ROOT_DIR)
 #     download_to_demo(rel_fp)
- 
+
 #     fp = DataManager.get_score_volume_origin_filepath_v3(stack_spec={'name':'atlasV7', 'resolution':'10.0um', 'vol_type':'score'}, structure=name_s, wrt='canonicalAtlasSpace')
 #     rel_fp = relative_to_local(fp, local_root=ROOT_DIR)
 #     download_to_demo(rel_fp)
-    
-# # For visualization demo.    
+
+# # For visualization demo.
 
 # for sec in range(221, 238):
 #     fp = DataManager.get_image_filepath_v2(stack='DEMO999', prep_id=2, resol='raw', version='NtbNormalizedAdaptiveInvertedGammaJpeg', section=sec, sorted_filenames_fp=sorted_filenames_fp_demo)
 #     rel_fp = relative_to_local(fp, local_root=DATA_ROOTDIR)
 #     download_to_demo(rel_fp)
-    
+
 # fp = DataManager.get_original_volume_filepath_v2(stack_spec={'name':'DEMO999', 'resolution':'10.0um', 'vol_type':'intensity', 'prep_id':'wholebrainWithMargin'}, structure=None)
 # rel_fp = relative_to_local(fp, local_root=ROOT_DIR)
 # download_to_demo(rel_fp)
