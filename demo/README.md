@@ -55,7 +55,7 @@ cd ../demo
  --out_prep_id alignedPadded`
 
 - **(HUMAN)** Inspect aligned images using preprocessGUI `preprocess_gui.py`, correct pairwise transforms and check each image's order in stack. Create DEMO998_sorted_filenames.txt
-- **(HUMAN)** draw initial snake contours for masking
+- **(HUMAN)** draw initial snake contours for masking using maskingGUI `masking_gui.py`.
 - `python masking.py input_spec.ini {DataManager.get_initial_snake_contours_filepath(stack=stack)}`
 - **(HUMAN)** Return to masking GUI to inspect and correct the automatically generated masks.
 - `python warp_crop.py --input_spec input_spec.ini \
