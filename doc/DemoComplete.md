@@ -79,8 +79,10 @@ The following has been tested on Linux Ubuntu 16.04 and might not work on other 
 - `python compress_jpeg.py input_spec.ini`
 
 ## Compute patch features
+---
 - `$ ./demo/download_demo_data_compute_features.py`
 - `$ ./demo/compute_features_demo.py DEMO999 --section 230 --version NtbNormalizedAdaptiveInvertedGamma`
+---
 
 This demo is expected to finish in 1 minute.
 
@@ -108,8 +110,10 @@ For COMPUTE FEATURE DEMO:
   - To generalize, for every section two files are generated. Features and Locations, outputted as a bloscpack file.
  
 ## Generate probability volumes
+---
 - `$ ./demo/download_demo_data_scoring.py`
 - `$ ./demo/from_images_to_score_volumes_demo.py DEMO999 799 NtbNormalizedAdaptiveInvertedGammaJpeg --structure_list "[\"3N\", \"4N\", \"12N\"]"`
+---
 
 Note that the data needed to download for this demo is about 35G.
 
