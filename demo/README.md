@@ -31,7 +31,7 @@ cd ../demo
 * Pulling the Git repo takes 3-4 minutes with good Internet connection.
 
 ## Preprocess [not finished]
-- Run `download_demo_data_preprocessing.py` to download 4 JPEG2000 images.
+- Run `download_demo_data_preprocessing.py` to download 4 JPEG2000 images of the demo brain.
 - **(HUMAN)** Create meta data information for this brain
 - `python jp2_to_tiff.py DEMO998 {input_spec_json}`
 - `python extract_channel.py input_spec.ini 2 Ntb`
