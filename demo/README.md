@@ -5,7 +5,7 @@ Each demo shows one essential step of the pipeline:
 - preprocess the jpeg2000 stack (e.g. convert to tif and intra-stack align)
 - extract features using a convolutional neural network
 - generate probability maps using pre-trained classifiers
-- register 12N (hypoglossal nucleus) to the atlas individually.
+- register 12N (hypoglossal nucleus) to the atlas.
 - register 3N_R (occulomotor, right) and 4N_R (trochlear, right) to the atlas as a group.
 - visualize the aligned atlas overlaid on original images
 
