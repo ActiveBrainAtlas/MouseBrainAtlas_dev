@@ -39,9 +39,9 @@ cd ../demo
 - `python normalize_intensity.py input_spec.ini NtbNormalized`
 
 - **(HUMAN)** browse thumbnails to verify orientations are all correct
-- **(HUMAN)** Obtain roughly correctly sorted list of image names.
+- **(HUMAN)** Obtain a roughly correct sorted list of image names from the data provider.
 - `python align.py temp.ini {elastix_output_dir} {param_fp}`
-- **(HUMAN)** select anchor name
+- **(HUMAN)** select anchor image, using preprocessGUI `preprocess_gui.py`
 
 - `python compose.py --elastix_output_dir "{elastix_output_dir}" \
 --custom_output_dir "{custom_output_dir}" \
