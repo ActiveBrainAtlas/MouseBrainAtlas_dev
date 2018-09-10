@@ -17,18 +17,18 @@ All generated and downloaded data are stored in `demo/demo_data/`.
 
 ---------------------------
 
-## Install packages, setup environment variables
+## Installation
 
-The following has been tested on Linux Ubuntu 16.04 and might not work on other operating systems.
-
+A configuration script is provided to create a virtualenv called **mousebrainatlas** and install necessary packages.
 ```
 sudo apt-get install wget python-pip python-tk
 cd setup
-sudo pip install -r requirements.txt
-source set_env_variables.sh
+source config.sh
+workon `mousebrainatlas`
 cd ../demo
 ```
-* Pulling the Git repo takes 3-4 minutes with good Internet connection.
+
+The following has been tested on Linux Ubuntu 16.04 and might not work on other operating systems. Pulling the Git repo takes 3-4 minutes with good Internet connection.
 
 ## Preprocess
 - Run `download_demo_data_preprocessing.py` to download 4 JPEG2000 images of the demo brain.
