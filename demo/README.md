@@ -27,7 +27,7 @@ workon mousebrainatlas
 cd ../demo
 ```
 
-The following has been tested on Linux Ubuntu 16.04 and might not work on other operating systems. Pulling the Git repo takes 3-4 minutes with good Internet connection.
+The following has been tested on Linux Ubuntu 16.04 and might not work on other operating systems. Cloning the Git repo takes 3-4 minutes with good Internet connection.
 
 ## Preprocess
 - Run `download_demo_data_preprocessing.py` to download 4 JPEG2000 images of the demo brain.
