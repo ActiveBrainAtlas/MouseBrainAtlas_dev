@@ -63,7 +63,7 @@ cd ../demo
  --crop "/data/CSHL_data_processed/DEMO998/DEMO998_original_image_crop.csv" \
  --out_prep_id None`
 - `python normalize_intensity_adaptive.py input_spec.ini NtbNormalizedAdaptiveInvertedGamma`
-- **(HUMAN)** Give alignedWithMargin cropbox, based on alignedPadded images or automatically infer based on alignedPadded masks.
+- **(HUMAN)** Manually specify the alignedWithMargin cropbox based on alignedPadded images, or automatically infer based on alignedPadded masks.
 - `python warp_crop.py --input_spec input_spec.ini \
  --warp "{toanchor_transforms_fp}" \
  --crop "{DataManager.get_cropbox_filename_v2(stack=stack, anchor_fn=None, prep_id='alignedWithMargin')}" \
