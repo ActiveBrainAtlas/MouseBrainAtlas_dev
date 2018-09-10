@@ -21,11 +21,6 @@ if isinstance(kwargs_list, dict):
 else:
     # [{'a':1, 'b':'x'}, {'a':2, 'b':'y'}, {'a':3, 'b':'z'}]
     assert isinstance(kwargs_list, list)
-    
-    print ''
-    print args.command
-    print ''
-    
+
 for kwargs in kwargs_list:
-    print (args.command % kwargs)
     os.system(args.command % kwargs)

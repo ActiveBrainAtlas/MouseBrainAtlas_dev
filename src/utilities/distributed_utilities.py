@@ -12,7 +12,7 @@ from metadata import *
 
 default_root = dict(localhost='/home/yuncong',
                     # workstation='/media/yuncong/BstemAtlasData',
-                    workstation='/media/alexn/BstemAtlasDataBackup',
+                    workstation='/data',
                     oasis='/home/yuncong/csd395', s3=S3_DATA_BUCKET, ec2='/shared', ec2scratch='/scratch', s3raw=S3_RAWDATA_BUCKET)
 
 def upload_to_s3(fp, local_root=None, is_dir=False):
@@ -45,20 +45,17 @@ def download_from_s3(fp, local_root=None, is_dir=False, redownload=False, includ
         fp (str): file path
         local_root (str): default to ROOT_DIR
     """
-    
-  #  print 'ROOT dir of download location: '+local_root
 
     # Not using keyword default value because ROOT_DIR might be dynamically assigned rather than set at module importing.
-  #  if local_root is None:
-  #      print 'local_root is None'
-  #      if '/media/yuncong/YuncongPublic' in fp:
-  #          local_root = '/media/yuncong/YuncongPublic'
-  #      # elif '/media/yuncong/BstemAtlasData' in fp:
-  #      elif fp.startswith('/data'):
-  #          # local_root = '/media/yuncong/BstemAtlasData'
-  #          local_root = '/data'
-  #      else:
-  #          local_root = ROOT_DIR
+    if local_root is None:
+        if '/media/yuncong/YuncongPublic' in fp:
+            local_root = '/media/yuncong/YuncongPublic'
+        # elif '/media/yuncong/BstemAtlasData' in fp:
+        elif fp.startswith('/data'):
+            # local_root = '/media/yuncong/BstemAtlasData'
+            local_root = '/data'
+        else:
+            local_root = ROOT_DIR
 
     if redownload or not os.path.exists(fp):
         # TODO: even if the file exists, it might be incomplete. A more reliable way is to check if the sizes of two files match.
@@ -68,7 +65,6 @@ def download_from_s3(fp, local_root=None, is_dir=False, redownload=False, includ
                             is_dir=is_dir,
                             to_root=local_root,
                             include_only=include_only)
-        #print 'Success?'
 
 
 def relative_to_local(abs_fp, local_root=None):
@@ -93,7 +89,6 @@ def transfer_data(from_fp, to_fp, from_hostname, to_hostname, is_dir, include_on
     if from_hostname in ['localhost', 'ec2', 'workstation', 'ec2scratch']:
         # upload
         if to_hostname in ['s3', 's3raw']:
-            
             if is_dir:
                 if includes is not None:
                     execute_command('aws s3 cp --recursive \"%(from_fp)s\" \"s3://%(to_fp)s\" --exclude \"*\" %(includes_str)s' % dict(from_fp=from_fp, to_fp=to_fp, includes_str=" ".join(['--include ' + incl for incl in includes])))
@@ -113,7 +108,7 @@ def transfer_data(from_fp, to_fp, from_hostname, to_hostname, is_dir, include_on
     elif to_hostname in ['localhost', 'ec2', 'workstation', 'ec2scratch']:
         # download
         if from_hostname in ['s3', 's3raw']:
-            
+
             # Clear existing folder/file
             if not include_only and not includes and not exclude_only:
                 execute_command('rm -rf \"%(to_fp)s\" && mkdir -p \"%(to_parent)s\"' % dict(to_parent=to_parent, to_fp=to_fp))
@@ -130,7 +125,6 @@ def transfer_data(from_fp, to_fp, from_hostname, to_hostname, is_dir, include_on
                     execute_command('aws s3 cp --recursive \"s3://%(from_fp)s\" \"%(to_fp)s\"' % dict(from_fp=from_fp, to_fp=to_fp))
             else:
                 execute_command('aws s3 cp \"s3://%(from_fp)s\" \"%(to_fp)s\"' % dict(from_fp=from_fp, to_fp=to_fp))
-                print '\nEXECUTING THIS COMMAND: '+'aws s3 cp \"s3://%(from_fp)s\" \"%(to_fp)s\"' % dict(from_fp=from_fp, to_fp=to_fp)+'\n'
         else:
             execute_command("scp -r %(from_hostname)s:\"%(from_fp)s\" \"%(to_fp)s\"" % dict(from_fp=from_fp, to_fp=to_fp, from_hostname=from_hostname))
     else:
@@ -139,22 +133,13 @@ def transfer_data(from_fp, to_fp, from_hostname, to_hostname, is_dir, include_on
                         dict(from_fp=from_fp, to_fp=to_fp, from_hostname=from_hostname, to_hostname=to_hostname, to_parent=to_parent))
 
 def transfer_data_synced(fp_relative, from_hostname, to_hostname, is_dir, from_root=None, to_root=None, include_only=None, exclude_only=None, includes=None, s3_bucket=None):
-    #print 'from_root: '+str(from_root)
-    print 'to_root: '+str(to_root)
     if from_root is None:
         from_root = default_root[from_hostname]
-        #print 'new from_root: '+str(from_root)
     if to_root is None:
         to_root = default_root[to_hostname]
-        # Maybe need to set this to '/media' in the future???
-        # Set to_root to this if your download location is an absolute filepath
-        #to_root = '/'
-        #print 'new to_root: '+str(to_root)
 
     from_fp = os.path.join(from_root, fp_relative)
     to_fp = os.path.join(to_root, fp_relative)
-    #print 'from: '+from_fp
-    print 'finally to  : '+to_fp
     transfer_data(from_fp=from_fp, to_fp=to_fp, from_hostname=from_hostname, to_hostname=to_hostname, is_dir=is_dir, include_only=include_only, exclude_only=exclude_only, includes=includes)
 
 
@@ -269,17 +254,18 @@ def run_distributed5(command, argument_type='single', kwargs_list=None, jobs_per
         argument_type: one of list, list2, single. If command takes one input item as argument, use "single". If command takes a list of input items as argument, use "list2". If command takes an argument called "kwargs_str", use "list".
     """
 
-    # Remove stderr and stdout files no matter what.
     if use_aws:
-        #execute_command('rm -f /home/ubuntu/stderr_*; rm -f /home/ubuntu/stdout_*')
-        execute_command('rm -f ~/stderr_*; rm -f ~/stdout_*')
+        execute_command('rm -f /home/ubuntu/stderr_*; rm -f /home/ubuntu/stdout_*')
     else:
         execute_command('rm -f ~/stderr_*; rm -f ~/stdout_*')
 
     if local_only:
         sys.stderr.write("Run locally.\n")
+
         n_hosts = 1
+
     else:
+
         # Use a fixed node list rather than letting SGE automatically determine the node list.
         # This allows for control over which input items go to which node.
         if node_list is None:
@@ -293,7 +279,6 @@ def run_distributed5(command, argument_type='single', kwargs_list=None, jobs_per
     if kwargs_list is None:
         kwargs_list = {'dummy': [None]*n_hosts}
 
-    # kwargs list is converted to a dictionary
     if isinstance(kwargs_list, dict):
         keys, vals = zip(*kwargs_list.items())
         kwargs_list_as_list = [dict(zip(keys, t)) for t in zip(*vals)]
@@ -305,31 +290,19 @@ def run_distributed5(command, argument_type='single', kwargs_list=None, jobs_per
         kwargs_list_as_dict = dict(zip(keys, zip(*vals)))
 
     assert argument_type in ['single', 'list', 'list2'], 'argument_type must be one of single, list, list2.'
-    print 'argument type: '+argument_type
-    
-    
+
     for node_i, (fi, li) in enumerate(first_last_tuples_distribute_over(0, len(kwargs_list_as_list)-1, n_hosts)):
-        #print 'fi: ',fi # First index
-        #print 'li: ',li # Last index
-        #print 'node_i: ',node_i # Node index
-        #print 'enumerate over ',first_last_tuples_distribute_over(0, len(kwargs_list_as_list)-1, n_hosts)
-        
-        temp_script = '/tmp/runall.sh'
+
+        temp_script = '/home/yuncong/runall.sh'
         temp_f = open(temp_script, 'w')
 
         for j, (fj, lj) in enumerate(first_last_tuples_distribute_over(fi, li, jobs_per_node)):
-            #print 'fj: ',fj # First index 2
-            #print 'lj: ',lj # Last index 2
-            #print 'index j: ',j # J index
-        
-            # json.dumps(obj) converts an object into a string
-            
             if argument_type == 'list':
                 line = command % {'kwargs_str': json.dumps(kwargs_list_as_list[fj:lj+1])}
             elif argument_type == 'list2':
                 line = command % {key: json.dumps(vals[fj:lj+1]) for key, vals in kwargs_list_as_dict.iteritems()}
             elif argument_type == 'single':
-                # It is important to wrap command_templates and kwargs_list_str in apostrophes.
+                # It is important to wrap command_templates and kwargs_list_str in apostrphes.
                 # That lets bash treat them as single strings.
                 # Reference: http://stackoverflow.com/questions/15783701/which-characters-need-to-be-escaped-in-bash-how-do-we-know-it
                 line = "%(generic_launcher_path)s %(command_template)s %(kwargs_list_str)s" % \
@@ -337,8 +310,6 @@ def run_distributed5(command, argument_type='single', kwargs_list=None, jobs_per
                 'command_template': shell_escape(command),
                 'kwargs_list_str': shell_escape(json.dumps(kwargs_list_as_list[fj:lj+1]))
                 }
-            #print 'line: '+line
-            #print sys.getsizeof(line)
 
             temp_f.write(line + ' &\n')
 
@@ -351,24 +322,16 @@ def run_distributed5(command, argument_type='single', kwargs_list=None, jobs_per
         # One can then assign downstream programs to specific nodes so they can read corresponding files from local scratch.
         
         if use_aws:
-            stdout_template = '/home/alexn/stdout_%d.log'
-            stderr_template = '/home/alexn/stderr_%d.log'
-            #stdout_template = '/home/ubuntu/stdout_%d.log'
-            #stderr_template = '/home/ubuntu/stderr_%d.log'
+            stdout_template = '/home/ubuntu/stdout_%d.log'
+            stderr_template = '/home/ubuntu/stderr_%d.log'
         else:
-            stdout_template = '/home/alexn/stdout_%d.log'
-            stderr_template = '/home/alexn/stderr_%d.log'
-            #stdout_template = '/home/yuncong/stdout_%d.log'
-            #stderr_template = '/home/yuncong/stderr_%d.log'
+            stdout_template = '/home/yuncong/stdout_%d.log'
+            stderr_template = '/home/yuncong/stderr_%d.log'
         
         if local_only:
             stdout_f = open(stdout_template % node_i, "w")
             stderr_f = open(stderr_template % node_i, "w")
-            #print 'before calling script'
-            #print line
             call(temp_script, shell=True, stdout=stdout_f, stderr=stderr_f)
-            #print 'after calling script'
-            #print 'running script: '+temp_script
         else:
             call('qsub -V -q all.q@%(node)s -o %(stdout_log)s -e %(stderr_log)s %(script)s' % \
              dict(node=node_list[node_i], script=temp_script,

@@ -26,14 +26,33 @@ except:
 
 import bloscpack as bp
 
-from ipywidgets import FloatProgress
-from IPython.display import display
-
 from skimage.measure import grid_points_in_poly, subdivide_polygon, approximate_polygon
 from skimage.measure import find_contours, regionprops
 
 from skimage.filters import gaussian
 
+from metadata import ENABLE_UPLOAD_S3, ENABLE_DOWNLOAD_S3
+
+#######################################
+
+import warnings
+import functools
+
+def deprecated(func):
+    """This is a decorator which can be used to mark functions
+    as deprecated. It will result in a warning being emitted
+    when the function is used."""
+    @functools.wraps(func)
+    def new_func(*args, **kwargs):
+        warnings.simplefilter('always', DeprecationWarning)  # turn off filter
+        warnings.warn("Call to deprecated function {}.".format(func.__name__),
+                      category=DeprecationWarning,
+                      stacklevel=2)
+        warnings.simplefilter('default', DeprecationWarning)  # reset filter
+        return func(*args, **kwargs)
+    return new_func
+
+#########################################
 
 def convert_defaultdict_to_dict(d):
     if isinstance(d, defaultdict):
@@ -99,7 +118,7 @@ def load_data(fp, polydata_instead_of_face_vertex_list=True, download_s3=True):
     from vis3d_utilities import load_mesh_stl
     from distributed_utilities import download_from_s3
 
-    if download_s3:
+    if ENABLE_DOWNLOAD_S3 and download_s3:
         download_from_s3(fp)
 
     if fp.endswith('.bp'):
@@ -127,7 +146,7 @@ def save_data(data, fp, upload_s3=True):
     create_parent_dir_if_not_exists(fp)
 
     if fp.endswith('.bp'):
-        bp.pack_ndarray_file(np.ascontiguousarray(data), fp) 
+        bp.pack_ndarray_file(np.ascontiguousarray(data), fp)
         # ascontiguousarray is important, without which sometimes the loaded array will be different from saved.
     elif fp.endswith('.json'):
         save_json(data, fp)
@@ -147,7 +166,7 @@ def save_data(data, fp, upload_s3=True):
     else:
         raise
 
-    if upload_s3:
+    if ENABLE_UPLOAD_S3 and upload_s3: # in the future, use only one flag.
         upload_to_s3(fp)
 
 ##################################################################
@@ -208,7 +227,7 @@ def convert_volume_forms(volume, out_form):
     else:
         raise Exception("out_form %s is not recognized.")
 
-        
+
 def volume_origin_to_bbox(v, o):
     """
     Convert a (volume, origin) tuple into a bounding box.
@@ -273,7 +292,7 @@ def plot_by_stack_by_structure(data_all_stacks_all_structures, structures,
                               ):
     """
     Plot the input data, with structures as x-axis. Different stacks are represented using different colors.
-    
+
     Args:
         style (str): scatter or boxplot.
     """
@@ -290,12 +309,12 @@ def plot_by_stack_by_structure(data_all_stacks_all_structures, structures,
                     for i, s in enumerate(structures)]
             ax.scatter(range(len(vals)), vals, marker='o', s=100, label=stack, c=np.array(stack_to_color[stack])/255.);
     elif style == 'boxplot':
-        
-        D = [[data_all_stacks_all_structures[stack][struct] 
-              for stack in data_all_stacks_all_structures.iterkeys() 
+
+        D = [[data_all_stacks_all_structures[stack][struct]
+              for stack in data_all_stacks_all_structures.iterkeys()
              if struct in data_all_stacks_all_structures[stack]]
             for struct in structures]
-        
+
         bplot = plt.boxplot(np.array(D), positions=range(0, len(structures)), patch_artist=True);
 #         for patch in bplot['boxes']:
 #             patch.set_facecolor(np.array(stack_to_color[stack])/255.)
@@ -320,7 +339,7 @@ def plot_by_stack_by_structure(data_all_stacks_all_structures, structures,
     ax.set_ylim([yticks[0], yticks[-1]+yticks[-1]-yticks[-2]]);
     plt.legend();
     ax.set_title(title, fontsize=20);
-    
+
     return fig, ax
 
 #####################################################################
@@ -1368,18 +1387,21 @@ def array_to_one_liner(arr):
     return ' '.join(map(str, arr)) + '\n'
 
 def show_progress_bar(min, max):
+    from ipywidgets import FloatProgress
+    from IPython.display import display
+
     bar = FloatProgress(min=min, max=max)
     display(bar)
     return bar
 
-from enum import Enum
-
-class PolygonType(Enum):
-    CLOSED = 'closed'
-    OPEN = 'open'
-    TEXTURE = 'textured'
-    TEXTURE_WITH_CONTOUR = 'texture with contour'
-    DIRECTION = 'directionality'
+# from enum import Enum
+#
+# class PolygonType(Enum):
+#     CLOSED = 'closed'
+#     OPEN = 'open'
+#     TEXTURE = 'textured'
+#     TEXTURE_WITH_CONTOUR = 'texture with contour'
+#     DIRECTION = 'directionality'
 
 def create_parent_dir_if_not_exists(fp):
     create_if_not_exists(os.path.dirname(fp))
@@ -2128,40 +2150,6 @@ def smart_map(data, keyfunc, func):
 
     return results_inOrigOrder.values()
 
-boynton_colors = dict(blue=(0,0,255),
-    red=(255,0,0),
-    green=(0,255,0),
-    yellow=(255,255,0),
-    magenta=(255,0,255),
-    pink=(255,128,128),
-    gray=(128,128,128),
-    brown=(128,0,0),
-    orange=(255,128,0))
-
-kelly_colors = dict(vivid_yellow=(255, 179, 0),
-                    strong_purple=(128, 62, 117),
-                    vivid_orange=(255, 104, 0),
-                    very_light_blue=(166, 189, 215),
-                    vivid_red=(193, 0, 32),
-                    grayish_yellow=(206, 162, 98),
-                    medium_gray=(129, 112, 102),
-
-                    # these aren't good for people with defective color vision:
-                    vivid_green=(0, 125, 52),
-                    strong_purplish_pink=(246, 118, 142),
-                    strong_blue=(0, 83, 138),
-                    strong_yellowish_pink=(255, 122, 92),
-                    strong_violet=(83, 55, 122),
-                    vivid_orange_yellow=(255, 142, 0),
-                    strong_purplish_red=(179, 40, 81),
-                    vivid_greenish_yellow=(244, 200, 0),
-                    strong_reddish_brown=(127, 24, 13),
-                    vivid_yellowish_green=(147, 170, 0),
-                    deep_yellowish_brown=(89, 51, 21),
-                    vivid_reddish_orange=(241, 58, 19),
-                    dark_olive_green=(35, 44, 22))
-
-high_contrast_colors = boynton_colors.values() + kelly_colors.values()
 
 import randomcolor
 
