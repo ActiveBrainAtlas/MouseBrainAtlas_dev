@@ -19,7 +19,7 @@ All generated and downloaded data are stored in `demo/demo_data/`.
 
 ## Installation
 
-A configuration script is provided to create a virtualenv called **mousebrainatlas** and install necessary packages.
+A configuration script is provided to create a [virtualenv](https://virtualenv.pypa.io/en/stable/) called **mousebrainatlas** and install necessary packages.
 ```
 sudo apt-get install wget python-pip python-tk
 cd setup
