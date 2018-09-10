@@ -6,7 +6,7 @@ Each demo shows one essential step of the pipeline:
 - extract features using a convolutional neural network
 - generate probability maps using pre-trained classifiers
 - register 12N (hypoglossal nucleus) to the atlas.
-- register 3N_R (occulomotor, right) and 4N_R (trochlear, right) to the atlas as a group.
+- register 3N_R (occulomotor nucleus, right) and 4N_R (trochlear nucleus, right) to the atlas as a group.
 - visualize the aligned atlas overlaid on original images
 
 Associated with each step are one download script and one work script.
