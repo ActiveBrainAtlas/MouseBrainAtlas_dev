@@ -22,12 +22,7 @@ def download_to_demo(fp):
     create_if_not_exists(demo_data_dir)
     s3_http_prefix = 'https://s3-us-west-1.amazonaws.com/mousebrainatlas-data/'
     url = s3_http_prefix + fp
-<<<<<<< HEAD
-    print os.path.join(demo_data_dir, fp)
-=======
->>>>>>> yuncong_demo
     demo_fp = os.path.join(demo_data_dir, fp)
-    print '*******'
     execute_command('wget -N -P \"%s\" \"%s\"' % (os.path.dirname(demo_fp), url))
     return demo_fp
 
@@ -39,11 +34,7 @@ download_to_demo(rel_fp)
 
 fp = DataManager.get_anchor_filename_filename(stack='DEMO999')
 rel_fp = relative_to_local(fp, local_root=DATA_ROOTDIR)
-print '***'
-print rel_fp
 anchor_fp_demo = download_to_demo(rel_fp)
-print '**************************'
-sys.exit()
 
 anchor_fn = DataManager.load_anchor_filename(stack='DEMO999')
 
