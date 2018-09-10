@@ -55,7 +55,7 @@ for sec in range(85, 357):
     download_to_demo(rel_fp)
 
 
-for sec in [152]:
+for sec in [230]:
     fp = DataManager.get_image_filepath_v2(stack='DEMO999', prep_id='alignedBrainstemCrop', resol='raw', version='NtbNormalizedAdaptiveInvertedGamma', section=sec)
     rel_fp = relative_to_local(fp, local_root=DATA_ROOTDIR)
     download_to_demo(rel_fp)
