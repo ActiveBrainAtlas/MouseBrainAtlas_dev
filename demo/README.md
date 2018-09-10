@@ -23,7 +23,7 @@ A configuration script is provided to create a [virtualenv](https://virtualenv.p
 ```
 cd setup
 source config.sh
-workon `mousebrainatlas`
+workon mousebrainatlas
 cd ../demo
 ```
 
