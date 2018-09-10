@@ -32,14 +32,52 @@ cd ../demo
 
 ## Preprocess [not finished]
 - Run download_demo_data_preprocessing.py --step 1 to download an example JPEG2000 image.
-- `verify_input.py`: 
-  Using this we verify
-    - every image is in order list
-  this also generates the thumbnails `resize`. 
-    - orientations are correct
-- Run preprocess_demo.py --step 1
-- Run download_demo_data_preprocessing.py --step 2
-- `$ ./align.py DEMO999`
+- **(HUMAN)** Create meta data information for this brain
+- `python jp2_to_tiff.py DEMO998 {input_spec_json}`
+- `python extract_channel.py input_spec.ini 2 Ntb`
+- `python rescale.py input_spec.ini thumbnail -f {1./32}`
+- `python normalize_intensity.py input_spec.ini NtbNormalized`
+
+- **(HUMAN)** browse thumbnails to verify orientations are all correct
+- **(HUMAN)** Obtain roughly correctly sorted list of image names.
+- `python align.py temp.ini {elastix_output_dir} {param_fp}`
+- **(HUMAN)** select anchor name
+
+- `python compose.py --elastix_output_dir "{elastix_output_dir}" \
+--custom_output_dir "{custom_output_dir}" \
+--input_spec input_spec.ini  \
+--anchor "{anchor_img_name}" \
+--out "{toanchor_transforms_fp}"`
+- **(HUMAN)** set planar_resolution for DEMO998 in `metadata.py`
+
+- `python warp_crop.py --input_spec input_spec.ini \
+ --warp "/data/CSHL_data_processed/DEMO999/DEMO999_transformsTo_MD662&661-F102-2017.06.06-22.30.50_MD661_1_0304.csv" \
+ --out_prep_id alignedPadded`
+
+- **(HUMAN)** Inspect aligned images using preprocessGUI `preprocess_gui.py`, correct pairwise transforms and check each image's order in stack. Create DEMO998_sorted_filenames.txt
+- **(HUMAN)** draw initial snake contours for masking
+- `python masking.py input_spec.ini {DataManager.get_initial_snake_contours_filepath(stack=stack)}`
+- **(HUMAN)** Return to masking GUI to inspect and correct the automatically generated masks.
+- `python warp_crop.py --input_spec input_spec.ini \
+ --inverse_warp "{toanchor_transforms_fp}" \
+ --crop "/data/CSHL_data_processed/DEMO998/DEMO998_original_image_crop.csv" \
+ --out_prep_id None`
+- `python normalize_intensity_adaptive.py input_spec.ini NtbNormalizedAdaptiveInvertedGamma`
+- **(HUMAN)** Give alignedWithMargin cropbox, based on alignedPadded images or automatically infer based on alignedPadded masks.
+- `python warp_crop.py --input_spec input_spec.ini \
+ --warp "{toanchor_transforms_fp}" \
+ --crop "{DataManager.get_cropbox_filename_v2(stack=stack, anchor_fn=None, prep_id='alignedWithMargin')}" \
+ --out_prep_id alignedWithMargin`
+- `python rescale.py input_spec.ini thumbnail -f {1./32}`
+- **(HUMAN)** Specify prep2 (alignedBrainstemCrop) cropping box, based on alignedWithMargin thumbnails or alignedPadded thumbnails
+- `python warp_crop.py --input_spec input_spec.ini \
+ --warp "{toanchor_transforms_fp}" \
+ --crop "{convert_cropbox_fmt(data=DataManager.load_cropbox_v2_relative(stack=stack, prep_id='alignedBrainstemCrop', \
+                                     wrt_prep_id='alignedWithMargin', \
+                                    out_resolution='thumbnail'), \
+                    in_fmt='arr_xxyy', out_fmt='str_xywh', stack=stack)}" \
+ --out_prep_id alignedBrainstemCrop`
+- `python compress_jpeg.py input_spec.ini`
 
 ## Compute patch features
 - `$ ./download_demo_data_compute_features.py`
