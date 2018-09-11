@@ -1,6 +1,11 @@
 # Demos
 
+**Yoav:** Is this demo supposed to run on a local ubuntu machine or on a machine on ec2?
+
 This demo suite shows how to align three structures (12N, 3N_R, 4N_R) in a subject brain (DEMO999) with the atlas (atlasV7). 
+
+**Yoav** Can the demo be changed to run on the complete set of structures?
+
 Each demo shows one essential step of the pipeline:
 - preprocess the jpeg2000 stack (e.g. convert to tif and intra-stack align)
 - extract features using a convolutional neural network
