@@ -119,7 +119,12 @@ Note that the data needed to download for this demo is about 35G.
 
 #### Alex Running Notes
 For `demo/download_demo_data_scoring.py`:
-- Ran with `python demo/download_demo_data_scoring.py --demo_data_dir $ROOT_DIR`. Downloading the files can take a while.
+- Ran with `python demo/download_demo_data_scoring.py --demo_data_dir $ROOT_DIR`. Downloading the files takes at least 3-5 hours.
+- Downloads an entire stack's feature data (272 sections for MD661 specifically). For each slice there are two *.bp files as listed below:
+ - `[SLICENAME]_prep2_none_win7_inception-bn-blue_features.bp`
+ - `[SLICENAME]_prep2_none_win7_inception-bn-blue_locations.bp`
+
+For `./demo/from_images_to_score_volumes_demo.py`
 
 ## Registration
 `$ ./download_demo_data_registration.py`
