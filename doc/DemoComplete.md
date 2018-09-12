@@ -92,14 +92,20 @@ This demo is expected to finish in 1 minute.
 ##### Evironmental variables
 ```python
 REPO_DIIR = the directory holding the code repository
-ROOT_DIR = the root od the data sub-directories
-DATA_ROOTDIR = 
-THUMBNAIL_DATA_ROOTDIR
+ROOT_DIR = the root of the data sub-directories, all downloaded data goes here
+DATA_ROOTDIR = this is where high level data past the preprocessing stage is saved
+THUMBNAIL_DATA_ROOTDIR = this is for most preprocessing outputs, location of downsampled images
+```
+Alex set these variables to: 
+```python
+REPO_DIIR = $PWD/../src/
+ROOT_DIR = /media/alexn/BstemAtlasDataBackup/demo/
+DATA_ROOTDIR = /media/alexn/BstemAtlasDataBackup/demo/
+THUMBNAIL_DATA_ROOTDIR = /media/alexn/BstemAtlasDataBackup/demo/
 ```
 
 
 For the first command: `demo/download_demo_data_compute_features.py`:
-- Set ALL environmental root path variables to be 'ROOT=/media/alexn/BstemAtlasDataBackup/demo/', except REPO_DIIR. I'll call this path 'ROOT'
 - Ran with `python demo/download_demo_data_compute_features.py --demo_data_dir /media/alexn/BstemAtlasDataBackup/demo/` to copy all files into the external hard drive. Only takes in 1 arg which is the download dir, otherwise defaults to ./demo_data. All files go into `[demo_data_dir]/CSHL_data_processed/DEMO999/`, Downloaded 4 files:
   - `DEMO999_sorted_filenames.txt`
   - `DEMO999_anchor.txt`
