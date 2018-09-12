@@ -25,7 +25,7 @@ A configuration script is provided to create a [virtualenv](https://virtualenv.p
 cd setup
 # Modify the first a few lines of config.sh according to your specific use case.
 source config.sh
-workon mousebrainatlas
+# Make sure we are now working under the mousebrainatlas python virtual environment.
 cd ../demo
 ```
 
