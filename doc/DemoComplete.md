@@ -89,7 +89,7 @@ For each patch generate a feature vector using the pre-trained CNN
 This demo is expected to finish in 1 minute.
 
 #### Alex Running Notes
-For `demo/download_demo_data_compute_features.py`:
+For the first command: `demo/download_demo_data_compute_features.py`:
 - Set ALL environmental root path variables to be /media/alexn/BstemAtlasDataBackup/demo/, except REPO_DIIR. I'll call this path 'ROOT'
 - Ran with `python demo/download_demo_data_compute_features.py --demo_data_dir /media/alexn/BstemAtlasDataBackup/demo/` to copy all files into the external hard drive. Only takes in 1 arg which is the download dir, otherwise defaults to ./demo_data. All files go into `[demo_data_dir]/CSHL_data_processed/DEMO999/`, Downloaded 4 files:
   - `DEMO999_sorted_filenames.txt`
