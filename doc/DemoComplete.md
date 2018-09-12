@@ -125,6 +125,8 @@ For `demo/download_demo_data_scoring.py`:
  - `[SLICENAME]_prep2_none_win7_inception-bn-blue_locations.bp`
 
 For `./demo/from_images_to_score_volumes_demo.py`
+- Running does not work properly with the suggested command. Does not take in a description of preprocessing files as input.
+- Issues with the code running, does not download necessary files from S3 https://s3.console.aws.amazon.com/s3/buckets/mousebrainatlas-data/CSHL_volumes/atlasV6/atlasV6_10.0um_scoreVolume/score_volumes/?region=us-east-1&tab=overview
 
 ## Registration
 `$ ./download_demo_data_registration.py`
