@@ -20,14 +20,16 @@ parser = argparse.ArgumentParser(
 
 parser.add_argument("brain_name", type=str, help="Brain name")
 parser.add_argument("detector_id", type=int, help="Detector id")
+parser.add_argument("bg_img_version", type=str, help="Version of scoremap visualization background image")
 parser.add_argument("--structure_list", type=str, help="Json-encoded list of structures (unsided) (Default: all known structures)")
 args = parser.parse_args()
 
 stack = args.brain_name
 detector_id = args.detector_id
+bg_img_version = args.bg_img_version
 
 import json
-if hasattr(args, 'structure_list'): 
+if hasattr(args, 'structure_list'):
     structure_list = json.loads(args.structure_list)
         
     from_fp = 'mousebrainatlas-data/CSHL_volumes/atlasV6/atlasV6_10.0um_scoreVolume/score_volumes/'
@@ -41,9 +43,9 @@ if hasattr(args, 'structure_list'):
 else:
     # structure_list = all_known_structures
     structure_list = ['Amb', 'SNR', '7N', '5N', '7n', 'LRt', 'Sp5C', 'SNC', 'VLL', 'SC', 'IC']
-    
-atlas_spec = dict(name='atlasV6',
-                   vol_type='score'    ,               
+
+atlas_spec = dict(name='atlasV7',
+                   vol_type='score'    ,
                     resolution='10.0um'
                    )
 
@@ -80,13 +82,13 @@ DataManager.load_original_volume_all_known_structures_v3(atlas_spec, in_bbox_wrt
 # for name_s, corners_xyz in registered_atlas_structures_xyzTwoCorners_wrt_wholebrainWithMargin_atlasResol.iteritems():
 # #     print name_s
 #     registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners[name_s] = \
-#     converter.convert_frame_and_resolution(p=corners_xyz, 
+#     converter.convert_frame_and_resolution(p=corners_xyz,
 #                                        in_wrt=('wholebrainWithMargin', 'sagittal'),
 #                                       in_resolution='10.0um',
 #                                       out_wrt=('wholebrainXYcropped', 'sagittal'),
 #                                       out_resolution='image_image_section').astype(np.int)
 
-# save_json(registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners, 
+# save_json(registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners,
 #           '/home/yuncong/' + stack + '_registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners.json')
 
 
@@ -95,7 +97,7 @@ DataManager.load_original_volume_all_known_structures_v3(atlas_spec, in_bbox_wrt
 batch_size = 256
 model_dir_name = 'inception-bn-blue'
 model_name = 'inception-bn-blue'
-model, mean_img = load_mxnet_model(model_dir_name=model_dir_name, model_name=model_name, 
+model, mean_img = load_mxnet_model(model_dir_name=model_dir_name, model_name=model_name,
                                    num_gpus=1, batch_size=batch_size)
 
 # detector_id = 19 # For CSHL nissl data. e.g. MD589, denser window
@@ -110,7 +112,7 @@ valid_secmin = np.min(metadata_cache['valid_sections'][stack])
 valid_secmax = np.max(metadata_cache['valid_sections'][stack])
 
 registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners = \
-load_json(os.path.join(ROOT_DIR, 'CSHL_simple_global_registration', 
+load_json(os.path.join(ROOT_DIR, 'CSHL_simple_global_registration',
                        stack + '_registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners.json'))
 
 ######## Identify ROI based on simple global alignment ########
@@ -136,15 +138,15 @@ for name_u in structure_list:
                 continue
 
             registered_atlas_structures_wrt_wholebrainXYcropped_bboxes_perSection[name_u][sec] = \
-            (max(xmin - image_margin, 0), 
-             xmax + image_margin, 
-             max(ymin - image_margin, 0), 
+            (max(xmin - image_margin, 0),
+             xmax + image_margin,
+             max(ymin - image_margin, 0),
              ymax + image_margin)
     else:
 
         a = defaultdict(list)
 
-        lname = convert_to_left_name(name_u)        
+        lname = convert_to_left_name(name_u)
         (xmin, ymin, secmin), (xmax, ymax, secmax) = registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners[lname]
 
         for sec in range(max(secmin - section_margin, valid_secmin), min(secmax + 1 + section_margin, valid_secmax)):
@@ -152,9 +154,9 @@ for name_u in structure_list:
             if is_invalid(sec=sec, stack=stack):
                 continue
 
-            a[sec].append((max(xmin - image_margin, 0), 
-             xmax + image_margin, 
-             max(ymin - image_margin, 0), 
+            a[sec].append((max(xmin - image_margin, 0),
+             xmax + image_margin,
+             max(ymin - image_margin, 0),
              ymax + image_margin))
 
         rname = convert_to_right_name(name_u)
@@ -165,9 +167,9 @@ for name_u in structure_list:
             if is_invalid(sec=sec, stack=stack):
                 continue
 
-            a[sec].append((max(xmin - image_margin, 0), 
-             xmax + image_margin, 
-             max(ymin - image_margin, 0), 
+            a[sec].append((max(xmin - image_margin, 0),
+             xmax + image_margin,
+             max(ymin - image_margin, 0),
              ymax + image_margin))
 
         for sec, bboxes in a.iteritems():
@@ -196,18 +198,18 @@ for name_u in structure_list:
 
             viz_all_landmarks, scoremap_all_landmarks = \
             draw_scoremap(clfs={name_u: clfs[name_u]}, 
-                                  bbox=bbox,
-                            scheme='none', 
+                            scheme='none',
                         win_id=win_id, prep_id=2,
-                        stack=stack, 
+                        stack=stack,
                           return_what='both',
                           sec=sec,
                         model=model, model_name=model_name,
-                         mean_img=mean_img, 
+                         mean_img=mean_img,
                          batch_size=batch_size,
                           output_patch_size=224,
                           is_nissl=False,
                        out_resolution_um=out_resolution_um,
+			bg_img_version=bg_img_version,
                     image_shape=metadata_cache['image_shape'][stack],
                                   return_wholeimage=True)
 
@@ -216,16 +218,16 @@ for name_u in structure_list:
 
             t = time.time()
             scoremap_bp_filepath = \
-            DataManager.get_downscaled_scoremap_filepath(stack=stack, section=sec, 
+            DataManager.get_downscaled_scoremap_filepath(stack=stack, section=sec,
                                                          structure=name_u,
                                                          detector_id=detector_id,
                                                          out_resolution_um=out_resolution_um)
             save_data(sm.astype(np.float16), scoremap_bp_filepath, upload_s3=False)
             sys.stderr.write('Save scoremap: %.2f seconds\n' % (time.time() - t))
-            
+
             t = time.time()
             viz_filepath = \
-            DataManager.get_scoremap_viz_filepath_v2(stack=stack, section=sec, 
+            DataManager.get_scoremap_viz_filepath_v2(stack=stack, section=sec,
                                                          structure=name_u,
                                                          detector_id=detector_id,
                                                          out_resolution=output_resolution)
@@ -237,15 +239,15 @@ for name_u in structure_list:
             ################ Generate scoremap only ################
 
 #                 scoremap_all_landmarks = \
-#                 draw_scoremap(clfs={name_u: clfs[name_u]}, 
+#                 draw_scoremap(clfs={name_u: clfs[name_u]},
 #                                       bbox=bbox,
-#                                 scheme='none', 
+#                                 scheme='none',
 #                             win_id=win_id, prep_id=2,
-#                             stack=stack, 
+#                             stack=stack,
 #                               return_what='scoremap',
 #                               sec=sec,
 #                             model=model, model_name=model_name,
-#                              mean_img=mean_img, 
+#                              mean_img=mean_img,
 #                              batch_size=batch_size,
 #                               output_patch_size=224,
 #                               is_nissl=False,
@@ -256,7 +258,7 @@ for name_u in structure_list:
 #                 sm = scoremap_all_landmarks[name_u]
 
 #                 scoremap_bp_filepath = \
-#                 DataManager.get_downscaled_scoremap_filepath(stack=stack, section=sec, 
+#                 DataManager.get_downscaled_scoremap_filepath(stack=stack, section=sec,
 #                                                              structure=name_u,
 #                                                              detector_id=detector_id,
 #                                                              out_resolution_um=out_resolution_um)
@@ -281,23 +283,23 @@ for name_u in structure_list:
 
         (xmin, ymin, s1), (xmax, ymax, s2) = registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners[name_s]
 
-        for sec in range(max(s1 - section_margin, metadata_cache['section_limits'][stack][0]), 
+        for sec in range(max(s1 - section_margin, metadata_cache['section_limits'][stack][0]),
                          min(s2 + 1 + section_margin, metadata_cache['section_limits'][stack][1])):
 
             if is_invalid(sec=sec, stack=stack):
                 continue
 
             try:
-                scoremap = DataManager.load_downscaled_scoremap(stack=stack, section=sec, structure=name_u, 
+                scoremap = DataManager.load_downscaled_scoremap(stack=stack, section=sec, structure=name_u,
                                                                 prep_id='alignedBrainstemCrop',
-                                                              out_resolution_um=out_resolution_um, 
+                                                              out_resolution_um=out_resolution_um,
                                                                 detector_id=detector_id).astype(np.float32)
             except Exception as e:
                 sys.stderr.write('%s\n' % e)
                 continue
 
-            mask = DataManager.load_image_v2(stack=stack, section=sec, 
-                                 prep_id='alignedBrainstemCrop', 
+            mask = DataManager.load_image_v2(stack=stack, section=sec,
+                                 prep_id='alignedBrainstemCrop',
                                  resol='thumbnail', version='mask')
 
             mask_outResol = rescale_by_resampling(mask, new_shape=(scoremap.shape[1], scoremap.shape[0]))
@@ -311,7 +313,7 @@ for name_u in structure_list:
                                 in_resol_um=out_resolution_um,
                                 out_resol_um=out_resolution_um)
         sys.stderr.write('Images to volume: %.2f seconds\n' % (time.time() - t))
-        
+
         brain_spec = dict(name=stack,
                        vol_type='score',
                         detector_id=detector_id,
@@ -324,7 +326,7 @@ for name_u in structure_list:
                   DataManager.get_original_volume_filepath_v2(stack_spec=brain_spec, structure=name_s))
 
         wholebrainXYcropped_origin_wrt_wholebrain_outVolResol = \
-        DataManager.get_domain_origin(stack=stack, domain='wholebrainXYcropped', 
+        DataManager.get_domain_origin(stack=stack, domain='wholebrainXYcropped',
                                       resolution=output_resolution)
         volume_origin_wrt_wholebrain_outVolResol =\
         volume_origin_wrt_wholebrainXYcropped_outVolResol + wholebrainXYcropped_origin_wrt_wholebrain_outVolResol
@@ -336,7 +338,7 @@ for name_u in structure_list:
         # Compute gradients.
 
         t = time.time()
-        gradients = compute_gradient_v2((volume_outVolResol, volume_origin_wrt_wholebrain_outVolResol), 
+        gradients = compute_gradient_v2((volume_outVolResol, volume_origin_wrt_wholebrain_outVolResol),
                                         smooth_first=True)
         sys.stderr.write('Compute gradient: %.2f seconds\n' % (time.time() - t))
 

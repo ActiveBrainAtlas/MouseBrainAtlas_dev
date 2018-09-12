@@ -69,3 +69,4 @@ coverage.xml
 # Sphinx documentation
 docs/_build/
 
+demo/demo_data

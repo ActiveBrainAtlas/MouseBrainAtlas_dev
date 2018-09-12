@@ -1,6 +1,7 @@
 # Demos
 
 This demo suite shows how to align three structures (12N, 3N_R, 4N_R) in a subject brain (DEMO999) with the atlas (atlasV7). 
+
 Each demo shows one essential step of the pipeline:
 - preprocess the jpeg2000 stack (e.g. convert to tif and intra-stack align)
 - extract features using a convolutional neural network
@@ -11,7 +12,7 @@ Each demo shows one essential step of the pipeline:
 
 Associated with each step are one download script and one work script.
 At each step, the work script generates **a subset** of the full outputs expected of that step.
-A download script is then used to download from S3 the full outputs that are **pre-computed**. They are then used by the work script of the next step.
+A download script is then used to download from S3 the full set of outputs that are **pre-computed**. They are then used by the work script of the next step.
 
 All generated and downloaded data are stored in `demo/demo_data/`.
 
@@ -22,12 +23,13 @@ All generated and downloaded data are stored in `demo/demo_data/`.
 A configuration script is provided to create a [virtualenv](https://virtualenv.pypa.io/en/stable/) called **mousebrainatlas** and install necessary packages.
 ```
 cd setup
+# Modify the first a few lines of config.sh according to your specific use case.
 source config.sh
-workon mousebrainatlas
+# Make sure we are now working under the mousebrainatlas python virtual environment.
 cd ../demo
 ```
 
-The following has been tested on Linux Ubuntu 16.04 and might not work on other operating systems. Pulling the Git repo takes 3-4 minutes with good Internet connection.
+The following has been tested on Linux Ubuntu 16.04. Cloning the Git repo takes 3-4 minutes with good Internet connection.
 
 ## Preprocess
 - Run `download_demo_data_preprocessing.py` to download 4 JPEG2000 images of the demo brain.
