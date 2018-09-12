@@ -22,10 +22,10 @@ All generated and downloaded data are stored in `demo/demo_data/`.
 
 A configuration script is provided to create a [virtualenv](https://virtualenv.pypa.io/en/stable/) called **mousebrainatlas** and install necessary packages.
 ```
-cd setup
-source config.sh
-workon mousebrainatlas
-cd ../demo
+# Modify the first a few lines of config.sh according to your specific use case, then
+source setup/config.sh
+# Make sure we are now working under the mousebrainatlas python virtual environment, then
+cd demo
 ```
 
 The following has been tested on Linux Ubuntu 16.04. Cloning the Git repo takes 3-4 minutes with good Internet connection.

@@ -61,7 +61,24 @@ for sec in range(220, 260):
     download_to_demo(rel_fp)
 
 
-# TODO: DOWNLOAD mxnet model
+# DOWNLOAD mxnet model
+
+model_dir_name = 'inception-bn-blue'
+
+fp = os.path.join(MXNET_MODEL_ROOTDIR, model_dir_name, 'inception-bn-blue-0000.params')
+rel_fp = relative_to_local(fp, local_root=DATA_ROOTDIR)
+download_to_demo(rel_fp)
+
+fp = os.path.join(MXNET_MODEL_ROOTDIR, model_dir_name, 'inception-bn-blue-symbol.json')
+rel_fp = relative_to_local(fp, local_root=DATA_ROOTDIR)
+download_to_demo(rel_fp)
+
+fp = os.path.join(MXNET_MODEL_ROOTDIR, model_dir_name, 'mean_224.npy')
+rel_fp = relative_to_local(fp, local_root=DATA_ROOTDIR)
+download_to_demo(rel_fp)
+
+
+
 
 # For scoring and construct 3-d probability map.
 #
