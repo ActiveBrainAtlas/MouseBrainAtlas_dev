@@ -129,7 +129,11 @@ Field name | Values  | Description
 ----------:|:-------:|:------------
 Stack_name | DEMO999 | identifier of the stack. (a copy of MD661 in this case)
 anchor |   alignedTo_MD662&661 | Describes how the stack was aligned
-       | F116 |
+   xx    | F116 | xx
+
+**Define a schema for the filenames**
+**Define a regular expression for each schema**
+
 
 DEMO999_alignedTo_MD662&661-F116-2017.06.07-04.39.41_MD661_1_0346_prep2_sectionLimits.json
 For the second command `compute_features_demo.py`:
