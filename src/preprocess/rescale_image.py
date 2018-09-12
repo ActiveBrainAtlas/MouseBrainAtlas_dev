@@ -17,7 +17,7 @@ parser = argparse.ArgumentParser(
 
 parser.add_argument("input_fp", type=str, help="Input image name")
 parser.add_argument("output_fp", type=str, help="Output image name")
-parser.add_argument("-f", "--rescale_factor", type=float, help="Rescale factor")
+earser.add_argument("-f", "--rescale_factor", type=float, help="Rescale factor")
 parser.add_argument("-W", "--width", type=int, help="Width")
 parser.add_argument("-H", "--height", type=int, help="Height")
 args = parser.parse_args()

@@ -45,6 +45,7 @@ model, mean_img = load_mxnet_model(model_dir_name=model_dir_name, model_name=mod
                                    num_gpus=1, batch_size=batch_size)
 
 for sec in sections:
+#for sec in range(220, 260):
 
     compute_and_save_features_one_section(
                                 version=version,
