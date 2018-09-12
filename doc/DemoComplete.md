@@ -79,11 +79,13 @@ The following has been tested on Linux Ubuntu 16.04 and might not work on other 
 - `python compress_jpeg.py input_spec.ini`
 
 ## Compute patch features
+For each patch generate a feature vector using the pre-trained CNN
+
+#### Yuncong's directions
 ---
 - `$ ./demo/download_demo_data_compute_features.py`
 - `$ ./demo/compute_features_demo.py DEMO999 --section 230 --version NtbNormalizedAdaptiveInvertedGamma`
 ---
-
 This demo is expected to finish in 1 minute.
 
 #### Alex Running Notes
@@ -117,7 +119,8 @@ For COMPUTE FEATURE DEMO:
 
 Note that the data needed to download for this demo is about 35G.
 
-#### Alex Running Notes
+#### Al
+ex Running Notes
 For `demo/download_demo_data_scoring.py`:
 - Ran with `python demo/download_demo_data_scoring.py --demo_data_dir $ROOT_DIR`. Downloading the files takes at least 3-5 hours.
 - Downloads an entire stack's feature data (272 sections for MD661 specifically). For each slice there are two *.bp files as listed below:
