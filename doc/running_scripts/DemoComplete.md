@@ -111,18 +111,6 @@ S3_ROOT = s3://mousebrainatlas-data/
 ```
 - note: The relative filepath from $S3_ROOT will exactly match the relative filepath from $ROOT_DIR. As well as the other ROOT directories.
 
----
-
-For the first command: `demo/download_demo_data_compute_features.py`:
-- Ran with `python demo/download_demo_data_compute_features.py --demo_data_dir /media/alexn/BstemAtlasDataBackup/demo/` to copy all files into the external hard drive. Only takes in 1 arg which is the download dir, otherwise defaults to ./demo_data. All files go into `[demo_data_dir]/CSHL_data_processed/DEMO999/` from `s3://mousebrainatlas-data/CSHL_data_processed/DEMO999/`, Downloaded 4 files:
-  - `DEMO999_sorted_filenames.txt`
-  - `DEMO999_anchor.txt`
-  - `DEMO999_alignedTo_MD662&661-F116-2017.06.07-04.39.41_MD661_1_0346_prep2_sectionLimits.json`
-  - `DEMO999_alignedTo_MD662&661-F116-2017.06.07-04.39.41_MD661_1_0346_prep2_cropbox.json`
-- After these are downloaded, a for loop is traversed to download the `*_prep1_thumbnail_mask.png` for every section. Following that, a single `*_prep2_raw_NtbNormalizedAdaptiveInvertedGamma.tif` file is downloaded for one section (MD661_2_0155)
-  - 272 `*_MD661_#_####_prep1_thumbnail_mask.png` files
-  - `MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_prep2_raw_NtbNormalizedAdaptiveInvertedGamma.tif`, denoted section 230
-  
 ##### Example schema
 
 Field name | Values  | Description
@@ -134,8 +122,18 @@ anchor |   alignedTo_MD662&661 | Describes how the stack was aligned
 **Define a schema for the filenames**
 **Define a regular expression for each schema**
 
+---
 
-DEMO999_alignedTo_MD662&661-F116-2017.06.07-04.39.41_MD661_1_0346_prep2_sectionLimits.json
+For the first command: `demo/download_demo_data_compute_features.py`:
+- Ran with `python demo/download_demo_data_compute_features.py --demo_data_dir /media/alexn/BstemAtlasDataBackup/demo/` to copy all files into the external hard drive. Only takes in 1 arg which is the download dir, otherwise defaults to ./demo_data. All files go into `[demo_data_dir]/CSHL_data_processed/DEMO999/` from `s3://mousebrainatlas-data/CSHL_data_processed/DEMO999/`, Downloaded 4 files:
+  - `DEMO999_sorted_filenames.txt`
+  - `DEMO999_anchor.txt`
+  - `DEMO999_alignedTo_MD662&661-F116-2017.06.07-04.39.41_MD661_1_0346_prep2_sectionLimits.json`
+  - `DEMO999_alignedTo_MD662&661-F116-2017.06.07-04.39.41_MD661_1_0346_prep2_cropbox.json`
+- After these are downloaded, a for loop is traversed to download the `*_prep1_thumbnail_mask.png` for every section. Following that, a single `*_prep2_raw_NtbNormalizedAdaptiveInvertedGamma.tif` file is downloaded for one section (MD661_2_0155)
+  - 272 `*_MD661_#_####_prep1_thumbnail_mask.png` files
+  - `MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_prep2_raw_NtbNormalizedAdaptiveInvertedGamma.tif`, denoted section 230
+
 For the second command `compute_features_demo.py`:
 - Creates directory ROOT/mxnet_models_. The following 3 files should be inside:
       - `inception-bn-blue-0000.params.67eD5BCb`
