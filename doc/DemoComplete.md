@@ -123,6 +123,15 @@ For the first command: `demo/download_demo_data_compute_features.py`:
   - 272 `*_MD661_#_####_prep1_thumbnail_mask.png` files
   - `MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_prep2_raw_NtbNormalizedAdaptiveInvertedGamma.tif`, denoted section 230
   
+##### Example schema
+
+Field name | Values  | Description
+----------:|:-------:|:------------
+Stack_name | DEMO999 | identifier of the stack. (a copy of MD661 in this case)
+anchor |   alignedTo_MD662&661 | Describes how the stack was aligned
+       | F116 |
+
+DEMO999_alignedTo_MD662&661-F116-2017.06.07-04.39.41_MD661_1_0346_prep2_sectionLimits.json
 For the second command `compute_features_demo.py`:
 - Creates directory ROOT/mxnet_models_. The following 3 files should be inside:
       - `inception-bn-blue-0000.params.67eD5BCb`
