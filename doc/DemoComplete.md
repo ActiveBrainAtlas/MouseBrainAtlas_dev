@@ -123,7 +123,7 @@ For the first command: `demo/download_demo_data_compute_features.py`:
   - 272 `*_MD661_#_####_prep1_thumbnail_mask.png` files
   - `MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_prep2_raw_NtbNormalizedAdaptiveInvertedGamma.tif`, denoted section 230
   
-For COMPUTE FEATURE DEMO:
+For the second command `compute_features_demo.py`:
 - Creates directory ROOT/mxnet_models_. The following 3 files should be inside:
       - `inception-bn-blue-0000.params.67eD5BCb`
       - `inception-bn-blue-symbol.json`
