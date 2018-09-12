@@ -22,6 +22,9 @@ def upload_to_s3(fp, local_root=None, is_dir=False):
         local_root (str): default to ROOT_DIR
     """
 
+    if not ENABLE_UPLOAD_S3:
+        return
+
     # Not using keyword default value because ROOT_DIR might be dynamically assigned rather than set at module importing.
     if local_root is None:
         if '/media/yuncong/YuncongPublic' in fp:
@@ -45,6 +48,9 @@ def download_from_s3(fp, local_root=None, is_dir=False, redownload=False, includ
         fp (str): file path
         local_root (str): default to ROOT_DIR
     """
+
+    if not ENABLE_DOWNLOAD_S3:
+        return
 
     # Not using keyword default value because ROOT_DIR might be dynamically assigned rather than set at module importing.
     if local_root is None:
