@@ -1,11 +1,21 @@
 #!/bin/bash
 
+# The user should specify this part
+PROJECT_DIR=/home/yuncong/MouseBrainAtlas
+virtualenv="mousebrainatlas"
+
+##############################################
+
 red='\e[1;31m'
 purple='\e[1;35m'
 green='\e[1;32m'
 cyan='\e[1;36m'
 NC='\033[0m' # No Color
-virtualenv="mousebrainatlas"
+
+export REPO_DIR=$PROJECT_DIR/src
+export ROOT_DIR=$PROJECT_DIR/demo/demo_data/
+export DATA_ROOTDIR=$PROJECT_DIR/demo/demo_data/
+export THUMBNAIL_DATA_ROOTDIR=$PROJECT_DIR/demo/demo_data/
 
 if [ ! -d $virtualenv ]; then
         echo ""
@@ -22,8 +32,8 @@ source $virtualenv/bin/activate
 #echo -e "${green}[virtualenv] Installing pip${NC}"
 #python oss/get-pip.py
 
-echo ""
-echo -e "${green}[virtualenv] Installing Python packages${NC}"
+#echo ""
+#echo -e "${green}[virtualenv] Installing Python packages${NC}"
 #pip install --use-wheel --no-index --find-link=oss/packages -r oss/requirements_gpu.txt
-pip install -r requirements.txt
+#pip install -r requirements.txt
 
