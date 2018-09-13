@@ -90,7 +90,7 @@ This demo is expected to finish in 1 minute on a GPU-equipped machine.
 
 ## Generate probability volumes
 ```
-./download_demo_data_scoring.py`
+./download_demo_data_scoring.py
 ./from_images_to_score_volumes_demo.py DEMO999 799 NtbNormalizedAdaptiveInvertedGammaJpeg --structure_list "[\"3N\", \"4N\", \"12N\"]"
 ```
 
