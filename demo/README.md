@@ -80,14 +80,19 @@ The following has been tested on Linux Ubuntu 16.04. Cloning the Git repo takes 
 - `python compress_jpeg.py input_spec.ini`
 
 ## Compute patch features
-- `$ ./download_demo_data_compute_features.py`
-- `$ ./compute_features_demo.py DEMO999 --section 230 --version NtbNormalizedAdaptiveInvertedGamma`
+```
+./download_demo_data_compute_features.py
+./compute_features_demo.py DEMO999 --section 220 --version NtbNormalizedAdaptiveInvertedGamma
+./compute_features_demo.py DEMO999 --section 221 --version NtbNormalizedAdaptiveInvertedGamma
+```
 
 This demo is expected to finish in 1 minute on a GPU-equipped machine.
 
 ## Generate probability volumes
-- `$ ./download_demo_data_scoring.py`
-- `$ ./from_images_to_score_volumes_demo.py DEMO999 799 NtbNormalizedAdaptiveInvertedGammaJpeg --structure_list "[\"3N\", \"4N\", \"12N\"]"`
+```
+./download_demo_data_scoring.py`
+./from_images_to_score_volumes_demo.py DEMO999 799 NtbNormalizedAdaptiveInvertedGammaJpeg --structure_list "[\"3N\", \"4N\", \"12N\"]"
+```
 
 Note that the data needed to download for this demo is about 35G.
 
