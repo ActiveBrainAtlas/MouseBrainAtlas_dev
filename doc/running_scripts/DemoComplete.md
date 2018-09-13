@@ -90,20 +90,6 @@ This demo is expected to finish in 1 minute.
 
 #### Alex Running Notes
 
-
-##### Example schema
-
-Field name | Values  | Description
-----------:|:-------:|:------------
-Stack_name | DEMO999 | identifier of the stack. (a copy of MD661 in this case)
-anchor |   alignedTo_MD662&661 | Describes how the stack was aligned
-   xx    | F116 | xx
-
-**Define a schema for the filenames**
-**Define a regular expression for each schema**
-
----
-
 For the first command: `demo/download_demo_data_compute_features.py`:
 - Ran with `python demo/download_demo_data_compute_features.py --demo_data_dir /media/alexn/BstemAtlasDataBackup/demo/` to copy all files into the external hard drive. Only takes in 1 arg which is the download dir, otherwise defaults to ./demo_data. All files go into `[demo_data_dir]/CSHL_data_processed/DEMO999/` from `s3://mousebrainatlas-data/CSHL_data_processed/DEMO999/`, Downloaded 4 files:
   - `DEMO999_sorted_filenames.txt`
@@ -178,3 +164,18 @@ The complete set of overlay images are under `CSHL_registration_visualization/DE
 
 
 Input and expected output will be downloaded from an open S3 bucket
+
+
+
+
+
+##### Example schema
+
+Field name | Values  | Description
+----------:|:-------:|:------------
+Stack_name | DEMO999 | identifier of the stack. (a copy of MD661 in this case)
+anchor |   alignedTo_MD662&661 | Describes how the stack was aligned
+   xx    | F116 | xx
+
+**Define a schema for the filenames**
+**Define a regular expression for each schema**
