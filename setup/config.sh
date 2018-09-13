@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # User can modify this part
-PROJECT_DIR=/home/yuncong/MouseBrainAtlas
+PROJECT_DIR=/home/ds/yuncong/MouseBrainAtlas_dev
 virtualenv="mousebrainatlas_virtualenv"
 ##################################################
 
