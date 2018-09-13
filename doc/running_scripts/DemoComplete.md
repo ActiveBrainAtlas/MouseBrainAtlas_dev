@@ -96,15 +96,17 @@ For the first command: `demo/download_demo_data_compute_features.py`:
   - `DEMO999_anchor.txt`
   - `DEMO999_alignedTo_MD662&661-F116-2017.06.07-04.39.41_MD661_1_0346_prep2_sectionLimits.json`
   - `DEMO999_alignedTo_MD662&661-F116-2017.06.07-04.39.41_MD661_1_0346_prep2_cropbox.json`
-- After these are downloaded, a for loop is traversed to download the `*_prep1_thumbnail_mask.png` for every section. Following that, a single `*_prep2_raw_NtbNormalizedAdaptiveInvertedGamma.tif` file is downloaded for one section (MD661_2_0155)
-  - 272 `*_MD661_#_####_prep1_thumbnail_mask.png` files
-  - `MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_prep2_raw_NtbNormalizedAdaptiveInvertedGamma.tif`, denoted section 230
-
-For the second command `compute_features_demo.py`:
-- Creates directory ROOT/mxnet_models_. The following 3 files should be inside:
-      - `inception-bn-blue-0000.params.67eD5BCb`
+- After these are downloaded, a for loop is traversed to download the `*_prep1_thumbnail_mask.png` for every section downloading into `DATA_ROOTDIR/DEMO999_prep1_thumbnail_mask/`. 
+ - 272 `*_MD661_#_####_prep1_thumbnail_mask.png` files
+- Following that, two `*_prep2_raw_NtbNormalizedAdaptiveInvertedGamma.tif` files are downloaded into `DATA_ROOTDIR/DEMO999_prep2_raw_NtbNormalizedAdaptiveInvertedGamma/`
+  - `MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_prep2_raw_NtbNormalizedAdaptiveInvertedGamma.tif`, denoted section 225
+  - `MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep2_raw_NtbNormalizedAdaptiveInvertedGamma.tif`, denoted section 235
+- Creates directory `DATA_ROOTDIR/mxnet_models/inception-bn-blue/`. The following 3 files should be inside:
+      - `inception-bn-blue-0000.params`
       - `inception-bn-blue-symbol.json`
       - `mean_224.npy`
+      
+For the second command `compute_features_demo.py` for section 225:
 - Make sure that the demo downloads the same section you are computing features for. (Demo only gdoes 1 section, hard coded in the download script) Script can easily be changed to do every single section.
 - OUTPUTS: (all saved to ROOT/CSHL_patch_features/inception-bn-blue/DEMO999/DEMO999_prep2_none_win7)
   - `MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_prep2_none_win7_inception-bn-blue_features.bp`
