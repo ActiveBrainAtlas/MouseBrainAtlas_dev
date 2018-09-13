@@ -29,7 +29,7 @@ cd demo
 ```
 
 - The config has been tested on Linux Ubuntu 16.04. 
-- The default `requirements.txt` assumes CUDA version of 9.0. If your CUDA version (check using `nvcc -v` or `cat /usr/local/cuda/version.txt`) is 9.1, replace `mxnet-cu90` with `mxnet-cu91` in `requirements.txt`. If your machine does not have a GPU, replace `mxnet-cu90` with `mxnet`.
+- The default `requirements.txt` assumes CUDA version of 9.0. If your CUDA version (check using `nvcc -v` or `cat /usr/local/cuda/version.txt`) is 9.1, replace `mxnet-cu90` with `mxnet-cu91` in `requirements.txt`. If your machine does not have a GPU, replace `mxnet-cu90` with `mxnet`. Refer to [official mxnet page](https://mxnet.incubator.apache.org/install/index.html?platform=Linux&language=Python&processor=CPU) for available pips.
 
 ## Preprocess
 - Run `download_demo_data_preprocessing.py` to download 4 JPEG2000 images of the demo brain.
