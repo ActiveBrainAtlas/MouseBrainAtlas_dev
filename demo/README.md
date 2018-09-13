@@ -28,7 +28,8 @@ source setup/config.sh
 cd demo
 ```
 
-The following has been tested on Linux Ubuntu 16.04. Cloning the Git repo takes 3-4 minutes with good Internet connection.
+- The config has been tested on Linux Ubuntu 16.04. 
+- The default `requirements.txt` assumes CUDA version of 9.0. If your CUDA version (check using `nvcc -v` or `cat /usr/local/cuda/version.txt`) is 9.1, replace `mxnet-cu90` with `mxnet-cu91` in `requirements.txt`. If your machine does not have a GPU, replace `mxnet-cu90` with `mxnet`.
 
 ## Preprocess
 - Run `download_demo_data_preprocessing.py` to download 4 JPEG2000 images of the demo brain.
@@ -87,7 +88,7 @@ The following has been tested on Linux Ubuntu 16.04. Cloning the Git repo takes 
 ./demo_compute_features.py DEMO999 --section 235 --version NtbNormalizedAdaptiveInvertedGamma
 ```
 
-This demo is expected to finish in 1 minute on a GPU-equipped machine.
+This demo is expected to finish in 1 minute for each section on a machine equipped with Nvidia Titan X GPU.
 
 ## Generate probability volumes
 ```
