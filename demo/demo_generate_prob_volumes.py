@@ -31,15 +31,6 @@ bg_img_version = args.bg_img_version
 import json
 if hasattr(args, 'structure_list'):
     structure_list = json.loads(args.structure_list)
-        
-    from_fp = 'mousebrainatlas-data/CSHL_volumes/atlasV6/atlasV6_10.0um_scoreVolume/score_volumes/'
-    to_fp = '/media/alexn/BstemAtlasDataBackup/demo/CSHL_volumes/atlasV6/atlasV6_10.0um_scoreVolume/score_volumes/'
-    include_only = 'atlasV6_10.0um_scoreVolume_12N*'
-    execute_command('aws s3 cp --recursive \"s3://%(from_fp)s\" \"%(to_fp)s\" --exclude \"*\" --include \"%(include)s\"' % dict(from_fp=from_fp, to_fp=to_fp, include=include_only))
-    include_only = 'atlasV6_10.0um_scoreVolume_3N*'
-    execute_command('aws s3 cp --recursive \"s3://%(from_fp)s\" \"%(to_fp)s\" --exclude \"*\" --include \"%(include)s\"' % dict(from_fp=from_fp, to_fp=to_fp, include=include_only))
-    include_only = 'atlasV6_10.0um_scoreVolume_4N*'
-    execute_command('aws s3 cp --recursive \"s3://%(from_fp)s\" \"%(to_fp)s\" --exclude \"*\" --include \"%(include)s\"' % dict(from_fp=from_fp, to_fp=to_fp, include=include_only))
 else:
     # structure_list = all_known_structures
     structure_list = ['Amb', 'SNR', '7N', '5N', '7n', 'LRt', 'Sp5C', 'SNC', 'VLL', 'SC', 'IC']
@@ -56,7 +47,7 @@ DataManager.load_original_volume_all_known_structures_v3(atlas_spec, in_bbox_wrt
 
 # # Define 3-D ROI for which to compute scores based on simpleGlobal registered atlas.
 
-#T_atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol = bp.unpack_ndarray_file(ROOT_DIR + stack + '_T_atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol.bp')
+# T_atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol = bp.unpack_ndarray_file('/home/yuncong/' + stack + '_T_atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol.bp')
 
 # registered_atlas_structures_wrt_wholebrainWithMargin_atlasResol = \
 # {name_s: transform_volume_v4(volume=vo, transform=T_atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol, return_origin_instead_of_bbox=True)
@@ -267,7 +258,7 @@ for name_u in structure_list:
 #                 del scoremap_all_landmarks
 
         except Exception as e:
-            sys.stderr.write('%s\n' % e)
+            sys.stderr.write('Scoremap generation FAILED: %s\n' % e)
             continue
 
 

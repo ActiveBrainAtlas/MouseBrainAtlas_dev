@@ -603,6 +603,8 @@ def images_to_volume_v2(images, spacing_um, in_resol_um, out_resol_um, crop_to_m
     dtype = images.values()[0].dtype
     volume = np.zeros((ydim, xdim, zdim), dtype)
 
+    assert len(sections) > 1, "Must provide more than 1 section to reconstruct a volume."
+
     for i in range(len(sections)-1):
         # z1 = int(np.floor((sections[i]-1) * voxel_z_size))
         # z2 = int(np.ceil(sections[i+1] * voxel_z_size))

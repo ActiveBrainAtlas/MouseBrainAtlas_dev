@@ -35,6 +35,13 @@ try:
 except:
     sys.stderr.write('xgboost is not loaded.')
 
+def gpu_device(gpu_number=0):
+    try:
+        _ = mx.nd.array([1, 2, 3], ctx=mx.gpu(gpu_number))
+    except mx.MXNetError:
+        return None
+    return mx.gpu(gpu_number)
+
 def compute_classification_metrics(probs, labels):
     """
     Args:
@@ -269,7 +276,12 @@ def load_mxnet_model(model_dir_name, model_name, num_gpus=8, batch_size = 256, o
     # if HOST_ID == 'workstation':
     # model = mx.mod.Module(context=[mx.gpu(i) for i in range(1)], symbol=flatten_output)
     # else:
-    model = mx.mod.Module(context=[mx.gpu(i) for i in range(num_gpus)], symbol=flatten_output)
+
+    if not gpu_device():
+        print('No GPU device found! Use CPU for mxnet feature extraction.')
+        model = mx.mod.Module(context=mx.cpu(), symbol=flatten_output)
+    else:
+        model = mx.mod.Module(context=[mx.gpu(i) for i in range(num_gpus)], symbol=flatten_output)
 
     # Increase batch_size to 500 does not save any time.
     model.bind(data_shapes=[('data', (batch_size,1,224,224))], for_training=False)
