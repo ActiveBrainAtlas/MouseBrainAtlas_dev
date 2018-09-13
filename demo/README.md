@@ -88,7 +88,8 @@ cd demo
 ./demo_compute_features.py DEMO999 --section 235 --version NtbNormalizedAdaptiveInvertedGamma
 ```
 
-This demo is expected to finish in 1 minute for each section on a machine equipped with Nvidia Titan X GPU.
+If using GPU, the demo for each section should finish in about 1 minute. If using CPU, this takes about 1 hour.
+
 
 ## Generate probability volumes
 ```
