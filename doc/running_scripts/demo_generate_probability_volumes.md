@@ -11,7 +11,11 @@ For `demo/download_demo_data_generate_prob_volumes.py`:
 - Downloads an entire stack's feature data (272 sections for MD661 specifically). For each slice there are two *.bp files as listed below:
  - `[SLICENAME]_prep2_none_win7_inception-bn-blue_features.bp`
  - `[SLICENAME]_prep2_none_win7_inception-bn-blue_locations.bp`
- 
+
+For `./demo/from_images_to_score_volumes_demo.py`
+- Outputs shown below in tree format due to how many files there were.
+
+```
  CSHL_simple_global_registration/
 └── DEMO999_registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners.json
 CSHL_classifiers/
@@ -20,10 +24,7 @@ CSHL_classifiers/
         ├── 12N_clf_setting_899.dump
         ├── 3N_clf_setting_899.dump
         └── 4N_clf_setting_899.dump
-
-For `./demo/from_images_to_score_volumes_demo.py`
-- Running does not work properly with the suggested command. Does not take in a description of preprocessing files as input.
-- Issues with the code running, does not download necessary files from S3 https://s3.console.aws.amazon.com/s3/buckets/mousebrainatlas-data/CSHL_volumes/atlasV6/atlasV6_10.0um_scoreVolume/score_volumes/?region=us-east-1&tab=overview
+```
 
 ```
 CSHL_volumes/
