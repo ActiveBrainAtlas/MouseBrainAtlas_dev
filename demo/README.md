@@ -22,11 +22,10 @@ All generated and downloaded data are stored in `demo/demo_data/`.
 
 A configuration script is provided to create a [virtualenv](https://virtualenv.pypa.io/en/stable/) called **mousebrainatlas** and install necessary packages.
 ```
-cd setup
-# Modify the first a few lines of config.sh according to your specific use case.
-source config.sh
-# Make sure we are now working under the mousebrainatlas python virtual environment.
-cd ../demo
+# Modify the first a few lines of config.sh according to your specific use case, then
+source setup/config.sh
+# Make sure we are now working under the mousebrainatlas python virtual environment, then
+cd demo
 ```
 
 The following has been tested on Linux Ubuntu 16.04. Cloning the Git repo takes 3-4 minutes with good Internet connection.
@@ -81,16 +80,20 @@ The following has been tested on Linux Ubuntu 16.04. Cloning the Git repo takes 
 - `python compress_jpeg.py input_spec.ini`
 
 ## Compute patch features
-- `$ ./download_demo_data_compute_features.py`
-- `$ ./compute_features_demo.py DEMO999 --section 230 --version NtbNormalizedAdaptiveInvertedGamma`
+```
+./download_demo_data_compute_features.py
+# For 3N, do any two sections between 221-244, 4N 221-237, 12N 183-265.
+./demo_compute_features.py DEMO999 --section 225 --version NtbNormalizedAdaptiveInvertedGamma
+./demo_compute_features.py DEMO999 --section 235 --version NtbNormalizedAdaptiveInvertedGamma
+```
 
-This demo is expected to finish in 1 minute.
+This demo is expected to finish in 1 minute on a GPU-equipped machine.
 
 ## Generate probability volumes
-- `$ ./download_demo_data_scoring.py`
-- `$ ./from_images_to_score_volumes_demo.py DEMO999 799 NtbNormalizedAdaptiveInvertedGammaJpeg --structure_list "[\"3N\", \"4N\", \"12N\"]"`
-
-Note that the data needed to download for this demo is about 35G.
+```
+./download_demo_data_generate_prob_volumes.py
+./demo_generate_prob_volumes.py DEMO999 799 NtbNormalizedAdaptiveInvertedGammaJpeg --structure_list "[\"3N\", \"4N\", \"12N\"]"
+```
 
 ## Registration
 `$ ./download_demo_data_registration.py`

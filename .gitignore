@@ -1,1 +1,7 @@
-demo/demo_data
+# Exclude demo data
+demo/demo_data/
+
+# Exclude virtualenv
+mousebrainatlas_virtualenv/
+
+*.pyc
