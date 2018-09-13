@@ -83,7 +83,7 @@ The following has been tested on Linux Ubuntu 16.04. Cloning the Git repo takes 
 - `$ ./download_demo_data_compute_features.py`
 - `$ ./compute_features_demo.py DEMO999 --section 230 --version NtbNormalizedAdaptiveInvertedGamma`
 
-This demo is expected to finish in 1 minute.
+This demo is expected to finish in 1 minute on a GPU-equipped machine.
 
 ## Generate probability volumes
 - `$ ./download_demo_data_scoring.py`
