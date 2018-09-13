@@ -1,6 +1,6 @@
 ## The setup
 
-The scripts are intended to run on a virtual environement for ease of use. This makes it so you do not need to worry about installing each package.
+The scripts are intended to run on a virtual environement for ease of use. This makes it so you do not need to worry about installing each package. For developers on the Atlas machine, this is not necessary.
 
 A description of the environment variables are given in the [environmentVariables](environmentVariables.md) document.
 
