@@ -82,7 +82,7 @@ The following has been tested on Linux Ubuntu 16.04. Cloning the Git repo takes 
 ## Compute patch features
 ```
 ./download_demo_data_compute_features.py
-# For 3N 221-244, 4N 221-237, 12N 183-265
+# For 3N, do any two sections between 221-244, 4N 221-237, 12N 183-265.
 ./demo_compute_features.py DEMO999 --section 225 --version NtbNormalizedAdaptiveInvertedGamma
 ./demo_compute_features.py DEMO999 --section 235 --version NtbNormalizedAdaptiveInvertedGamma
 ```
