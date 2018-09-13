@@ -35,7 +35,8 @@ model_name = 'inception-bn-blue'
 timestamp = None
 
 #for sec in range(85, 357):
-for sec in range(220, 223):
+#for sec in range(220, 223):
+for sec in []:
     # Download features
     fp = DataManager.get_dnn_features_filepath_v2(stack=stack, sec=sec, prep_id=prep_id, win_id=win_id,
                           normalization_scheme=normalization_scheme,
@@ -59,7 +60,7 @@ for name_u in ['3N', '4N', '12N']:
 
 
 # For drawing score map background 
-for sec in range(220, 222):
+for sec in [225, 235]:
     fp = DataManager.get_image_filepath_v2(stack='DEMO999', prep_id=2, resol='raw', version='NtbNormalizedAdaptiveInvertedGammaJpeg', section=sec)
     rel_fp = relative_to_local(fp, local_root=DATA_ROOTDIR)
     download_to_demo(rel_fp)

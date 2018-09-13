@@ -23,6 +23,7 @@ def upload_to_s3(fp, local_root=None, is_dir=False):
     """
 
     if not ENABLE_UPLOAD_S3:
+	sys.stderr.write("ENABLE_UPLOAD_S3 is False. Skip uploading to S3.\n")
         return
 
     # Not using keyword default value because ROOT_DIR might be dynamically assigned rather than set at module importing.
@@ -50,6 +51,7 @@ def download_from_s3(fp, local_root=None, is_dir=False, redownload=False, includ
     """
 
     if not ENABLE_DOWNLOAD_S3:
+        sys.stderr.write("ENABLE_DOWNLOAD_S3 is False. Skip downloading from S3.\n")
         return
 
     # Not using keyword default value because ROOT_DIR might be dynamically assigned rather than set at module importing.

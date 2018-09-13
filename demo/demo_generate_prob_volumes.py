@@ -258,7 +258,7 @@ for name_u in structure_list:
 #                 del scoremap_all_landmarks
 
         except Exception as e:
-            sys.stderr.write('%s\n' % e)
+            sys.stderr.write('Scoremap generation FAILED: %s\n' % e)
             continue
 
 
