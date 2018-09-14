@@ -32,15 +32,18 @@ cd demo
 - The default `requirements.txt` assumes CUDA version of 9.0. If your CUDA version (check using `nvcc -v` or `cat /usr/local/cuda/version.txt`) is 9.1, replace `mxnet-cu90` with `mxnet-cu91` in `requirements.txt`. If your machine does not have a GPU, replace `mxnet-cu90` with `mxnet`. Refer to [official mxnet page](https://mxnet.incubator.apache.org/install/index.html?platform=Linux&language=Python&processor=CPU) for available pips.
 
 ## Preprocess
+
+For each step below that requires `input_spec.ini`, the ini file is a different one and must be manually created.
+
 - Run `download_demo_data_preprocessing.py` to download 4 JPEG2000 images of the demo brain.
 - **(HUMAN)** Create meta data information for this brain
 - Create `DEMO998_input_spec.json`. `python jp2_to_tiff.py DEMO998 DEMO998_input_spec.json`.
-- Create `input_spec.ini`. `python extract_channel.py input_spec.ini 2 Ntb`
-- Create `input_spec.ini`. `python rescale.py input_spec.ini thumbnail -f 0.03125`
-- Create `input_spec.ini`. `python normalize_intensity.py input_spec.ini NtbNormalized`
+- `python extract_channel.py input_spec.ini 2 Ntb`
+- `python rescale.py input_spec.ini thumbnail -f 0.03125`
+- `python normalize_intensity.py input_spec.ini NtbNormalized`
 - **(HUMAN)** browse thumbnails to verify orientations are all correct
 - **(HUMAN)** Obtain a roughly correct sorted list of image names from the data provider.
-- Create `input_spec.ini`. `python align.py input_spec.ini demo_data/CSHL_data_processed/DEMO998/DEMO998_elastix_output ../src/preprocess/parameters/Parameters_Rigid_MutualInfo_noNumberOfSpatialSamples_4000Iters.txt`
+- `python align.py input_spec.ini demo_data/CSHL_data_processed/DEMO998/DEMO998_elastix_output ../src/preprocess/parameters/Parameters_Rigid_MutualInfo_noNumberOfSpatialSamples_4000Iters.txt`
 - **(HUMAN)** select anchor image, using preprocessGUI `preprocess_gui.py`
 - `python compose.py --elastix_output_dir "demo_data/CSHL_data_processed/DEMO998/DEMO998_elastix_output" \
 --custom_output_dir "demo_data/CSHL_data_processed/DEMO998/DEMO998_custom_output" \
