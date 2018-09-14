@@ -1,9 +1,9 @@
 # Demos
 
-This demo suite shows how to align three structures (12N, 3N_R, 4N_R) in a subject brain (DEMO999) with the atlas (atlasV7). 
+This demo suite shows how to align three structures (12N, 3N_R, 4N_R) in a subject brain (DEMO998) with the atlas (atlasV7). 
 
-Each demo shows one essential step of the pipeline:
-- preprocess the jpeg2000 stack (e.g. convert to tif and intra-stack align)
+Each demo shows one of the essential steps of the pipeline:
+- preprocess jpeg2000 images (e.g. convert to tif and intra-stack align)
 - extract features using a convolutional neural network
 - generate probability maps using pre-trained classifiers
 - register 12N (hypoglossal nucleus) to the atlas.
