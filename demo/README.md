@@ -83,8 +83,8 @@ For each step below that requires `input_spec.ini`, the ini file is a different 
 ```
 ./download_demo_data_compute_features.py
 # For 3N, do any two sections between 221-244, 4N 221-237, 12N 183-265.
-./demo_compute_features.py DEMO999 --section 225 --version NtbNormalizedAdaptiveInvertedGamma
-./demo_compute_features.py DEMO999 --section 235 --version NtbNormalizedAdaptiveInvertedGamma
+./demo_compute_features.py DEMO998 --section 225 --version NtbNormalizedAdaptiveInvertedGamma
+./demo_compute_features.py DEMO998 --section 235 --version NtbNormalizedAdaptiveInvertedGamma
 ```
 
 If using GPU, the demo for each section should finish in about 1 minute. If using CPU, this takes about 1 hour.
@@ -93,7 +93,7 @@ If using GPU, the demo for each section should finish in about 1 minute. If usin
 ## Generate probability volumes
 ```
 ./download_demo_data_generate_prob_volumes.py
-./demo_generate_prob_volumes.py DEMO999 799 NtbNormalizedAdaptiveInvertedGammaJpeg --structure_list "[\"3N\", \"4N\", \"12N\"]"
+./demo_generate_prob_volumes.py DEMO998 799 NtbNormalizedAdaptiveInvertedGammaJpeg --structure_list "[\"3N\", \"4N\", \"12N\"]"
 ```
 
 ## Registration
