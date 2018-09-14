@@ -54,8 +54,10 @@ cd demo
 - **(HUMAN)** Inspect aligned images using preprocessGUI `preprocess_gui.py`, correct pairwise transforms and check each image's order in stack. Create `DEMO998_sorted_filenames.txt` based on the given roughly correct list.
 - **(HUMAN)** draw initial snake contours for masking using maskingGUI. 
 `python mask_editing_tool_v4.py DEMO998`
-- `python masking.py input_spec.ini {DataManager.get_initial_snake_contours_filepath(stack=stack)}`
-- **(HUMAN)** Return to masking GUI to inspect and correct the automatically generated masks.
+- `python masking.py input_spec.ini demo_data/CSHL_data_processed/DEMO998/DEMO998_prep1_thumbnail_initSnakeContours.pkl`
+- **(HUMAN)** Return to masking GUI to inspect and correct the automatically generated masks. 
+`python mask_editing_tool_v4.py DEMO998`
+- **(HUMAN)** Create `DEMO998_original_image_crop.csv`
 - `python warp_crop.py --input_spec input_spec.ini \
  --inverse_warp "demo_data/CSHL_data_processed/DEMO998/DEMO998_transformsTo_MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250.csv" \
  --crop "demo_data/CSHL_data_processed/DEMO998/DEMO998_original_image_crop.csv" \
@@ -63,18 +65,15 @@ cd demo
 - `python normalize_intensity_adaptive.py input_spec.ini NtbNormalizedAdaptiveInvertedGamma`
 - **(HUMAN)** Manually specify the alignedWithMargin cropbox based on alignedPadded images, or automatically infer based on alignedPadded masks.
 - `python warp_crop.py --input_spec input_spec.ini \
- --warp "{toanchor_transforms_fp}" \
- --crop "{DataManager.get_cropbox_filename_v2(stack=stack, anchor_fn=None, prep_id='alignedWithMargin')}" \
+ --warp "demo_data/CSHL_data_processed/DEMO998/DEMO998_transformsTo_MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250.csv" \
+ --crop "demo_data/CSHL_data_processed/DEMO998/DEMO998_cropbox.ini" \
  --out_prep_id alignedWithMargin`
 - `python rescale.py input_spec.ini thumbnail -f 0.03125`
 - **(HUMAN)** Specify prep2 (alignedBrainstemCrop) cropping box, based on alignedWithMargin thumbnails or alignedPadded thumbnails
 - `python warp_crop.py --input_spec input_spec.ini \
- --warp "{toanchor_transforms_fp}" \
- --crop "{convert_cropbox_fmt(data=DataManager.load_cropbox_v2_relative(stack=stack, prep_id='alignedBrainstemCrop', \
-                                     wrt_prep_id='alignedWithMargin', \
-                                    out_resolution='thumbnail'), \
-                    in_fmt='arr_xxyy', out_fmt='str_xywh', stack=stack)}" \
+ --crop "demo_data/CSHL_data_processed/DEMO998/DEMO998_cropbox.ini" \
  --out_prep_id alignedBrainstemCrop`
+- `python rescale.py input_spec.ini thumbnail -f 0.03125`
 - `python compress_jpeg.py input_spec.ini`
 
 ## Compute patch features
