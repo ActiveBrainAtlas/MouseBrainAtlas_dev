@@ -3,7 +3,7 @@ import os
 import time
 
 import numpy as np
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 from matplotlib.path import Path
 from shapely.geometry import Polygon
 from pandas import read_hdf, DataFrame, read_csv
@@ -33,7 +33,7 @@ sys.path.append('/home/yuncong/csd395/xgboost/python-package')
 try:
     from xgboost.sklearn import XGBClassifier
 except:
-    sys.stderr.write('xgboost is not loaded.')
+    sys.stderr.write('xgboost is not loaded.\n')
 
 def gpu_device(gpu_number=0):
     try:

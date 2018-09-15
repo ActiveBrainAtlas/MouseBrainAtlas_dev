@@ -1115,13 +1115,14 @@ class DataManager(object):
             prep_id (int or str): 2D frame specifier
         """
 
-        if isinstance(prep_id, str):
+        if isinstance(prep_id, str) or isinstance(prep_id, unicode):
             prep_id = prep_str_to_id_2d[prep_id]
 
         if anchor_fn is None:
             anchor_fn = DataManager.load_anchor_filename(stack=stack)
 
-        fp = os.path.join(THUMBNAIL_DATA_DIR, stack, stack + '_alignedTo_' + anchor_fn + '_prep' + str(prep_id) + '_cropbox.json')
+        #fp = os.path.join(THUMBNAIL_DATA_DIR, stack, stack + '_alignedTo_' + anchor_fn + '_prep' + str(prep_id) + '_cropbox.json')
+	fp = os.path.join(THUMBNAIL_DATA_DIR, stack, stack + '_cropbox.ini')
         return fp
 
     @staticmethod
@@ -1215,7 +1216,10 @@ class DataManager(object):
 
     @staticmethod
     def load_cropbox_v2_relative(stack, prep_id, wrt_prep_id, out_resolution):
-
+	"""
+ 	Returns:
+            xmin, xmax, ymin, ymax
+ 	"""
         alignedBrainstemCrop_xmin_down32, alignedBrainstemCrop_xmax_down32, \
         alignedBrainstemCrop_ymin_down32, alignedBrainstemCrop_ymax_down32 = DataManager.load_cropbox_v2(stack=stack, prep_id=prep_id, only_2d=True)
 
@@ -1248,8 +1252,8 @@ class DataManager(object):
             convert_section_to_z (bool): If true, return (xmin,xmax,ymin,ymax,zmin,zmax) where z=0 is section #1; if false, return (xmin,xmax,ymin,ymax,secmin,secmax)
             prep_id (int)
         """
-
-        if isinstance(prep_id, str):
+        
+	if isinstance(prep_id, str) or isinstance(prep_id, unicode):
             fp = DataManager.get_cropbox_filename_v2(stack=stack, anchor_fn=anchor_fn, prep_id=prep_id)
         elif isinstance(prep_id, int):
             # fp = DataManager.get_cropbox_filename(stack=stack, anchor_fn=anchor_fn, prep_id=prep_id)
@@ -1266,9 +1270,19 @@ class DataManager(object):
                 zmin = int(DataManager.convert_section_to_z(stack=stack, sec=secmin, downsample=32, z_begin=0, mid=True))
                 zmax = int(DataManager.convert_section_to_z(stack=stack, sec=secmax, downsample=32, z_begin=0, mid=True))
 
-        elif fp.endswith('.json'):
-            cropbox_dict = load_data(fp)
-            xmin = cropbox_dict['rostral_limit']
+        elif fp.endswith('.json') or fp.endswith('.ini'):
+	    if fp.endswith('.json'):
+                cropbox_dict = load_data(fp)
+            else:
+		if isinstance(prep_id, str) or isinstance(prep_id, unicode):
+                    prep_id_str = prep_id
+                elif isinstance(prep_id, int):
+                    prep_id_str = prep_id_to_str_2d[prep_id]
+                else:
+                    raise
+                cropbox_dict = load_ini(fp, section=prep_id_str)
+
+	    xmin = cropbox_dict['rostral_limit']
             xmax = cropbox_dict['caudal_limit']
             ymin = cropbox_dict['dorsal_limit']
             ymax = cropbox_dict['ventral_limit']
@@ -4527,7 +4541,7 @@ class DataManager(object):
             Absolute path of the image directory.
         """
 
-        if prep_id is not None and isinstance(prep_id, str):
+        if prep_id is not None and (isinstance(prep_id, str) or isinstance(prep_id, unicode)):
             prep_id = prep_str_to_id_2d[prep_id]
 
         if version is None:
@@ -4757,7 +4771,7 @@ class DataManager(object):
         else:
             assert fn is not None
 
-        if prep_id is not None and isinstance(prep_id, str):
+        if prep_id is not None and (isinstance(prep_id, str) or isinstance(prep_id, unicode)):
             prep_id = prep_str_to_id_2d[prep_id]
 
         image_dir = DataManager.get_image_dir_v2(stack=stack, prep_id=prep_id, resol=resol, version=version, data_dir=data_dir, thumbnail_data_dir=thumbnail_data_dir)
@@ -5421,28 +5435,36 @@ def generate_metadata_cache():
 
         try:
             metadata_cache['anchor_fn'][stack] = DataManager.load_anchor_filename(stack)
-        except:
+        except Exception as e:
+	    sys.stderr.write("Failed to cache %s anchor: %s\n" % (stack, e.message))
             pass
+
         try:
             metadata_cache['sections_to_filenames'][stack] = DataManager.load_sorted_filenames(stack)[1]
-        except:
-            pass
+        except Exception as e:
+	    sys.stderr.write("Failed to cache %s sections_to_filenames: %s\n" % (stack, e.message))
+
         try:
             metadata_cache['filenames_to_sections'][stack] = DataManager.load_sorted_filenames(stack)[0]
-            metadata_cache['filenames_to_sections'][stack].pop('Placeholder')
-            metadata_cache['filenames_to_sections'][stack].pop('Nonexisting')
-            metadata_cache['filenames_to_sections'][stack].pop('Rescan')
-        except:
-            pass
+	    if 'Placeholder' in metadata_cache['filenames_to_sections'][stack]:
+	        metadata_cache['filenames_to_sections'][stack].pop('Placeholder')
+	    if 'Nonexisting' in metadata_cache['filenames_to_sections'][stack]:
+	        metadata_cache['filenames_to_sections'][stack].pop('Nonexisting')
+	    if 'Rescan' in metadata_cache['filenames_to_sections'][stack]:
+                metadata_cache['filenames_to_sections'][stack].pop('Rescan')
+        except Exception as e:
+	    sys.stderr.write("Failed to cache %s filenames_to_sections: %s\n" % (stack, e.message))
+
         try:
             metadata_cache['section_limits'][stack] = DataManager.load_section_limits_v2(stack, prep_id=2)
-        except:
-            pass
-        try:
+        except Exception as e:
+	    sys.stderr.write("Failed to cache %s section_limits: %s\n" % (stack, e.message))
+     
+	try:
             # alignedBrainstemCrop cropping box
             metadata_cache['cropbox'][stack] = DataManager.load_cropbox_v2(stack, prep_id=2)
-        except:
-            pass
+        except Exception as e:
+	    sys.stderr.write("Failed to cache %s cropbox: %s\n" % (stack, e.message))
 
         try:
             first_sec, last_sec = metadata_cache['section_limits'][stack]
@@ -5450,6 +5472,7 @@ def generate_metadata_cache():
             metadata_cache['valid_filenames'][stack] = [metadata_cache['sections_to_filenames'][stack][sec] for sec in
                                                        metadata_cache['valid_sections'][stack]]
         except:
+	    sys.stderr.write("Failed to cache %s valid_sections/filenames\n" % stack)
             pass
 
         try:
@@ -5460,7 +5483,8 @@ def generate_metadata_cache():
 
         try:
             metadata_cache['image_shape'][stack] = DataManager.get_image_dimension(stack)
-        except:
+        except Exception as e:
+	    sys.stderr.write("Failed to cache %s image_shape: %s\n" % (stack, e))
             pass
 
     return metadata_cache

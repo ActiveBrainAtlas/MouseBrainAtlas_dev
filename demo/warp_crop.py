@@ -28,34 +28,6 @@ from data_manager import *
 from distributed_utilities import *
 from metadata import orientation_argparse_str_to_imagemagick_str
 
-def convert_cropbox_from_arr_1um(data, out_fmt, out_resol, stack=None):
-    
-    data = data / convert_resolution_string_to_um(stack=stack, resolution=out_resol)
-
-    if out_fmt == 'str':
-        return ','.join(map(str, data))
-    elif out_fmt == 'dict':
-        raise Exception("too lazy to implement")
-    else:
-        return data
-    
-def convert_cropbox_to_arr_1um(data, in_resol, stack=None):
-
-    if isinstance(data, dict):
-        arr = np.array([data['rostral_limit'], data['dorsal_limit'], data['caudal_limit'] - data['rostral_limit'] + 1, data['ventral_limit'] - data['dorsal_limit'] + 1])
-        # Since this does not check for wrt, the user needs to make sure the cropbox is relative to the input prep (i.e. the wrt attribute is the same as input prep)
-    elif isinstance(data, str):
-        arr = np.array(map(int, map(eval, data.split(','))))
-    else:
-        arr = np.array(data)
-
-    arr_1um = arr * convert_resolution_string_to_um(stack=stack, resolution=in_resol)
-    return arr_1um
-
-def convert_cropbox_fmt(out_fmt, data, in_resol='1um', out_resol='1um', stack=None):
-    arr_1um = convert_cropbox_to_arr_1um(data=data, in_resol=in_resol, stack=stack)
-    return convert_cropbox_from_arr_1um(data=arr_1um, out_fmt=out_fmt, out_resol=out_resol, stack=stack)
-
 def transform_to_str(transform):
     return ','.join(map(str, transform.flatten()))
 
@@ -75,12 +47,15 @@ elif args.input_fp is not None and args.output_fp is not None:
     input_fp = args.input_fp
     output_fp = args.output_fp
 
-if args.crop is not None:
-    if args.crop.endswith('.json'):
-        cropbox = load_json(args.crop)
-        cropbox_resol = cropbox['resolution']
-    elif isinstance(args.crop, str):
-        cropbox_resol = 'thumbnail'
+#if args.crop is not None:
+   # if args.crop.endswith('.json'):
+  #      cropbox = load_json(args.crop)
+        #cropbox_resol = cropbox['resolution']
+ #   elif args.crop.endswith('ini'):
+#	cropbox = load_ini(args.crop, section=out_prep_id)
+#	cropbox_resol = cropbox['resolution']
+    #elif isinstance(args.crop, str):
+        #cropbox_resol = 'thumbnail'
     
 def rescale_transform(transform, factor):
 
@@ -105,17 +80,29 @@ if args.input_spec is not None:
 	assert args.inverse_warp.endswith('.csv')
         transforms_to_anchor = csv_to_dict(args.inverse_warp)
         transforms_to_anchor = {img_name: np.linalg.inv(np.reshape(tf, (3,3))) for img_name, tf in transforms_to_anchor.iteritems()}
-    else:
-	raise ("Must specify either warp or inverse_warp")
+    #else:
+	#raise Exception("Must specify either warp or inverse_warp")
 
     if args.crop is not None:
-        if args.crop.endswith('.json'):
-	    cropbox = load_json(args.crop)
+        if args.crop.endswith('.json') or args.crop.endswith('.ini'):
+	    if args.crop.endswith('.json'):
+	        cropbox = load_json(args.crop)
+	    else:
+		cropbox = load_ini(args.crop, section=out_prep_id)
+		print cropbox
+	    
 	    cropboxes = {img_name: cropbox for img_name in image_name_list}
+	    in_fmt = 'dict'
+	    cropbox_resol = cropbox['resolution']
+
 	elif args.crop.endswith('.csv'):
 	    cropboxes = csv_to_dict(args.crop)
+	    in_fmt = 'arr_xywh'
+	    cropbox_resol = 'thumbnail'
         elif isinstance(args.crop, str):
             cropboxes = {img_name: args.crop for img_name in image_name_list}
+	    in_fmt = 'str_xywh'
+	    cropbox_resol = 'thumbnail'
         else:
             raise Exception("crop argument must be either a csv file or a str")
 
@@ -124,10 +111,10 @@ if args.input_spec is not None:
     transforms_scale_factor = convert_resolution_string_to_um(stack=stack, resolution=transforms_resol) / convert_resolution_string_to_um(stack=stack, resolution=resol)
 
     run_distributed('%(script)s --input_fp \"%%(input_fp)s\" --output_fp \"%%(output_fp)s\" %%(transform_str)s %%(box_xywh_str)s --pad_color %%(pad_color)s' % \
-                {'script': os.path.join(REPO_DIR, 'preprocess', 'warp_crop.py'),
+                {'script': os.path.join(os.getcwd(), 'warp_crop.py'),
                 },
                 kwargs_list=[{'transform_str': ('--warp ' + transform_to_str(rescale_transform(transforms_to_anchor[img_name], factor=transforms_scale_factor))) if args.warp is not None or args.inverse_warp is not None else '',
-                              'box_xywh_str': ('--crop ' + convert_cropbox_fmt(data=cropboxes[img_name], out_fmt='str', in_resol=cropbox_resol, out_resol=resol, stack=stack)) if args.crop is not None else '',
+                              'box_xywh_str': ('--crop ' + convert_cropbox_fmt(data=cropboxes[img_name], out_fmt='str_xywh', in_fmt=in_fmt, in_resol=cropbox_resol, out_resol=resol, stack=stack)) if args.crop is not None else '',
                             'input_fp': DataManager.get_image_filepath_v2(stack=stack, fn=img_name, prep_id=prep_id, version=version, resol=resol),
                             'output_fp': DataManager.get_image_filepath_v2(stack=stack, fn=img_name, prep_id=out_prep_id, version=version, resol=resol),
                             'pad_color': ('black' if img_name.split('-')[1][0] == 'F' else 'white') if pad_color == 'auto' else pad_color}
@@ -147,7 +134,16 @@ else:
         T = np.linalg.inv(str_to_transform(args.warp))
 
     if args.crop is not None:
-        x, y, w, h = convert_cropbox_fmt(data=args.crop, out_fmt='arr')
+        if args.crop.endswith('.json'):
+            cropbox = load_json(args.crop) 
+            x, y, w, h = convert_cropbox_fmt(data=args.crop, out_fmt='arr_xywh', in_fmt='dict')
+            #cropboxes = {img_name: cropbox for img_name in image_name_list}
+        #elif args.crop.endswith('.csv'):
+            #cropboxes = csv_to_dict(args.crop)
+        elif isinstance(args.crop, str):
+            x, y, w, h = convert_cropbox_fmt(data=args.crop, out_fmt='arr_xywh', in_fmt='str_xywh')
+        else:
+	    raise Exception("crop argument must be either a csv file or a str")
     else:
 	x, y, w, h = (0,0,2000,1000)
 

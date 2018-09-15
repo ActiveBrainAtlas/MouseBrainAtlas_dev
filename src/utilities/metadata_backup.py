@@ -579,48 +579,44 @@ XY_PIXEL_DISTANCE_TB_AXIOSCAN = XY_PIXEL_DISTANCE_LOSSLESS_AXIOSCAN * 32
 
 #######################################
 
-#all_nissl_stacks = ['MD585', 'MD589', 'MD590', 'MD591', 'MD592', 'MD593', 'MD594', 'MD595', 'MD598', 'MD599', 'MD602', 'MD603']
-#all_ntb_stacks = ['MD635']
-#all_dk_ntb_stacks = ['CHATM2', 'CHATM3']
-#all_alt_nissl_ntb_stacks = ['MD653', 'MD652', 'MD642']
-#all_alt_nissl_tracing_stacks = ['MD657', 'MD658', 'MD661', 'MD662']
+all_nissl_stacks = ['MD585', 'MD589', 'MD590', 'MD591', 'MD592', 'MD593', 'MD594', 'MD595', 'MD598', 'MD599', 'MD602', 'MD603']
+all_ntb_stacks = ['MD635']
+all_dk_ntb_stacks = ['CHATM2', 'CHATM3']
+all_alt_nissl_ntb_stacks = ['MD653', 'MD652', 'MD642']
+all_alt_nissl_tracing_stacks = ['MD657', 'MD658', 'MD661', 'MD662']
 # all_stacks = all_nissl_stacks + all_ntb_stacks
-#all_stacks = all_nissl_stacks + all_ntb_stacks + all_alt_nissl_ntb_stacks + all_alt_nissl_tracing_stacks + all_dk_ntb_stacks \
-#                + ['DEMO999', 'MD998']
-#all_annotated_nissl_stacks = ['MD585', 'MD589', 'MD594']
-#all_annotated_ntb_stacks = ['MD635']
-#all_annotated_stacks = all_annotated_nissl_stacks + all_annotated_ntb_stacks
+all_stacks = all_nissl_stacks + all_ntb_stacks + all_alt_nissl_ntb_stacks + all_alt_nissl_tracing_stacks + all_dk_ntb_stacks \
+                + ['DEMO999']
+all_annotated_nissl_stacks = ['MD585', 'MD589', 'MD594']
+all_annotated_ntb_stacks = ['MD635']
+all_annotated_stacks = all_annotated_nissl_stacks + all_annotated_ntb_stacks
 
-all_nissl_stacks = []
-all_ntb_stacks = ['DEMO998']
-all_stacks = all_nissl_stacks + all_ntb_stacks
-
-BRAINS_INFO_DIR = os.path.join(DATA_ROOTDIR, 'brains_info')
-
-# from utilities2015 import load_ini
-
-def load_ini(fp, split_newline=True, section='DEFAULT'):
-    import ConfigParser
-    config = ConfigParser.ConfigParser()
-    config.read(fp)
-    input_spec = dict(config.items(section))
-    input_spec = {k: v.split('\n') if '\n' in v else v for k, v in input_spec.iteritems()}
-    for k, v in input_spec.iteritems():
-        if not isinstance(v, list):
-            if '.' not in v and v.isdigit():
-                input_spec[k] = int(v)
-            elif v.replace('.','',1).isdigit():
-                input_spec[k] = float(v)
-    return input_spec
-
-planar_resolution = {}
-for brain_ini in os.listdir(BRAINS_INFO_DIR):
-    brain_name = os.path.splitext(brain_ini)[0]
-    brain_info = load_ini(os.path.join(BRAINS_INFO_DIR, brain_ini))
-    planar_resolution[brain_name] = float(brain_info['planar_resolution_um'])
-
-print planar_resolution
-
+planar_resolution = {'MD585': XY_PIXEL_DISTANCE_LOSSLESS,
+                     'MD589':XY_PIXEL_DISTANCE_LOSSLESS,
+                     'MD590':XY_PIXEL_DISTANCE_LOSSLESS,
+                     'MD591':XY_PIXEL_DISTANCE_LOSSLESS,
+                     'MD592':XY_PIXEL_DISTANCE_LOSSLESS,
+                     'MD593':XY_PIXEL_DISTANCE_LOSSLESS,
+                     'MD594':XY_PIXEL_DISTANCE_LOSSLESS,
+                     'MD595':XY_PIXEL_DISTANCE_LOSSLESS,
+                     'MD598':XY_PIXEL_DISTANCE_LOSSLESS,
+                     'MD599':XY_PIXEL_DISTANCE_LOSSLESS,
+                     'MD602':XY_PIXEL_DISTANCE_LOSSLESS,
+                     'MD603':XY_PIXEL_DISTANCE_LOSSLESS,
+                     'MD635':XY_PIXEL_DISTANCE_LOSSLESS,
+                     'MD653':XY_PIXEL_DISTANCE_LOSSLESS,
+                     'MD652':XY_PIXEL_DISTANCE_LOSSLESS,
+                     'MD642':XY_PIXEL_DISTANCE_LOSSLESS,
+                     'MD657':XY_PIXEL_DISTANCE_LOSSLESS,
+                     'MD658':XY_PIXEL_DISTANCE_LOSSLESS,
+                     'MD661':XY_PIXEL_DISTANCE_LOSSLESS,
+                     'MD662':XY_PIXEL_DISTANCE_LOSSLESS,
+                     # 'ChatCryoJane201710': XY_PIXEL_DISTANCE_LOSSLESS_AXIOSCAN,
+                     # 'DmaleAxioscan': XY_PIXEL_DISTANCE_LOSSLESS_AXIOSCAN,
+                     'CHATM2': XY_PIXEL_DISTANCE_LOSSLESS_AXIOSCAN,
+                     'CHATM3': XY_PIXEL_DISTANCE_LOSSLESS_AXIOSCAN,
+                     'DEMO999': XY_PIXEL_DISTANCE_LOSSLESS,
+                    }
 
 ########################################
 

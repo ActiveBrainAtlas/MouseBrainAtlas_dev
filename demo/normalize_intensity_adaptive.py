@@ -132,6 +132,8 @@ for image_name in image_name_list:
     img_normalized[raw_mask] = (img[raw_mask] - mean_map[raw_mask]) / std_map[raw_mask]
     sys.stderr.write('Normalize: %.2f seconds.\n' % (time.time() - t)) #30s
 
+    del img, mean_map, std_map
+
     t = time.time()
     # FIX THIS! THIS only save uint16, not float16. Need to save as bp instead.
 #     img_fp = DataManager.get_image_filepath_v2(stack=stack, prep_id=None, version='NtbNormalizedFloat', resol='down8', section=section, )
@@ -159,7 +161,8 @@ for image_name in image_name_list:
     create_parent_dir_if_not_exists(fp)
     plt.savefig(fp)
     plt.close();
-    
+    sys.stderr.write('Save float histogram: %.2f seconds.\n' % (time.time() - t)) #30s
+
 #     hist_fp = DataManager.get_intensity_normalization_result_filepath(what='float_histogram', stack=stack, section=section)
 #     create_parent_dir_if_not_exists(hist_fp)
     
@@ -172,6 +175,8 @@ for image_name in image_name_list:
 
 #     plt.savefig(hist_fp)
 #     plt.close();
+
+    del img_normalized, raw_mask
 
 gamma_map = img_as_ubyte(adjust_gamma(np.arange(0, 256, 1) / 255., 8.))
 

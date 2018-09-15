@@ -13,7 +13,7 @@ try:
     import cv2
 except:
     sys.stderr.write('Cannot find cv2\n')
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 from multiprocess import Pool
 
 sys.path.append(os.environ['REPO_DIR'] + '/utilities')

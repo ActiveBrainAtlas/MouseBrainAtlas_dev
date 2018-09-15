@@ -28,38 +28,38 @@ def download_to_demo(fp):
 
 # For compute features demo.
 
-fp = DataManager.get_sorted_filenames_filename(stack='DEMO999')
-rel_fp = relative_to_local(fp, local_root=DATA_ROOTDIR)
-download_to_demo(rel_fp)
+#fp = DataManager.get_sorted_filenames_filename(stack='DEMO999')
+#rel_fp = relative_to_local(fp, local_root=DATA_ROOTDIR)
+#download_to_demo(rel_fp)
 
-fp = DataManager.get_anchor_filename_filename(stack='DEMO999')
-rel_fp = relative_to_local(fp, local_root=DATA_ROOTDIR)
-anchor_fp_demo = download_to_demo(rel_fp)
+#fp = DataManager.get_anchor_filename_filename(stack='DEMO999')
+#rel_fp = relative_to_local(fp, local_root=DATA_ROOTDIR)
+#anchor_fp_demo = download_to_demo(rel_fp)
 
-anchor_fn = DataManager.load_anchor_filename(stack='DEMO999')
+#anchor_fn = DataManager.load_anchor_filename(stack='DEMO999')
 
-fp = DataManager.get_section_limits_filename_v2(stack='DEMO999', anchor_fn=anchor_fn)
-rel_fp = relative_to_local(fp, local_root=DATA_ROOTDIR)
-download_to_demo(rel_fp)
+#fp = DataManager.get_section_limits_filename_v2(stack='DEMO999', anchor_fn=anchor_fn)
+#rel_fp = relative_to_local(fp, local_root=DATA_ROOTDIR)
+#download_to_demo(rel_fp)
 
-fp = DataManager.get_cropbox_filename_v2(stack='DEMO999', prep_id='alignedBrainstemCrop', anchor_fn=anchor_fn)
-rel_fp = relative_to_local(fp, local_root=DATA_ROOTDIR)
-download_to_demo(rel_fp)
+#fp = DataManager.get_cropbox_filename_v2(stack='DEMO999', prep_id='alignedBrainstemCrop', anchor_fn=anchor_fn)
+#rel_fp = relative_to_local(fp, local_root=DATA_ROOTDIR)
+#download_to_demo(rel_fp)
 
 # Now that we have DEMO999 meta files, refresh the metadata cache.
-generate_metadata_cache()
+#generate_metadata_cache()
 
-for sec in range(85, 357):
-    fp = DataManager.get_image_filepath_v2(stack='DEMO999', prep_id='alignedPadded', resol='thumbnail', version='mask', section=sec)
-    rel_fp = relative_to_local(fp, local_root=DATA_ROOTDIR)
-    download_to_demo(rel_fp)
+#for sec in range(85, 357):
+#    fp = DataManager.get_image_filepath_v2(stack='DEMO999', prep_id='alignedPadded', resol='thumbnail', version='mask', section=sec)
+#    rel_fp = relative_to_local(fp, local_root=DATA_ROOTDIR)
+#    download_to_demo(rel_fp)
 
 
 #for sec in range(220, 260):
-for sec in [225, 235]:
-    fp = DataManager.get_image_filepath_v2(stack='DEMO999', prep_id='alignedBrainstemCrop', resol='raw', version='NtbNormalizedAdaptiveInvertedGamma', section=sec)
-    rel_fp = relative_to_local(fp, local_root=DATA_ROOTDIR)
-    download_to_demo(rel_fp)
+#for sec in [225, 235]:
+#    fp = DataManager.get_image_filepath_v2(stack='DEMO999', prep_id='alignedBrainstemCrop', resol='raw', version='NtbNormalizedAdaptiveInvertedGamma', section=sec)
+#    rel_fp = relative_to_local(fp, local_root=DATA_ROOTDIR)
+#    download_to_demo(rel_fp)
 
 
 # DOWNLOAD mxnet model

@@ -1,4 +1,5 @@
 import matplotlib
+matplotlib.use('Agg')
 
 import os
 import csv
@@ -18,7 +19,9 @@ from skimage.io import imread, imsave
 from skimage.util import img_as_ubyte, img_as_float
 from skimage.color import gray2rgb, rgb2gray
 import numpy as np
+
 import matplotlib.pyplot as plt
+
 try:
     import cv2
 except:
@@ -31,7 +34,7 @@ from skimage.measure import find_contours, regionprops
 
 from skimage.filters import gaussian
 
-from metadata import ENABLE_UPLOAD_S3, ENABLE_DOWNLOAD_S3
+from metadata import ENABLE_UPLOAD_S3, ENABLE_DOWNLOAD_S3, convert_resolution_string_to_um
 
 #######################################
 
@@ -112,6 +115,78 @@ def compute_gradient_v2(volume, smooth_first=False, dtype=np.float16):
 
         return g.astype(dtype), o
 
+####################################################################
+
+def convert_cropbox_from_arr_xywh_1um(data, out_fmt, out_resol, stack=None):
+
+    data = data / convert_resolution_string_to_um(stack=stack, resolution=out_resol)
+
+    if out_fmt == 'str_xywh':
+        return ','.join(map(str, data))
+    elif out_fmt == 'dict':
+        raise Exception("too lazy to implement")
+    else:
+        return data
+
+def convert_cropbox_to_arr_xywh_1um(data, in_fmt, in_resol, stack=None):
+
+    if isinstance(data, dict):
+        arr_xywh = np.array([data['rostral_limit'], data['dorsal_limit'], data['caudal_limit'] - data['rostral_limit'] + 1, data['ventral_limit'] - data['dorsal_limit'] + 1])
+        # Since this does not check for wrt, the user needs to make sure the cropbox is relative to the input prep (i.e. the wrt attribute is the same as input prep)
+    elif isinstance(data, str):
+        if in_fmt == 'str_xywh':
+            arr_xywh = np.array(map(np.round, map(eval, data.split(','))))
+        elif in_fmt == 'str_xxyy':
+            arr_xxyy = np.array(map(np.round, map(eval, data.split(','))))
+            arr_xywh = np.array([arr_xxyy[0], arr_xxyy[2], arr_xxyy[1] - arr_xxyy[0] + 1, arr_xxyy[3] - arr_xxyy[2] + 1])
+        else:
+            raise
+    else:
+        if in_fmt == 'arr_xywh':
+            arr_xywh = np.array(data)
+        elif in_fmt == 'arr_xxyy':
+            arr_xywh = np.array([data[0], data[2], data[1] - data[0] + 1, data[3] - data[2] + 1])
+        else:
+            raise
+            
+    arr_xywh_1um = arr_xywh * convert_resolution_string_to_um(stack=stack, resolution=in_resol)
+    return arr_xywh_1um
+
+def convert_cropbox_fmt(out_fmt, data, in_fmt=None, in_resol='1um', out_resol='1um', stack=None):
+    arr_xywh_1um = convert_cropbox_to_arr_xywh_1um(data=data, in_fmt=in_fmt, in_resol=in_resol, stack=stack)
+    data_out = convert_cropbox_from_arr_xywh_1um(data=arr_xywh_1um, out_fmt=out_fmt, out_resol=out_resol, stack=stack)
+    return data_out
+
+########################################
+
+
+
+def csv_to_dict(fp):
+    import pandas as pd
+    df = pd.read_csv(fp, index_col=0, header=None)
+    d = df.to_dict(orient='index')
+    d = {k: v.values() for k, v in d.iteritems()}
+    return d
+
+def dict_to_csv(d, fp):
+    import pandas as pd
+    df = pd.DataFrame.from_dict({k: np.array(v).flatten() for k, v in d.iteritems()}, orient='index')
+    df.to_csv(fp, header=False)
+
+
+def load_ini(fp, split_newline=True, section='DEFAULT'):
+    import ConfigParser
+    config = ConfigParser.ConfigParser()
+    config.read(fp)
+    input_spec = dict(config.items(section))
+    input_spec = {k: v.split('\n') if '\n' in v else v for k, v in input_spec.iteritems()}
+    for k, v in input_spec.iteritems():
+	if not isinstance(v, list):
+	    if '.' not in v and v.isdigit():
+    	        input_spec[k] = int(v)
+	    elif v.replace('.','',1).isdigit():
+	        input_spec[k] = float(v)
+    return input_spec
 
 def load_data(fp, polydata_instead_of_face_vertex_list=True, download_s3=True):
 
@@ -589,7 +664,6 @@ def plot_centroid_means_and_covars_3d(instance_centroids,
     # Plot in 3D.
 
     from mpl_toolkits.mplot3d import Axes3D
-    import matplotlib.pyplot as plt
     from metadata import name_unsided_to_color, convert_to_original_name
 
     fig = plt.figure(figsize=(20, 20))
