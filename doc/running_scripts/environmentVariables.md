@@ -4,7 +4,7 @@ All environment variables are set in setup/config.sh. This file will set 4 envir
 
 This file should be run with `$ source ./setup/config.sh` to set the repository directory properly.
 
-##### Evironmental variables	
+### Evironmental variables	
 ```python	
 REPO_DIIR = the directory holding the code repository	
 ROOT_DIR = the root of the data sub-directories, all downloaded data goes here	
