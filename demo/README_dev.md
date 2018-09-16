@@ -36,20 +36,21 @@ cd demo
 For each step below that requires `input_spec.ini`, the ini file is a different one and must be manually created.
 
 - Run `download_demo_data_preprocessing.py` to download 4 JPEG2000 images of the demo brain.
-- **(HUMAN)** Create meta data information for this brain
+- **(HUMAN)** create `DEMO998.ini` and put it under `demo_data/brains_info/`
 - Create `DEMO998_input_spec.json`. `python jp2_to_tiff.py DEMO998 DEMO998_input_spec.json`.
 - `python extract_channel.py input_spec.ini 2 Ntb`
 - `python rescale.py input_spec.ini thumbnail -f 0.03125`
 - `python normalize_intensity.py input_spec.ini NtbNormalized`
 - **(HUMAN)** browse thumbnails to verify orientations are all correct
+### Intra-stack align
 - **(HUMAN)** Obtain a roughly correct sorted list of image names from the data provider.
-- `python align.py input_spec.ini alignedPadded`
-- **(HUMAN)** select anchor image, using preprocessGUI `preprocess_gui.py`
-- `python compose.py --input_spec input_spec.ini --prep_id alignedPadded`
-- **(HUMAN)** create `DEMO998.ini` and put it in `demo_data/brains_info/`
+- **(HUMAN)** Create `alignedPadded.ini` to describe intra-stack alignment operation.
+- `python align.py input_spec.ini --prep_id alignedPadded`
+- `python compose.py input_spec.ini --prep_id alignedPadded`
 - `python warp_crop.py --input_spec input_spec.ini --out_prep_id alignedPadded`
 - **(HUMAN)** Inspect aligned images using preprocessGUI `preprocess_gui.py`, correct pairwise transforms and check each image's order in stack. Create `DEMO998_sorted_filenames.txt` based on the given roughly correct list.
-- **(HUMAN)** draw initial snake contours for masking using maskingGUI. 
+### Create masks
+- **(HUMAN)** draw initial snake contours for masking using maskingGUI.
 `python mask_editing_tool_v4.py DEMO998`
 - `python masking.py input_spec.ini demo_data/CSHL_data_processed/DEMO998/DEMO998_prep1_thumbnail_initSnakeContours.pkl`
 - **(HUMAN)** Return to masking GUI to inspect and correct the automatically generated masks. 
@@ -60,12 +61,14 @@ For each step below that requires `input_spec.ini`, the ini file is a different 
  --crop "demo_data/CSHL_data_processed/DEMO998/DEMO998_original_image_crop.csv" \
  --out_prep_id None`
 - `python normalize_intensity_adaptive.py input_spec.ini NtbNormalizedAdaptiveInvertedGamma`
+### Whole-slice crop
 - **(HUMAN)** Manually specify the alignedWithMargin cropbox based on alignedPadded images, or automatically infer based on alignedPadded masks.
 - `python warp_crop.py --input_spec input_spec.ini \
  --warp "demo_data/CSHL_data_processed/DEMO998/DEMO998_transformsTo_MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250.csv" \
  --crop "demo_data/CSHL_data_processed/DEMO998/DEMO998_cropbox.ini" \
  --out_prep_id alignedWithMargin`
 - `python rescale.py input_spec.ini thumbnail -f 0.03125`
+### Brainstem crop
 - **(HUMAN)** Specify prep2 (alignedBrainstemCrop) cropping box, based on alignedWithMargin thumbnails or alignedPadded thumbnails
 - `python warp_crop.py --input_spec input_spec.ini \
  --crop "demo_data/CSHL_data_processed/DEMO998/DEMO998_cropbox.ini" \
