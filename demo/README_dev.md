@@ -40,6 +40,7 @@ For each step below that requires `input_spec.ini`, the ini file is a different 
 - Create `DEMO998_input_spec.json`. `python jp2_to_tiff.py DEMO998 DEMO998_input_spec.json`.
 - `python extract_channel.py input_spec.ini 2 Ntb`
 - `python rescale.py input_spec.ini thumbnail -f 0.03125`
+### Global intensity normalization
 - `python normalize_intensity.py input_spec.ini NtbNormalized`
 - **(HUMAN)** browse thumbnails to verify orientations are all correct
 ### Intra-stack align
@@ -60,6 +61,7 @@ For each step below that requires `input_spec.ini`, the ini file is a different 
  --inverse_warp "demo_data/CSHL_data_processed/DEMO998/DEMO998_transformsTo_MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250.csv" \
  --crop "demo_data/CSHL_data_processed/DEMO998/DEMO998_original_image_crop.csv" \
  --out_prep_id None`
+### Local adaptive intensity normalization
 - `python normalize_intensity_adaptive.py input_spec.ini NtbNormalizedAdaptiveInvertedGamma`
 ### Whole-slice crop
 - **(HUMAN)** Manually specify the alignedWithMargin cropbox based on alignedPadded images, or automatically infer based on alignedPadded masks.
