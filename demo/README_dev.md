@@ -33,7 +33,7 @@ cd demo
 
 ## Preprocess
 
-For each step below that requires `input_spec.ini`, the ini file is a different one and must be manually created.
+Note that the `input_spec.ini` files for most steps are different and must be manually created according to the actual input.
 
 - Run `download_demo_data_preprocessing.py` to download 4 JPEG2000 images of the demo brain.
 - **(HUMAN)** create `DEMO998.ini` and put it under `demo_data/brains_info/`
