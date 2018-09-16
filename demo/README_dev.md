@@ -42,8 +42,8 @@ For each step below that requires `input_spec.ini`, the ini file is a different 
 - `python rescale.py input_spec.ini thumbnail -f 0.03125`
 ### Global intensity normalization
 - `python normalize_intensity.py input_spec.ini NtbNormalized`
-- **(HUMAN)** browse thumbnails to verify orientations are all correct
 ### Intra-stack align
+- **(HUMAN)** browse thumbnails to verify orientations are all correct
 - **(HUMAN)** Obtain a roughly correct sorted list of image names from the data provider.
 - **(HUMAN)** Create `alignedPadded.ini` to describe intra-stack alignment operation.
 - `python align.py input_spec.ini --prep_id alignedPadded`
