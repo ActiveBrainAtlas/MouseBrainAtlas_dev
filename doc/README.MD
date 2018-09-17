@@ -6,6 +6,7 @@ For a complete description of the project's scripts look at __[Runnable Scripts]
 
 ## User Guide
 [Yuncong User Guide](User%20Manuals/UserGuide.md) gives a high level description of the pipeline, the steps numbered below, but does NOT describe how to run the Atlas scripts in detail.
+
  0. Training Classifier
  1. Preprocessing
  2. Detection
