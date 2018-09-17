@@ -54,7 +54,7 @@ CSHL_data_processed/
         └── SLICECF_prep2_raw_NtbNormalizedAdaptiveInvertedGammaJpeg.jpg
 ```
 
-## Alex Running Notes
+## Full Alex Running Notes
 
 For the first command: `demo/download_demo_data_compute_features.py`:
 - Downloads all necessary files.
