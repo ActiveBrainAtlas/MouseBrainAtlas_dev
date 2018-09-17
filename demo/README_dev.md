@@ -48,7 +48,7 @@ Note that the `input_spec.ini` files for most steps are different and must be ma
 - **(HUMAN)** Create `alignedPadded.ini` to describe intra-stack alignment operation.
 - `python align.py input_spec.ini --prep_id alignedPadded`
 - `python compose.py input_spec.ini --prep_id alignedPadded`
-- `python warp_crop.py --input_spec input_spec.ini --out_prep_id alignedPadded`
+- `python warp_crop.py --input_spec input_spec.ini --op_id from_none_to_padded`
 - **(HUMAN)** Inspect aligned images using preprocessGUI `preprocess_gui.py`, correct pairwise transforms and check each image's order in stack. Create `DEMO998_sorted_filenames.txt` based on the given roughly correct list.
 ### Create masks
 - **(HUMAN)** draw initial snake contours for masking using maskingGUI.
@@ -57,25 +57,17 @@ Note that the `input_spec.ini` files for most steps are different and must be ma
 - **(HUMAN)** Return to masking GUI to inspect and correct the automatically generated masks. 
 `python mask_editing_tool_v4.py DEMO998`
 - **(HUMAN)** Create `DEMO998_original_image_crop.csv`
-- `python warp_crop.py --input_spec input_spec.ini \
- --inverse_warp "demo_data/CSHL_data_processed/DEMO998/DEMO998_transformsTo_MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250.csv" \
- --crop "demo_data/CSHL_data_processed/DEMO998/DEMO998_original_image_crop.csv" \
- --out_prep_id None`
+- `python warp_crop.py --input_spec input_spec.ini --op_id from_padded_to_none`
  
 ### Local adaptive intensity normalization
 - `python normalize_intensity_adaptive.py input_spec.ini NtbNormalizedAdaptiveInvertedGamma`
 ### Whole-slice crop
 - **(HUMAN)** Manually specify the alignedWithMargin cropbox based on alignedPadded images, or automatically infer based on alignedPadded masks.
-- `python warp_crop.py --input_spec input_spec.ini \
- --warp "demo_data/CSHL_data_processed/DEMO998/DEMO998_transformsTo_MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250.csv" \
- --crop "demo_data/CSHL_data_processed/DEMO998/DEMO998_cropbox.ini" \
- --out_prep_id alignedWithMargin`
+- `python warp_crop.py --input_spec input_spec.ini --op_id from_padded_to_wholeslice`
 - `python rescale.py input_spec.ini thumbnail -f 0.03125`
 ### Brainstem crop
 - **(HUMAN)** Specify prep2 (alignedBrainstemCrop) cropping box, based on alignedWithMargin thumbnails or alignedPadded thumbnails
-- `python warp_crop.py --input_spec input_spec.ini \
- --crop "demo_data/CSHL_data_processed/DEMO998/DEMO998_cropbox.ini" \
- --out_prep_id alignedBrainstemCrop`
+- `python warp_crop.py --input_spec input_spec.ini --op_id from_padded_to_brainstem`
 - `python rescale.py input_spec.ini thumbnail -f 0.03125`
 - `python compress_jpeg.py input_spec.ini`
 
