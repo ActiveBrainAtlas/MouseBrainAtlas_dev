@@ -1,6 +1,8 @@
 ---
-- `$ ./demo/download_demo_data_scoring.py`
-- `$ ./demo/from_images_to_score_volumes_demo.py DEMO999 799 NtbNormalizedAdaptiveInvertedGammaJpeg --structure_list "[\"3N\", \"4N\", \"12N\"]"`
+```
+./demo/download_demo_data_scoring.py
+./demo/from_images_to_score_volumes_demo.py DEMO999 799 NtbNormalizedAdaptiveInvertedGammaJpeg --structure_list "[\"3N\", \"4N\", \"12N\"]"
+```
 ---
 
 Note that the data needed to download for this demo is about 35G.
