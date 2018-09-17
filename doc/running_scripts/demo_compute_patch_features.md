@@ -38,8 +38,8 @@ Two files listed below. For every `SLICECF`, there will be these two files gener
 ```
 CSHL_patch_features/
 └── inception-bn-blue
-    └── DEMO999
-        └── DEMO999_prep2_none_win7
+    └── STACK
+        └── STACK_prep2_none_win7
             ├── SLICECF_prep2_none_win7_inception-bn-blue_features.bp
             └── SLICECF_prep2_none_win7_inception-bn-blue_locations.bp
 ```
