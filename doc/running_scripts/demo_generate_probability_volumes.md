@@ -6,19 +6,27 @@ Commands:
 
 ---
 
-Note that the data needed to download for this demo is about 35G.
+Note that the data needed to download for this demo is about 35G. It may take a few hours to download.
 
-## Alex Running Notes
-
-#### For running the first command `demo/download_demo_data_generate_prob_volumes.py`:
-- Ran with `python demo/download_demo_data_generate_prob_volumes.py --demo_data_dir $ROOT_DIR`. Downloading the files takes at least 3-5 hours.
-- Downloads an entire stack's feature data (272 sections for MD661 specifically). For each slice there are two *.bp files as listed below:
- - `[SLICENAME]_prep2_none_win7_inception-bn-blue_features.bp`
- - `[SLICENAME]_prep2_none_win7_inception-bn-blue_locations.bp`
+## Summary
+For the sake of generalization the following substitutions will be used.
+- `STACK` = the name of the current brain stack, ex: 'MD662', 
+- `SLICE` = the name of the current slice, this is typically long, ex: 'MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257'
+- `ANCHOR` = a particular SLICE, all other slices are aligned to this ANCHOR
 
 
-#### For running the second command `./demo/from_images_to_score_volumes_demo.py`:
-- Outputs shown below in tree format due to how many files there were.
+#### INPUTS:
+
+```
+CSHL_patch_features/
+└── inception-bn-blue
+    └── STACK
+        └── STACK_prep2_none_win7
+            ├── SLICE_prep2_none_win7_inception-bn-blue_features.bp
+            └── SLICE_prep2_none_win7_inception-bn-blue_locations.bp
+```
+
+#### OUTPUTS:
 
 ```
  CSHL_simple_global_registration/
@@ -33,8 +41,8 @@ CSHL_classifiers/
 
 ```
 CSHL_volumes/
-└── DEMO999
-    └── DEMO999_detector799_10.0um_scoreVolume
+└── STACK
+    └── STACK_detector799_10.0um_scoreVolume
         ├── score_volume_gradients
         │   ├── DEMO999_detector799_10.0um_scoreVolume_12N_gradients.bp
         │   ├── DEMO999_detector799_10.0um_scoreVolume_12N_origin_wrt_wholebrain.txt
@@ -61,7 +69,7 @@ CSHL_volumes/
 ```
 CSHL_scoremaps/
 └── 10.0um
-    └── DEMO999
+    └── STACK
         └── DEMO999_prep2_10.0um_detector799
             ├── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_prep2_10.0um_detector799
             │   ├── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_prep2_10.0um_detector799_12N_scoremap.bp
@@ -76,21 +84,34 @@ CSHL_scoremaps/
 CSHL_scoremap_viz/
 └── 10.0um
     ├── 12N
-    │   └── DEMO999
+    │   └── STACK
     │       └── detector799
     │           └── prep2
     │               ├── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_prep2_10.0um_12N_detector799_scoremapViz.jpg
     │               └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep2_10.0um_12N_detector799_scoremapViz.jpg
     ├── 3N
-    │   └── DEMO999
+    │   └── STACK
     │       └── detector799
     │           └── prep2
     │               ├── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_prep2_10.0um_3N_detector799_scoremapViz.jpg
     │               └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep2_10.0um_3N_detector799_scoremapViz.jpg
     └── 4N
-        └── DEMO999
+        └── STACK
             └── detector799
                 └── prep2
                     ├── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_prep2_10.0um_4N_detector799_scoremapViz.jpg
                     └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep2_10.0um_4N_detector799_scoremapViz.jpg
 ```
+
+
+## Alex Running Notes
+
+#### For running the first command `demo/download_demo_data_generate_prob_volumes.py`:
+- Ran with `python demo/download_demo_data_generate_prob_volumes.py --demo_data_dir $ROOT_DIR`. Downloading the files takes at least 3-5 hours.
+- Downloads an entire stack's feature data (272 sections for MD661 specifically). For each slice there are two *.bp files as listed below:
+ - `[SLICENAME]_prep2_none_win7_inception-bn-blue_features.bp`
+ - `[SLICENAME]_prep2_none_win7_inception-bn-blue_locations.bp`
+
+
+#### For running the second command `./demo/from_images_to_score_volumes_demo.py`:
+- Outputs shown in summary, too many to list properly.
