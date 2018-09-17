@@ -1,6 +1,6 @@
 ## Setup
 
-All environment variables are set in setup/config.sh. This file will set 4 environment variables as described below as well as set up a virtual environment from which you will run the code.
+All environment variables are set in `setup/config.sh`. This file will set 4 environment variables as described below as well as set up a virtual environment from which you will run the code.
 
 This file should be run with `$ source ./setup/config.sh` to set the repository directory properly.
 
@@ -28,4 +28,4 @@ S3_ROOT = s3://mousebrainatlas-data/
 S3 filepaths are NOT changeable by the user and can be ignored for the most part unless the user wishes to directly access pertinent data.
 
 
-- note: The relative filepath from $S3_ROOT will exactly match the relative filepath from $ROOT_DIR. As well as the other ROOT directories.
+- note: The relative filepath from $S3_ROOT will exactly match the relative filepath from $ROOT_DIR. As well as the other ROOT directories. For example when downloading `/S3_ROOT/folder_A/file` it will be saved to `/ROOT_DIR/folder_A/file` on your machine.
