@@ -61,6 +61,7 @@ Note that the `input_spec.ini` files for most steps are different and must be ma
  --inverse_warp "demo_data/CSHL_data_processed/DEMO998/DEMO998_transformsTo_MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250.csv" \
  --crop "demo_data/CSHL_data_processed/DEMO998/DEMO998_original_image_crop.csv" \
  --out_prep_id None`
+ 
 ### Local adaptive intensity normalization
 - `python normalize_intensity_adaptive.py input_spec.ini NtbNormalizedAdaptiveInvertedGamma`
 ### Whole-slice crop
