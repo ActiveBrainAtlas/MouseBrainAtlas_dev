@@ -28,4 +28,4 @@ S3_ROOT = s3://mousebrainatlas-data/
 S3 filepaths are NOT changeable by the user and can be ignored for the most part unless the user wishes to directly access pertinent data.
 
 
-- note: The relative filepath from $S3_ROOT will exactly match the relative filepath from $ROOT_DIR. As well as the other ROOT directories. For example when downloading `/S3_ROOT/folder_A/file` it will be saved to `/ROOT_DIR/folder_A/file` on your machine.
+- note: The relative filepath from $S3_ROOT will exactly match the relative filepath from $ROOT_DIR. As well as the other ROOT directories. For example when downloading `/S3_ROOT/folder/file` it will be saved to `/ROOT_DIR/folder/file` on your machine.
