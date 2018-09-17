@@ -1,10 +1,13 @@
----
-- `$ ./demo/download_demo_data_compute_features.py`
-- `$ ./demo/compute_features_demo.py DEMO999 --section 230 --version NtbNormalizedAdaptiveInvertedGamma`
+```
+./demo/download_demo_data_compute_features.py
+./demo_compute_features.py DEMO999 --section 225 --version NtbNormalizedAdaptiveInvertedGamma
+./demo_compute_features.py DEMO999 --section 235 --version NtbNormalizedAdaptiveInvertedGamma
+```
+
 ---
 This demo is expected to finish in 1 minute.
 
-#### Alex Running Notes
+### Alex Running Notes
 
 For the first command: `demo/download_demo_data_compute_features.py`:
 - Downloads all necessary files.
@@ -30,8 +33,53 @@ For the second command `compute_features_demo.py` for section 225:
   - `MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_prep2_none_win7_inception-bn-blue_locations.bp`
   - To generalize, for every section two files are generated. Features and Locations, outputted as a bloscpack file. Features are a high dimensional vector that encodes properties of the images.
   
-For the third command `compute_features_demo.py` for section 225:
+For the third command `compute_features_demo.py` for section 235:
 - Make sure that the demo downloads the same section you are computing features for. (Demo only does 1 section, hard coded in the download script) Script can easily be changed to do every single section.
 - OUTPUTS: (all saved to `DATA_ROOTDIR/CSHL_patch_features/inception-bn-blue/DEMO999/DEMO999_prep2_none_win7/`)
   - `MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep2_none_win7_inception-bn-blue_features.bp`
   - `MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep2_none_win7_inception-bn-blue_locations.bp`
+
+### Summary
+For the sake of generalization the following substitutions will be used.
+- STACK = the name of the current brain stack, ex: 'MD662', 
+- SLICE = the name of the current slice, this is typically long, ex: 'MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257'
+- ANCHOR = a particular SLICE, all other slices are aligned to this ANCHOR
+
+This particular version of the script only computes features for two files, I will denote them specially. For these files you only need the slices you need to compute features for. For the previous SLICE, all files in the STACK must be included no matter what.
+- SLICECF = the slice you are computing features for. Stands for Slice Compute Features
+
+#### INPUTS:
+
+```
+CSHL_data_processed/
+└── STACK
+    ├── STACK_alignedTo_ANCHOR_prep2_cropbox.json
+    ├── STACK_alignedTo_ANCHOR_prep2_sectionLimits.json
+    ├── STACK_anchor.txt
+    ├── STACK_sorted_filenames.txt
+    ├── STACK_prep1_thumbnail_mask
+    │   └── SLICE_prep1_thumbnail_mask.png      [for all 272 slices]
+    └── STACK_prep2_raw_NtbNormalizedAdaptiveInvertedGamma
+        ├── SLICECF_prep2_raw_NtbNormalizedAdaptiveInvertedGamma.tif
+        └── SLICECF_prep2_raw_NtbNormalizedAdaptiveInvertedGamma.tif
+```
+
+#### OUTPUTS:
+Two files listed below. For every SLICECF, there will be these two files generated.
+
+```
+CSHL_patch_features/
+└── inception-bn-blue
+    └── DEMO999
+        └── DEMO999_prep2_none_win7
+            ├── SLICECF_prep2_none_win7_inception-bn-blue_features.bp
+            └── SLICECF_prep2_none_win7_inception-bn-blue_locations.bp
+```
+For every SLICECF the .tiff files are converted to .jpg files. This should not be considered ouputs but intermediate files.
+
+```
+CSHL_data_processed/
+└── STACK
+    └── STACK_prep2_raw_NtbNormalizedAdaptiveInvertedGammaJpeg * * * * * NOT INPUT * * * * *
+        └── SLICECF_prep2_raw_NtbNormalizedAdaptiveInvertedGammaJpeg.jpg
+```
