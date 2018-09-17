@@ -12,3 +12,6 @@ There are 4 scripts that encapsulate the entire pipeline, they are listed below:
 - __[Generate Probability Volumes](demo_generate_probability_volumes.md)__
 - __[Registration](demo_registration.md)__
 
+## Running the scripts
+
+The commands on how to run the scripts are they are is located in the [demo folder's README](demo/README.md). Note, there is not much information beyond the necessary commands.
