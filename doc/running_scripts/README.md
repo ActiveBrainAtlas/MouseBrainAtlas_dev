@@ -14,4 +14,4 @@ There are 4 scripts that encapsulate the entire pipeline, they are listed below:
 
 ## Running the scripts
 
-The commands on how to run the scripts are they are is located in the [demo folder's README](../demo/README.md). Note, there is not much information beyond the necessary commands.
+The commands on how to run the scripts are they are is located in the [demo folder's README](../../demo/README.md). Note, there is not much information beyond the necessary commands.
