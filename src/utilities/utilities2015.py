@@ -117,6 +117,28 @@ def compute_gradient_v2(volume, smooth_first=False, dtype=np.float16):
 
 ####################################################################
 
+def convert_2d_transform_forms(transform, out_form):
+
+    if isinstance(transform, str):
+	if out_form == (2,3):
+	    return np.reshape(map(np.float, transform.split(',')), (2,3))
+	elif out_form == (3,3):
+            return np.vstack([np.reshape(map(np.float, transform.split(',')), (2,3)), [0,0,1]])
+    else:
+        transform = np.array(transform)
+        if transform.shape == (2,3):
+    	    if out_form == (3,3):
+    	        transform = np.vstack([transform, [0,0,1]])
+	    elif out_form == 'str':
+	        transform = ','.join(map(str, transform[:2].flatten()))
+        elif transform.shape == (3,3):
+    	    if out_form == (2,3):
+	        transform = transform[:2]
+	    elif out_form == 'str':
+	        transform = ','.join(map(str, transform[:2].flatten()))
+
+    return transform
+
 def convert_cropbox_from_arr_xywh_1um(data, out_fmt, out_resol, stack=None):
 
     data = data / convert_resolution_string_to_um(stack=stack, resolution=out_resol)
@@ -125,8 +147,12 @@ def convert_cropbox_from_arr_xywh_1um(data, out_fmt, out_resol, stack=None):
         return ','.join(map(str, data))
     elif out_fmt == 'dict':
         raise Exception("too lazy to implement")
-    else:
+    elif out_fmt == 'arr_xywh':
         return data
+    elif out_fmt == 'arr_xxyy':
+	return np.array([data[0], data[0]+data[2]-1, data[1], data[1]+data[3]-1])
+    else:
+	raise
 
 def convert_cropbox_to_arr_xywh_1um(data, in_fmt, in_resol, stack=None):
 
@@ -147,12 +173,16 @@ def convert_cropbox_to_arr_xywh_1um(data, in_fmt, in_resol, stack=None):
         elif in_fmt == 'arr_xxyy':
             arr_xywh = np.array([data[0], data[2], data[1] - data[0] + 1, data[3] - data[2] + 1])
         else:
+	    print in_fmt, data
             raise
             
     arr_xywh_1um = arr_xywh * convert_resolution_string_to_um(stack=stack, resolution=in_resol)
     return arr_xywh_1um
 
 def convert_cropbox_fmt(out_fmt, data, in_fmt=None, in_resol='1um', out_resol='1um', stack=None):
+    if in_resol == out_resol: # in this case, stack is not required/ Arbitrarily set both to 1um
+	in_resol = '1um'
+	out_resol = '1um'
     arr_xywh_1um = convert_cropbox_to_arr_xywh_1um(data=data, in_fmt=in_fmt, in_resol=in_resol, stack=stack)
     data_out = convert_cropbox_from_arr_xywh_1um(data=arr_xywh_1um, out_fmt=out_fmt, out_resol=out_resol, stack=stack)
     return data_out
@@ -162,6 +192,9 @@ def convert_cropbox_fmt(out_fmt, data, in_fmt=None, in_resol='1um', out_resol='1
 
 
 def csv_to_dict(fp):
+    """
+    First column contains keys.
+    """
     import pandas as pd
     df = pd.read_csv(fp, index_col=0, header=None)
     d = df.to_dict(orient='index')
@@ -174,9 +207,14 @@ def dict_to_csv(d, fp):
     df.to_csv(fp, header=False)
 
 
-def load_ini(fp, split_newline=True, section='DEFAULT'):
+def load_ini(fp, split_newline=True, convert_none_str=True, section='DEFAULT'):
+    """
+    Value of string None will be converted to Python None.
+    """
     import ConfigParser
     config = ConfigParser.ConfigParser()
+    if not os.path.exists(fp):
+        raise Exception("ini file %s does not exist." % fp)
     config.read(fp)
     input_spec = dict(config.items(section))
     input_spec = {k: v.split('\n') if '\n' in v else v for k, v in input_spec.iteritems()}
@@ -186,6 +224,10 @@ def load_ini(fp, split_newline=True, section='DEFAULT'):
     	        input_spec[k] = int(v)
 	    elif v.replace('.','',1).isdigit():
 	        input_spec[k] = float(v)
+        elif v == 'None':
+	    if convert_none_str:
+    	        input_spec[k] = None
+    assert len(input_spec) > 0, "Failed to read data from ini file."
     return input_spec
 
 def load_data(fp, polydata_instead_of_face_vertex_list=True, download_s3=True):

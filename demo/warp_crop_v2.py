@@ -5,8 +5,10 @@ import argparse
 parser = argparse.ArgumentParser(
     formatter_class=argparse.RawDescriptionHelpFormatter,
     description="""Warp and/or crop images.
-Usage 1: warp_crop.py --input_fp in.tif --output_fp out.tif --crop 100,100,20,10
-Note that the user must ensure the crop coordinates are consistent with the resolution of the input image.
+Usage 1: warp_crop.py --input_fp in.tif --output_fp out.tif --warp 0.99,0,0,0,1.1,0,0,0,1 --crop 100,100,20,10
+Note that the user must ensure the warp parameters and crop coordinates are consistent with the resolution of the input image.
+Usage 2: warp_crop.py --input_spec in.ini --op_id align1crop1
+In this case the operations are defined as ini files in the operation_configs/ folder.
 """)
 
 parser.add_argument("--input_spec", type=str, help="Input specifier ini file.")
@@ -37,6 +39,11 @@ def transform_to_str(transform):
 def str_to_transform(transform_str):
     return np.reshape(map(np.float, transform_str.split(',')), (3,3))
 
+def rescale_transform(transform, factor):
+    T = transform.copy()
+    T[:2,2] = transform[:2, 2] * factor
+    return T
+
 out_prep_id = args.out_prep_id
 if out_prep_id == 'None':
     out_prep_id = None 
@@ -45,28 +52,9 @@ init_rotate = args.init_rotate
 pad_color = args.pad_color
 
 if args.input_spec is not None:
+# Usage 2
+
     input_spec = load_ini(args.input_spec)
-elif args.input_fp is not None and args.output_fp is not None:
-    input_fp = args.input_fp
-    output_fp = args.output_fp
-
-#if args.crop is not None:
-   # if args.crop.endswith('.json'):
-  #      cropbox = load_json(args.crop)
-        #cropbox_resol = cropbox['resolution']
- #   elif args.crop.endswith('ini'):
-#	cropbox = load_ini(args.crop, section=out_prep_id)
-#	cropbox_resol = cropbox['resolution']
-    #elif isinstance(args.crop, str):
-        #cropbox_resol = 'thumbnail'
-    
-def rescale_transform(transform, factor):
-
-    T = transform.copy()
-    T[:2,2] = transform[:2, 2] * factor
-    return T
-
-if args.input_spec is not None:
 
     image_name_list = input_spec['image_name_list']
     stack = input_spec['stack']
@@ -75,48 +63,50 @@ if args.input_spec is not None:
     version = input_spec['version']
     resol = input_spec['resol']
 
-    if args.warp is not None:
-	assert args.warp.endswith('.csv')
-	transforms_to_anchor = csv_to_dict(args.warp)
+    ini_fp = os.path.join(DATA_ROOTDIR, 'domain_specs', out_prep_id + '.ini')
+    operation_spec = load_ini(ini_fp)
+    if operation_spec['type'] == 'warp':
+	do_warp = True
+	tf_csv = operation_spec['transforms_csv']
+	assert tf_csv.endswith('.csv'), "transforms_csv is not a csv file."
+	transforms_to_anchor = csv_to_dict(tf_csv)
         transforms_to_anchor = {img_name: np.reshape(tf, (3,3)) for img_name, tf in transforms_to_anchor.iteritems()}
     elif args.inverse_warp is not None:
 	assert args.inverse_warp.endswith('.csv')
         transforms_to_anchor = csv_to_dict(args.inverse_warp)
         transforms_to_anchor = {img_name: np.linalg.inv(np.reshape(tf, (3,3))) for img_name, tf in transforms_to_anchor.iteritems()}
-    #else:
-	#raise Exception("Must specify either warp or inverse_warp")
 
-    if args.crop is not None:
-        if args.crop.endswith('.json') or args.crop.endswith('.ini'):
-	    if args.crop.endswith('.json'):
-	        cropbox = load_json(args.crop)
-	    else:
-		cropbox = load_ini(args.crop, section=out_prep_id)
-		print cropbox
+    #if args.crop is not None:
+    #    if args.crop.endswith('.json') or args.crop.endswith('.ini'):
+    #	    if args.crop.endswith('.json'):
+#	        cropbox = load_json(args.crop)
+#	    else:
+#		cropbox = load_ini(args.crop, section=out_prep_id)
+#		print cropbox
 	    
-	    cropboxes = {img_name: cropbox for img_name in image_name_list}
-	    in_fmt = 'dict'
-	    cropbox_resol = cropbox['resolution']
+#	    cropboxes = {img_name: cropbox for img_name in image_name_list}
+#	    in_fmt = 'dict'
+#	    cropbox_resol = cropbox['resolution']
 
-	elif args.crop.endswith('.csv'):
-	    cropboxes = csv_to_dict(args.crop)
-	    in_fmt = 'arr_xywh'
-	    cropbox_resol = 'thumbnail'
-        elif isinstance(args.crop, str):
-            cropboxes = {img_name: args.crop for img_name in image_name_list}
-	    in_fmt = 'str_xywh'
-	    cropbox_resol = 'thumbnail'
-        else:
-            raise Exception("crop argument must be either a csv file or a str")
+#	elif args.crop.endswith('.csv'):
+#	    cropboxes = csv_to_dict(args.crop)
+#	    in_fmt = 'arr_xywh'
+#	    cropbox_resol = 'thumbnail'
+ #       elif isinstance(args.crop, str):
+  #          cropboxes = {img_name: args.crop for img_name in image_name_list}
+#	    in_fmt = 'str_xywh'
+#	    cropbox_resol = 'thumbnail'
+ #       else:
+  #          raise Exception("crop argument must be either a csv file or a str")
 
-    transforms_resol = 'thumbnail'
+    transforms_resol = operation_spec['resolution']
 
     transforms_scale_factor = convert_resolution_string_to_um(stack=stack, resolution=transforms_resol) / convert_resolution_string_to_um(stack=stack, resolution=resol)
 
     run_distributed('%(script)s --input_fp \"%%(input_fp)s\" --output_fp \"%%(output_fp)s\" %%(transform_str)s %%(box_xywh_str)s --pad_color %%(pad_color)s' % \
                 {'script': os.path.join(os.getcwd(), 'warp_crop.py'),
                 },
-                kwargs_list=[{'transform_str': ('--warp ' + transform_to_str(rescale_transform(transforms_to_anchor[img_name], factor=transforms_scale_factor))) if args.warp is not None or args.inverse_warp is not None else '',
+                kwargs_list=[{'transform_str': ('--warp ' + transform_to_str(rescale_transform(transforms_to_anchor[img_name], factor=transforms_scale_factor))) if do_warp else '',
                               'box_xywh_str': ('--crop ' + convert_cropbox_fmt(data=cropboxes[img_name], out_fmt='str_xywh', in_fmt=in_fmt, in_resol=cropbox_resol, out_resol=resol, stack=stack)) if args.crop is not None else '',
                             'input_fp': DataManager.get_image_filepath_v2(stack=stack, fn=img_name, prep_id=prep_id, version=version, resol=resol),
                             'output_fp': DataManager.get_image_filepath_v2(stack=stack, fn=img_name, prep_id=out_prep_id, version=version, resol=resol),
@@ -127,6 +117,12 @@ if args.input_spec is not None:
             local_only=True)
 
 else:
+# Usage 1
+
+    assert args.input_fp is not None and args.output_fp is not None
+    input_fp = args.input_fp
+    output_fp = args.output_fp
+
 
     if init_rotate == '':
         init_rotate = ''

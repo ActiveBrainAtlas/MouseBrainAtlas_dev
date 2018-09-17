@@ -4770,9 +4770,13 @@ class DataManager(object):
                 raise Exception('Section is invalid: %s.' % fn)
         else:
             assert fn is not None
-
+	
+	
         if prep_id is not None and (isinstance(prep_id, str) or isinstance(prep_id, unicode)):
-            prep_id = prep_str_to_id_2d[prep_id]
+	    if prep_id == 'None':
+		prep_id = None
+	    else:
+                prep_id = prep_str_to_id_2d[prep_id]
 
         image_dir = DataManager.get_image_dir_v2(stack=stack, prep_id=prep_id, resol=resol, version=version, data_dir=data_dir, thumbnail_data_dir=thumbnail_data_dir)
 

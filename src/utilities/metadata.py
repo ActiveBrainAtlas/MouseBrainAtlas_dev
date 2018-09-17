@@ -599,9 +599,14 @@ BRAINS_INFO_DIR = os.path.join(DATA_ROOTDIR, 'brains_info')
 
 # from utilities2015 import load_ini
 
-def load_ini(fp, split_newline=True, section='DEFAULT'):
+def load_ini(fp, split_newline=True, convert_none_str=True, section='DEFAULT'):
+    """
+    Value of string None will be converted to Python None.
+    """
     import ConfigParser
     config = ConfigParser.ConfigParser()
+    if not os.path.exists(fp):
+        raise Exception("ini file %s does not exist." % fp)
     config.read(fp)
     input_spec = dict(config.items(section))
     input_spec = {k: v.split('\n') if '\n' in v else v for k, v in input_spec.iteritems()}
@@ -611,6 +616,10 @@ def load_ini(fp, split_newline=True, section='DEFAULT'):
                 input_spec[k] = int(v)
             elif v.replace('.','',1).isdigit():
                 input_spec[k] = float(v)
+        elif v == 'None':
+            if convert_none_str:
+                input_spec[k] = None
+    assert len(input_spec) > 0, "Failed to read data from ini file."
     return input_spec
 
 planar_resolution = {}
