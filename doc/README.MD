@@ -1,7 +1,7 @@
 # Documentation Files
  Following are all of the documentation files and user guides for the Atlas code. Having had multiple developers working on it, there are documentation files deemed "historical" that were made by earlier developers. Certain documents are also marked as incomplete and should be ignored by non-developers. Several "historical" files are unmarked as they are not outdated.
  
-## Current Scripts [Sept. 17 '18]
+## Current Scripts [Sept. 17 2018]
 For a complete description of the project's scripts look at [Runnable Scripts](running_scripts/README.md). There are currently 4 runnable scripts, the first of the four is still in development.
 
 ## User Guide
