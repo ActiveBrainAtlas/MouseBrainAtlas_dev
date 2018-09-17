@@ -41,12 +41,12 @@ For the third command `compute_features_demo.py` for section 235:
 
 ### Summary
 For the sake of generalization the following substitutions will be used.
-- STACK = the name of the current brain stack, ex: 'MD662', 
-- SLICE = the name of the current slice, this is typically long, ex: 'MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257'
-- ANCHOR = a particular SLICE, all other slices are aligned to this ANCHOR
+- `STACK` = the name of the current brain stack, ex: 'MD662', 
+- `SLICE` = the name of the current slice, this is typically long, ex: 'MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257'
+- `ANCHOR` = a particular SLICE, all other slices are aligned to this ANCHOR
 
-This particular version of the script only computes features for two files, I will denote them specially. For these files you only need the slices you need to compute features for. For the previous SLICE, all files in the STACK must be included no matter what.
-- SLICECF = the slice you are computing features for. Stands for Slice Compute Features
+This particular version of the script only computes features for two slices, I will denote them specially as `SLICECF`. For these files you only need the slices you need to compute features for. For the previously defined `SLICE`, all files in the `STACK` must be included no matter what.
+- `SLICECF` = the slice you are computing features for. Stands for Slice Compute Features
 
 #### INPUTS:
 
@@ -65,7 +65,7 @@ CSHL_data_processed/
 ```
 
 #### OUTPUTS:
-Two files listed below. For every SLICECF, there will be these two files generated.
+Two files listed below. For every `SLICECF`, there will be these two files generated.
 
 ```
 CSHL_patch_features/
@@ -75,7 +75,7 @@ CSHL_patch_features/
             ├── SLICECF_prep2_none_win7_inception-bn-blue_features.bp
             └── SLICECF_prep2_none_win7_inception-bn-blue_locations.bp
 ```
-For every SLICECF the .tiff files are converted to .jpg files. This should not be considered ouputs but intermediate files.
+For every `SLICECF` the .tiff files are converted to .jpg files. This should not be considered ouputs but an intermediate step.
 
 ```
 CSHL_data_processed/
