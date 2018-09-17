@@ -75,6 +75,8 @@ CSHL_patch_features/
             ├── SLICECF_prep2_none_win7_inception-bn-blue_features.bp
             └── SLICECF_prep2_none_win7_inception-bn-blue_locations.bp
 ```
+
+#### INTERMEDIATE FILES:
 For every `SLICECF` the .tiff files are converted to .jpg files. This should not be considered ouputs but an intermediate step.
 
 ```
