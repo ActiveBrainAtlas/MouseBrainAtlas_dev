@@ -6,10 +6,10 @@ This file should be run with `$ source ./setup/config.sh` to set the repository 
 
 ### Evironmental variables	
 ```python	
-REPO_DIIR = the directory holding the code repository	
-ROOT_DIR = the root of the data sub-directories, all downloaded data goes here	
-DATA_ROOTDIR = this is where high level data past the preprocessing stage is saved	
-THUMBNAIL_DATA_ROOTDIR = this is for most preprocessing outputs, location of downsampled images	
+REPO_DIIR = 'the directory holding the code repository'
+ROOT_DIR = 'the root of the data sub-directories, all downloaded data goes here'
+DATA_ROOTDIR = 'this is where high level data past the preprocessing stage is saved'
+THUMBNAIL_DATA_ROOTDIR = 'this is for most preprocessing outputs, location of downsampled images'
 ```	
 
 During Alex's testing on the Atlas computer these variables were set to: 
