@@ -7,7 +7,7 @@
 ---
 This demo is expected to finish in 1 minute.
 
-### Alex Running Notes
+## Alex Running Notes
 
 For the first command: `demo/download_demo_data_compute_features.py`:
 - Downloads all necessary files.
@@ -39,7 +39,7 @@ For the third command `compute_features_demo.py` for section 235:
   - `MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep2_none_win7_inception-bn-blue_features.bp`
   - `MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep2_none_win7_inception-bn-blue_locations.bp`
 
-### Summary
+## Summary
 For the sake of generalization the following substitutions will be used.
 - `STACK` = the name of the current brain stack, ex: 'MD662', 
 - `SLICE` = the name of the current slice, this is typically long, ex: 'MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257'
