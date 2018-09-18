@@ -6,7 +6,8 @@ This file should be run with `$ source ./setup/config.sh` to set the repository 
 
 ### Evironmental variables	
 ```python	
-REPO_DIIR is 'the directory holding the code repository'
+PROJECT_DIR is 'the root directory of the repository. Contains src/ doc/ etc...'
+REPO_DIIR is 'the directory holding the code, should be PROJECT_DIR/src/'
 ROOT_DIR is 'the root of the data sub-directories, all downloaded data goes here'
 DATA_ROOTDIR is 'this is where high level data past the preprocessing stage is saved'
 THUMBNAIL_DATA_ROOTDIR is 'this is for most preprocessing outputs, location of downsampled images'
@@ -14,10 +15,11 @@ THUMBNAIL_DATA_ROOTDIR is 'this is for most preprocessing outputs, location of d
 
 During Alex's testing on the Atlas computer these variables were set to: 
 ```python	
-REPO_DIIR = $PWD/../src/	
-ROOT_DIR = /media/alexn/BstemAtlasDataBackup/demo/	
-DATA_ROOTDIR = /media/alexn/BstemAtlasDataBackup/demo/	
-THUMBNAIL_DATA_ROOTDIR = /media/alexn/BstemAtlasDataBackup/demo/	
+PROJECT_DIR = $PWD/../
+REPO_DIR = $PROJECT_DIR/src/
+ROOT_DIR = /media/alexn/BstemAtlasDataBackup/demo/
+DATA_ROOTDIR = /media/alexn/BstemAtlasDataBackup/demo/
+THUMBNAIL_DATA_ROOTDIR = /media/alexn/BstemAtlasDataBackup/demo/
 ```	
 
 S3 file locations:	
