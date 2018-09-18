@@ -50,7 +50,7 @@ For every `SLICECF` the .tiff files are converted to .jpg files. This should not
 ```
 CSHL_data_processed/
 └── STACK
-    └── STACK_prep2_raw_NtbNormalizedAdaptiveInvertedGammaJpeg * * * * * NOT INPUT * * * * *
+    └── STACK_prep2_raw_NtbNormalizedAdaptiveInvertedGammaJpeg
         └── SLICECF_prep2_raw_NtbNormalizedAdaptiveInvertedGammaJpeg.jpg
 ```
 
