@@ -86,17 +86,24 @@ For the third command `compute_features_demo.py` for section 235:
   - `MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep2_none_win7_inception-bn-blue_features.bp`
   - `MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep2_none_win7_inception-bn-blue_locations.bp`
 
+
+
 ## Description & Help
 
 #### download_demo_data_compute_features.py
 description = 'This script downloads input data for demo.'
+
 ##### Args
 --demo_data_dir: type=str, help='Directory to store demo input data, must equal THUMBNAIL_DATA_ROOTDIR'
 
 #### demo_compute_features.py
 description = 'Computes features for specified sections, runs two orders of magnitude faster using a GPU.'
+
 ##### Args
 brain_name: type=str, help="Brain name"
+
 --section: type=int, help="Section number. If specified, do detection on this one section; otherwise, use all valid sections."
+
 --version": type=str, help="Image version"
+
 --win_id": type=int, help="Window id (Default: %(default)s).", default=7
