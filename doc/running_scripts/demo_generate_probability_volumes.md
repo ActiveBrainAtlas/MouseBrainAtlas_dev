@@ -1,7 +1,7 @@
 Commands:
 ```
 ./demo/download_demo_data_scoring.py
-./demo/from_images_to_score_volumes_demo.py DEMO999 799 NtbNormalizedAdaptiveInvertedGammaJpeg --structure_list "[\"3N\", \"4N\", \"12N\"]"
+./demo/demo_generate_prob_volumes.py DEMO999 799 NtbNormalizedAdaptiveInvertedGammaJpeg --structure_list "[\"3N\", \"4N\", \"12N\"]"
 ```
 
 ---
@@ -114,3 +114,26 @@ CSHL_scoremap_viz/
 
 #### For running the second command `./demo/from_images_to_score_volumes_demo.py`:
 - Outputs shown in summary, too many to list properly.
+
+
+## Description & Help
+
+### script download_demo_data_scoring.py
+---
+description = 'This script downloads input data for demo.'
+
+#### Args:
+--demo_data_dir: type=str, help='Directory to store demo input data, must equal THUMBNAIL_DATA_ROOTDIR', default='demo_data'
+
+### script demo_generate_prob_volumes.py
+---
+description = 'Converts computed features into probability volumes.'
+
+#### Args:
+brain_name: type=str, help="Brain name"
+
+detector_id: type=int, help="Detector id"
+
+bg_img_version: type=str, help="Version of scoremap visualization background image"
+
+--structure_list: type=str, help="Json-encoded list of structures (unsided) (Default: all known structures)"
