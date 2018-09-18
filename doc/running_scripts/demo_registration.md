@@ -25,7 +25,7 @@ Folders already present:
 
 
 #### INPUTS:
-
+For Registration:
 ```
 ├── CSHL_data_processed
 │   └── DEMO999
@@ -60,6 +60,8 @@ Folders already present:
                 ├── DEMO999_detector799_10.0um_scoreVolume_4N_R.bp
                 └── DEMO999_detector799_10.0um_scoreVolume_4N_R_origin_wrt_wholebrain.txt
 ```
+
+For visualization demo I'm working on this error:
 ```
 return code: 0
 Traceback (most recent call last):
