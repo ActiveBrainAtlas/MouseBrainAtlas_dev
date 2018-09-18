@@ -38,17 +38,16 @@ Note that the `input_spec.ini` files for most steps are different and must be ma
 - Run `download_demo_data_preprocessing.py` to download 4 JPEG2000 images of the demo brain.
 - **(HUMAN)** create `DEMO998.ini` and put it under `demo_data/brains_info/`
 - Create `DEMO998_input_spec.json`. `python jp2_to_tiff.py DEMO998 DEMO998_input_spec.json`.
-- `python extract_channel.py input_spec.ini 2 Ntb`
-- `python rescale.py input_spec.ini thumbnail -f 0.03125`
+- Create `input_spec.ini` as (None,None,raw). `python extract_channel.py input_spec.ini 2 Ntb`
+- Create `input_spec.ini` as (None,Ntb,raw). `python rescale.py input_spec.ini thumbnail -f 0.03125`
 ### Global intensity normalization
-- `python normalize_intensity.py input_spec.ini NtbNormalized`
+- Create `input_spec.ini` as (None,Ntb,thumbnail). `python normalize_intensity.py input_spec.ini NtbNormalized`
 ### Intra-stack align
-- **(HUMAN)** browse thumbnails to verify orientations are all correct
-- **(HUMAN)** Obtain a roughly correct sorted list of image names from the data provider.
+- **(HUMAN)** Browse thumbnails to verify orientations are all correct.
 - **(HUMAN)** Create `from_none_to_aligned.ini` to describe intra-stack alignment operation.
-- `python align_compose.py input_spec.ini --op_id from_none_to_aligned`
+- Create `input_spec.ini` as (None,NtbNormalized,thumbnail). Note that in this file specify `sorted_image_name_list` rather than `image_name_list`. `python align_compose.py input_spec.ini --op from_none_to_aligned`
 - `python warp_crop.py --input_spec input_spec.ini --op_id from_none_to_padded`
-- **(HUMAN)** Inspect aligned images using preprocessGUI `preprocess_gui.py`, correct pairwise transforms and check each image's order in stack. Create `DEMO998_sorted_filenames.txt` based on the given roughly correct list.
+- **(HUMAN)** Inspect aligned images using preprocessGUI `preprocess_gui.py`, correct pairwise transforms and check each image's order in stack.
 ### Create masks
 - **(HUMAN)** draw initial snake contours for masking using maskingGUI.
 `python mask_editing_tool_v4.py DEMO998`
@@ -56,17 +55,17 @@ Note that the `input_spec.ini` files for most steps are different and must be ma
 - **(HUMAN)** Return to masking GUI to inspect and correct the automatically generated masks. 
 `python mask_editing_tool_v4.py DEMO998`
 - **(HUMAN)** Create `DEMO998_original_image_crop.csv`
-- `python warp_crop.py --input_spec input_spec.ini --op_id from_padded_to_none`
+- `python warp_crop.py --input_spec input_spec.ini --op from_padded_to_none`
  
 ### Local adaptive intensity normalization
 - `python normalize_intensity_adaptive.py input_spec.ini NtbNormalizedAdaptiveInvertedGamma`
 ### Whole-slice crop
 - **(HUMAN)** Manually specify the alignedWithMargin cropbox based on alignedPadded images, or automatically infer based on alignedPadded masks.
-- `python warp_crop.py --input_spec input_spec.ini --op_id from_padded_to_wholeslice`
+- `python warp_crop.py --input_spec input_spec.ini --op from_padded_to_wholeslice`
 - `python rescale.py input_spec.ini thumbnail -f 0.03125`
 ### Brainstem crop
 - **(HUMAN)** Specify prep2 (alignedBrainstemCrop) cropping box, based on alignedWithMargin thumbnails or alignedPadded thumbnails
-- `python warp_crop.py --input_spec input_spec.ini --op_id from_padded_to_brainstem`
+- `python warp_crop.py --input_spec input_spec.ini --op from_padded_to_brainstem`
 - `python rescale.py input_spec.ini thumbnail -f 0.03125`
 - `python compress_jpeg.py input_spec.ini`
 
