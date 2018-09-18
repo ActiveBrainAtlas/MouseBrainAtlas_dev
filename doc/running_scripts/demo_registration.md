@@ -61,15 +61,51 @@ For Registration:
                 └── DEMO999_detector799_10.0um_scoreVolume_4N_R_origin_wrt_wholebrain.txt
 ```
 
-For visualization demo I'm working on this error:
+For visualization demo had an error that took a while to fix, still documenting this:
 ```
-return code: 0
-Traceback (most recent call last):
-  File "./demo/download_demo_data_registration.py", line 76, in <module>
-    fp = DataManager.get_image_filepath_v2(stack='DEMO999', prep_id=2, resol='raw', version='NtbNormalizedAdaptiveInvertedGammaJpeg', section=sec)
-  File "/home/alexn/brainDev/setup/../src/utilities/data_manager.py", line 4767, in get_image_filepath_v2
-    fn = metadata_cache['sections_to_filenames'][stack][section]
-KeyError: 'DEMO999'
+demo_data/
+├── CSHL_data_processed
+│   └── DEMO999
+│       └── DEMO999_prep2_raw_NtbNormalizedAdaptiveInvertedGammaJpeg
+│           ├── MD662&661-F79-2017.06.06-11.52.28_MD661_2_0236_prep2_raw_NtbNormalizedAdaptiveInvertedGammaJpeg.jpg
+│           ├── MD662&661-F80-2017.06.06-12.18.56_MD661_1_0238_prep2_raw_NtbNormalizedAdaptiveInvertedGammaJpeg.jpg
+│           ├── MD662&661-F80-2017.06.06-12.18.56_MD661_2_0239_prep2_raw_NtbNormalizedAdaptiveInvertedGammaJpeg.jpg
+│           ├── MD662&661-F81-2017.06.06-12.44.40_MD661_1_0241_prep2_raw_NtbNormalizedAdaptiveInvertedGammaJpeg.jpg
+│           ├── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_prep2_raw_NtbNormalizedAdaptiveInvertedGammaJpeg.jpg
+│           ├── MD662&661-F82-2017.06.06-13.10.59_MD661_1_0244_prep2_raw_NtbNormalizedAdaptiveInvertedGammaJpeg.jpg
+│           ├── MD662&661-F82-2017.06.06-13.10.59_MD661_2_0245_prep2_raw_NtbNormalizedAdaptiveInvertedGammaJpeg.jpg
+│           ├── MD662&661-F83-2017.06.06-13.37.35_MD661_1_0247_prep2_raw_NtbNormalizedAdaptiveInvertedGammaJpeg.jpg
+│           ├── MD662&661-F83-2017.06.06-13.37.35_MD661_2_0248_prep2_raw_NtbNormalizedAdaptiveInvertedGammaJpeg.jpg
+│           ├── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_prep2_raw_NtbNormalizedAdaptiveInvertedGammaJpeg.jpg
+│           ├── MD662&661-F84-2017.06.06-14.03.51_MD661_2_0251_prep2_raw_NtbNormalizedAdaptiveInvertedGammaJpeg.jpg
+│           ├── MD662&661-F85-2017.06.06-14.30.01_MD661_1_0253_prep2_raw_NtbNormalizedAdaptiveInvertedGammaJpeg.jpg
+│           ├── MD662&661-F85-2017.06.06-14.30.01_MD661_2_0254_prep2_raw_NtbNormalizedAdaptiveInvertedGammaJpeg.jpg
+│           ├── MD662&661-F86-2017.06.06-14.56.48_MD661_1_0256_prep2_raw_NtbNormalizedAdaptiveInvertedGammaJpeg.jpg
+│           ├── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep2_raw_NtbNormalizedAdaptiveInvertedGammaJpeg.jpg
+│           ├── MD662&661-F87-2017.06.06-15.22.59_MD661_1_0259_prep2_raw_NtbNormalizedAdaptiveInvertedGammaJpeg.jpg
+│           └── MD662&661-F87-2017.06.06-15.22.59_MD661_2_0260_prep2_raw_NtbNormalizedAdaptiveInvertedGammaJpeg.jpg
+├── CSHL_simple_global_registration
+│   └── DEMO999_registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners.json
+└── CSHL_volumes
+    ├── atlasV7
+    │   └── atlasV7_10.0um_scoreVolume
+    │       └── score_volumes
+    │           ├── atlasV7_10.0um_scoreVolume_12N.bp
+    │           ├── atlasV7_10.0um_scoreVolume_12N_origin_wrt_canonicalAtlasSpace.txt
+    │           ├── atlasV7_10.0um_scoreVolume_12N_surround_200um.bp
+    │           ├── atlasV7_10.0um_scoreVolume_12N_surround_200um_origin_wrt_canonicalAtlasSpace.txt
+    │           ├── atlasV7_10.0um_scoreVolume_3N_R.bp
+    │           ├── atlasV7_10.0um_scoreVolume_3N_R_origin_wrt_canonicalAtlasSpace.txt
+    │           ├── atlasV7_10.0um_scoreVolume_3N_R_surround_200um.bp
+    │           ├── atlasV7_10.0um_scoreVolume_3N_R_surround_200um_origin_wrt_canonicalAtlasSpace.txt
+    │           ├── atlasV7_10.0um_scoreVolume_4N_R.bp
+    │           ├── atlasV7_10.0um_scoreVolume_4N_R_origin_wrt_canonicalAtlasSpace.txt
+    │           ├── atlasV7_10.0um_scoreVolume_4N_R_surround_200um.bp
+    │           └── atlasV7_10.0um_scoreVolume_4N_R_surround_200um_origin_wrt_canonicalAtlasSpace.txt
+    └── DEMO999
+        └── DEMO999_wholebrainWithMargin_10.0um_intensityVolume
+            ├── DEMO999_wholebrainWithMargin_10.0um_intensityVolume.bp
+            └── DEMO999_wholebrainWithMargin_10.0um_intensityVolume_origin_wrt_wholebrain.txt
 ```
 
 #### OUTPUTS:
