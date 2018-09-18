@@ -1,9 +1,9 @@
 # Demos
 
-This demo suite shows how to align three structures (12N, 3N_R, 4N_R) in a subject brain (DEMO999) with the atlas (atlasV7). 
+This demo suite shows how to align three structures (12N, 3N_R, 4N_R) in a subject brain (DEMO998) with the atlas (atlasV7). 
 
-Each demo shows one essential step of the pipeline:
-- preprocess the jpeg2000 stack (e.g. convert to tif and intra-stack align)
+Each demo shows one of the essential steps of the pipeline:
+- preprocess jpeg2000 images (e.g. convert to tif and intra-stack align)
 - extract features using a convolutional neural network
 - generate probability maps using pre-trained classifiers
 - register 12N (hypoglossal nucleus) to the atlas.
@@ -28,64 +28,63 @@ source setup/config.sh
 cd demo
 ```
 
-- The demos have been tested on a machine with Intel Xeon W5580 3.20GHz 16-core CPU, 128GB RAM and a Nvidia Titan X GPU, running Linux Ubuntu 16.04.
+- The demos are written in Python 2.7.2 and have been tested on a machine with Intel Xeon W5580 3.20GHz 16-core CPU, 128GB RAM and a Nvidia Titan X GPU, running Linux Ubuntu 16.04. 
 - The default `requirements.txt` assumes CUDA version of 9.0. If your CUDA version (check using `nvcc -v` or `cat /usr/local/cuda/version.txt`) is 9.1, replace `mxnet-cu90` with `mxnet-cu91` in `requirements.txt`. If your machine does not have a GPU, replace `mxnet-cu90` with `mxnet`. Refer to [official mxnet page](https://mxnet.incubator.apache.org/install/index.html?platform=Linux&language=Python&processor=CPU) for available pips.
 
 ## Preprocess
+
+For each step below that requires `input_spec.ini`, the ini file is a different one and must be manually created.
+
 - Run `download_demo_data_preprocessing.py` to download 4 JPEG2000 images of the demo brain.
 - **(HUMAN)** Create meta data information for this brain
-- `python jp2_to_tiff.py DEMO998 {input_spec_json}`
+- Create `DEMO998_input_spec.json`. `python jp2_to_tiff.py DEMO998 DEMO998_input_spec.json`.
 - `python extract_channel.py input_spec.ini 2 Ntb`
-- `python rescale.py input_spec.ini thumbnail -f {1./32}`
+- `python rescale.py input_spec.ini thumbnail -f 0.03125`
 - `python normalize_intensity.py input_spec.ini NtbNormalized`
-
 - **(HUMAN)** browse thumbnails to verify orientations are all correct
 - **(HUMAN)** Obtain a roughly correct sorted list of image names from the data provider.
-- `python align.py temp.ini {elastix_output_dir} {param_fp}`
+- `python align.py input_spec.ini demo_data/CSHL_data_processed/DEMO998/DEMO998_elastix_output ../src/preprocess/parameters/Parameters_Rigid_MutualInfo_noNumberOfSpatialSamples_4000Iters.txt`
 - **(HUMAN)** select anchor image, using preprocessGUI `preprocess_gui.py`
-
-- `python compose.py --elastix_output_dir "{elastix_output_dir}" \
---custom_output_dir "{custom_output_dir}" \
+- `python compose.py --elastix_output_dir "demo_data/CSHL_data_processed/DEMO998/DEMO998_elastix_output" \
+--custom_output_dir "demo_data/CSHL_data_processed/DEMO998/DEMO998_custom_output" \
 --input_spec input_spec.ini  \
---anchor "{anchor_img_name}" \
---out "{toanchor_transforms_fp}"`
-- **(HUMAN)** set planar_resolution for DEMO998 in `metadata.py`
-
+--anchor "MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250" \
+--out "demo_data/CSHL_data_processed/DEMO998/DEMO998_transformsTo_MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250.csv"`
+- **(HUMAN)** create `DEMO998.ini` and put it in `demo_data/brains_info/`
 - `python warp_crop.py --input_spec input_spec.ini \
- --warp "/data/CSHL_data_processed/DEMO999/DEMO999_transformsTo_MD662&661-F102-2017.06.06-22.30.50_MD661_1_0304.csv" \
+ --warp "demo_data/CSHL_data_processed/DEMO998/DEMO998_transformsTo_MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250.csv" \
  --out_prep_id alignedPadded`
-
-- **(HUMAN)** Inspect aligned images using preprocessGUI `preprocess_gui.py`, correct pairwise transforms and check each image's order in stack. Create DEMO998_sorted_filenames.txt
-- **(HUMAN)** draw initial snake contours for masking using maskingGUI `masking_gui.py`.
-- `python masking.py input_spec.ini {DataManager.get_initial_snake_contours_filepath(stack=stack)}`
-- **(HUMAN)** Return to masking GUI to inspect and correct the automatically generated masks.
+- **(HUMAN)** Inspect aligned images using preprocessGUI `preprocess_gui.py`, correct pairwise transforms and check each image's order in stack. Create `DEMO998_sorted_filenames.txt` based on the given roughly correct list.
+- **(HUMAN)** draw initial snake contours for masking using maskingGUI. 
+`python mask_editing_tool_v4.py DEMO998`
+- `python masking.py input_spec.ini demo_data/CSHL_data_processed/DEMO998/DEMO998_prep1_thumbnail_initSnakeContours.pkl`
+- **(HUMAN)** Return to masking GUI to inspect and correct the automatically generated masks. 
+`python mask_editing_tool_v4.py DEMO998`
+- **(HUMAN)** Create `DEMO998_original_image_crop.csv`
 - `python warp_crop.py --input_spec input_spec.ini \
- --inverse_warp "{toanchor_transforms_fp}" \
- --crop "/data/CSHL_data_processed/DEMO998/DEMO998_original_image_crop.csv" \
+ --inverse_warp "demo_data/CSHL_data_processed/DEMO998/DEMO998_transformsTo_MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250.csv" \
+ --crop "demo_data/CSHL_data_processed/DEMO998/DEMO998_original_image_crop.csv" \
  --out_prep_id None`
 - `python normalize_intensity_adaptive.py input_spec.ini NtbNormalizedAdaptiveInvertedGamma`
 - **(HUMAN)** Manually specify the alignedWithMargin cropbox based on alignedPadded images, or automatically infer based on alignedPadded masks.
 - `python warp_crop.py --input_spec input_spec.ini \
- --warp "{toanchor_transforms_fp}" \
- --crop "{DataManager.get_cropbox_filename_v2(stack=stack, anchor_fn=None, prep_id='alignedWithMargin')}" \
+ --warp "demo_data/CSHL_data_processed/DEMO998/DEMO998_transformsTo_MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250.csv" \
+ --crop "demo_data/CSHL_data_processed/DEMO998/DEMO998_cropbox.ini" \
  --out_prep_id alignedWithMargin`
-- `python rescale.py input_spec.ini thumbnail -f {1./32}`
+- `python rescale.py input_spec.ini thumbnail -f 0.03125`
 - **(HUMAN)** Specify prep2 (alignedBrainstemCrop) cropping box, based on alignedWithMargin thumbnails or alignedPadded thumbnails
 - `python warp_crop.py --input_spec input_spec.ini \
- --warp "{toanchor_transforms_fp}" \
- --crop "{convert_cropbox_fmt(data=DataManager.load_cropbox_v2_relative(stack=stack, prep_id='alignedBrainstemCrop', \
-                                     wrt_prep_id='alignedWithMargin', \
-                                    out_resolution='thumbnail'), \
-                    in_fmt='arr_xxyy', out_fmt='str_xywh', stack=stack)}" \
+ --crop "demo_data/CSHL_data_processed/DEMO998/DEMO998_cropbox.ini" \
  --out_prep_id alignedBrainstemCrop`
+- `python rescale.py input_spec.ini thumbnail -f 0.03125`
 - `python compress_jpeg.py input_spec.ini`
 
 ## Compute patch features
 ```
 ./download_demo_data_compute_features.py
 # For 3N, do any two sections between 221-244, 4N 221-237, 12N 183-265.
-./demo_compute_features.py DEMO999 --section 225 --version NtbNormalizedAdaptiveInvertedGamma
-./demo_compute_features.py DEMO999 --section 235 --version NtbNormalizedAdaptiveInvertedGamma
+./demo_compute_features.py DEMO998 --section 225 --version NtbNormalizedAdaptiveInvertedGamma
+./demo_compute_features.py DEMO998 --section 235 --version NtbNormalizedAdaptiveInvertedGamma
 ```
 
 If using GPU, the demo for each section should finish in about 1 minute. If using CPU, this takes about 1 hour.
@@ -94,7 +93,7 @@ If using GPU, the demo for each section should finish in about 1 minute. If usin
 ## Generate probability volumes
 ```
 ./download_demo_data_generate_prob_volumes.py
-./demo_generate_prob_volumes.py DEMO999 799 NtbNormalizedAdaptiveInvertedGammaJpeg --structure_list "[\"3N\", \"4N\", \"12N\"]"
+./demo_generate_prob_volumes.py DEMO998 799 NtbNormalizedAdaptiveInvertedGammaJpeg --structure_list "[\"3N\", \"4N\", \"12N\"]"
 ```
 
 ## Registration
