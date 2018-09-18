@@ -90,16 +90,16 @@ For the third command `compute_features_demo.py` for section 235:
 
 ## Description & Help
 
-#### download_demo_data_compute_features.py
+### script download_demo_data_compute_features.py
 description = 'This script downloads input data for demo.'
 
-##### Args
+#### Args:
 --demo_data_dir: type=str, help='Directory to store demo input data, must equal THUMBNAIL_DATA_ROOTDIR'
 
-#### demo_compute_features.py
+### script demo_compute_features.py
 description = 'Computes features for specified sections, runs two orders of magnitude faster using a GPU.'
 
-##### Args
+#### Args:
 brain_name: type=str, help="Brain name"
 
 --section: type=int, help="Section number. If specified, do detection on this one section; otherwise, use all valid sections."
