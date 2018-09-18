@@ -45,9 +45,8 @@ Note that the `input_spec.ini` files for most steps are different and must be ma
 ### Intra-stack align
 - **(HUMAN)** browse thumbnails to verify orientations are all correct
 - **(HUMAN)** Obtain a roughly correct sorted list of image names from the data provider.
-- **(HUMAN)** Create `alignedPadded.ini` to describe intra-stack alignment operation.
-- `python align.py input_spec.ini --prep_id alignedPadded`
-- `python compose.py input_spec.ini --prep_id alignedPadded`
+- **(HUMAN)** Create `from_none_to_aligned.ini` to describe intra-stack alignment operation.
+- `python align_compose.py input_spec.ini --op_id from_none_to_aligned`
 - `python warp_crop.py --input_spec input_spec.ini --op_id from_none_to_padded`
 - **(HUMAN)** Inspect aligned images using preprocessGUI `preprocess_gui.py`, correct pairwise transforms and check each image's order in stack. Create `DEMO998_sorted_filenames.txt` based on the given roughly correct list.
 ### Create masks
