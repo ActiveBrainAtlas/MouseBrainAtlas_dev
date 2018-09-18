@@ -13,6 +13,7 @@ For the sake of generalization the following substitutions will be used.
 - `STACK` = the name of the current brain stack, ex: 'MD662', 
 - `SLICE` = the name of the current slice, this is typically long, ex: 'MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257'
 - `ANCHOR` = a particular SLICE, all other slices are aligned to this ANCHOR
+- `SLICECF` = the slice you have computed features for. Must have run these slices through the last demo script fully (2 slices for the demo).
 
 
 #### INPUTS:
@@ -27,6 +28,7 @@ CSHL_patch_features/
 ```
 
 #### OUTPUTS:
+As this version of the scripts only acts on the structures 3N, 4N, and 12N, this is the output for those structures specifically. The other 25 will be present during actual analysis.
 
 ```
  CSHL_simple_global_registration/
@@ -44,27 +46,27 @@ CSHL_volumes/
 └── STACK
     └── STACK_detector799_10.0um_scoreVolume
         ├── score_volume_gradients
-        │   ├── DEMO999_detector799_10.0um_scoreVolume_12N_gradients.bp
-        │   ├── DEMO999_detector799_10.0um_scoreVolume_12N_origin_wrt_wholebrain.txt
-        │   ├── DEMO999_detector799_10.0um_scoreVolume_3N_L_gradients.bp
-        │   ├── DEMO999_detector799_10.0um_scoreVolume_3N_L_origin_wrt_wholebrain.txt
-        │   ├── DEMO999_detector799_10.0um_scoreVolume_3N_R_gradients.bp
-        │   ├── DEMO999_detector799_10.0um_scoreVolume_3N_R_origin_wrt_wholebrain.txt
-        │   ├── DEMO999_detector799_10.0um_scoreVolume_4N_L_gradients.bp
-        │   ├── DEMO999_detector799_10.0um_scoreVolume_4N_L_origin_wrt_wholebrain.txt
-        │   ├── DEMO999_detector799_10.0um_scoreVolume_4N_R_gradients.bp
-        │   └── DEMO999_detector799_10.0um_scoreVolume_4N_R_origin_wrt_wholebrain.txt
+        │   ├── STACK_detector799_10.0um_scoreVolume_12N_gradients.bp
+        │   ├── STACK_detector799_10.0um_scoreVolume_12N_origin_wrt_wholebrain.txt
+        │   ├── STACK_detector799_10.0um_scoreVolume_3N_L_gradients.bp
+        │   ├── STACK_detector799_10.0um_scoreVolume_3N_L_origin_wrt_wholebrain.txt
+        │   ├── STACK_detector799_10.0um_scoreVolume_3N_R_gradients.bp
+        │   ├── STACK_detector799_10.0um_scoreVolume_3N_R_origin_wrt_wholebrain.txt
+        │   ├── STACK_detector799_10.0um_scoreVolume_4N_L_gradients.bp
+        │   ├── STACK_detector799_10.0um_scoreVolume_4N_L_origin_wrt_wholebrain.txt
+        │   ├── STACK_detector799_10.0um_scoreVolume_4N_R_gradients.bp
+        │   └── STACK_detector799_10.0um_scoreVolume_4N_R_origin_wrt_wholebrain.txt
         └── score_volumes
-            ├── DEMO999_detector799_10.0um_scoreVolume_12N.bp
-            ├── DEMO999_detector799_10.0um_scoreVolume_12N_origin_wrt_wholebrain.txt
-            ├── DEMO999_detector799_10.0um_scoreVolume_3N_L.bp
-            ├── DEMO999_detector799_10.0um_scoreVolume_3N_L_origin_wrt_wholebrain.txt
-            ├── DEMO999_detector799_10.0um_scoreVolume_3N_R.bp
-            ├── DEMO999_detector799_10.0um_scoreVolume_3N_R_origin_wrt_wholebrain.txt
-            ├── DEMO999_detector799_10.0um_scoreVolume_4N_L.bp
-            ├── DEMO999_detector799_10.0um_scoreVolume_4N_L_origin_wrt_wholebrain.txt
-            ├── DEMO999_detector799_10.0um_scoreVolume_4N_R.bp
-            └── DEMO999_detector799_10.0um_scoreVolume_4N_R_origin_wrt_wholebrain.txt
+            ├── STACK_detector799_10.0um_scoreVolume_12N.bp
+            ├── STACK_detector799_10.0um_scoreVolume_12N_origin_wrt_wholebrain.txt
+            ├── STACK_detector799_10.0um_scoreVolume_3N_L.bp
+            ├── STACK_detector799_10.0um_scoreVolume_3N_L_origin_wrt_wholebrain.txt
+            ├── STACK_detector799_10.0um_scoreVolume_3N_R.bp
+            ├── STACK_detector799_10.0um_scoreVolume_3N_R_origin_wrt_wholebrain.txt
+            ├── STACK_detector799_10.0um_scoreVolume_4N_L.bp
+            ├── STACK_detector799_10.0um_scoreVolume_4N_L_origin_wrt_wholebrain.txt
+            ├── STACK_detector799_10.0um_scoreVolume_4N_R.bp
+            └── STACK_detector799_10.0um_scoreVolume_4N_R_origin_wrt_wholebrain.txt
 ```
 ```
 CSHL_scoremaps/
@@ -87,20 +89,17 @@ CSHL_scoremap_viz/
     │   └── STACK
     │       └── detector799
     │           └── prep2
-    │               ├── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_prep2_10.0um_12N_detector799_scoremapViz.jpg
-    │               └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep2_10.0um_12N_detector799_scoremapViz.jpg
+    │               └── SLICECF_prep2_10.0um_12N_detector799_scoremapViz.jpg
     ├── 3N
     │   └── STACK
     │       └── detector799
     │           └── prep2
-    │               ├── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_prep2_10.0um_3N_detector799_scoremapViz.jpg
-    │               └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep2_10.0um_3N_detector799_scoremapViz.jpg
+    │               └── SLICECF_prep2_10.0um_3N_detector799_scoremapViz.jpg
     └── 4N
         └── STACK
             └── detector799
                 └── prep2
-                    ├── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_prep2_10.0um_4N_detector799_scoremapViz.jpg
-                    └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep2_10.0um_4N_detector799_scoremapViz.jpg
+                    └── SLICECF_prep2_10.0um_4N_detector799_scoremapViz.jpg
 ```
 
 
