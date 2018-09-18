@@ -27,7 +27,47 @@ Folders already present:
 #### INPUTS:
 
 ```
-
+├── CSHL_data_processed
+│   └── DEMO999
+│       ├── DEMO999_alignedTo_MD662&661-F116-2017.06.07-04.39.41_MD661_1_0346_prep2_sectionLimits.json
+│       ├── DEMO999_anchor.txt
+│       └── DEMO999_sorted_filenames.txt
+├── CSHL_simple_global_registration
+│   └── DEMO999_T_atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol.bp
+└── CSHL_volumes
+    ├── atlasV7
+    │   └── atlasV7_10.0um_scoreVolume
+    │       └── score_volumes
+    │           ├── atlasV7_10.0um_scoreVolume_12N.bp
+    │           ├── atlasV7_10.0um_scoreVolume_12N_origin_wrt_canonicalAtlasSpace.txt
+    │           ├── atlasV7_10.0um_scoreVolume_12N_surround_200um.bp
+    │           ├── atlasV7_10.0um_scoreVolume_12N_surround_200um_origin_wrt_canonicalAtlasSpace.txt
+    │           ├── atlasV7_10.0um_scoreVolume_3N_R.bp
+    │           ├── atlasV7_10.0um_scoreVolume_3N_R_origin_wrt_canonicalAtlasSpace.txt
+    │           ├── atlasV7_10.0um_scoreVolume_3N_R_surround_200um.bp
+    │           ├── atlasV7_10.0um_scoreVolume_3N_R_surround_200um_origin_wrt_canonicalAtlasSpace.txt
+    │           ├── atlasV7_10.0um_scoreVolume_4N_R.bp
+    │           ├── atlasV7_10.0um_scoreVolume_4N_R_origin_wrt_canonicalAtlasSpace.txt
+    │           ├── atlasV7_10.0um_scoreVolume_4N_R_surround_200um.bp
+    │           └── atlasV7_10.0um_scoreVolume_4N_R_surround_200um_origin_wrt_canonicalAtlasSpace.txt
+    └── DEMO999
+        └── DEMO999_detector799_10.0um_scoreVolume
+            └── score_volumes
+                ├── DEMO999_detector799_10.0um_scoreVolume_12N.bp
+                ├── DEMO999_detector799_10.0um_scoreVolume_12N_origin_wrt_wholebrain.txt
+                ├── DEMO999_detector799_10.0um_scoreVolume_3N_R.bp
+                ├── DEMO999_detector799_10.0um_scoreVolume_3N_R_origin_wrt_wholebrain.txt
+                ├── DEMO999_detector799_10.0um_scoreVolume_4N_R.bp
+                └── DEMO999_detector799_10.0um_scoreVolume_4N_R_origin_wrt_wholebrain.txt
+```
+```
+return code: 0
+Traceback (most recent call last):
+  File "./demo/download_demo_data_registration.py", line 76, in <module>
+    fp = DataManager.get_image_filepath_v2(stack='DEMO999', prep_id=2, resol='raw', version='NtbNormalizedAdaptiveInvertedGammaJpeg', section=sec)
+  File "/home/alexn/brainDev/setup/../src/utilities/data_manager.py", line 4767, in get_image_filepath_v2
+    fn = metadata_cache['sections_to_filenames'][stack][section]
+KeyError: 'DEMO999'
 ```
 
 #### OUTPUTS:
