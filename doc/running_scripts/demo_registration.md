@@ -6,11 +6,10 @@ Commands:
 ./demo/register_brains_demo_3N_R_4N_R.py
 ./demo/visualize_registration_demo_3_structures.py
 ```
-The download takes less than 1 minute. Next command registers 12N individually. Last command registers 3N_R and 4N_R as a group.
-
-`./visualize_registration_demo_3_structures.py`
-
-To visualize the registration results.
+The download takes less than 1 minute. The following 3 commands are detailed below:
+- register 12N (hypoglossal nucleus) individually.
+- register 3N_R (occulomotor, right) and 4N_R (trochlear, right) as a group.
+- visualize the aligned atlas overlaid on original images
 
 ---
 
