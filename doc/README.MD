@@ -2,7 +2,7 @@
  Following are all of the documentation files and user guides for the Atlas code. Having had multiple developers working on it, there are documentation files deemed "historical" that were made by earlier developers. Certain documents are also marked as incomplete and should be ignored by non-developers. Several "historical" files are unmarked as they are not outdated.
  
 ## Atlas Scripts [Sept. 17 2018]
-For a complete description of the project's scripts look at __[Runnable Scripts](running_scripts/README.md)__. There are currently 4 runnable scripts, the first of the four is still in development.
+For a complete description of the project's scripts look at __[Atlas Scripts](running_scripts/README.md)__. There are currently 4 runnable scripts, the first of the four is still in development.
 
 ## User Guide
 [Yuncong User Guide](User%20Manuals/UserGuide.md) gives a high level description of the pipeline, the steps numbered below, but does NOT describe how to run the Atlas scripts in detail.
