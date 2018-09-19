@@ -11,7 +11,29 @@ The download takes less than 1 minute. The following 3 commands are detailed bel
 - register 3N_R (occulomotor, right) and 4N_R (trochlear, right) as a group.
 - visualize the aligned atlas overlaid on original images
 
+NOTE: The user must create `fixed_brain_spec_[STRUCTURE].json` and `moving_brain_spec_[STRUCTURE].json` files in the ROOT_DIR for registration to work properly. An example of this can be found in the next section.
+
 ---
+
+## Example json file
+`demo_fixed_brain_spec_12N.json` was used for the original demo which contained: 
+```
+{
+"name":"DEMO999", 
+"vol_type": "score", 
+"resolution":"10.0um",
+"detector_id":799,
+"structure":["12N"]
+}
+```
+- name: stack name
+- vol_type: ?
+- resolution: self explanitory
+- detector_id: Sets detector settings (look below at detector settings link)
+- structure: name of specific brain structure
+
+[Classifier Settings](https://github.com/CodingDonky/MouseBrainAtlas/blob/master/learning/classifier_settings.csv)
+[Detector Settings](https://github.com/CodingDonky/MouseBrainAtlas/blob/master/learning/detector_settings.csv)
 
 ## Summary
 For the sake of generalization the following substitutions will be used.
