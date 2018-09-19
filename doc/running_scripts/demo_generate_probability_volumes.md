@@ -30,6 +30,8 @@ CSHL_patch_features/
 #### OUTPUTS:
 As this version of the scripts only acts on the structures 3N, 4N, and 12N, this is the output for those structures specifically. The other 25 will be present during actual analysis.
 
+Recall that in the demo run there were two STACKCF files, everytime this appears in a folder/file there will be double.
+
 ```
  CSHL_simple_global_registration/
 └── DEMO999_registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners.json
@@ -73,14 +75,10 @@ CSHL_scoremaps/
 └── 10.0um
     └── STACK
         └── DEMO999_prep2_10.0um_detector799
-            ├── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_prep2_10.0um_detector799
-            │   ├── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_prep2_10.0um_detector799_12N_scoremap.bp
-            │   ├── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_prep2_10.0um_detector799_3N_scoremap.bp
-            │   └── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_prep2_10.0um_detector799_4N_scoremap.bp
-            └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep2_10.0um_detector799
-                ├── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep2_10.0um_detector799_12N_scoremap.bp
-                ├── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep2_10.0um_detector799_3N_scoremap.bp
-                └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep2_10.0um_detector799_4N_scoremap.bp
+            └── SLICECF_prep2_10.0um_detector799
+                ├── SLICECF_prep2_10.0um_detector799_12N_scoremap.bp
+                ├── SLICECF_prep2_10.0um_detector799_3N_scoremap.bp
+                └── SLICECF_prep2_10.0um_detector799_4N_scoremap.bp
 ```
 ```
 CSHL_scoremap_viz/
