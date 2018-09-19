@@ -131,8 +131,9 @@ args = parser.parse_args()
 # brain_f_spec = load_json(args.fixed_brain_spec)
 # brain_m_spec = load_json(args.moving_brain_spec)
 # registration_setting = args.registration_setting
-per_structure_alignment_spec = load_json(args.per_structure_alignment_spec)
-simpleGlobal_alignment_spec = load_json(args.global_alignment_spec)
+file_prefix = '/home/alexn/brainDev/demo/'
+per_structure_alignment_spec = load_json(file_prefix+args.per_structure_alignment_spec)
+simpleGlobal_alignment_spec = load_json(file_prefix+args.global_alignment_spec)
 
 structure_list = per_structure_alignment_spec.keys()
 

@@ -1,7 +1,10 @@
 # Exclude demo data
 demo/demo_data/
+demo_data/
 
 # Exclude virtualenv
 mousebrainatlas_virtualenv/
 
+*.jpg
+*.tiff
 *.pyc

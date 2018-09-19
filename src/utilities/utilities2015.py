@@ -1487,6 +1487,9 @@ def save_json(obj, fp):
         json.dump(obj, f)
 
 def load_json(fp):
+    print '************************************'
+    print fp
+    print '************************************'
     with open(fp, 'r') as f:
         return json.load(f)
 

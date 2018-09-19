@@ -32,8 +32,9 @@ parser.add_argument("-g", "--use_simple_global", action='store_false', help="Set
 # parser.add_argument("--out_dir", type=str, help="Output directory")
 args = parser.parse_args()
 
-brain_f_spec = load_json(args.fixed_brain_spec)
-brain_m_spec = load_json(args.moving_brain_spec)
+file_prefix = '/home/alexn/brainDev/demo/'
+brain_f_spec = load_json(file_prefix+args.fixed_brain_spec)
+brain_m_spec = load_json(file_prefix+args.moving_brain_spec)
 registration_setting = args.registration_setting
 use_simple_global = args.use_simple_global
 
