@@ -131,7 +131,7 @@ demo_data/
 ```
 
 #### OUTPUTS:
-For command 2, `demo/register_brains_demo_12N.py`:
+##### For command 2, `demo/register_brains_demo_12N.py`:
 ```
 CSHL_registration_parameters/
 └── atlasV7
@@ -144,34 +144,7 @@ CSHL_registration_parameters/
 
 Note, everything under the folder `atlasV7` was simply downloaded from S3. This is the complete Atlas.
 ```
-CSHL_volumes/
-├── atlasV7
-│   ├── atlasV7_10.0um_scoreVolume
-│   │   └── score_volumes
-│   │       ├── atlasV7_10.0um_scoreVolume_12N.bp
-│   │       ├── atlasV7_10.0um_scoreVolume_12N_origin_wrt_canonicalAtlasSpace.txt
-│   │       ├── atlasV7_10.0um_scoreVolume_12N_surround_200um.bp
-│   │       ├── atlasV7_10.0um_scoreVolume_12N_surround_200um_origin_wrt_canonicalAtlasSpace.txt
-│   │       ├── atlasV7_10.0um_scoreVolume_3N_R.bp
-│   │       ├── atlasV7_10.0um_scoreVolume_3N_R_origin_wrt_canonicalAtlasSpace.txt
-│   │       ├── atlasV7_10.0um_scoreVolume_3N_R_surround_200um.bp
-│   │       ├── atlasV7_10.0um_scoreVolume_3N_R_surround_200um_origin_wrt_canonicalAtlasSpace.txt
-│   │       ├── atlasV7_10.0um_scoreVolume_4N_R.bp
-│   │       ├── atlasV7_10.0um_scoreVolume_4N_R_origin_wrt_canonicalAtlasSpace.txt
-│   │       ├── atlasV7_10.0um_scoreVolume_4N_R_surround_200um.bp
-│   │       └── atlasV7_10.0um_scoreVolume_4N_R_surround_200um_origin_wrt_canonicalAtlasSpace.txt
-│   ├── atlasV7_10.0um_scoreVolume_12N_warp7_DEMO999_detector799_10.0um_scoreVolume_12N_10.0um
-│   │   └── score_volumes
-│   │       ├── atlasV7_10.0um_scoreVolume_12N_warp7_DEMO999_detector799_10.0um_scoreVolume_12N_10.0um_12N.bp
-│   │       ├── atlasV7_10.0um_scoreVolume_12N_warp7_DEMO999_detector799_10.0um_scoreVolume_12N_10.0um_12N_origin_wrt_fixedWholebrain.txt
-│   │       ├── atlasV7_10.0um_scoreVolume_12N_warp7_DEMO999_detector799_10.0um_scoreVolume_12N_10.0um_12N_surround_200um.bp
-│   │       └── atlasV7_10.0um_scoreVolume_12N_warp7_DEMO999_detector799_10.0um_scoreVolume_12N_10.0um_12N_surround_200um_origin_wrt_fixedWholebrain.txt
-│   └── atlasV7_10.0um_scoreVolume_warp0_DEMO999_detector799_10.0um_scoreVolume_10.0um
-│       └── score_volumes
-│           ├── atlasV7_10.0um_scoreVolume_warp0_DEMO999_detector799_10.0um_scoreVolume_10.0um_12N.bp
-│           ├── atlasV7_10.0um_scoreVolume_warp0_DEMO999_detector799_10.0um_scoreVolume_10.0um_12N_origin_wrt_fixedWholebrain.txt
-│           ├── atlasV7_10.0um_scoreVolume_warp0_DEMO999_detector799_10.0um_scoreVolume_10.0um_12N_surround_200um.bp
-│           └── atlasV7_10.0um_scoreVolume_warp0_DEMO999_detector799_10.0um_scoreVolume_10.0um_12N_surround_200um_origin_wrt_fixedWholebrain.txt
+CSHL_volumes/          ?? maybe
 └── DEMO999
     └── DEMO999_wholebrainWithMargin_10.0um_intensityVolume
         ├── DEMO999_wholebrainWithMargin_10.0um_intensityVolume.bp
@@ -182,16 +155,84 @@ CSHL_volumes/
 CSHL_simple_global_registration/
 └── DEMO999_T_atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol.bp
 ```
+```
+CSHL_volumes/
+└── atlasV7
+    ├── atlasV7_10.0um_scoreVolume_12N_warp7_DEMO999_detector799_10.0um_scoreVolume_12N_10.0um
+    │   └── score_volumes
+    │       ├── atlasV7_10.0um_scoreVolume_12N_warp7_DEMO999_detector799_10.0um_scoreVolume_12N_10.0um_12N.bp
+    │       ├── atlasV7_10.0um_scoreVolume_12N_warp7_DEMO999_detector799_10.0um_scoreVolume_12N_10.0um_12N_origin_wrt_fixedWholebrain.txt
+    │       ├── atlasV7_10.0um_scoreVolume_12N_warp7_DEMO999_detector799_10.0um_scoreVolume_12N_10.0um_12N_surround_200um.bp
+    │       └── atlasV7_10.0um_scoreVolume_12N_warp7_DEMO999_detector799_10.0um_scoreVolume_12N_10.0um_12N_surround_200um_origin_wrt_fixedWholebrain.txt
+    └── atlasV7_10.0um_scoreVolume_warp0_DEMO999_detector799_10.0um_scoreVolume_10.0um
+        └── score_volumes
+            ├── atlasV7_10.0um_scoreVolume_warp0_DEMO999_detector799_10.0um_scoreVolume_10.0um_12N.bp
+            ├── atlasV7_10.0um_scoreVolume_warp0_DEMO999_detector799_10.0um_scoreVolume_10.0um_12N_origin_wrt_fixedWholebrain.txt
+            ├── atlasV7_10.0um_scoreVolume_warp0_DEMO999_detector799_10.0um_scoreVolume_10.0um_12N_surround_200um.bp
+            └── atlasV7_10.0um_scoreVolume_warp0_DEMO999_detector799_10.0um_scoreVolume_10.0um_12N_surround_200um_origin_wrt_fixedWholebrain.txt
+```
 
 
-For command 3, `demo/register_brains_demo_3N_R_4N_R.py`:
+##### For command 3, `demo/register_brains_demo_3N_R_4N_R.py`:
+```
+CSHL_registration_parameters/
+└── atlasV7
+    └── atlasV7_10.0um_scoreVolume_3N_R_4N_R_warp7_DEMO999_detector799_10.0um_scoreVolume_3N_R_4N_R
+        ├── atlasV7_10.0um_scoreVolume_3N_R_4N_R_warp7_DEMO999_detector799_10.0um_scoreVolume_3N_R_4N_R_parameters.json
+        ├── atlasV7_10.0um_scoreVolume_3N_R_4N_R_warp7_DEMO999_detector799_10.0um_scoreVolume_3N_R_4N_R_scoreEvolution.png
+        ├── atlasV7_10.0um_scoreVolume_3N_R_4N_R_warp7_DEMO999_detector799_10.0um_scoreVolume_3N_R_4N_R_scoreHistory.bp
+        └── atlasV7_10.0um_scoreVolume_3N_R_4N_R_warp7_DEMO999_detector799_10.0um_scoreVolume_3N_R_4N_R_trajectory.bp
+```
+
+```
+CSHL_volumes/
+└── atlasV7
+    ├── atlasV7_10.0um_scoreVolume_3N_R_4N_R_warp7_DEMO999_detector799_10.0um_scoreVolume_3N_R_4N_R_10.0um
+    │   └── score_volumes
+    │       ├── atlasV7_10.0um_scoreVolume_3N_R_4N_R_warp7_DEMO999_detector799_10.0um_scoreVolume_3N_R_4N_R_10.0um_3N_R.bp
+    │       ├── atlasV7_10.0um_scoreVolume_3N_R_4N_R_warp7_DEMO999_detector799_10.0um_scoreVolume_3N_R_4N_R_10.0um_3N_R_origin_wrt_fixedWholebrain.txt
+    │       ├── atlasV7_10.0um_scoreVolume_3N_R_4N_R_warp7_DEMO999_detector799_10.0um_scoreVolume_3N_R_4N_R_10.0um_3N_R_surround_200um.bp
+    │       ├── atlasV7_10.0um_scoreVolume_3N_R_4N_R_warp7_DEMO999_detector799_10.0um_scoreVolume_3N_R_4N_R_10.0um_3N_R_surround_200um_origin_wrt_fixedWholebrain.txt
+    │       ├── atlasV7_10.0um_scoreVolume_3N_R_4N_R_warp7_DEMO999_detector799_10.0um_scoreVolume_3N_R_4N_R_10.0um_4N_R.bp
+    │       ├── atlasV7_10.0um_scoreVolume_3N_R_4N_R_warp7_DEMO999_detector799_10.0um_scoreVolume_3N_R_4N_R_10.0um_4N_R_origin_wrt_fixedWholebrain.txt
+    │       ├── atlasV7_10.0um_scoreVolume_3N_R_4N_R_warp7_DEMO999_detector799_10.0um_scoreVolume_3N_R_4N_R_10.0um_4N_R_surround_200um.bp
+    │       └── atlasV7_10.0um_scoreVolume_3N_R_4N_R_warp7_DEMO999_detector799_10.0um_scoreVolume_3N_R_4N_R_10.0um_4N_R_surround_200um_origin_wrt_fixedWholebrain.txt
+    └── atlasV7_10.0um_scoreVolume_warp0_DEMO999_detector799_10.0um_scoreVolume_10.0um
+        └── score_volumes
+            ├── atlasV7_10.0um_scoreVolume_warp0_DEMO999_detector799_10.0um_scoreVolume_10.0um_3N_R.bp
+            ├── atlasV7_10.0um_scoreVolume_warp0_DEMO999_detector799_10.0um_scoreVolume_10.0um_3N_R_origin_wrt_fixedWholebrain.txt
+            ├── atlasV7_10.0um_scoreVolume_warp0_DEMO999_detector799_10.0um_scoreVolume_10.0um_3N_R_surround_200um.bp
+            ├── atlasV7_10.0um_scoreVolume_warp0_DEMO999_detector799_10.0um_scoreVolume_10.0um_3N_R_surround_200um_origin_wrt_fixedWholebrain.txt
+            ├── atlasV7_10.0um_scoreVolume_warp0_DEMO999_detector799_10.0um_scoreVolume_10.0um_4N_R.bp
+            ├── atlasV7_10.0um_scoreVolume_warp0_DEMO999_detector799_10.0um_scoreVolume_10.0um_4N_R_origin_wrt_fixedWholebrain.txt
+            ├── atlasV7_10.0um_scoreVolume_warp0_DEMO999_detector799_10.0um_scoreVolume_10.0um_4N_R_surround_200um.bp
+            └── atlasV7_10.0um_scoreVolume_warp0_DEMO999_detector799_10.0um_scoreVolume_10.0um_4N_R_surround_200um_origin_wrt_fixedWholebrain.txt
+
+```
+
+##### For command 4, `demo/visualize_registration_demo_3_structures.py`:
 ```
 
 ```
 
-For command 4, `demo/visualize_registration_demo_3_structures.py`:
+##### Downloaded from S3 before any outputs generated:
 ```
-
+CSHL_volumes/
+└── atlasV7
+    └── atlasV7_10.0um_scoreVolume
+        └── score_volumes
+            ├── atlasV7_10.0um_scoreVolume_12N.bp
+            ├── atlasV7_10.0um_scoreVolume_12N_origin_wrt_canonicalAtlasSpace.txt
+            ├── atlasV7_10.0um_scoreVolume_12N_surround_200um.bp
+            ├── atlasV7_10.0um_scoreVolume_12N_surround_200um_origin_wrt_canonicalAtlasSpace.txt
+            ├── atlasV7_10.0um_scoreVolume_3N_R.bp
+            ├── atlasV7_10.0um_scoreVolume_3N_R_origin_wrt_canonicalAtlasSpace.txt
+            ├── atlasV7_10.0um_scoreVolume_3N_R_surround_200um.bp
+            ├── atlasV7_10.0um_scoreVolume_3N_R_surround_200um_origin_wrt_canonicalAtlasSpace.txt
+            ├── atlasV7_10.0um_scoreVolume_4N_R.bp
+            ├── atlasV7_10.0um_scoreVolume_4N_R_origin_wrt_canonicalAtlasSpace.txt
+            ├── atlasV7_10.0um_scoreVolume_4N_R_surround_200um.bp
+            └── atlasV7_10.0um_scoreVolume_4N_R_surround_200um_origin_wrt_canonicalAtlasSpace.txt
 ```
 
 
@@ -206,6 +247,7 @@ For command 4, `demo/visualize_registration_demo_3_structures.py`:
 ***
 
 #### For running the second command `demo/register_brains_demo_12N.py`:
+- ran with `demo/register_brains_demo_12N.py -r 7 -g`. Requires adding filepath to json files in repo's dmeo folder.
 - Outputs shown in summary, too many to list properly.
 
 #### For running the second command `demo/register_brains_demo_3N_R_4N_R.py`:
