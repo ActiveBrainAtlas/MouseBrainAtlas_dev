@@ -212,6 +212,18 @@ CSHL_volumes/
 
 ##### For command 4, `demo/visualize_registration_demo_3_structures.py`:
 ```
+Traceback (most recent call last):
+  File "demo/visualize_registration_demo_3_structures.py", line 198, in <module>
+    resolution='10.0um', level=levels, sample_every=5)
+  File "demo/visualize_registration_demo_3_structures.py", line 48, in get_structure_contours_from_structure_volumes_v3
+    converter = CoordinatesConverter(stack=stack, section_list=metadata_cache['sections_to_filenames'][stack].keys())
+  File "/home/alexn/brainDev/setup/../src/utilities/data_manager.py", line 126, in __init__
+    cropbox_origin_xy_wrt_wholebrain_tbResol = DataManager.load_cropbox_v2(stack=stack, prep_id='alignedBrainstemCrop', only_2d=True)[[0,2]]
+  File "/home/alexn/brainDev/setup/../src/utilities/data_manager.py", line 1283, in load_cropbox_v2
+    cropbox_dict = load_ini(fp, section=prep_id_str)
+  File "/home/alexn/brainDev/setup/../src/utilities/metadata.py", line 609, in load_ini
+    raise Exception("ini file %s does not exist." % fp)
+Exception: ini file /media/alexn/BstemAtlasDataBackup/demo/CSHL_data_processed/DEMO999/DEMO999_cropbox.ini does not exist.
 
 ```
 
