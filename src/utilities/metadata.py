@@ -595,6 +595,7 @@ XY_PIXEL_DISTANCE_TB_AXIOSCAN = XY_PIXEL_DISTANCE_LOSSLESS_AXIOSCAN * 32
 
 all_nissl_stacks = []
 all_ntb_stacks = ['DEMO998','DEMO999','MD662']
+all_ntb_stacks = ['DEMO999']
 all_stacks = all_nissl_stacks + all_ntb_stacks
 
 BRAINS_INFO_DIR = os.path.join(DATA_ROOTDIR, 'brains_info')

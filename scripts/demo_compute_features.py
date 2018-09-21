@@ -10,7 +10,7 @@ matplotlib.use('Agg') # https://stackoverflow.com/a/3054314
 import matplotlib.pyplot as plt
 import numpy as np
 
-os.environ['REPO_DIR'] = '/home/alexn/brainDev/src'
+#os.environ['REPO_DIR'] = '/home/alexn/brainDev/src'
 sys.path.append(os.path.join(os.environ['REPO_DIR'],'utilities'))
 print os.environ['REPO_DIR']
 from utilities2015 import *
@@ -31,6 +31,10 @@ parser.add_argument("--section", type=int, help="Section number. If specified, d
 parser.add_argument("--version", type=str, help="Image version")
 parser.add_argument("--win_id", type=int, help="Window id (Default: %(default)s).", default=7)
 args = parser.parse_args()
+
+print 'REPO_DIR: ' + os.environ['REPO_DIR']
+print 'ROOT_DIR: ' + os.environ['ROOT_DIR']
+print 'DATA_ROOTDIR: ' + os.environ['DATA_ROOTDIR']
 
 stack = args.brain_name
 if hasattr(args, 'section') and args.section is not None:

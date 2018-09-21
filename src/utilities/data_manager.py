@@ -5435,8 +5435,14 @@ def generate_metadata_cache():
     metadata_cache['valid_filenames'] = {}
     metadata_cache['valid_sections_all'] = {}
     metadata_cache['valid_filenames_all'] = {}
+    print '\n\n*********************************************'
+    print 'ALL STACKS: '
+    print all_stacks
+    print '*********************************************\n\n'
     for stack in all_stacks:
-
+        print '\n\n*********************************************'
+        print 'FOR STACK: ' + stack
+        print '*********************************************\n\n' 
         try:
             metadata_cache['anchor_fn'][stack] = DataManager.load_anchor_filename(stack)
         except Exception as e:
