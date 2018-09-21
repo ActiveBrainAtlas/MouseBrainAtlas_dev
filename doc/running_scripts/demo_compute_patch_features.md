@@ -22,8 +22,8 @@ This particular version of the script only computes features for two slices, I w
 ```
 CSHL_data_processed/
 └── STACK
-    ├── STACK_alignedTo_ANCHOR_prep2_cropbox.json
-    ├── STACK_alignedTo_ANCHOR_prep2_sectionLimits.json
+    ├── STACK_alignedTo_ANCHOR_prep2_cropbox.json                 ??
+    ├── STACK_alignedTo_ANCHOR_prep2_sectionLimits.json           ??
     ├── STACK_anchor.txt
     ├── STACK_sorted_filenames.txt
     ├── STACK_prep1_thumbnail_mask
@@ -92,6 +92,8 @@ For the third command `compute_features_demo.py` for section 235:
 ## Description & Help
 
 - NOTE: Script requires the following files to function: `STACK_cropbix.ini`, `STACK_anchor.txt`, `STACK_sorted_filenames.txt`, all located in `ROOT/CSHL_data_processed/`. These files are used to populate metadata_cache line 5438 of data_manager.py. The brains loaded into metadata_cache are set in metadata.py line 597.
+
+Generating `STACK_cropbix.ini` is very easy. Open up a slice in Gimp, the highest and widest slice you can find, and make a box around the brainstem, there is a screenshot in my folder showing exactly how to do this. You need to generate 4 numbers (each one denotes a number of pixels). Xmin, Xmin, Ymin, Ymax.
 
 ### script download_demo_data_compute_features.py
 ---
