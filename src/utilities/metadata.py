@@ -173,6 +173,7 @@ elif hostname == 'yuncong-Precision-WorkStation-T7500' and username == 'alexn':
     S3_RAWDATA_BUCKET = 'mousebrainatlas-rawdata'
 
     REPO_DIR = os.environ['REPO_DIR']
+    print 'REPO_DIR = ' + REPO_DIR
 
     DATA_DIR = os.path.join(DATA_ROOTDIR, 'CSHL_data_processed')
 
@@ -500,6 +501,7 @@ def convert_to_surround_name(name, margin=None, suffix=None):
 
 #######################################
 
+print 'DATASET_SETTINGS_CSV: '+DATASET_SETTINGS_CSV
 from pandas import read_csv
 dataset_settings = read_csv(DATASET_SETTINGS_CSV, header=0, index_col=0)
 classifier_settings = read_csv(CLASSIFIER_SETTINGS_CSV, header=0, index_col=0)
@@ -592,7 +594,7 @@ XY_PIXEL_DISTANCE_TB_AXIOSCAN = XY_PIXEL_DISTANCE_LOSSLESS_AXIOSCAN * 32
 #all_annotated_stacks = all_annotated_nissl_stacks + all_annotated_ntb_stacks
 
 all_nissl_stacks = []
-all_ntb_stacks = ['DEMO998','DEMO999']
+all_ntb_stacks = ['DEMO998','DEMO999','MD662']
 all_stacks = all_nissl_stacks + all_ntb_stacks
 
 BRAINS_INFO_DIR = os.path.join(DATA_ROOTDIR, 'brains_info')
