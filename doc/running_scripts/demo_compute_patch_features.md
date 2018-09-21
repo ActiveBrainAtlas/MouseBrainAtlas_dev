@@ -16,6 +16,7 @@ For the sake of generalization the following substitutions will be used.
 This particular version of the script only computes features for two slices, I will denote them specially as `SLICECF`. For these files you only need the slices you need to compute features for. For the previously defined `SLICE`, all files in the `STACK` must be included no matter what.
 - `SLICECF` = the slice you are computing features for. Stands for Slice Compute Features
 
+
 #### INPUTS:
 
 ```
@@ -89,6 +90,8 @@ For the third command `compute_features_demo.py` for section 235:
 
 
 ## Description & Help
+
+- NOTE: Script requires the following files to function: `STACK_cropbix.ini`, `STACK_anchor.txt`, `STACK_sorted_filenames.txt`, all located in `ROOT/CSHL_data_processed/`. These files are used to populate metadata_cache line 5438 of data_manager.py. The brains loaded into metadata_cache are set in metadata.py line 597.
 
 ### script download_demo_data_compute_features.py
 ---
