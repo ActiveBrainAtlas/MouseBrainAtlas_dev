@@ -250,6 +250,8 @@ def load_data(fp, polydata_instead_of_face_vertex_list=True, download_s3=True):
         data = np.loadtxt(fp)
     elif fp.endswith('.png') or fp.endswith('.tif'):
         data = imread(fp)
+    elif fp.endswith('.ini'):
+	data = load_ini(fp)
     else:
         raise
 

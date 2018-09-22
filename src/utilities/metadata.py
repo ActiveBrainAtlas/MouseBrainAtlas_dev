@@ -623,10 +623,11 @@ def load_ini(fp, split_newline=True, convert_none_str=True, section='DEFAULT'):
     return input_spec
 
 planar_resolution = {}
-for brain_ini in os.listdir(BRAINS_INFO_DIR):
-    brain_name = os.path.splitext(brain_ini)[0]
-    brain_info = load_ini(os.path.join(BRAINS_INFO_DIR, brain_ini))
-    planar_resolution[brain_name] = float(brain_info['planar_resolution_um'])
+if os.path.exists(BRAINS_INFO_DIR):
+    for brain_ini in os.listdir(BRAINS_INFO_DIR):
+        brain_name = os.path.splitext(brain_ini)[0]
+        brain_info = load_ini(os.path.join(BRAINS_INFO_DIR, brain_ini))
+        planar_resolution[brain_name] = float(brain_info['planar_resolution_um'])
 
 print planar_resolution
 

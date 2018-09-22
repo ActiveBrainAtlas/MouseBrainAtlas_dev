@@ -66,6 +66,8 @@ def invert_section_to_filename_mapping(section_to_filename):
 def is_invalid(fn=None, sec=None, stack=None):
     if sec is not None:
         assert stack is not None
+	if sec not in metadata_cache['sections_to_filenames'][stack]:
+	    return True
         fn = metadata_cache['sections_to_filenames'][stack][sec]
     else:
         assert fn is not None
@@ -1012,7 +1014,7 @@ class DataManager(object):
     ########################################################
 
     @staticmethod
-    def load_data(filepath, filetype):
+    def load_data(filepath, filetype=None):
 
         if not os.path.exists(filepath):
             sys.stderr.write('File does not exist: %s\n' % filepath)
@@ -1064,6 +1066,8 @@ class DataManager(object):
                 xdim_f, ydim_f, zdim_f  = one_liner_to_arr(lines[4], int)
 
             return global_params, centroid_m, centroid_f, xdim_m, ydim_m, zdim_m, xdim_f, ydim_f, zdim_f
+	elif filepath.endswith('ini'):
+	    return load_ini(fp)
         else:
             sys.stderr.write('File type %s not recognized.\n' % filetype)
 
@@ -1081,7 +1085,7 @@ class DataManager(object):
     def load_anchor_filename(stack):
         fp = DataManager.get_anchor_filename_filename(stack)
 	if not os.path.exists(fp):
-	    sys.stderr.write("No anchor.txt is found. Seems we are using the operation ini to provide anchor. Try to load operation ini.")
+	    sys.stderr.write("No anchor.txt is found. Seems we are using the operation ini to provide anchor. Try to load operation ini.\n")
 	    fp = DataManager.get_anchor_filename_filename_v2(stack) # ini
             anchor_image_name = load_ini(fp)['anchor_image_name']
 	else:    
@@ -1114,6 +1118,9 @@ class DataManager(object):
             anchor_fn = DataManager.load_anchor_filename(stack=stack)
 
         fp = os.path.join(THUMBNAIL_DATA_DIR, stack, stack + '_alignedTo_' + anchor_fn + '_prep' + str(prep_id) + '_sectionLimits.json')
+	if not os.path.exists(fp):
+	    fp = os.path.join(DATA_DIR, stack, stack + '_prep' + str(prep_id) + '_sectionLimits.ini')
+
         return fp
 
     @staticmethod
@@ -1262,7 +1269,7 @@ class DataManager(object):
             convert_section_to_z (bool): If true, return (xmin,xmax,ymin,ymax,zmin,zmax) where z=0 is section #1; if false, return (xmin,xmax,ymin,ymax,secmin,secmax)
             prep_id (int)
         """
-        
+
 	if isinstance(prep_id, str) or isinstance(prep_id, unicode):
             fp = DataManager.get_cropbox_filename_v2(stack=stack, anchor_fn=anchor_fn, prep_id=prep_id)
         elif isinstance(prep_id, int):
@@ -1270,6 +1277,17 @@ class DataManager(object):
             fp = DataManager.get_cropbox_filename_v2(stack=stack, anchor_fn=anchor_fn, prep_id=prep_id)
         else:
             raise Exception("prep_id %s must be either str or int" % prep_id)
+
+	if not os.path.exists(fp):
+	    sys.stderr.write("Seems you are using operation INIs to provide cropbox.\n")
+	    if prep_id == 2 or prep_id == 'alignedBrainstemCrop':
+    	        fp = os.path.join(DATA_ROOTDIR, 'operation_configs', 'from_padded_to_brainstem.ini')
+	    elif prep_id == 5 or prep_id == 'alignedWithMargin':
+		fp = os.path.join(DATA_ROOTDIR, 'operation_configs', 'from_padded_to_wholeslice.ini')
+	    else:
+		raise Exception("Not implemented")
+	else:
+	    raise Exception("Cannot find any cropbox specification.")
 
         # download_from_s3(fp, local_root=THUMBNAIL_DATA_ROOTDIR)
 
@@ -1290,7 +1308,14 @@ class DataManager(object):
                     prep_id_str = prep_id_to_str_2d[prep_id]
                 else:
                     raise
-                cropbox_dict = load_ini(fp, section=prep_id_str)
+		if fp.endswith('cropbox.ini'):
+	            cropbox_dict = load_ini(fp, section=prep_id_str)
+		elif '_to_' in fp:
+		    cropbox_dict = load_ini(fp)
+		else:
+		    raise Exception("Do not know how to parse %s for cropbox" % fp)
+
+	    assert cropbox_dict['resolution'] == 'thumbnail', "Provided cropbox must have thumbnail resolution."
 
 	    xmin = cropbox_dict['rostral_limit']
             xmax = cropbox_dict['caudal_limit']
@@ -5482,12 +5507,11 @@ def generate_metadata_cache():
 
         try:
             first_sec, last_sec = metadata_cache['section_limits'][stack]
-            metadata_cache['valid_sections'][stack] = [sec for sec in range(first_sec, last_sec+1) if not is_invalid(stack=stack, sec=sec)]
+            metadata_cache['valid_sections'][stack] = [sec for sec in range(first_sec, last_sec+1) if sec in metadata_cache['sections_to_filenames'][stack] and not is_invalid(stack=stack, sec=sec)]
             metadata_cache['valid_filenames'][stack] = [metadata_cache['sections_to_filenames'][stack][sec] for sec in
                                                        metadata_cache['valid_sections'][stack]]
-        except:
-	    sys.stderr.write("Failed to cache %s valid_sections/filenames\n" % stack)
-            pass
+        except Exception as e:
+	    sys.stderr.write("Failed to cache %s valid_sections/filenames: %s\n" % (stack, str(e)))
 
         try:
             metadata_cache['valid_sections_all'][stack] = [sec for sec, fn in metadata_cache['sections_to_filenames'][stack].iteritems() if not is_invalid(fn=fn)]
