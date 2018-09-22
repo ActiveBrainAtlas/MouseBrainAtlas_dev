@@ -1081,10 +1081,10 @@ class DataManager(object):
     def load_anchor_filename(stack):
         fp = DataManager.get_anchor_filename_filename(stack)
 	if not os.path.exists(fp):
-	    sys.stderr.write("No anchor.txt is found. Seems we are using the operation ini to provide anchor. Try to load operation ini.")
+	    sys.stderr.write("No anchor.txt is found. Seems we are using the operation ini to provide anchor. Try to load operation ini.\n")
 	    fp = DataManager.get_anchor_filename_filename_v2(stack) # ini
             anchor_image_name = load_ini(fp)['anchor_image_name']
-	else:    
+	else:
             # download_from_s3(fp, local_root=THUMBNAIL_DATA_ROOTDIR)
             anchor_image_name = DataManager.load_data(fp, filetype='anchor')
 	return anchor_image_name
@@ -1262,7 +1262,7 @@ class DataManager(object):
             convert_section_to_z (bool): If true, return (xmin,xmax,ymin,ymax,zmin,zmax) where z=0 is section #1; if false, return (xmin,xmax,ymin,ymax,secmin,secmax)
             prep_id (int)
         """
-        
+
 	if isinstance(prep_id, str) or isinstance(prep_id, unicode):
             fp = DataManager.get_cropbox_filename_v2(stack=stack, anchor_fn=anchor_fn, prep_id=prep_id)
         elif isinstance(prep_id, int):
@@ -4780,8 +4780,8 @@ class DataManager(object):
                 raise Exception('Section is invalid: %s.' % fn)
         else:
             assert fn is not None
-	
-	
+
+
         if prep_id is not None and (isinstance(prep_id, str) or isinstance(prep_id, unicode)):
 	    if prep_id == 'None':
 		prep_id = None
@@ -5473,7 +5473,7 @@ def generate_metadata_cache():
             metadata_cache['section_limits'][stack] = DataManager.load_section_limits_v2(stack, prep_id=2)
         except Exception as e:
 	    sys.stderr.write("Failed to cache %s section_limits: %s\n" % (stack, e.message))
-     
+
 	try:
             # alignedBrainstemCrop cropping box
             metadata_cache['cropbox'][stack] = DataManager.load_cropbox_v2(stack, prep_id=2)
