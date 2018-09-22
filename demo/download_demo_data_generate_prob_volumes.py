@@ -25,7 +25,7 @@ def download_to_demo(fp):
     execute_command('wget -N -P \"%s\" \"%s\"' % (os.path.dirname(demo_fp), url))
     return demo_fp
 
-stack = 'DEMO999'
+stack = 'DEMO998'
 prep_id = 'alignedBrainstemCrop'
 win_id = 7
 normalization_scheme = 'none'
@@ -49,7 +49,7 @@ timestamp = None
 
 
 # Download the bounding boxes for different structures that are inferred from SIMPLE global alignment.
-download_to_demo(os.path.join('CSHL_simple_global_registration', 'DEMO999_registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners.json'))
+download_to_demo(os.path.join('CSHL_simple_global_registration', 'DEMO998_registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners.json'))
 
 # Download pre-trained logistic regression classifiers.
 classifier_id = 899
@@ -60,8 +60,19 @@ for name_u in ['3N', '4N', '12N']:
 
 
 # Download background images on top of which to draw score maps.
-for sec in [225, 235]:
-    fp = DataManager.get_image_filepath_v2(stack='DEMO999', prep_id=2, resol='raw', version='NtbNormalizedAdaptiveInvertedGammaJpeg', section=sec)
-    rel_fp = relative_to_local(fp, local_root=DATA_ROOTDIR)
+#for sec in [225, 235]:
+#    fp = DataManager.get_image_filepath_v2(stack='DEMO998', prep_id=2, resol='raw', version='NtbNormalizedAdaptiveInvertedGammaJpeg', section=sec)
+#    rel_fp = relative_to_local(fp, local_root=DATA_ROOTDIR)
+#    download_to_demo(rel_fp)
+
+# Download atlas
+for name_s in ['3N_R', '4N_R', '3N_R_surround_200um', '4N_R_surround_200um','12N', '12N_surround_200um']:
+
+    fp = DataManager.get_score_volume_filepath_v3(stack_spec={'name':'atlasV7', 'resolution':'10.0um', 'vol_type':'score'}, structure=name_s)
+    rel_fp = relative_to_local(fp, local_root=ROOT_DIR)
+    download_to_demo(rel_fp)
+
+    fp = DataManager.get_score_volume_origin_filepath_v3(stack_spec={'name':'atlasV7', 'resolution':'10.0um', 'vol_type':'score'}, structure=name_s, wrt='canonicalAtlasSpace')
+    rel_fp = relative_to_local(fp, local_root=ROOT_DIR)
     download_to_demo(rel_fp)
 
