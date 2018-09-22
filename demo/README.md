@@ -74,6 +74,15 @@ Draw initial snake contours.
 - Create `input_spec.ini` as (alignedBrainstemCrop,NtbNormalizedAdaptiveInvertedGamma,raw). `python rescale.py input_spec.ini thumbnail -f 0.03125`
 - Use the same `input_spec.ini` as previous step. `python compress_jpeg.py input_spec.ini`
 
+## (Optional) Obtain a simple global alignment
+
+This can serve two purposes:
+1. It allows us to estimate a probable region of the brain volume for each structure. We can compute features only on these regions to save computation. 
+2. It can be used as a starting point for the structure-specific registration later.
+
+- Pick the center of 12N and of 3N at sagittal midline. Input them into `registration_v7_atlasV7_simpleGlobal.ipynb`.
+
+
 ## Compute patch features
 ```
 (This is no longer needed) ./download_demo_data_compute_features.py
@@ -97,12 +106,12 @@ If using GPU, the demo for each section should finish in about 1 minute. If usin
 * This takes less than 1 minute.
 
 ### Register 12N individually
-- `$ python register_brains_demo_12N.py`
+- `$ python register_brains_demo_12N.py --use_simple_global`
   - Expected runtime of about 8 minutes
   - Output displays 1000 iterations of gradient descent
 
 ### Register 3N_R and 4N_R as a group
-- `$ python register_brains_demo_3N_R_4N_R.py`
+- `$ python register_brains_demo_3N_R_4N_R.py --use_simple_global`
   - Expected runtime of about 3 minutes
   - Output displays 1000 iterations of gradient descent
 
