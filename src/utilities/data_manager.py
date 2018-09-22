@@ -274,7 +274,6 @@ class CoordinatesConverter(object):
             print p, in_resolution, out_resolution
         assert p.ndim == 2
 
-
         import re
         m = re.search('^(.*?)_(.*?)_(.*?)$', in_resolution)
         if m is not None:
@@ -286,7 +285,6 @@ class CoordinatesConverter(object):
         else:
             if in_resolution == 'image':
                 p_um = p * self.resolutions['image']['um']
-
             elif in_resolution == 'image_image_index':
                 uv_um = p[..., :2] * self.get_resolution_um(resol_name='image')
                 i_um = np.array([SECTION_THICKNESS * (self.section_list[int(idx)] - 0.5) for idx in p[..., 2]])
@@ -311,17 +309,17 @@ class CoordinatesConverter(object):
         m = re.search('^(.*?)_(.*?)_(.*?)$', out_resolution)
         if m is not None:
             out_x_resol, out_y_resol, out_z_resol = m.groups()
-            assert out_x_resol == out_y_resol
+            assert out_x_resol == out_y_resol # i.e. image
             uv_outResol = p_um[..., :2] / self.get_resolution_um(resol_name=out_x_resol)
             sec_outResol = np.array([1 + int(np.floor(d_um / SECTION_THICKNESS)) for d_um in np.atleast_1d(p_um[..., 2])])
             p_outResol = np.column_stack([np.atleast_2d(uv_outResol), np.atleast_1d(sec_outResol)])
         else:
             if out_resolution == 'image':
                 p_outResol = p_um / self.resolutions['image']['um']
-            # elif out_resolution == 'image_image_section':
-            #     uv_outResol = p_um[..., :2] / self.resolutions['image']['um']
-            #     sec_outResol = np.array([1 + int(np.floor(d_um / SECTION_THICKNESS)) for d_um in np.atleast_1d(p_um[..., 2])])
-            #     p_outResol = np.column_stack([np.atleast_2d(uv_outResol), np.atleast_1d(sec_outResol)])
+            #elif out_resolution == 'image_image_section':
+            #    uv_outResol = p_um[..., :2] / self.resolutions['image']['um']
+            #    sec_outResol = np.array([1 + int(np.floor(d_um / SECTION_THICKNESS)) for d_um in np.atleast_1d(p_um[..., 2])])
+            #    p_outResol = np.column_stack([np.atleast_2d(uv_outResol), np.atleast_1d(sec_outResol)])
             elif out_resolution == 'image_image_index':
                 uv_outResol = p_um[..., :2] / self.get_resolution_um(resol_name='image')
                 if hasattr(self, 'section_list'):
@@ -451,6 +449,7 @@ class CoordinatesConverter(object):
 
         1. The "absolute" way:
         - wholebrain: formed by stacking all sections of prep1 (aligned + padded) images
+	- wholebrainWithMargin: tightly wrap around brain tissue. The origin is the nearest corner of the bounding box of all images' prep1 masks.
         - wholebrainXYcropped: formed by stacking all sections of prep2 images
         - brainstemXYfull: formed by stacking sections of prep1 images that contain brainstem
         - brainstem: formed by stacking brainstem sections of prep2 images
@@ -1211,6 +1210,7 @@ class DataManager(object):
             if domain == 'wholebrain':
                 origin_loadedResol = np.zeros((3,))
             elif domain == 'wholebrainXYcropped':
+                # alignedBrainstemCrop wrt. alignedPadded
                 crop_xmin_rel2uncropped, crop_ymin_rel2uncropped = metadata_cache['cropbox'][stack][[0,2]]
                 origin_loadedResol = np.array([crop_xmin_rel2uncropped, crop_ymin_rel2uncropped, 0])
             elif domain == 'brainstemXYfull':
@@ -4716,16 +4716,21 @@ class DataManager(object):
                         elif prep_id == 2:
                             # get prep 2 masks directly from prep 5 masks.
                             try:
-                                sys.stderr.write('Try finding prep5 masks.\n')
+                                sys.stderr.write('Try to find prep5 mask.\n')
                                 mask_prep5 = DataManager.load_image_v2(stack=stack, section=section, fn=fn, prep_id=5, version='mask', resol='thumbnail')
                                 xmin,xmax,ymin,ymax = DataManager.load_cropbox_v2_relative(stack=stack, prep_id=prep_id, wrt_prep_id=5, out_resolution='down32')
                                 mask_prep2 = mask_prep5[ymin:ymax+1, xmin:xmax+1].copy()
                                 return mask_prep2.astype(np.bool)
                             except:
                                 # get prep 2 masks directly from prep 1 masks.
-                                sys.stderr.write('Cannot load mask %s, section=%s, fn=%s, prep=%s\n' % (stack, section, fn, prep_id))
-                                sys.stderr.write('Try finding prep1 masks.\n')
-                                mask_prep1 = DataManager.load_image_v2(stack=stack, section=section, fn=fn, prep_id=1, version='mask', resol='thumbnail')
+                                sys.stderr.write('Failed to load prep5 mask.\n')
+                                sys.stderr.write('Try to find prep1 mask.\n')
+                                try:
+                                    mask_prep1 = DataManager.load_image_v2(stack=stack, section=section, fn=fn, prep_id=1, version='mask', resol='thumbnail')
+                                    sys.stderr.write('Loaded prep1 mask.\n')
+                                except:
+                                    sys.stderr.write('Failed to find prep1 mask. Give up.\n')
+                                    raise
                                 xmin,xmax,ymin,ymax = DataManager.load_cropbox_v2(stack=stack, prep_id=prep_id, return_dict=False, only_2d=True)
                                 mask_prep2 = mask_prep1[ymin:ymax+1, xmin:xmax+1].copy()
                                 return mask_prep2.astype(np.bool)
@@ -5169,40 +5174,41 @@ class DataManager(object):
         Args:
             prep_id (str or int)
         """
+        return DataManager.load_image_v2(stack=stack, prep_id=prep_id, section=section, fn=fn, version='mask', resol='thumbnail')
+            
+#         try:
+#             fp = DataManager.get_thumbnail_mask_filename_v3(stack=stack, section=section, fn=fn, prep_id=prep_id)
+#             # download_from_s3(fp, local_root=THUMBNAIL_DATA_ROOTDIR)
+#             mask = imread(fp).astype(np.bool)
+#             return mask
+#         except:
+#             sys.stderr.write('Cannot load mask %s, section=%s, fn=%s, prep=%s\n' % (stack, section, fn, prep_id))
 
-        try:
-            fp = DataManager.get_thumbnail_mask_filename_v3(stack=stack, section=section, fn=fn, prep_id=prep_id)
-            # download_from_s3(fp, local_root=THUMBNAIL_DATA_ROOTDIR)
-            mask = imread(fp).astype(np.bool)
-            return mask
-        except:
-            sys.stderr.write('Cannot load mask %s, section=%s, fn=%s, prep=%s\n' % (stack, section, fn, prep_id))
+#             if isinstance(prep_id, str):
+#                 prep_id = prep_str_to_id_2d[prep_id]
 
-            if isinstance(prep_id, str):
-                prep_id = prep_str_to_id_2d[prep_id]
+#             if prep_id == 2:
+#                 # get prep 2 masks directly from prep 5 masks.
+#                 try:
+#                     sys.stderr.write('Try finding prep5 masks.\n')
+#                     fp = DataManager.get_thumbnail_mask_filename_v3(stack=stack, section=section, fn=fn, prep_id=5)
+#                     # download_from_s3(fp, local_root=THUMBNAIL_DATA_ROOTDIR)
+#                     mask_prep5 = imread(fp).astype(np.bool)
 
-            if prep_id == 2:
-                # get prep 2 masks directly from prep 5 masks.
-                try:
-                    sys.stderr.write('Try finding prep5 masks.\n')
-                    fp = DataManager.get_thumbnail_mask_filename_v3(stack=stack, section=section, fn=fn, prep_id=5)
-                    # download_from_s3(fp, local_root=THUMBNAIL_DATA_ROOTDIR)
-                    mask_prep5 = imread(fp).astype(np.bool)
+#                     xmin,xmax,ymin,ymax = DataManager.load_cropbox_v2_relative(stack=stack, prep_id=prep_id, wrt_prep_id=5, out_resolution='down32')
+#                     mask_prep2 = mask_prep5[ymin:ymax+1, xmin:xmax+1].copy()
+#                     return mask_prep2
+#                 except:
+#                     # get prep 2 masks directly from prep 1 masks.
+#                     sys.stderr.write('Cannot load mask %s, section=%s, fn=%s, prep=%s\n' % (stack, section, fn, prep_id))
+#                     sys.stderr.write('Try finding prep1 masks.\n')
+#                     fp = DataManager.get_thumbnail_mask_filename_v3(stack=stack, section=section, fn=fn, prep_id=1)
+#                     # download_from_s3(fp, local_root=THUMBNAIL_DATA_ROOTDIR)
+#                     mask_prep1 = imread(fp).astype(np.bool)
 
-                    xmin,xmax,ymin,ymax = DataManager.load_cropbox_v2_relative(stack=stack, prep_id=prep_id, wrt_prep_id=5, out_resolution='down32')
-                    mask_prep2 = mask_prep5[ymin:ymax+1, xmin:xmax+1].copy()
-                    return mask_prep2
-                except:
-                    # get prep 2 masks directly from prep 1 masks.
-                    sys.stderr.write('Cannot load mask %s, section=%s, fn=%s, prep=%s\n' % (stack, section, fn, prep_id))
-                    sys.stderr.write('Try finding prep1 masks.\n')
-                    fp = DataManager.get_thumbnail_mask_filename_v3(stack=stack, section=section, fn=fn, prep_id=1)
-                    # download_from_s3(fp, local_root=THUMBNAIL_DATA_ROOTDIR)
-                    mask_prep1 = imread(fp).astype(np.bool)
-
-                    xmin,xmax,ymin,ymax = DataManager.load_cropbox_v2(stack=stack, prep_id=prep_id, return_dict=False, only_2d=True)
-                    mask_prep2 = mask_prep1[ymin:ymax+1, xmin:xmax+1].copy()
-                    return mask_prep2
+#                     xmin,xmax,ymin,ymax = DataManager.load_cropbox_v2(stack=stack, prep_id=prep_id, return_dict=False, only_2d=True)
+#                     mask_prep2 = mask_prep1[ymin:ymax+1, xmin:xmax+1].copy()
+#                     return mask_prep2
 
 
     # @staticmethod
@@ -5499,8 +5505,8 @@ def generate_metadata_cache():
         except Exception as e:
 	    sys.stderr.write("Failed to cache %s section_limits: %s\n" % (stack, e.message))
      
-	try:
-            # alignedBrainstemCrop cropping box
+        try:
+            # alignedBrainstemCrop cropping box relative to alignedpadded
             metadata_cache['cropbox'][stack] = DataManager.load_cropbox_v2(stack, prep_id=2)
         except Exception as e:
 	    sys.stderr.write("Failed to cache %s cropbox: %s\n" % (stack, e.message))
