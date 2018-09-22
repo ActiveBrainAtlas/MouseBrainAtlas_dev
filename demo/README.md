@@ -85,8 +85,6 @@ This can serve two purposes:
 
 ## Compute patch features
 ```
-(This is no longer needed) ./download_demo_data_compute_features.py
-# For 3N, do any two sections between 210-224, 4N 207-217 232-242, 12N 203-245.
 python demo_compute_features.py DEMO998 --section 225 --version NtbNormalizedAdaptiveInvertedGamma
 python demo_compute_features.py DEMO998 --section 230 --version NtbNormalizedAdaptiveInvertedGamma
 python demo_compute_features.py DEMO998 --section 235 --version NtbNormalizedAdaptiveInvertedGamma
@@ -102,8 +100,6 @@ If using GPU, the demo for each section should finish in about 1 minute. If usin
 
 
 ## Registration
-`(no longer needed) $ ./download_demo_data_registration.py`
-* This takes less than 1 minute.
 
 ### Register 12N individually
 - `$ python register_brains_demo_12N.py --use_simple_global`
