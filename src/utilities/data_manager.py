@@ -1073,11 +1073,21 @@ class DataManager(object):
         return fn
 
     @staticmethod
+    def get_anchor_filename_filename_v2(stack):
+        fp = os.path.join(DATA_ROOTDIR, 'operation_configs', 'from_none_to_aligned.ini')
+	return fp
+
+    @staticmethod
     def load_anchor_filename(stack):
         fp = DataManager.get_anchor_filename_filename(stack)
-        # download_from_s3(fp, local_root=THUMBNAIL_DATA_ROOTDIR)
-        anchor_fn = DataManager.load_data(fp, filetype='anchor')
-        return anchor_fn
+	if not os.path.exists(fp):
+	    sys.stderr.write("No anchor.txt is found. Seems we are using the operation ini to provide anchor. Try to load operation ini.")
+	    fp = DataManager.get_anchor_filename_filename_v2(stack) # ini
+            anchor_image_name = load_ini(fp)['anchor_image_name']
+	else:    
+            # download_from_s3(fp, local_root=THUMBNAIL_DATA_ROOTDIR)
+            anchor_image_name = DataManager.load_data(fp, filetype='anchor')
+	return anchor_image_name
 
 
     @staticmethod
