@@ -80,8 +80,8 @@ This can serve two purposes:
 1. It allows us to estimate a probable region of the brain volume for each structure. We can compute features only on these regions to save computation. 
 2. It can be used as a starting point for the structure-specific registration later.
 
-- Pick the center of 12N and of 3N at sagittal midline. Input them into `registration_v7_atlasV7_simpleGlobal.ipynb`.
-
+- Pick the center of 12N and of 3N at sagittal midline. Input them into `registration_v7_atlasV7_simpleGlobal.ipynb` to compute the simple global transform.
+- Then run the `# Identify 3-d bounding box of each simpleGlobal aligned structure` part of `from_images_to_score_volume.ipynb` to generate structure ROIs.
 
 ## Compute patch features
 ```
