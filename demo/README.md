@@ -33,7 +33,9 @@ cd demo
 
 ## Preprocess
 
-Note that the `input_spec.ini` files for most steps are different and must be manually created according to the actual input.
+Note that the `input_spec.ini` files for most steps are different and must be manually created according to the actual input. In the following instructions, "create `input_spec.ini` as (prep_id, version, resolution)" means using the same set of image names as `image_name_list` but set the `prep_id`, `version` and `resolution` accordingly.
+
+To use GUIs, install PyQt4 into the virtualenv according to [this answer](https://stackoverflow.com/a/28850104).
 
 - Run `download_demo_data_preprocessing.py` to download 4 JPEG2000 images of the demo brain.
 - **(HUMAN)** create `DEMO998.ini` and put it under `demo_data/brains_info/`
@@ -49,16 +51,15 @@ Note that the `input_spec.ini` files for most steps are different and must be ma
 - `python warp_crop.py --input_spec input_spec.ini --op_id from_none_to_padded`
 - **(HUMAN)** Inspect aligned images using preprocessGUI `preprocess_gui.py`, correct pairwise transforms and check each image's order in stack.
 ### Create masks
-- **(HUMAN)** draw initial snake contours for masking using maskingGUI.
-`python mask_editing_tool_v4.py DEMO998`
-- `python masking.py input_spec.ini demo_data/CSHL_data_processed/DEMO998/DEMO998_prep1_thumbnail_initSnakeContours.pkl`
-- **(HUMAN)** Return to masking GUI to inspect and correct the automatically generated masks. 
-`python mask_editing_tool_v4.py DEMO998`
-- **(HUMAN)** Create `DEMO998_original_image_crop.csv`
-- `python warp_crop.py --input_spec input_spec.ini --op from_padded_to_none`
+- **(HUMAN)** On a machine with monitor, launch the maskingGUI. `DATA_ROOTDIR=/media/yuncong/brainstem/home/yuncong/MouseBrainAtlas/demo/demo_data python mask_editing_tool_v4.py DEMO998`.
+Draw initial snake contours.
+- Create `input_spec.ini` as (alignedPadded,NtbNormalized,thumbnail). `python masking.py input_spec.ini demo_data/CSHL_data_processed/DEMO998/DEMO998_prep1_thumbnail_initSnakeContours.pkl`
+- **(HUMAN)** Return to masking GUI to inspect and correct the automatically generated masks.
+- **(HUMAN)** Create `DEMO998_original_image_crop.csv`. In this file each row is x,y,w,h.
+- Create `input_spec.ini` as (alignedPadded,mask,thumbnail). `python warp_crop.py --input_spec input_spec.ini --op_id from_padded_to_none`
  
 ### Local adaptive intensity normalization
-- `python normalize_intensity_adaptive.py input_spec.ini NtbNormalizedAdaptiveInvertedGamma`
+- Create `input_spec.ini` as (None,Ntb,raw). `python normalize_intensity_adaptive.py input_spec.ini NtbNormalizedAdaptiveInvertedGamma`
 ### Whole-slice crop
 - **(HUMAN)** Manually specify the alignedWithMargin cropbox based on alignedPadded images, or automatically infer based on alignedPadded masks.
 - `python warp_crop.py --input_spec input_spec.ini --op from_padded_to_wholeslice`
