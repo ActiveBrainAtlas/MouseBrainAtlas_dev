@@ -88,7 +88,7 @@ If using GPU, the demo for each section should finish in about 1 minute. If usin
 ## Generate probability volumes
 
 - Create `DEMO998_prep2_sectionLimits.ini`. In this file specify the indices of the first and last sections that include the brainstem.
-- `python download_demo_data_generate_prob_volumes.py`
+- Download detectors. `python download_demo_data_generate_prob_volumes.py`
 - `python demo_generate_prob_volumes.py DEMO998 799 NtbNormalizedAdaptiveInvertedGammaJpeg --structure_list "[\"3N\", \"4N\", \"12N\"]"`
 
 
