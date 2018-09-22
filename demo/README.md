@@ -33,6 +33,8 @@ cd demo
 
 ## Preprocess
 
+Install ImageMagick 6.8.9.
+
 Note that the `input_spec.ini` files for most steps are different and must be manually created according to the actual input. In the following instructions, "create `input_spec.ini` as (prep_id, version, resolution)" means using the same set of image names as `image_name_list` but set the `prep_id`, `version` and `resolution` accordingly.
 
 To use GUIs, install PyQt4 into the virtualenv according to [this answer](https://stackoverflow.com/a/28850104).
@@ -55,49 +57,52 @@ To use GUIs, install PyQt4 into the virtualenv according to [this answer](https:
 Draw initial snake contours.
 - Create `input_spec.ini` as (alignedPadded,NtbNormalized,thumbnail). `python masking.py input_spec.ini demo_data/CSHL_data_processed/DEMO998/DEMO998_prep1_thumbnail_initSnakeContours.pkl`
 - **(HUMAN)** Return to masking GUI to inspect and correct the automatically generated masks.
-- **(HUMAN)** Create `DEMO998_original_image_crop.csv`. In this file each row is x,y,w,h.
-- Create `input_spec.ini` as (alignedPadded,mask,thumbnail). `python warp_crop.py --input_spec input_spec.ini --op_id from_padded_to_none`
+- **(HUMAN)** Create `DEMO998_original_image_crop.csv`. In this file each row is x,y,width,height in thumbnail resolution.
+- Create `input_spec.ini` as (alignedPadded,mask,thumbnail). `python warp_crop.py --input_spec input_spec.ini --op_id from_padded_to_none`.
  
 ### Local adaptive intensity normalization
 - Create `input_spec.ini` as (None,Ntb,raw). `python normalize_intensity_adaptive.py input_spec.ini NtbNormalizedAdaptiveInvertedGamma`
+
 ### Whole-slice crop
-- **(HUMAN)** Manually specify the alignedWithMargin cropbox based on alignedPadded images, or automatically infer based on alignedPadded masks.
-- `python warp_crop.py --input_spec input_spec.ini --op from_padded_to_wholeslice`
-- `python rescale.py input_spec.ini thumbnail -f 0.03125`
+- **(HUMAN)** Create `from_none_to_wholeslice.ini`. In this file specify the cropbox for the domain `alignedWithMargin ` based on `alignedPadded` images. This cropbox can also be automatically inferred as padding 20 thumbnail-resolution pixels surrounding the `alignedPadded` masks.
+- Create `input_spec.ini` as (None,NtbNormalizedAdaptiveInvertedGamma,raw). `python warp_crop.py --input_spec input_spec.ini --op_id from_none_to_wholeslice`
+- Create `input_spec.ini` as (alignedWithMargin,NtbNormalizedAdaptiveInvertedGamma,raw). `python rescale.py input_spec.ini thumbnail -f 0.03125`
+
 ### Brainstem crop
-- **(HUMAN)** Specify prep2 (alignedBrainstemCrop) cropping box, based on alignedWithMargin thumbnails or alignedPadded thumbnails
-- `python warp_crop.py --input_spec input_spec.ini --op from_padded_to_brainstem`
-- `python rescale.py input_spec.ini thumbnail -f 0.03125`
-- `python compress_jpeg.py input_spec.ini`
+- **(HUMAN)** Create `from_wholeslice_to_brainstem.ini`. Specify prep2 (alignedBrainstemCrop) cropping box, based on alignedWithMargin or alignedPadded thumbnails.
+- Create `input_spec.ini` as (alignedWithMargin,NtbNormalizedAdaptiveInvertedGamma,raw). `python warp_crop.py --input_spec input_spec.ini --op_id from_wholeslice_to_brainstem`
+- Create `input_spec.ini` as (alignedBrainstemCrop,NtbNormalizedAdaptiveInvertedGamma,raw). `python rescale.py input_spec.ini thumbnail -f 0.03125`
+- Use the same `input_spec.ini` as previous step. `python compress_jpeg.py input_spec.ini`
 
 ## Compute patch features
 ```
-./download_demo_data_compute_features.py
-# For 3N, do any two sections between 221-244, 4N 221-237, 12N 183-265.
-./demo_compute_features.py DEMO998 --section 225 --version NtbNormalizedAdaptiveInvertedGamma
-./demo_compute_features.py DEMO998 --section 235 --version NtbNormalizedAdaptiveInvertedGamma
+(This is no longer needed) ./download_demo_data_compute_features.py
+# For 3N, do any two sections between 210-224, 4N 207-217 232-242, 12N 203-245.
+python demo_compute_features.py DEMO998 --section 225 --version NtbNormalizedAdaptiveInvertedGamma
+python demo_compute_features.py DEMO998 --section 230 --version NtbNormalizedAdaptiveInvertedGamma
+python demo_compute_features.py DEMO998 --section 235 --version NtbNormalizedAdaptiveInvertedGamma
 ```
 
 If using GPU, the demo for each section should finish in about 1 minute. If using CPU, this takes about 1 hour.
 
-
 ## Generate probability volumes
-```
-./download_demo_data_generate_prob_volumes.py
-./demo_generate_prob_volumes.py DEMO998 799 NtbNormalizedAdaptiveInvertedGammaJpeg --structure_list "[\"3N\", \"4N\", \"12N\"]"
-```
+
+- Create `DEMO998_prep2_sectionLimits.ini`. In this file specify the indices of the first and last sections that include the brainstem.
+- Download detectors. `python download_demo_data_generate_prob_volumes.py`
+- `python demo_generate_prob_volumes.py DEMO998 799 NtbNormalizedAdaptiveInvertedGammaJpeg --structure_list "[\"3N\", \"4N\", \"12N\"]"`
+
 
 ## Registration
-`$ ./download_demo_data_registration.py`
+`(no longer needed) $ ./download_demo_data_registration.py`
 * This takes less than 1 minute.
 
 ### Register 12N individually
-- `$ ./register_brains_demo_12N.py`
+- `$ python register_brains_demo_12N.py`
   - Expected runtime of about 8 minutes
   - Output displays 1000 iterations of gradient descent
 
 ### Register 3N_R and 4N_R as a group
-- `$ ./register_brains_demo_3N_R_4N_R.py`
+- `$ python register_brains_demo_3N_R_4N_R.py`
   - Expected runtime of about 3 minutes
   - Output displays 1000 iterations of gradient descent
 
@@ -107,7 +112,7 @@ The outputs include the transform parameters and transformed atlas structures.
 ## Visualize registration results
 
 To visualize the multi-probability level structures of the aligned atlas overlaid on original images:
-- `$ ./visualize_registration_demo_3_structures.py`
+- `$ python visualize_registration_demo_3_structures.py`
   - Expected runtime of about 1 minute
   - "Image fails to load. Trying to convert from other resol/versions" is part of expected output
 
