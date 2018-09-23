@@ -123,7 +123,7 @@ for name_u in structure_list:
 
         (xmin, ymin, secmin), (xmax, ymax, secmax) = registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners[name_u]
 
-        for sec in range(max(secmin - section_margin, valid_secmin), min(secmax + 1 + section_margin, valid_secmax)):
+        for sec in range(max(secmin - section_margin, valid_secmin), min(secmax + 1 + section_margin, valid_secmax) + 1):
 
             if is_invalid(sec=sec, stack=stack):
                 continue
@@ -140,7 +140,7 @@ for name_u in structure_list:
         lname = convert_to_left_name(name_u)
         (xmin, ymin, secmin), (xmax, ymax, secmax) = registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners[lname]
 
-        for sec in range(max(secmin - section_margin, valid_secmin), min(secmax + 1 + section_margin, valid_secmax)):
+        for sec in range(max(secmin - section_margin, valid_secmin), min(secmax + 1 + section_margin, valid_secmax) + 1):
 
             if is_invalid(sec=sec, stack=stack):
                 continue
@@ -153,7 +153,7 @@ for name_u in structure_list:
         rname = convert_to_right_name(name_u)
         (xmin, ymin, secmin), (xmax, ymax, secmax) = registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners[rname]
 
-        for sec in range(max(secmin - section_margin, valid_secmin), min(secmax + 1 + section_margin, valid_secmax)):
+        for sec in range(max(secmin - section_margin, valid_secmin), min(secmax + 1 + section_margin, valid_secmax) + 1):
 
             if is_invalid(sec=sec, stack=stack):
                 continue
@@ -275,7 +275,7 @@ for name_u in structure_list:
         (xmin, ymin, s1), (xmax, ymax, s2) = registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners[name_s]
 
         for sec in range(max(s1 - section_margin, metadata_cache['section_limits'][stack][0]),
-                         min(s2 + 1 + section_margin, metadata_cache['section_limits'][stack][1])):
+                         min(s2 + 1 + section_margin, metadata_cache['section_limits'][stack][1])+1):
 
             if is_invalid(sec=sec, stack=stack):
                 continue

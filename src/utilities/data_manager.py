@@ -4797,8 +4797,12 @@ class DataManager(object):
 
             if sorted_filenames_fp is not None:
                 _, sections_to_filenames = DataManager.load_sorted_filenames(fp=sorted_filenames_fp)
+                if section not in sections_to_filenames:
+                    raise Exception('Section %d is not specified in sorted list.' % section)
                 fn = sections_to_filenames[section]
             else:
+                if section not in metadata_cache['sections_to_filenames'][stack]:
+                    raise Exception('Section %d is not specified in sorted list.' % section)
                 fn = metadata_cache['sections_to_filenames'][stack][section]
 
             if is_invalid(fn=fn):
