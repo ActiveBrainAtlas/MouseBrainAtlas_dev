@@ -48,6 +48,9 @@ timestamp = None
 #    download_to_demo(rel_fp)
 
 
+# Download the SIMPLE global alignment.
+download_to_demo(os.path.join('CSHL_simple_global_registration', 'DEMO998_T_atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol.txt'))
+
 # Download the bounding boxes for different structures that are inferred from SIMPLE global alignment.
 download_to_demo(os.path.join('CSHL_simple_global_registration', 'DEMO998_registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners.json'))
 
