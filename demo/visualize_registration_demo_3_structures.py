@@ -18,9 +18,9 @@ from metadata import *
 from data_manager import *
 
 
-metadata_cache1 = generate_metadata_cache()
-print metadata_cache1['sections_to_filenames'].keys()
-print DataManager.load_anchor_filename('DEMO999')
+#metadata_cache1 = generate_metadata_cache()
+#print metadata_cache1['sections_to_filenames']
+#print DataManager.load_anchor_filename('DEMO998')
 
 def get_structure_contours_from_structure_volumes_v3(volumes, stack, sections, 
                                                      resolution, level, sample_every=1,
@@ -146,7 +146,7 @@ structure_list = per_structure_alignment_spec.keys()
 section_margin_um = 1000.
 section_margin = int(section_margin_um / SECTION_THICKNESS)
 
-stack = 'DEMO999'
+stack = 'DEMO998'
 # stack = brain_f_spec['name']
 # valid_secmin = np.min(metadata_cache['valid_sections'][stack])
 # valid_secmax = np.max(metadata_cache['valid_sections'][stack])
@@ -181,13 +181,14 @@ for structure_m in structure_list:
                                                structure=structure_m)
 
     # prep2 because at end of get_structure_contours_from_structure_volumes_v2 we used wholebrainXYcropped
-    registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners = \
+    registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners_atlasResol = \
     load_json(os.path.join(ROOT_DIR, 'CSHL_simple_global_registration', stack + '_registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners.json'))
 
-    (_, _, secmin), (_, _, secmax) = registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners[structure_m]
+    (_, _, secmin), (_, _, secmax) = registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners_atlasResol[structure_m]
+    print secmin, secmax
 
     atlas_structures_wrt_wholebrainWithMargin_sections = \
-    range(max(secmin - section_margin, valid_secmin), min(secmax + 1 + section_margin, valid_secmax))
+    range(max(secmin - section_margin, valid_secmin), min(secmax + 1 + section_margin, valid_secmax)+1)
 
     levels = [0.1, 0.25, 0.5, 0.75, 0.99]
 
@@ -195,6 +196,9 @@ for structure_m in structure_list:
     get_structure_contours_from_structure_volumes_v3(volumes={structure_m: vo}, stack=stack, 
                                                      sections=atlas_structures_wrt_wholebrainWithMargin_sections,
                                                     resolution='10.0um', level=levels, sample_every=5)
+
+    print atlas_structures_wrt_wholebrainWithMargin_sections
+    print vo[0].shape, vo[1]
 
     for sec, contours_one_structure_all_levels in sorted(auto_contours_all_sections_one_structure_all_levels.items()):
         if not is_invalid(sec=sec, stack=stack):
