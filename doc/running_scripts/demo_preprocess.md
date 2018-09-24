@@ -1,4 +1,5 @@
 ## Table of Contents
+The preprocessing stage of the code can be broken down into the following 7-8 steps.
 
 1) [Preprocess Setup](#preprocess-setup)
 2) [Global Intensity Normalization](#global-intensity-normalization)
