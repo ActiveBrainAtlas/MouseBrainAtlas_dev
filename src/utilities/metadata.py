@@ -159,18 +159,18 @@ elif hostname == 'yuncong-Precision-WorkStation-T7500' and username == 'alexn':
     if 'DATA_ROOTDIR' in os.environ:
         DATA_ROOTDIR = os.environ['DATA_ROOTDIR']
     else:
-        DATA_ROOTDIR = '/home/alexn/data'
+        DATA_ROOTDIR = '/media/alexn/BstemAtlasDataBackup'
 
     if 'THUMBNAIL_DATA_ROOTDIR' in os.environ:
         THUMBNAIL_DATA_ROOTDIR = os.environ['THUMBNAIL_DATA_ROOTDIR']
     else:
-        THUMBNAIL_DATA_ROOTDIR = '/home/alexn/data'
+        THUMBNAIL_DATA_ROOTDIR = '/media/alexn/BstemAtlasDataBackup'
 
     RAW_DATA_DIR = os.path.join(DATA_ROOTDIR, 'CSHL_data')
 
     ON_AWS = False
-    S3_DATA_BUCKET = 'mousebrainatlas-data-alexn'
-    S3_RAWDATA_BUCKET = 'mousebrainatlas-rawdata-alexn'
+    S3_DATA_BUCKET = 'mousebrainatlas-data'
+    S3_RAWDATA_BUCKET = 'mousebrainatlas-rawdata'
 
     REPO_DIR = os.environ['REPO_DIR']
 
@@ -623,12 +623,13 @@ def load_ini(fp, split_newline=True, convert_none_str=True, section='DEFAULT'):
     return input_spec
 
 planar_resolution = {}
-if os.path.exists(BRAINS_INFO_DIR):
+try:
     for brain_ini in os.listdir(BRAINS_INFO_DIR):
         brain_name = os.path.splitext(brain_ini)[0]
         brain_info = load_ini(os.path.join(BRAINS_INFO_DIR, brain_ini))
         planar_resolution[brain_name] = float(brain_info['planar_resolution_um'])
-
+except:
+    print "ERROR IN METADATA. NO BRAINS_INFO FOLDER. LINE 630"
 print planar_resolution
 
 
