@@ -12,7 +12,7 @@ This document is meant to contain an exhaustive list of every file generated thr
 
 ## 1) Preprocessing Stage
 
-### CSHL_data_processed/
+#### CSHL_data_processed/
 Contains ALL preprocessing data from the inputs `SLICE_lossless.jp2` to the final outputs `SLICE_prep2_raw_NtbNormalizedAdaptiveInvertedGamma.tif`
 
 
