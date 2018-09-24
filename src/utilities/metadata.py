@@ -633,6 +633,8 @@ try:
         planar_resolution[brain_name] = float(brain_info['planar_resolution_um'])
 except:
     print "ERROR IN METADATA. NO BRAINS_INFO FOLDER. LINE 630"
+    print 'BRAINS_INFO_DIR: '
+    print BRAINS_INFO_DIR
 print planar_resolution
 
 

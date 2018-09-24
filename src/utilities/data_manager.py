@@ -1013,7 +1013,9 @@ class DataManager(object):
 
     @staticmethod
     def load_data(filepath, filetype):
-
+      #  print '\n******************************************************************\n'
+      #  print filetype # MARK1
+      #  print '\n******************************************************************\n'
         if not os.path.exists(filepath):
             sys.stderr.write('File does not exist: %s\n' % filepath)
 
@@ -1282,7 +1284,7 @@ class DataManager(object):
                     raise
                 cropbox_dict = load_ini(fp, section=prep_id_str)
 
-	    xmin = cropbox_dict['rostral_limit']
+            xmin = cropbox_dict['rostral_limit']
             xmax = cropbox_dict['caudal_limit']
             ymin = cropbox_dict['dorsal_limit']
             ymax = cropbox_dict['ventral_limit']
@@ -5464,18 +5466,21 @@ def generate_metadata_cache():
                 metadata_cache['filenames_to_sections'][stack].pop('Rescan')
         except Exception as e:
 	    sys.stderr.write("Failed to cache %s filenames_to_sections: %s\n" % (stack, e.message))
-
+        
+        print '\n_____SECTION LIMITS_____\n'
         try:
             metadata_cache['section_limits'][stack] = DataManager.load_section_limits_v2(stack, prep_id=2)
         except Exception as e:
-	    sys.stderr.write("Failed to cache %s section_limits: %s\n" % (stack, e.message))
+            print e
+            sys.stderr.write("Failed to cache %s section_limits: %s\n" % (stack, e.message))
      
 	try:
             # alignedBrainstemCrop cropping box
             metadata_cache['cropbox'][stack] = DataManager.load_cropbox_v2(stack, prep_id=2)
         except Exception as e:
 	    sys.stderr.write("Failed to cache %s cropbox: %s\n" % (stack, e.message))
-
+    
+        print '\n_____VALID SECTIONS_____\n'
         try:
             first_sec, last_sec = metadata_cache['section_limits'][stack]
             metadata_cache['valid_sections'][stack] = [sec for sec in range(first_sec, last_sec+1) if not is_invalid(stack=stack, sec=sec)]
@@ -5499,8 +5504,13 @@ def generate_metadata_cache():
 
     return metadata_cache
 
-
+print '\n____________________________________________________'
+print 'metadata starting caching'
+print '____________________________________________________\n'
 generate_metadata_cache()
+print '\n____________________________________________________'
+print 'metadata finished caching'
+print '____________________________________________________\n'
 
 def resolve_actual_setting(setting, stack, fn=None, sec=None):
     """Take a possibly composite setting index, and return the actual setting index according to fn."""
