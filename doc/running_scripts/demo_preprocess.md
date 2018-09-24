@@ -1,13 +1,13 @@
 ## Table of Contents
 
-- [Preprocess Setup](#preprocess-setup)
-- [Global Intensity Normalization](#global-intensity-normalization)
-- [Intra-Stack Alignment](#intra-stack-align)
-- [Create Masks](#create-masks)
-- [Local Adaptive Intensity Normalization](#local-adaptive-intensity-normalization)
-- [While-Slice Brain Crop](#whole-slice-crop)
-- [Brainstem Crop](#brainstem-crop)
-- [(Optional) Simple Global Alignment](#(optional)-obtain-a-simple-global-alignment)
+1) [Preprocess Setup](#preprocess-setup)
+2) [Global Intensity Normalization](#global-intensity-normalization)
+3) [Intra-Stack Alignment](#intra-stack-align)
+4) [Create Masks](#create-masks)
+5) [Local Adaptive Intensity Normalization](#local-adaptive-intensity-normalization)
+6) [While-Slice Brain Crop](#whole-slice-crop)
+7) [Brainstem Crop](#brainstem-crop)
+8) [(Optional) Simple Global Alignment](#optional-obtain-a-simple-global-alignment)
 
 
 ## Preprocess
