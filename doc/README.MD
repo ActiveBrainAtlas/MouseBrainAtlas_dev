@@ -28,6 +28,3 @@ These files contain information on what software is needed to run the code, how 
   - List of all packages that need to be installed 
 - [Stack Directories](Brain_stack_directories.md)
   - Description of every stack, all relevant information]
-
-## Documentation Files
- Following are all of the documentation files and user guides for the Atlas code. Having had multiple developers working on it, there are documentation files deemed "historical" that were made by earlier developers. Certain documents are also marked as incomplete and should be ignored by non-developers. Several "historical" files are unmarked as they are not outdated.
