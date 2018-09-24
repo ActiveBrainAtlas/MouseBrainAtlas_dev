@@ -1,3 +1,15 @@
+## Table of Contents
+
+- [Preprocess Setup](#preprocess-setup)
+- [Global Intensity Normalization](#global-intensity-normalization)
+- [Intra-Stack Alignment](#intra-stack-align)
+- [Create Masks](#create-masks)
+- [Local Adaptive Intensity Normalization](#local-adaptive-intensity-normalization)
+- [While-Slice Brain Crop](#whole-slice-crop)
+- [Brainstem Crop](#brainstem-crop)
+- [(Optional) Simple Global Alignment](#(optional)-obtain-a-simple-global-alignment)
+
+
 ## Preprocess
 
 Install ImageMagick 6.8.9.
@@ -15,6 +27,8 @@ To use GUIs, install PyQt4 into the virtualenv according to [this answer](https:
 
 ------------------------------------------------------------------------------------------------------------------------
 ##### Running Notes
+Initial Notes, the first few steps have `` and `` being saved to the REPO_DIR/demo/ which I think is dumb. I'll change them to be saved to the DATA_ROOTDIR when I change this into a script.
+
 - Run `download_demo_data_preprocessing.py` to download 4 JPEG2000 images of the demo brain.
   - Downloads the following files
   - Note: The user must create `STACK.ini` themselves for actual script.
@@ -52,7 +66,6 @@ DATA_ROOTDIR/
 [DEFAULT]
 planar_resolution_um = 0.46
 section_thickness_um = 20
-
 ```
 - Create `DEMO998_input_spec.json`. `python jp2_to_tiff.py DEMO998 DEMO998_input_spec.json`.
   - Accomplished with the following:
@@ -61,8 +74,9 @@ section_thickness_um = 20
       - Errors found, around line 30. `vr` (version) is set to 'null' for no version but later None is used for this. Causes crash. Change kwargs list to be version='null'
       - distributed_utilities line 304 hard codes `/home/yuncong/runall.sh` as well as std_err and atd_out a few lines after
       - Many hardcoded filepaths. Taking a good few hours to go through and change these 1 by 1. 
+- Below is an example .json file. Following that is the output of the command above.
 ```
-%%writefile DEMO998_input_spec.json
+Example DEMO998_input_spec.json:
 [
     {"version": null, 
  "resolution": "raw", 
@@ -72,8 +86,63 @@ section_thickness_um = 20
     }
 ]
 ```
+```
+DATA_ROOTDIR/
+|
+├── CSHL_data_processed
+│   ├── DEMO998
+│   │   └── DEMO998_raw
+│   │       ├── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_raw.tif
+│   │       ├── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_raw.tif
+│   │       └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_raw.tif
+│   └── DEMO998_sorted_filenames.txt
+├── runall.sh
+├── stderr_0.log
+└── stdout_0.log
+```
 - Create `input_spec.ini` as (None,None,raw). `python extract_channel.py input_spec.ini 2 Ntb`
+```
+Example input_spec.ini file:
+[DEFAULT]
+image_name_list = MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242
+    MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250
+    MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257
+stack = DEMO998
+prep_id = None
+version = None
+resol = raw
+```
+```
+DATA_ROOTDIR/
+|
+└── CSHL_data_processed
+    └── DEMO998
+        └── DEMO998_raw_Ntb
+            ├── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_raw_Ntb.tif
+            ├── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_raw_Ntb.tif
+            └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_raw_Ntb.tif
+```
 - Create `input_spec.ini` as (None,Ntb,raw). `python rescale.py input_spec.ini thumbnail -f 0.03125`
+```
+[DEFAULT]
+image_name_list = MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242
+    MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250
+    MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257
+stack = DEMO998
+prep_id = None
+version = Ntb
+resol = raw
+```
+```
+DATA_ROOTDIR/
+|
+└── CSHL_data_processed
+    └── DEMO998
+       └── DEMO998_thumbnail_Ntb
+            ├── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_thumbnail_Ntb.tif
+            ├── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_thumbnail_Ntb.tif
+            └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_thumbnail_Ntb.tif
+```
 
 ------------------------------------------------------------------------------------------------------------------------
 
@@ -92,6 +161,12 @@ Draw initial snake contours.
 - **(HUMAN)** Return to masking GUI to inspect and correct the automatically generated masks.
 - **(HUMAN)** Create `DEMO998_original_image_crop.csv`. In this file each row is x,y,width,height in thumbnail resolution.
 - Create `input_spec.ini` as (alignedPadded,mask,thumbnail). `python warp_crop.py --input_spec input_spec.ini --op_id from_padded_to_none`.
+
+------------------------------------------------------------------------------------------------------------------------
+##### Running Notes
+
+
+------------------------------------------------------------------------------------------------------------------------
  
 ### Local adaptive intensity normalization
 - Create `input_spec.ini` as (None,Ntb,raw). `python normalize_intensity_adaptive.py input_spec.ini NtbNormalizedAdaptiveInvertedGamma`
