@@ -8,6 +8,8 @@
  3. Registration
  4. Visualization
  5. Atlas Building
+ 
+<br/><br/>
 
 # Information for the Developer
 
