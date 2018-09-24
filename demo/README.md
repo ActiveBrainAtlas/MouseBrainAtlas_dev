@@ -17,6 +17,8 @@
 
 # Demos
 
+It is recommended to run the [walk-through](demo_tutorial.ipynb) (ipython notebook) interactively.
+
 This demo suite shows how to align three structures (12N, 3N_R, 4N_R) in a subject brain (DEMO998) with the atlas (atlasV7). 
 
 Each demo shows one of the essential steps of the pipeline:
@@ -56,6 +58,7 @@ Note that the `input_spec.ini` files for most steps are different and must be ma
 
 To use GUIs, install PyQt4 into the virtualenv according to [this answer](https://stackoverflow.com/a/28850104).
 
+### Preprocess setup
 - Run `download_demo_data_preprocessing.py` to download 4 JPEG2000 images of the demo brain.
 - **(HUMAN)** create `DEMO998.ini` and put it under `demo_data/brains_info/`
 - Create `DEMO998_input_spec.json`. `python jp2_to_tiff.py DEMO998 DEMO998_input_spec.json`.
