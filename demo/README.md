@@ -1,9 +1,9 @@
 - [Installation](#installation)
 - [Preprocessing](#preprocess)
-- [Compute Patch Features](#compute&nbsp;patch&nbsp;features)
-- [Compute Probability Volumes](#generate\ probability\ volume)
+- [Compute Patch Features](#compute-patch-features)
+- [Compute Probability Volumes](#generate-probability-volume)
 - [Registration](#registration)
-- [Visualize Results](#visualizeregistrationresults)
+- [Visualize Results](#visualize-registration-results)
 
 # Demos
 
