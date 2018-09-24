@@ -1,5 +1,13 @@
 ## mousebrainatlas-data
 All of the following are the main folders inside of the mousebrainatlas-data bucket.
+                           
+### To Delete
+- Dropbox/
+- LGN3Datlas/
+- image_examples/
+- image_examples_raw/
+- lauren_data/                             [Not yet, paper being worked on]
+- stacy_data/
 
 ### To Keep
 - CSHL_SPM/
@@ -34,11 +42,4 @@ All of the following are the main folders inside of the mousebrainatlas-data buc
 - raw_image_histograms_log/
 - raw_image_histograms_log_fullImage/
 - training_examples/
-                            
-### To Delete
-- Dropbox/
-- LGN3Datlas/
-- image_examples/
-- image_examples_raw/
-- lauren_data/                             [Not yet, paper being worked on]
-- stacy_data/
+ 
