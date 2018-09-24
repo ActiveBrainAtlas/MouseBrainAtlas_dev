@@ -149,12 +149,24 @@ DATA_ROOTDIR/
 
 ### Global intensity normalization
 - Create `input_spec.ini` as (None,Ntb,thumbnail). `python normalize_intensity.py input_spec.ini NtbNormalized`
+
+------------------------------------------------------------------------------------------------------------------------
+##### Running Notes
+
+------------------------------------------------------------------------------------------------------------------------
+
 ### Intra-stack align
 - **(HUMAN)** Browse thumbnails to verify orientations are all correct.
 - **(HUMAN)** Create `from_none_to_aligned.ini` to describe intra-stack alignment operation.
 - Create `input_spec.ini` as (None,NtbNormalized,thumbnail). Note that in this file specify `sorted_image_name_list` rather than `image_name_list`. `python align_compose.py input_spec.ini --op from_none_to_aligned`
 - `python warp_crop.py --input_spec input_spec.ini --op_id from_none_to_padded`
 - **(HUMAN)** Inspect aligned images using preprocessGUI `preprocess_gui.py`, correct pairwise transforms and check each image's order in stack.
+
+------------------------------------------------------------------------------------------------------------------------
+##### Running Notes
+
+------------------------------------------------------------------------------------------------------------------------
+
 ### Create masks
 - **(HUMAN)** On a machine with monitor, launch the maskingGUI. `DATA_ROOTDIR=/media/yuncong/brainstem/home/yuncong/MouseBrainAtlas/demo/demo_data python mask_editing_tool_v4.py DEMO998`.
 Draw initial snake contours.
@@ -166,22 +178,36 @@ Draw initial snake contours.
 ------------------------------------------------------------------------------------------------------------------------
 ##### Running Notes
 
-
 ------------------------------------------------------------------------------------------------------------------------
  
 ### Local adaptive intensity normalization
 - Create `input_spec.ini` as (None,Ntb,raw). `python normalize_intensity_adaptive.py input_spec.ini NtbNormalizedAdaptiveInvertedGamma`
+
+------------------------------------------------------------------------------------------------------------------------
+##### Running Notes
+
+------------------------------------------------------------------------------------------------------------------------
 
 ### Whole-slice crop
 - **(HUMAN)** Create `from_none_to_wholeslice.ini`. In this file specify the cropbox for the domain `alignedWithMargin ` based on `alignedPadded` images. This cropbox can also be automatically inferred as padding 20 thumbnail-resolution pixels surrounding the `alignedPadded` masks.
 - Create `input_spec.ini` as (None,NtbNormalizedAdaptiveInvertedGamma,raw). `python warp_crop.py --input_spec input_spec.ini --op_id from_none_to_wholeslice`
 - Create `input_spec.ini` as (alignedWithMargin,NtbNormalizedAdaptiveInvertedGamma,raw). `python rescale.py input_spec.ini thumbnail -f 0.03125`
 
+------------------------------------------------------------------------------------------------------------------------
+##### Running Notes
+
+------------------------------------------------------------------------------------------------------------------------
+
 ### Brainstem crop
 - **(HUMAN)** Create `from_wholeslice_to_brainstem.ini`. Specify prep2 (alignedBrainstemCrop) cropping box, based on alignedWithMargin or alignedPadded thumbnails.
 - Create `input_spec.ini` as (alignedWithMargin,NtbNormalizedAdaptiveInvertedGamma,raw). `python warp_crop.py --input_spec input_spec.ini --op_id from_wholeslice_to_brainstem`
 - Create `input_spec.ini` as (alignedBrainstemCrop,NtbNormalizedAdaptiveInvertedGamma,raw). `python rescale.py input_spec.ini thumbnail -f 0.03125`
 - Use the same `input_spec.ini` as previous step. `python compress_jpeg.py input_spec.ini`
+
+------------------------------------------------------------------------------------------------------------------------
+##### Running Notes
+
+------------------------------------------------------------------------------------------------------------------------
 
 ## (Optional) Obtain a simple global alignment
 
