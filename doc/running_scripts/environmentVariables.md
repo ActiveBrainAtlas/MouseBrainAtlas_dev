@@ -8,8 +8,8 @@ This file should be run with `$ source ./setup/config.sh` to set the repository 
 ```python	
 PROJECT_DIR is 'the root directory of the repository. Contains src/ doc/ etc...'
 REPO_DIIR is 'the directory holding the code, should be PROJECT_DIR/src/'
-ROOT_DIR is 'the root of the data sub-directories, all downloaded data goes here'
-DATA_ROOTDIR is 'this is where high level data past the preprocessing stage is saved'
+ROOT_DIR is 'all downloaded data past the preprocessing stage is stored here'
+DATA_ROOTDIR is 'this is where high level data gnerated during the preprocessing stage is saved'
 THUMBNAIL_DATA_ROOTDIR is 'this is for most preprocessing outputs, location of downsampled images'
 ```	
 
