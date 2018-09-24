@@ -3,8 +3,8 @@
 - [Preprocessing](#1-preprocessing-stage)
 - [Computing Patch Features](#2-patch-feature-stage)
 - [Generating Probability Volumes](#3-probability-volume-stage)
-- [Registration](#4-registration/visualization-stage)
-- [Visualize Results](#5-atlas-building-stage)
+- [Registration and Visualization](#4-registration/visualization-stage)
+- [Atlas Building](#5-atlas-building-stage)
 
 # Master File List
 
@@ -12,7 +12,7 @@ This document is meant to contain an exhaustive list of every file generated thr
 
 ## 1) Preprocessing Stage
 
-### CSHL_data_processed
+### CSHL_data_processed/
 
 
 ## 2) Patch Features Stage
