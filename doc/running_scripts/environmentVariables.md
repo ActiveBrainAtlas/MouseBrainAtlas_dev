@@ -15,7 +15,7 @@ THUMBNAIL_DATA_ROOTDIR is 'this is for most preprocessing outputs, location of d
 
 During Alex's testing on the Atlas computer these variables were set to: 
 ```python	
-PROJECT_DIR = $PWD/../
+PROJECT_DIR = $PWD/..
 REPO_DIR = $PROJECT_DIR/src/
 ROOT_DIR = /media/alexn/BstemAtlasDataBackup/demo/
 DATA_ROOTDIR = /media/alexn/BstemAtlasDataBackup/demo/
