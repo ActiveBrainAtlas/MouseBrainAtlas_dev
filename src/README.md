@@ -1,6 +1,8 @@
 ## Source Code
 
-In this directory lies all necessary source code for the Atlas to function properly. Other code outside the src/ folder simply drives the program by calling theses scripts. Below is a description of what each folder contains as well as whree it fits into the pipeline.
+In this directory lies all necessary source code for the Atlas to function properly. Other code outside the src/ folder simply drives the program by calling theses scripts. Below is a description of what each folder contains as well as where it fits into the pipeline.
+
+Note: This folder still being worked on. 70% Complete
 
 ### Folders
 
