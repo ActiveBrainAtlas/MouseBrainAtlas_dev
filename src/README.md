@@ -5,24 +5,24 @@ In this directory lies all necessary source code for the Atlas to function prope
 ### Folders
 
 - 3d
- - ?
+  - ?
 - annotation
- - ?
+  - ?
 - gui
- - Step 1 primarily
- - Step ?
+  - Step 1 primarily
+  - Step ?
 - learning
- - Step 0
+  - Step 0
 - preprocess
- - Step 1
+  - Step 1
 - preprocess_AN
- - To be deleted
+  - To be deleted
 - reconstruct
- - Step 5?
+  - Step 5?
 - registration
- - Step 3
+  - Step 3
 - utilities
- - Stores utility functions and global variables used throughout
+  - Stores utility functions and global variables used throughout
 
 ### List of Steps in the Pipeline
 
