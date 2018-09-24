@@ -14,7 +14,7 @@
 # Information for the Developer
 
 ## In Depth Atlas Scripts
-In depth description of each of the [Atlas Scripts](running_scripts/README.md) which includes all input files, output files, and input arguments for every script.
+Here is documentation of [Atlas Scripts in-depth](running_scripts/README.md) which includes all input files, output files, and input arguments for every script.
 
 
 ## Server Information
