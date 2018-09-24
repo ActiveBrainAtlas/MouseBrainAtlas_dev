@@ -1,4 +1,4 @@
-# Information for user
+# Information for the User
 
 *  __[Atlas Scripts](../demo/README.md)__: A set of scripts that encapsulate the pipeline of the Atlas project. The user must simply enter the listed commands step by step.
 
@@ -9,7 +9,7 @@
  4. Visualization
  5. Atlas Building
 
-# Information for developer
+# Information for the Developer
 
 ## In Depth Atlas Scripts
 In depth description of each of the [Atlas Scripts](running_scripts/README.md) which includes all input files, output files, and input arguments for every script.
