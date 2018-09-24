@@ -1,4 +1,4 @@
 # MouseBrainAtlas_dev
 
-* [Scripts](Demo):   The scripts for performing the stack processing pipeline.
-* [Doc](Doc):        Documentation for user and for developer.
+* [Scripts](./demo/README.md):   The scripts for performing the stack processing pipeline.
+* [Doc](./doc/README.MD):        Documentation for user and for developer.
