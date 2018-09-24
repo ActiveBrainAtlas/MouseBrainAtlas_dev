@@ -1,7 +1,9 @@
+## Table of Contents
+
 - [Installation](#installation)
 - [Preprocessing](#preprocess)
 - [Compute Patch Features](#compute-patch-features)
-- [Compute Probability Volumes](#generate-probability-volume)
+- [Generate Probability Volumes](#generate-probability-volumes)
 - [Registration](#registration)
 - [Visualize Results](#visualize-registration-results)
 
