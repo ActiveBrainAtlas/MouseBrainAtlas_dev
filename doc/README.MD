@@ -1,17 +1,18 @@
 # Information for user
 
-*  __[Atlas Scripts](../demo/README.md)__ A set of python scripts for running the following steps 
+*  __[Atlas Scripts](../demo/README.md)__: A set of scripts that encapsulate the pipeline of the Atlas project. The user must simply enter the listed commands step by step.
 
  0. Training Classifier  [not ready]
- 1. Preprocessing [note ready]
+ 1. Preprocessing [being tested]
  2. Detection
  3. Registration
  4. Visualization
  5. Atlas Building
 
 # Information for developer
+
 ## In Depth Atlas Scripts
-In depth description of each of the [Atlas Scripts](running_scripts/README.md).
+In depth description of each of the [Atlas Scripts](running_scripts/README.md) which includes all input files, output files, and input arguments for every script.
 
 
 ## Server Information
