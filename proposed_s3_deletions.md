@@ -6,7 +6,7 @@ All of the following are the main folders inside of the mousebrainatlas-data buc
 - LGN3Datlas/
 - image_examples/
 - image_examples_raw/
-- lauren_data/                             [Not yet, paper being worked on]
+- lauren_data/                             __[Not yet, paper still being worked on]__
 - stacy_data/
 
 ### To Keep
