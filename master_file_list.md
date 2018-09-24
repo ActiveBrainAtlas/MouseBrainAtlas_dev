@@ -1,10 +1,10 @@
 ## Table of Contents
 
 - [Preprocessing](#1-preprocessing-stage)
-- [Computing Patch Features](#compute-patch-features)
-- [Generating Probability Volumes](#generate-probability-volumes)
-- [Registration](#registration)
-- [Visualize Results](#visualize-registration-results)
+- [Computing Patch Features](#2-patch-feature-stage)
+- [Generating Probability Volumes](#3-probability-volume-stage)
+- [Registration](#4-registration/visualization-stage)
+- [Visualize Results](#5-atlas-building-stage)
 
 # Master File List
 
