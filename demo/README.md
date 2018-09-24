@@ -1,6 +1,6 @@
 # Demos
 
-It is recommended to follow the [walk-through](demo_tutorial.ipynb) (ipython notebook).
+It is recommended to run the [walk-through](demo_tutorial.ipynb) (ipython notebook) interactively.
 
 This demo suite shows how to align three structures (12N, 3N_R, 4N_R) in a subject brain (DEMO998) with the atlas (atlasV7). 
 
