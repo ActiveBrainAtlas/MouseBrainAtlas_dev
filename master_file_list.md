@@ -13,12 +13,20 @@ This document is meant to contain an exhaustive list of every file generated thr
 ## 1) Preprocessing Stage
 
 ### CSHL_data_processed/
+Contains ALL preprocessing data from the inputs `SLICE_lossless.jp2` to the final outputs `SLICE_prep2_raw_NtbNormalizedAdaptiveInvertedGamma.tif`
+
 
 
 ## 2) Patch Features Stage
 
+
+
 ## 3) Probability Volume Stage
 
+
+
 ## 4) Registration/Visualization Stage
+
+
 
 ## 5) Atlas Bulding Stage
