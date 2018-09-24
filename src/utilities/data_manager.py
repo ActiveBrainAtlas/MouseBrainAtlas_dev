@@ -5508,15 +5508,9 @@ def generate_metadata_cache():
             metadata_cache['section_limits'][stack] = DataManager.load_section_limits_v2(stack, prep_id=2)
         except Exception as e:
 	    sys.stderr.write("Failed to cache %s section_limits: %s\n" % (stack, e.message))
-<<<<<<< HEAD
-
-	try:
-            # alignedBrainstemCrop cropping box
-=======
      
         try:
             # alignedBrainstemCrop cropping box relative to alignedpadded
->>>>>>> 0c04b98d07f6f6b694c8fc1d63afd7a014566087
             metadata_cache['cropbox'][stack] = DataManager.load_cropbox_v2(stack, prep_id=2)
         except Exception as e:
 	    sys.stderr.write("Failed to cache %s cropbox: %s\n" % (stack, e.message))
