@@ -56,7 +56,8 @@ section_thickness_um = 20
 ```
 - Create `DEMO998_input_spec.json`. `python jp2_to_tiff.py DEMO998 DEMO998_input_spec.json`.
   - Accomplished with the following:
-    - Note that `data_dirs` should be set to your `DATA_ROOTDIR`
+    - Note that `data_dirs`, `filepath_to_imageName_mapping`, and `imageName_to_filepath_mapping` all must be changed by the user currently. I am trying to automate this
+  - The Jp2_to_tiff.py file seems to also requires user to download `DATA_ROOTDIR/CSHL_data_processed/DEMO998/DEMO998_sorted_filenames.txt`
 ```
 %%writefile DEMO998_input_spec.json
 [
