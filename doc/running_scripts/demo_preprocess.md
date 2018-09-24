@@ -6,11 +6,73 @@ Note that the `input_spec.ini` files for most steps are different and must be ma
 
 To use GUIs, install PyQt4 into the virtualenv according to [this answer](https://stackoverflow.com/a/28850104).
 
+### Preprocess Setup
 - Run `download_demo_data_preprocessing.py` to download 4 JPEG2000 images of the demo brain.
 - **(HUMAN)** create `DEMO998.ini` and put it under `demo_data/brains_info/`
 - Create `DEMO998_input_spec.json`. `python jp2_to_tiff.py DEMO998 DEMO998_input_spec.json`.
 - Create `input_spec.ini` as (None,None,raw). `python extract_channel.py input_spec.ini 2 Ntb`
 - Create `input_spec.ini` as (None,Ntb,raw). `python rescale.py input_spec.ini thumbnail -f 0.03125`
+
+------------------------------------------------------------------------------------------------------------------------
+##### Running Notes
+- Run `download_demo_data_preprocessing.py` to download 4 JPEG2000 images of the demo brain.
+  - Downloads the following files
+  - Note: The user must create `STACK.ini` themselves for actual script.
+```
+DATA_ROOTDIR/
+│
+├── brains_info
+│   └── DEMO998.ini
+├── jp2_files
+│   └── DEMO998
+│       ├── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_lossless.jp2
+│       ├── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_lossless.jp2
+│       └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_lossless.jp2
+├── mxnet_models
+│   └── inception-bn-blue
+│       ├── inception-bn-blue-0000.params
+│       ├── inception-bn-blue-symbol.json
+│       └── mean_224.npy
+└── operation_configs
+    ├── crop_orig.ini
+    ├── from_aligned_to_none.ini
+    ├── from_aligned_to_padded.ini
+    ├── from_aligned_to_wholeslice.ini
+    ├── from_none_to_aligned.ini
+    ├── from_none_to_brainstem.ini
+    ├── from_none_to_padded.ini
+    ├── from_none_to_wholeslice.ini
+    ├── from_padded_to_brainstem.ini
+    ├── from_padded_to_none.ini
+    └── from_wholeslice_to_brainstem.ini
+```
+- **(HUMAN)** create `DEMO998.ini` and put it under `demo_data/brains_info/`
+  - The following is the contents of the file for this demo:
+```
+[DEFAULT]
+planar_resolution_um = 0.46
+section_thickness_um = 20
+
+```
+- Create `DEMO998_input_spec.json`. `python jp2_to_tiff.py DEMO998 DEMO998_input_spec.json`.
+  - Accomplished with the following:
+    - Note that `data_dirs` should be set to your `DATA_ROOTDIR`
+```
+%%writefile DEMO998_input_spec.json
+[
+    {"version": null, 
+ "resolution": "raw", 
+     "data_dirs": "/home/yuncong/MouseBrainAtlas/demo/demo_data/jp2_files/DEMO998/", 
+     "filepath_to_imageName_mapping": "/home/yuncong/MouseBrainAtlas/demo/demo_data/jp2_files/DEMO998/(.*)?_lossless.jp2", 
+     "imageName_to_filepath_mapping": "/home/yuncong/MouseBrainAtlas/demo/demo_data/jp2_files/DEMO998/%s_lossless.jp2"
+    }
+]
+```
+- Create `input_spec.ini` as (None,None,raw). `python extract_channel.py input_spec.ini 2 Ntb`
+- Create `input_spec.ini` as (None,Ntb,raw). `python rescale.py input_spec.ini thumbnail -f 0.03125`
+
+------------------------------------------------------------------------------------------------------------------------
+
 ### Global intensity normalization
 - Create `input_spec.ini` as (None,Ntb,thumbnail). `python normalize_intensity.py input_spec.ini NtbNormalized`
 ### Intra-stack align
