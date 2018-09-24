@@ -28,13 +28,12 @@ parser = argparse.ArgumentParser(
 parser.add_argument("--fixed_brain_spec", type=str, help="Fixed brain specification, json", default='demo_fixed_brain_spec_12N.json')
 parser.add_argument("--moving_brain_spec", type=str, help="Moving brain specification, json", default='demo_moving_brain_spec_12N.json')
 parser.add_argument("-r", "--registration_setting", type=int, help="Registration setting, int, defined in registration_settings.csv", default=7)
-parser.add_argument("-g", "--use_simple_global", action='store_false', help="Set this flag to NOT initialize with simple global registration")
+parser.add_argument("-g", "--use_simple_global", action='store_true', help="Set this flag to initialize with simple global registration")
 # parser.add_argument("--out_dir", type=str, help="Output directory")
 args = parser.parse_args()
 
-file_prefix = '/home/alexn/brainDev/demo/'
-brain_f_spec = load_json(file_prefix+args.fixed_brain_spec)
-brain_m_spec = load_json(file_prefix+args.moving_brain_spec)
+brain_f_spec = load_json(args.fixed_brain_spec)
+brain_m_spec = load_json(args.moving_brain_spec)
 registration_setting = args.registration_setting
 use_simple_global = args.use_simple_global
 
@@ -84,7 +83,7 @@ aligner.set_label_weights(label_weights=aligner_parameters['label_weights_m'])
 ################################
 
 if use_simple_global:
-    T_atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol = bp.unpack_ndarray_file(os.path.join(ROOT_DIR, 'CSHL_simple_global_registration', brain_f_spec['name'] + '_T_atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol.bp'))
+    T_atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol = np.loadtxt(os.path.join(DATA_ROOTDIR, 'CSHL_simple_global_registration', brain_f_spec['name'] + '_T_atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol.txt'))
     aligner.set_initial_transform(T_atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol)
     aligner.set_centroid(centroid_m='structure_centroid', centroid_f='centroid_m')
 else:

@@ -3129,10 +3129,10 @@ def draw_scoremap(clfs, scheme, stack, win_id, prep_id=2,
         roi_xmin, roi_xmax, roi_ymin, roi_ymax = bbox
         roi_w = roi_xmax + 1 - roi_xmin
         roi_h = roi_ymax + 1 - roi_ymin
-
+        
     if fn is None:
         fn = metadata_cache['sections_to_filenames'][stack][sec]
-
+        
     ##########################################################################################
 
     t = time.time()
@@ -3155,7 +3155,7 @@ def draw_scoremap(clfs, scheme, stack, win_id, prep_id=2,
                                                     win_id=win_id,
                               normalization_scheme=scheme,
                                              model_name=model_name)
-
+        
         location_to_index = {tuple(loc): idx for idx, loc in enumerate(locations)}
         sample_locations_roi_set = set(map(tuple, sample_locations_roi))
         locations_set = set(map(tuple, locations))

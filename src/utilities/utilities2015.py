@@ -250,6 +250,8 @@ def load_data(fp, polydata_instead_of_face_vertex_list=True, download_s3=True):
         data = np.loadtxt(fp)
     elif fp.endswith('.png') or fp.endswith('.tif'):
         data = imread(fp)
+    elif fp.endswith('.ini'):
+	data = load_ini(fp)
     else:
         raise
 
@@ -1487,9 +1489,6 @@ def save_json(obj, fp):
         json.dump(obj, f)
 
 def load_json(fp):
-    print '************************************'
-    print fp
-    print '************************************'
     with open(fp, 'r') as f:
         return json.load(f)
 

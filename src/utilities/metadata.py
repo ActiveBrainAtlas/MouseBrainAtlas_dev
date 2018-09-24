@@ -159,21 +159,20 @@ elif hostname == 'yuncong-Precision-WorkStation-T7500' and username == 'alexn':
     if 'DATA_ROOTDIR' in os.environ:
         DATA_ROOTDIR = os.environ['DATA_ROOTDIR']
     else:
-        DATA_ROOTDIR = '/media/alexn/BstemAtlasDataBackup'
+        DATA_ROOTDIR = '/home/alexn/data'
 
     if 'THUMBNAIL_DATA_ROOTDIR' in os.environ:
         THUMBNAIL_DATA_ROOTDIR = os.environ['THUMBNAIL_DATA_ROOTDIR']
     else:
-        THUMBNAIL_DATA_ROOTDIR = '/media/alexn/BstemAtlasDataBackup'
+        THUMBNAIL_DATA_ROOTDIR = '/home/alexn/data'
 
     RAW_DATA_DIR = os.path.join(DATA_ROOTDIR, 'CSHL_data')
 
     ON_AWS = False
-    S3_DATA_BUCKET = 'mousebrainatlas-data'
-    S3_RAWDATA_BUCKET = 'mousebrainatlas-rawdata'
+    S3_DATA_BUCKET = 'mousebrainatlas-data-alexn'
+    S3_RAWDATA_BUCKET = 'mousebrainatlas-rawdata-alexn'
 
     REPO_DIR = os.environ['REPO_DIR']
-    print 'REPO_DIR = ' + REPO_DIR
 
     DATA_DIR = os.path.join(DATA_ROOTDIR, 'CSHL_data_processed')
 
@@ -501,7 +500,6 @@ def convert_to_surround_name(name, margin=None, suffix=None):
 
 #######################################
 
-print 'DATASET_SETTINGS_CSV: '+DATASET_SETTINGS_CSV
 from pandas import read_csv
 dataset_settings = read_csv(DATASET_SETTINGS_CSV, header=0, index_col=0)
 classifier_settings = read_csv(CLASSIFIER_SETTINGS_CSV, header=0, index_col=0)
@@ -594,8 +592,7 @@ XY_PIXEL_DISTANCE_TB_AXIOSCAN = XY_PIXEL_DISTANCE_LOSSLESS_AXIOSCAN * 32
 #all_annotated_stacks = all_annotated_nissl_stacks + all_annotated_ntb_stacks
 
 all_nissl_stacks = []
-all_ntb_stacks = ['DEMO998','DEMO999','MD662']
-all_ntb_stacks = ['DEMO999']
+all_ntb_stacks = ['DEMO998']
 all_stacks = all_nissl_stacks + all_ntb_stacks
 
 BRAINS_INFO_DIR = os.path.join(DATA_ROOTDIR, 'brains_info')
@@ -626,15 +623,12 @@ def load_ini(fp, split_newline=True, convert_none_str=True, section='DEFAULT'):
     return input_spec
 
 planar_resolution = {}
-try:
+if os.path.exists(BRAINS_INFO_DIR):
     for brain_ini in os.listdir(BRAINS_INFO_DIR):
         brain_name = os.path.splitext(brain_ini)[0]
         brain_info = load_ini(os.path.join(BRAINS_INFO_DIR, brain_ini))
         planar_resolution[brain_name] = float(brain_info['planar_resolution_um'])
-except:
-    print "ERROR IN METADATA. NO BRAINS_INFO FOLDER. LINE 630"
-    print 'BRAINS_INFO_DIR: '
-    print BRAINS_INFO_DIR
+
 print planar_resolution
 
 

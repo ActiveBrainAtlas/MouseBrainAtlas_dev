@@ -102,9 +102,10 @@ out_resolution_um = convert_resolution_string_to_um(resolution=output_resolution
 valid_secmin = np.min(metadata_cache['valid_sections'][stack])
 valid_secmax = np.max(metadata_cache['valid_sections'][stack])
 
-registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners = \
-load_json(os.path.join(ROOT_DIR, 'CSHL_simple_global_registration',
-                       stack + '_registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners.json'))
+fp = os.path.join(DATA_ROOTDIR, 'CSHL_simple_global_registration',
+        stack + '_registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners.json')
+
+registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners = load_json(fp)
 
 ######## Identify ROI based on simple global alignment ########
 
@@ -116,14 +117,17 @@ section_margin = int(section_margin_um / SECTION_THICKNESS)
 image_margin_um = 2000.
 image_margin = int(np.round(image_margin_um / convert_resolution_string_to_um('raw', stack)))
 
-
 for name_u in structure_list:
 
     if name_u in singular_structures:
 
         (xmin, ymin, secmin), (xmax, ymax, secmax) = registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners[name_u]
 
-        for sec in range(max(secmin - section_margin, valid_secmin), min(secmax + 1 + section_margin, valid_secmax)):
+<<<<<<< HEAD
+        for sec in range(max(secmin - section_margin, valid_secmin), min(secmax + 1 + section_margin, valid_secmax) + 1):
+=======
+        for sec in range(max(secmin - section_margin, valid_secmin), min(secmax + 1 + section_margin, valid_secmax)+1):
+>>>>>>> 0c04b98d07f6f6b694c8fc1d63afd7a014566087
 
             if is_invalid(sec=sec, stack=stack):
                 continue
@@ -138,27 +142,38 @@ for name_u in structure_list:
         a = defaultdict(list)
 
         lname = convert_to_left_name(name_u)
-        (xmin, ymin, secmin), (xmax, ymax, secmax) = registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners[lname]
+    	if lname in registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners:
+            (xmin, ymin, secmin), (xmax, ymax, secmax) = registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners[lname]
 
-        for sec in range(max(secmin - section_margin, valid_secmin), min(secmax + 1 + section_margin, valid_secmax)):
+<<<<<<< HEAD
+        for sec in range(max(secmin - section_margin, valid_secmin), min(secmax + 1 + section_margin, valid_secmax) + 1):
+=======
+            for sec in range(max(secmin - section_margin, valid_secmin), min(secmax + 1 + section_margin, valid_secmax)+1):
+>>>>>>> 0c04b98d07f6f6b694c8fc1d63afd7a014566087
 
-            if is_invalid(sec=sec, stack=stack):
-                continue
+                if is_invalid(sec=sec, stack=stack):
+                    continue
 
-            a[sec].append((max(xmin - image_margin, 0),
+                a[sec].append((max(xmin - image_margin, 0),
              xmax + image_margin,
              max(ymin - image_margin, 0),
              ymax + image_margin))
 
+
         rname = convert_to_right_name(name_u)
-        (xmin, ymin, secmin), (xmax, ymax, secmax) = registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners[rname]
+    	if rname in registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners:
+            (xmin, ymin, secmin), (xmax, ymax, secmax) = registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners[rname]
 
-        for sec in range(max(secmin - section_margin, valid_secmin), min(secmax + 1 + section_margin, valid_secmax)):
+<<<<<<< HEAD
+        for sec in range(max(secmin - section_margin, valid_secmin), min(secmax + 1 + section_margin, valid_secmax) + 1):
+=======
+            for sec in range(max(secmin - section_margin, valid_secmin), min(secmax + 1 + section_margin, valid_secmax)+1):
+>>>>>>> 0c04b98d07f6f6b694c8fc1d63afd7a014566087
 
-            if is_invalid(sec=sec, stack=stack):
-                continue
+                if is_invalid(sec=sec, stack=stack):
+                    continue
 
-            a[sec].append((max(xmin - image_margin, 0),
+                a[sec].append((max(xmin - image_margin, 0),
              xmax + image_margin,
              max(ymin - image_margin, 0),
              ymax + image_margin))
@@ -188,7 +203,8 @@ for name_u in structure_list:
             ############# Generate both scoremap and viz #################
 
             viz_all_landmarks, scoremap_all_landmarks = \
-            draw_scoremap(clfs={name_u: clfs[name_u]}, 
+            draw_scoremap(clfs={name_u: clfs[name_u]},
+                                      bbox=bbox,
                             scheme='none',
                         win_id=win_id, prep_id=2,
                         stack=stack,
@@ -272,10 +288,14 @@ for name_u in structure_list:
 
 #         for sec in metadata_cache['valid_sections'][stack]:
 
+	if name_s not in registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners:
+	    sys.stderr.write("Score volume ROI derived from simple global alignment does not exist. Skip generating score volume.\n")
+	    continue
+
         (xmin, ymin, s1), (xmax, ymax, s2) = registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners[name_s]
 
         for sec in range(max(s1 - section_margin, metadata_cache['section_limits'][stack][0]),
-                         min(s2 + 1 + section_margin, metadata_cache['section_limits'][stack][1])):
+                         min(s2 + 1 + section_margin, metadata_cache['section_limits'][stack][1])+1):
 
             if is_invalid(sec=sec, stack=stack):
                 continue
