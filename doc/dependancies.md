@@ -1,3 +1,14 @@
+## Software Requirements
+opencv-python==3.4.1.15
+scikit-image==0.13.1
+scikit-learn==0.19.1
+matplotlib==2.2.2
+pandas==0.23.0
+bloscpack==0.9.0
+multiprocess==0.70.4
+shapely==1.6.4
+randomcolor==0.4.4.5
+
 ## Dependancies
 
 Everything below is listed with the following format:
