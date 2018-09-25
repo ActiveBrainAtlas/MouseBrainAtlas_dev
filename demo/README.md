@@ -57,8 +57,7 @@ Install ImageMagick 6.8.9.
 Note that the `input_spec.ini` files for most steps are different and must be manually created according to the actual input. In the following instructions, "create `input_spec.ini` as (prep_id, version, resolution)" means using the same set of image names as `image_name_list` but set the `prep_id`, `version` and `resolution` accordingly.
 
 To use GUIs, install PyQt4 into the virtualenv according to [this answer](https://stackoverflow.com/a/28850104).
-
-### Preprocess setup
+### Preprocess Setup
 - Run `download_demo_data_preprocessing.py` to download 4 JPEG2000 images of the demo brain.
 - **(HUMAN)** create `DEMO998.ini` and put it under `demo_data/brains_info/`
 - Create `DEMO998_input_spec.json`. `python jp2_to_tiff.py DEMO998 DEMO998_input_spec.json`.
@@ -150,3 +149,13 @@ The complete set of overlay images are under `CSHL_registration_visualization/DE
 
 
 Input and expected output will be downloaded from an open S3 bucket
+
+----------------
+
+## Learn structure textures
+
+- Generate annotation boundaries using `brain_labeling_gui_v28.py`.
+- Assign class labels to image patches, according to manually annotated boundaries. `python label_patches.py DEMO998 --win_id 7`
+- Train classifiers. `python train_classifiers.py DEMO998 --win_id 7 --classifier_id 898 --structure_list "[\"3N\"]"`
+
+## Estimate structure shapes and positions
