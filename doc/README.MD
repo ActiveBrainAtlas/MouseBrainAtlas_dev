@@ -2,7 +2,8 @@
 
 __[Atlas Scripts](../demo/README.md)__: A set of scripts that encapsulate the pipeline of the Atlas project. The user must simply enter the listed commands step by step.
 
-The following is every step of the pipeline:
+The pipeline can be broken down into the following steps:
+
  0. Training Classifier  [not ready]
  1. Preprocessing [being tested]
  2. Detection
