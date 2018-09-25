@@ -174,7 +174,34 @@ DATA_ROOTDIR/
 
 ------------------------------------------------------------------------------------------------------------------------
 ##### Running Notes
+Output from running `python align_compose.py input_spec.ini --op from_none_to_aligned`
+```
+└── CSHL_data_processed
+    └── DEMO998
+        ├── DEMO998_elastix_output
+        │   ├── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_to_MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242
+        │   │   ├── elastix.log
+        │   │   ├── IterationInfo.0.R0.txt
+        │   │   ├── IterationInfo.0.R1.txt
+        │   │   ├── IterationInfo.0.R2.txt
+        │   │   ├── IterationInfo.0.R3.txt
+        │   │   ├── IterationInfo.0.R4.txt
+        │   │   ├── IterationInfo.0.R5.txt
+        │   │   ├── result.0.tif
+        │   │   └── TransformParameters.0.txt
+        │   └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_to_MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250
+        │       ├── elastix.log
+        │       ├── IterationInfo.0.R0.txt
+        │       ├── IterationInfo.0.R1.txt
+        │       ├── IterationInfo.0.R2.txt
+        │       ├── IterationInfo.0.R3.txt
+        │       ├── IterationInfo.0.R4.txt
+        │       ├── IterationInfo.0.R5.txt
+        │       ├── result.0.tif
+        │       └── TransformParameters.0.txt
+        └── DEMO998_transforms_to_anchor.csv
 
+```
 ------------------------------------------------------------------------------------------------------------------------
 
 ### Create masks
