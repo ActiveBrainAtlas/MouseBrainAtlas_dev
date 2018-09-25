@@ -152,6 +152,16 @@ DATA_ROOTDIR/
 
 ------------------------------------------------------------------------------------------------------------------------
 ##### Running Notes
+- Output of `python normalize_intensity.py input_spec.ini NtbNormalized`
+- From now on the `input_spec.ini` file contents that are used will remain in the notebook.
+```
+DATA_ROOTDIR/
+        |
+        └── DEMO998_thumbnail_NtbNormalized
+            ├── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_thumbnail_NtbNormalized.tif
+            ├── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_thumbnail_NtbNormalized.tif
+            └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_thumbnail_NtbNormalized.tif
+```
 
 ------------------------------------------------------------------------------------------------------------------------
 
