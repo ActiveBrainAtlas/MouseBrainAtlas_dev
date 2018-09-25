@@ -958,6 +958,7 @@ def convert_annotation_v3_original_to_aligned(contour_df, stack):
 
     return contour_df_out
 
+
 def convert_annotation_v3_original_to_aligned_cropped_v2(contour_df, stack, out_resolution, prep_id=2):
     """
     Convert contours defined wrt original reference frame in raw resolution to
@@ -994,8 +995,9 @@ def convert_annotation_v3_original_to_aligned_cropped_v2(contour_df, stack, out_
 
     return contour_df
 
+convert_annotation_v3_original_to_aligned_cropped = convert_annotation_v3_original_to_aligned_cropped_v2
 
-def convert_annotation_v3_aligned_cropped_to_original_v2(contour_df, stack, resolution=1, prep_id=2):
+def convert_annotation_v3_aligned_cropped_to_original_v2(contour_df, stack, resolution='raw', prep_id=2):
     """
     Convert contours defined wrt aligned cropped frame in resolution to
     contours defined wrt orignal unprocessed image frame in the raw resolution.
