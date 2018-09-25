@@ -137,7 +137,7 @@ Input and expected output will be downloaded from an open S3 bucket
 
 ## Train classifiers
 
-### Assign class labels to image patches, according to manually annotated boundaries.
+### Assign class labels to image patches, according to manually annotated boundaries
 
 `python label_patches.py DEMO998 --win_id 7`
 
