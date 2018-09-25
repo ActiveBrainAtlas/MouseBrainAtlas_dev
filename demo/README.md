@@ -135,7 +135,7 @@ Input and expected output will be downloaded from an open S3 bucket
 
 ----------------
 
-## Train classifiers
+## Learn structure textures
 
 ### Assign class labels to image patches, according to manually annotated boundaries
 
@@ -144,3 +144,5 @@ Input and expected output will be downloaded from an open S3 bucket
 ### Train classifiers
 
 `python train_classifiers.py DEMO998 --win_id 7 --classifier_id 898 --structure_list "[\"3N\"]"`
+
+## Estimate structure shapes and positions
