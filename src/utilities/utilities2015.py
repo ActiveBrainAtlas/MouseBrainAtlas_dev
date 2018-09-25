@@ -175,7 +175,7 @@ def convert_cropbox_to_arr_xywh_1um(data, in_fmt, in_resol, stack=None):
         else:
 	    print in_fmt, data
             raise
-            
+
     arr_xywh_1um = arr_xywh * convert_resolution_string_to_um(stack=stack, resolution=in_resol)
     return arr_xywh_1um
 
@@ -251,7 +251,9 @@ def load_data(fp, polydata_instead_of_face_vertex_list=True, download_s3=True):
     elif fp.endswith('.png') or fp.endswith('.tif'):
         data = imread(fp)
     elif fp.endswith('.ini'):
-	data = load_ini(fp)
+        data = load_ini(fp)
+    elif fp.endswith('.csv'):
+        data = csv_to_dict(fp)
     else:
         raise
 
