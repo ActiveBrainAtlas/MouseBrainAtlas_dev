@@ -824,7 +824,7 @@ class DataManager(object):
                     ts = None
                     if by_human:
                         if suffix is not None:
-                            m = re.match('%(stack)s_annotation_%(suffix)s_(.*)_win%(win_id)d_grid_indices_lookup.hdf' % {'stack':stack, 'win_id':win_id, 'suffix':suffix}, fn)
+                            m = re.match('%(stack)s_annotation%(suffix)s_(.*)_win%(win_id)d_grid_indices_lookup.hdf' % {'stack':stack, 'win_id':win_id, 'suffix': ('_' + suffix) if suffix is not None else ''}, fn)
                             if m is not None:
                                 ts = m.groups()[0]
                         else:
@@ -837,8 +837,9 @@ class DataManager(object):
                             ts = m.groups()[0]
 
                     if ts is None:
-                        print fn
-                    timestamps.append((datetime.strptime(ts, '%m%d%Y%H%M%S'), ts))
+                        print fn, m
+                    else:
+                        timestamps.append((datetime.strptime(ts, '%m%d%Y%H%M%S'), ts))
                 assert len(timestamps) > 0, 'No annotation files can be found.'
                 timestamp = sorted(timestamps)[-1][1]
                 print "latest timestamp: ", timestamp

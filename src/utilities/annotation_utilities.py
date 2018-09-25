@@ -970,7 +970,8 @@ def convert_annotation_v3_original_to_aligned_cropped_v2(contour_df, stack, out_
 
     contour_df = contour_df.copy()
 
-    xmin_down32, _, ymin_down32, _, _, _ = DataManager.load_cropbox(stack, prep_id=prep_id)
+    # xmin_down32, _, ymin_down32, _, _, _ = DataManager.load_cropbox(stack, prep_id=prep_id)
+    xmin_down32, _, ymin_down32, _ = DataManager.load_cropbox_v2(stack, prep_id=prep_id, only_2d=True)
 
     Ts_rawResol = DataManager.load_transforms(stack=stack, resolution='raw', use_inverse=True)
 

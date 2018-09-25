@@ -282,6 +282,9 @@ def save_data(data, fp, upload_s3=True):
             np.savetxt(fp, data)
         else:
             raise
+    elif fp.endswith('.dump'): # sklearn classifiers
+        import joblib
+        joblib.dump(data, fp)
     elif fp.endswith('.png') or fp.endswith('.tif') or fp.endswith('.jpg'):
         imsave(fp, data)
     else:
