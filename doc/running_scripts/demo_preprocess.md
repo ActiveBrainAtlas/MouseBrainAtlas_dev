@@ -177,6 +177,8 @@ DATA_ROOTDIR/
 Output from running `python align_compose.py input_spec.ini --op from_none_to_aligned`
   - NOTE: Some trouble on where to save .ini files. `input_spec.ini` always in repo's demo/ folder. `from_none_to_aligned_content.ini` will be ignored here, save to DATA_ROOTDIR.
 ```
+DATA_ROOTDIR/
+|
 └── CSHL_data_processed
     └── DEMO998
         ├── DEMO998_elastix_output
@@ -201,6 +203,18 @@ Output from running `python align_compose.py input_spec.ini --op from_none_to_al
         │       ├── result.0.tif
         │       └── TransformParameters.0.txt
         └── DEMO998_transforms_to_anchor.csv
+```
+- Output running `python warp_crop.py --input_spec input_spec.ini --op_id from_none_to_padded`
+    - Note: warp_crop.py line 92 changed to load_ini from `DATA_ROOTDIR + 'operation_configs/' + op_name + '.ini'`
+```
+DATA_ROOTDIR/
+|
+└── CSHL_data_processed
+    └── DEMO998
+        └── DEMO998_prep1_thumbnail_NtbNormalized
+            ├── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_prep1_thumbnail_NtbNormalized.tif
+            ├── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_prep1_thumbnail_NtbNormalized.tif
+            └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep1_thumbnail_NtbNormalized.tif
 
 ```
 ------------------------------------------------------------------------------------------------------------------------
