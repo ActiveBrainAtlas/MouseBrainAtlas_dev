@@ -132,3 +132,15 @@ The complete set of overlay images are under `CSHL_registration_visualization/DE
 
 
 Input and expected output will be downloaded from an open S3 bucket
+
+----------------
+
+## Train classifiers
+
+### Label patches
+
+`python label_patches.py DEMO998 --win_id 7`
+
+### Train classifiers
+
+`python train_classifiers.py DEMO998 --win_id 7 --classifier_id 898 --structure_list "[\"3N\"]"`
