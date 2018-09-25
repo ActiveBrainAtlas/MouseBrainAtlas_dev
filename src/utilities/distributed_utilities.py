@@ -302,6 +302,7 @@ def run_distributed5(command, argument_type='single', kwargs_list=None, jobs_per
     for node_i, (fi, li) in enumerate(first_last_tuples_distribute_over(0, len(kwargs_list_as_list)-1, n_hosts)):
 
         temp_script = '/home/yuncong/runall.sh'
+        temp_script = os.path.join(DATA_ROOTDIR,'runall.sh')
         temp_f = open(temp_script, 'w')
 
         for j, (fj, lj) in enumerate(first_last_tuples_distribute_over(fi, li, jobs_per_node)):
@@ -333,8 +334,8 @@ def run_distributed5(command, argument_type='single', kwargs_list=None, jobs_per
             stdout_template = '/home/ubuntu/stdout_%d.log'
             stderr_template = '/home/ubuntu/stderr_%d.log'
         else:
-            stdout_template = '/home/yuncong/stdout_%d.log'
-            stderr_template = '/home/yuncong/stderr_%d.log'
+            stdout_template = os.path.join(DATA_ROOTDIR,'stdout_%d.log')
+            stderr_template = os.path.join(DATA_ROOTDIR,'stderr_%d.log')
         
         if local_only:
             stdout_f = open(stdout_template % node_i, "w")

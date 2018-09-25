@@ -89,6 +89,7 @@ def parse_operation_sequence(op_name, resol, return_str=False, stack=None):
 	op_name = op_name[1:]
 
     op = load_ini('demo_data/operation_configs/' + op_name + '.ini')
+    print 'warp_crop_v3.py LINE 92 IS STUPID FIX THIS WHEN YOU GET TO IT'
     if op is None:
 	raise Exception("Cannot load %s.ini" % op_name)
     if 'operation_sequence' in op: # composite operation

@@ -55,7 +55,13 @@ else:
     assert args.param_fp is not None, "Must provide param_fp"
     elastix_output_dir = args.elastix_output_dir
     params_fp = args.param_fp
-
+    
+    
+print 'RUNNING: ' + "python %(script)s \"%(output_dir)s\" \'%%(kwargs_str)s\' -p %(param_fp)s -r" % \
+                {'script': os.path.join(os.getcwd(), 'align_sequential.py'),
+                'output_dir': elastix_output_dir,
+                 'param_fp': params_fp
+                }
 
 run_distributed("python %(script)s \"%(output_dir)s\" \'%%(kwargs_str)s\' -p %(param_fp)s -r" % \
                 {'script': os.path.join(os.getcwd(), 'align_sequential.py'),
