@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # User can modify this part
-PROJECT_DIR=$PWD/..
+PROJECT_DIR=/home/alexn/brainDev
 virtualenv="mousebrainatlas_virtualenv"
 ##################################################
 

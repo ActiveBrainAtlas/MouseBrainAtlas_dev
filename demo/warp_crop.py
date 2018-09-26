@@ -88,7 +88,9 @@ def parse_operation_sequence(op_name, resol, return_str=False, stack=None):
     if inverse:
 	op_name = op_name[1:]
 
-    op = load_ini('demo_data/operation_configs/' + op_name + '.ini')
+    op_fp = DATA_ROOTDIR + 'operation_configs/' + op_name + '.ini'
+    op = load_ini( op_fp )
+    print 'LOADING: ' + op_fp
     if op is None:
 	raise Exception("Cannot load %s.ini" % op_name)
     if 'operation_sequence' in op: # composite operation
@@ -118,7 +120,7 @@ if args.op_id is not None:
     prep_id = input_spec['prep_id']
     version = input_spec['version']
     resol = input_spec['resol']
-
+    
     op_seq = parse_operation_sequence(args.op_id, resol=resol, return_str=True, stack=stack)
 
     ops_in_prep_id = op_seq[0][2]
