@@ -32,7 +32,7 @@ from distributed_utilities import *
 
 input_spec = load_ini(args.input_spec)
 print input_spec
-image_name_list = input_spec['image_name_list']
+image_name_list = input_spec['sorted_image_name_list']
 stack = input_spec['stack']
 prep_id = input_spec['prep_id']
 if prep_id == 'None':

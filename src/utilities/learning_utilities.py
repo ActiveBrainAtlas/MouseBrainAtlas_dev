@@ -1334,7 +1334,7 @@ def win_id_to_gridspec(win_id, stack=None, image_shape=None):
 
 
 def generate_annotation_to_grid_indices_lookup_v2(stack, by_human, win_id,
-                                               stack_m='atlasV5',
+                                               stack_m,
                                                detector_id_m=None,
                                                 detector_id_f=None,
                                                 warp_setting=17, trial_idx=None,
@@ -1386,10 +1386,13 @@ def generate_annotation_to_grid_indices_lookup_v2(stack, by_human, win_id,
                                                               trial_idx=trial_idx, suffix='contours', timestamp=timestamp,
                                                     return_timestamp=False)
 
-        contours = contours_df[(contours_df['orientation'] == 'sagittal') & (contours_df['downsample'] == 1)]
-        contours = contours.drop_duplicates(subset=['section', 'name', 'side', 'filename', 'downsample', 'creator'])
+        # contours = contours_df[(contours_df['orientation'] == 'sagittal') & (contours_df['downsample'] == 1)]
+        # contours = contours.drop_duplicates(subset=['section', 'name', 'side', 'filename', 'downsample', 'creator'])
+        contours = contours_df[(contours_df['orientation'] == 'sagittal') & (contours_df['resolution'] == 'raw')]
+        contours = contours.drop_duplicates(subset=['section', 'name', 'side', 'filename', 'resolution', 'creator'])
 
-        contours_df = convert_annotation_v3_original_to_aligned_cropped(contours, stack=stack)
+        # contours_df = convert_annotation_v3_original_to_aligned_cropped(contours, stack=stack)
+        contours_df = convert_annotation_v3_original_to_aligned_cropped_v2(contours, stack=stack, out_resolution='raw', prep_id=prep_id)
 
         download_from_s3(DataManager.get_thumbnail_mask_dir_v3(stack=stack, prep_id=prep_id), is_dir=True)
 

@@ -9,7 +9,6 @@ from PyQt4.QtGui import *
 from multiprocess import Pool
 
 sys.path.append(os.environ['REPO_DIR'] + '/utilities')
-print sys.path
 from utilities2015 import *
 from metadata import *
 from data_manager import *

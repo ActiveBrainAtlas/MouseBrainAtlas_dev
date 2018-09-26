@@ -237,7 +237,7 @@ def get_surround_volume_v3(volume, distance=5, wall_level=0, prob=False, return_
     # Identify the bounding box for the surrouding area.
 
     vol, origin = volume
-    
+
     # if bbox is None:
     bbox = volume_origin_to_bbox(vol > wall_level, origin)
 
@@ -935,9 +935,9 @@ def convert_annotation_v3_original_to_aligned(contour_df, stack):
     Ts = DataManager.load_transforms(stack=stack, downsample_factor=1, use_inverse=True)
 
     contour_df_out = contour_df.copy()
-    
+
     for cnt_id, cnt in contour_df[(contour_df['orientation'] == 'sagittal') & (contour_df['resolution'] == 'raw')].iterrows():
-        
+
         img_name = cnt['filename']
         if img_name not in filename_to_section:
             continue
@@ -947,16 +947,17 @@ def convert_annotation_v3_original_to_aligned(contour_df, stack):
         Tinv = Ts[img_name]
 
         n = len(cnt['vertices'])
-        
+
         vertices_on_aligned_cropped = np.dot(Tinv, np.c_[cnt['vertices'], np.ones((n,))].T).T[:, :2]
         contour_df_out.set_value(cnt_id, 'vertices', vertices_on_aligned_cropped)
 
         label_position_on_aligned_cropped = np.dot(Tinv, np.r_[cnt['label_position'], 1])[:2]
         contour_df_out.set_value(cnt_id, 'label_position', label_position_on_aligned_cropped)
-        
+
         print cnt['label_position'], label_position_on_aligned_cropped, contour_df_out.loc[cnt_id]['label_position']
 
     return contour_df_out
+
 
 def convert_annotation_v3_original_to_aligned_cropped_v2(contour_df, stack, out_resolution, prep_id=2):
     """
@@ -969,7 +970,8 @@ def convert_annotation_v3_original_to_aligned_cropped_v2(contour_df, stack, out_
 
     contour_df = contour_df.copy()
 
-    xmin_down32, _, ymin_down32, _, _, _ = DataManager.load_cropbox(stack, prep_id=prep_id)
+    # xmin_down32, _, ymin_down32, _, _, _ = DataManager.load_cropbox(stack, prep_id=prep_id)
+    xmin_down32, _, ymin_down32, _ = DataManager.load_cropbox_v2(stack, prep_id=prep_id, only_2d=True)
 
     Ts_rawResol = DataManager.load_transforms(stack=stack, resolution='raw', use_inverse=True)
 
@@ -994,8 +996,9 @@ def convert_annotation_v3_original_to_aligned_cropped_v2(contour_df, stack, out_
 
     return contour_df
 
+convert_annotation_v3_original_to_aligned_cropped = convert_annotation_v3_original_to_aligned_cropped_v2
 
-def convert_annotation_v3_aligned_cropped_to_original_v2(contour_df, stack, resolution=1, prep_id=2):
+def convert_annotation_v3_aligned_cropped_to_original_v2(contour_df, stack, resolution='raw', prep_id=2):
     """
     Convert contours defined wrt aligned cropped frame in resolution to
     contours defined wrt orignal unprocessed image frame in the raw resolution.
@@ -1010,7 +1013,8 @@ def convert_annotation_v3_aligned_cropped_to_original_v2(contour_df, stack, reso
 
     _, section_to_filename = DataManager.load_sorted_filenames(stack)
 
-    xmin_down32, _, ymin_down32, _, _, _ = DataManager.load_cropbox(stack, prep_id=prep_id)
+    # xmin_down32, _, ymin_down32, _, _, _ = DataManager.load_cropbox(stack, prep_id=prep_id)
+    xmin_down32, _, ymin_down32, _, = DataManager.load_cropbox_v2(stack, prep_id=prep_id, only_2d=True)
 
     Ts_rawResol = DataManager.load_transforms(stack=stack, resolution='raw', use_inverse=True)
 
@@ -1072,9 +1076,9 @@ def convert_annotations(contour_df, stack, in_wrt, in_resol, out_wrt, out_resol)
         # convert_resolution_string_to_voxel_size(resolution=resolution, stack=stack) / \
         # convert_resolution_string_to_voxel_size(resolution='raw', stack=stack) + (xmin_down32 * 32., ymin_down32 * 32.)
         # out_vertices = np.dot(T_rawResol, np.c_[vertices_wrt_alignedUncropped_rawResol, np.ones((len(vertices_wrt_alignedUncropped_rawResol),))].T).T[:, :2]
-        
+
         converter = CoordinatesConverter(stack=stack)
-        
+
         out_vertices = converter.convert_frame_and_resolution(p=in_vertices, in_wrt=in_wrt, in_resolution=in_resol, out_wrt=out_wrt, out_resolution=out_resol)
 
         contour_df.set_value(cnt_id, 'vertices', out_vertices)

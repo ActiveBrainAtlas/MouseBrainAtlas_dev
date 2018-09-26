@@ -51,7 +51,7 @@ To use GUIs, install PyQt4 into the virtualenv according to [this answer](https:
 ### Intra-stack align
 - **(HUMAN)** Browse thumbnails to verify orientations are all correct.
 - **(HUMAN)** Create `from_none_to_aligned.ini` to describe intra-stack alignment operation.
-- Create `input_spec.ini` as (None,NtbNormalized,thumbnail). Note that in this file specify `sorted_image_name_list` rather than `image_name_list`. `python align_compose.py input_spec.ini --op from_none_to_aligned`
+- Create `input_spec.ini` as (None,NtbNormalized,thumbnail). `python align_compose.py input_spec.ini --op from_none_to_aligned`
 - `python warp_crop.py --input_spec input_spec.ini --op_id from_none_to_padded`
 - **(HUMAN)** Inspect aligned images using preprocessGUI `preprocess_gui.py`, correct pairwise transforms and check each image's order in stack.
 ### Create masks
