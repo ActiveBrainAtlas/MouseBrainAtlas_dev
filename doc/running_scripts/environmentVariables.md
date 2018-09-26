@@ -2,7 +2,7 @@
 
 All environment variables are set in `setup/config.sh`. This file will set 4 environment variables as described below as well as set up a virtual environment, called `mousebrainatlas_virtualenv`, from which you will run the code.
 
-This setup should be run with `$ source ./setup/config.sh` to set the repository directory properly. This will also create `mousebrainatlas_virtualenv` in your repository folder. 
+`$ source ./setup/config.sh` will run the entire setup procedure. It will create `mousebrainatlas_virtualenv` in your repository folder and set all environment variables. These should be changed BEFORE running the command as described below.
 
 ### Evironmental variables	
 ```python	
@@ -21,6 +21,7 @@ ROOT_DIR = /media/alexn/BstemAtlasDataBackup/demo/
 DATA_ROOTDIR = /media/alexn/BstemAtlasDataBackup/demo/
 THUMBNAIL_DATA_ROOTDIR = /media/alexn/BstemAtlasDataBackup/demo/
 ```	
+Note: It's recommended that `ROOT_DIR`, `DATA_ROOTDIR`, and `THUMBNAIL_DATA_ROOTDIR` all be set to the same filepath to reduce complexity and consolidate all the data.
 
 S3 file locations:	
 ```python	
