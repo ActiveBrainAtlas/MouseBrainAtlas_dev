@@ -14,7 +14,7 @@
 - [Generate Probability Volumes](#generate-probability-volumes)
 - [Registration](#registration)
 - [Visualize Results](#visualize-registration-results)
-- [Training the CNN](#learn-structure-textures)
+- [Texture Classifier Training](#learn-structure-textures)
 
 # Demos
 
