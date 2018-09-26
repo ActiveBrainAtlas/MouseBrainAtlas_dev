@@ -21,9 +21,9 @@ ROOT_DIR = /media/alexn/BstemAtlasDataBackup/demo/
 DATA_ROOTDIR = /media/alexn/BstemAtlasDataBackup/demo/
 THUMBNAIL_DATA_ROOTDIR = /media/alexn/BstemAtlasDataBackup/demo/
 ```	
-Note: It's recommended that `ROOT_DIR`, `DATA_ROOTDIR`, and `THUMBNAIL_DATA_ROOTDIR` all be set to the same filepath to reduce complexity and consolidate all the data.
+- note: It's recommended that `ROOT_DIR`, `DATA_ROOTDIR`, and `THUMBNAIL_DATA_ROOTDIR` all be set to the same filepath to reduce complexity and consolidate all the data.
 
-S3 file locations:	
+### S3 file locations:	
 ```python	
 S3_ROOT is 'The root of all downloaded and uploaded data'
 S3_ROOT = s3://mousebrainatlas-data/	
