@@ -43,7 +43,7 @@ To use GUIs, install PyQt4 into the virtualenv according to [this answer](https:
 
 - Run `download_demo_data_preprocessing.py` to download 4 JPEG2000 images of the demo brain.
 - **(HUMAN)** create `DEMO998.ini` and put it under `demo_data/brains_info/`
-- Create `DEMO998_input_spec.json`. `python jp2_to_tiff.py DEMO998 DEMO998_input_spec.json`.
+- Create `DEMO998_input_spec.json`. `python jp2_to_tiff.py DEMO998 DEMO998_raw_input_spec.json`.
 - Create `input_spec.ini` as (None,None,raw). `python extract_channel.py input_spec.ini 2 Ntb`
 - Create `input_spec.ini` as (None,Ntb,raw). `python rescale.py input_spec.ini thumbnail -f 0.03125`
 ### Global intensity normalization
