@@ -224,6 +224,8 @@ DATA_ROOTDIR/
             └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep1_thumbnail_NtbNormalized.tif
 
 ```
+NOTE: By the end of GUI step a new STACK_sorted_filenames.txt will be generated, should replace the first and be more accurate. The GUI allows the user to correct files in the wrong order.
+
 ------------------------------------------------------------------------------------------------------------------------
 
 ### Create masks
