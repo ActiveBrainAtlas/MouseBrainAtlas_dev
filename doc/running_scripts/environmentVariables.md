@@ -1,8 +1,8 @@
 ## Setup
 
-All environment variables are set in `setup/config.sh`. This file will set 4 environment variables as described below as well as set up a virtual environment from which you will run the code.
+All environment variables are set in `setup/config.sh`. This file will set 4 environment variables as described below as well as set up a virtual environment, called `mousebrainatlas_virtualenv`, from which you will run the code.
 
-This file should be run with `$ source ./setup/config.sh` to set the repository directory properly.
+This setup should be run with `$ source ./setup/config.sh` to set the repository directory properly. This will also create `mousebrainatlas_virtualenv` in your repository folder. 
 
 ### Evironmental variables	
 ```python	
