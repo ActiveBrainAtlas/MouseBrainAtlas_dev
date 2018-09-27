@@ -6,5 +6,5 @@
 - thumbnail: Sep 27 07:29 - Sep 27 08:11
 - I should make `from_none_to_aligned.ini` not dependent on DATA_ROOTDIR (TODO).
 - `align_v3.py` and `compose_v3.py` still use "sorted_image_name_list", changed to using "image_name_list".
-- 
+- `warp_crop` thumbnail must use more than 1 jobs, otherwise it will complain argument list too long. `--njobs 8` works fine.
 
