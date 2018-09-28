@@ -1,4 +1,5 @@
 import matplotlib
+matplotlib.use('Agg')
 
 import os
 import csv
@@ -18,7 +19,9 @@ from skimage.io import imread, imsave
 from skimage.util import img_as_ubyte, img_as_float
 from skimage.color import gray2rgb, rgb2gray
 import numpy as np
+
 import matplotlib.pyplot as plt
+
 try:
     import cv2
 except:
@@ -26,14 +29,33 @@ except:
 
 import bloscpack as bp
 
-from ipywidgets import FloatProgress
-from IPython.display import display
-
 from skimage.measure import grid_points_in_poly, subdivide_polygon, approximate_polygon
 from skimage.measure import find_contours, regionprops
 
 from skimage.filters import gaussian
 
+from metadata import ENABLE_UPLOAD_S3, ENABLE_DOWNLOAD_S3, convert_resolution_string_to_um
+
+#######################################
+
+import warnings
+import functools
+
+def deprecated(func):
+    """This is a decorator which can be used to mark functions
+    as deprecated. It will result in a warning being emitted
+    when the function is used."""
+    @functools.wraps(func)
+    def new_func(*args, **kwargs):
+        warnings.simplefilter('always', DeprecationWarning)  # turn off filter
+        warnings.warn("Call to deprecated function {}.".format(func.__name__),
+                      category=DeprecationWarning,
+                      stacklevel=2)
+        warnings.simplefilter('default', DeprecationWarning)  # reset filter
+        return func(*args, **kwargs)
+    return new_func
+
+#########################################
 
 def convert_defaultdict_to_dict(d):
     if isinstance(d, defaultdict):
@@ -93,13 +115,128 @@ def compute_gradient_v2(volume, smooth_first=False, dtype=np.float16):
 
         return g.astype(dtype), o
 
+####################################################################
+
+def convert_2d_transform_forms(transform, out_form):
+
+    if isinstance(transform, str):
+	if out_form == (2,3):
+	    return np.reshape(map(np.float, transform.split(',')), (2,3))
+	elif out_form == (3,3):
+            return np.vstack([np.reshape(map(np.float, transform.split(',')), (2,3)), [0,0,1]])
+    else:
+        transform = np.array(transform)
+        if transform.shape == (2,3):
+    	    if out_form == (3,3):
+    	        transform = np.vstack([transform, [0,0,1]])
+	    elif out_form == 'str':
+	        transform = ','.join(map(str, transform[:2].flatten()))
+        elif transform.shape == (3,3):
+    	    if out_form == (2,3):
+	        transform = transform[:2]
+	    elif out_form == 'str':
+	        transform = ','.join(map(str, transform[:2].flatten()))
+
+    return transform
+
+def convert_cropbox_from_arr_xywh_1um(data, out_fmt, out_resol, stack=None):
+
+    data = data / convert_resolution_string_to_um(stack=stack, resolution=out_resol)
+
+    if out_fmt == 'str_xywh':
+        return ','.join(map(str, data))
+    elif out_fmt == 'dict':
+        raise Exception("too lazy to implement")
+    elif out_fmt == 'arr_xywh':
+        return data
+    elif out_fmt == 'arr_xxyy':
+	return np.array([data[0], data[0]+data[2]-1, data[1], data[1]+data[3]-1])
+    else:
+	raise
+
+def convert_cropbox_to_arr_xywh_1um(data, in_fmt, in_resol, stack=None):
+
+    if isinstance(data, dict):
+        arr_xywh = np.array([data['rostral_limit'], data['dorsal_limit'], data['caudal_limit'] - data['rostral_limit'] + 1, data['ventral_limit'] - data['dorsal_limit'] + 1])
+        # Since this does not check for wrt, the user needs to make sure the cropbox is relative to the input prep (i.e. the wrt attribute is the same as input prep)
+    elif isinstance(data, str):
+        if in_fmt == 'str_xywh':
+            arr_xywh = np.array(map(np.round, map(eval, data.split(','))))
+        elif in_fmt == 'str_xxyy':
+            arr_xxyy = np.array(map(np.round, map(eval, data.split(','))))
+            arr_xywh = np.array([arr_xxyy[0], arr_xxyy[2], arr_xxyy[1] - arr_xxyy[0] + 1, arr_xxyy[3] - arr_xxyy[2] + 1])
+        else:
+            raise
+    else:
+        if in_fmt == 'arr_xywh':
+            arr_xywh = np.array(data)
+        elif in_fmt == 'arr_xxyy':
+            arr_xywh = np.array([data[0], data[2], data[1] - data[0] + 1, data[3] - data[2] + 1])
+        else:
+	    print in_fmt, data
+            raise
+
+    arr_xywh_1um = arr_xywh * convert_resolution_string_to_um(stack=stack, resolution=in_resol)
+    return arr_xywh_1um
+
+def convert_cropbox_fmt(out_fmt, data, in_fmt=None, in_resol='1um', out_resol='1um', stack=None):
+    if in_resol == out_resol: # in this case, stack is not required/ Arbitrarily set both to 1um
+	in_resol = '1um'
+	out_resol = '1um'
+    arr_xywh_1um = convert_cropbox_to_arr_xywh_1um(data=data, in_fmt=in_fmt, in_resol=in_resol, stack=stack)
+    data_out = convert_cropbox_from_arr_xywh_1um(data=arr_xywh_1um, out_fmt=out_fmt, out_resol=out_resol, stack=stack)
+    return data_out
+
+########################################
+
+
+
+def csv_to_dict(fp):
+    """
+    First column contains keys.
+    """
+    import pandas as pd
+    print 'FILEPATH : '+fp
+    df = pd.read_csv(fp, index_col=0, header=None)
+    d = df.to_dict(orient='index')
+    d = {k: v.values() for k, v in d.iteritems()}
+    return d
+
+def dict_to_csv(d, fp):
+    import pandas as pd
+    df = pd.DataFrame.from_dict({k: np.array(v).flatten() for k, v in d.iteritems()}, orient='index')
+    df.to_csv(fp, header=False)
+
+
+def load_ini(fp, split_newline=True, convert_none_str=True, section='DEFAULT'):
+    """
+    Value of string None will be converted to Python None.
+    """
+    import ConfigParser
+    config = ConfigParser.ConfigParser()
+    if not os.path.exists(fp):
+        raise Exception("ini file %s does not exist." % fp)
+    config.read(fp)
+    input_spec = dict(config.items(section))
+    input_spec = {k: v.split('\n') if '\n' in v else v for k, v in input_spec.iteritems()}
+    for k, v in input_spec.iteritems():
+	if not isinstance(v, list):
+	    if '.' not in v and v.isdigit():
+    	        input_spec[k] = int(v)
+	    elif v.replace('.','',1).isdigit():
+	        input_spec[k] = float(v)
+        elif v == 'None':
+	    if convert_none_str:
+    	        input_spec[k] = None
+    assert len(input_spec) > 0, "Failed to read data from ini file."
+    return input_spec
 
 def load_data(fp, polydata_instead_of_face_vertex_list=True, download_s3=True):
 
     from vis3d_utilities import load_mesh_stl
     from distributed_utilities import download_from_s3
 
-    if download_s3:
+    if ENABLE_DOWNLOAD_S3 and download_s3:
         download_from_s3(fp)
 
     if fp.endswith('.bp'):
@@ -114,6 +251,10 @@ def load_data(fp, polydata_instead_of_face_vertex_list=True, download_s3=True):
         data = np.loadtxt(fp)
     elif fp.endswith('.png') or fp.endswith('.tif'):
         data = imread(fp)
+    elif fp.endswith('.ini'):
+        data = load_ini(fp)
+    elif fp.endswith('.csv'):
+        data = csv_to_dict(fp)
     else:
         raise
 
@@ -127,7 +268,7 @@ def save_data(data, fp, upload_s3=True):
     create_parent_dir_if_not_exists(fp)
 
     if fp.endswith('.bp'):
-        bp.pack_ndarray_file(np.ascontiguousarray(data), fp) 
+        bp.pack_ndarray_file(np.ascontiguousarray(data), fp)
         # ascontiguousarray is important, without which sometimes the loaded array will be different from saved.
     elif fp.endswith('.json'):
         save_json(data, fp)
@@ -142,12 +283,15 @@ def save_data(data, fp, upload_s3=True):
             np.savetxt(fp, data)
         else:
             raise
+    elif fp.endswith('.dump'): # sklearn classifiers
+        import joblib
+        joblib.dump(data, fp)
     elif fp.endswith('.png') or fp.endswith('.tif') or fp.endswith('.jpg'):
         imsave(fp, data)
     else:
         raise
 
-    if upload_s3:
+    if ENABLE_UPLOAD_S3 and upload_s3: # in the future, use only one flag.
         upload_to_s3(fp)
 
 ##################################################################
@@ -208,7 +352,7 @@ def convert_volume_forms(volume, out_form):
     else:
         raise Exception("out_form %s is not recognized.")
 
-        
+
 def volume_origin_to_bbox(v, o):
     """
     Convert a (volume, origin) tuple into a bounding box.
@@ -273,7 +417,7 @@ def plot_by_stack_by_structure(data_all_stacks_all_structures, structures,
                               ):
     """
     Plot the input data, with structures as x-axis. Different stacks are represented using different colors.
-    
+
     Args:
         style (str): scatter or boxplot.
     """
@@ -290,12 +434,12 @@ def plot_by_stack_by_structure(data_all_stacks_all_structures, structures,
                     for i, s in enumerate(structures)]
             ax.scatter(range(len(vals)), vals, marker='o', s=100, label=stack, c=np.array(stack_to_color[stack])/255.);
     elif style == 'boxplot':
-        
-        D = [[data_all_stacks_all_structures[stack][struct] 
-              for stack in data_all_stacks_all_structures.iterkeys() 
+
+        D = [[data_all_stacks_all_structures[stack][struct]
+              for stack in data_all_stacks_all_structures.iterkeys()
              if struct in data_all_stacks_all_structures[stack]]
             for struct in structures]
-        
+
         bplot = plt.boxplot(np.array(D), positions=range(0, len(structures)), patch_artist=True);
 #         for patch in bplot['boxes']:
 #             patch.set_facecolor(np.array(stack_to_color[stack])/255.)
@@ -320,7 +464,7 @@ def plot_by_stack_by_structure(data_all_stacks_all_structures, structures,
     ax.set_ylim([yticks[0], yticks[-1]+yticks[-1]-yticks[-2]]);
     plt.legend();
     ax.set_title(title, fontsize=20);
-    
+
     return fig, ax
 
 #####################################################################
@@ -570,7 +714,6 @@ def plot_centroid_means_and_covars_3d(instance_centroids,
     # Plot in 3D.
 
     from mpl_toolkits.mplot3d import Axes3D
-    import matplotlib.pyplot as plt
     from metadata import name_unsided_to_color, convert_to_original_name
 
     fig = plt.figure(figsize=(20, 20))
@@ -1368,18 +1511,21 @@ def array_to_one_liner(arr):
     return ' '.join(map(str, arr)) + '\n'
 
 def show_progress_bar(min, max):
+    from ipywidgets import FloatProgress
+    from IPython.display import display
+
     bar = FloatProgress(min=min, max=max)
     display(bar)
     return bar
 
-from enum import Enum
-
-class PolygonType(Enum):
-    CLOSED = 'closed'
-    OPEN = 'open'
-    TEXTURE = 'textured'
-    TEXTURE_WITH_CONTOUR = 'texture with contour'
-    DIRECTION = 'directionality'
+# from enum import Enum
+#
+# class PolygonType(Enum):
+#     CLOSED = 'closed'
+#     OPEN = 'open'
+#     TEXTURE = 'textured'
+#     TEXTURE_WITH_CONTOUR = 'texture with contour'
+#     DIRECTION = 'directionality'
 
 def create_parent_dir_if_not_exists(fp):
     create_if_not_exists(os.path.dirname(fp))
@@ -2128,40 +2274,6 @@ def smart_map(data, keyfunc, func):
 
     return results_inOrigOrder.values()
 
-boynton_colors = dict(blue=(0,0,255),
-    red=(255,0,0),
-    green=(0,255,0),
-    yellow=(255,255,0),
-    magenta=(255,0,255),
-    pink=(255,128,128),
-    gray=(128,128,128),
-    brown=(128,0,0),
-    orange=(255,128,0))
-
-kelly_colors = dict(vivid_yellow=(255, 179, 0),
-                    strong_purple=(128, 62, 117),
-                    vivid_orange=(255, 104, 0),
-                    very_light_blue=(166, 189, 215),
-                    vivid_red=(193, 0, 32),
-                    grayish_yellow=(206, 162, 98),
-                    medium_gray=(129, 112, 102),
-
-                    # these aren't good for people with defective color vision:
-                    vivid_green=(0, 125, 52),
-                    strong_purplish_pink=(246, 118, 142),
-                    strong_blue=(0, 83, 138),
-                    strong_yellowish_pink=(255, 122, 92),
-                    strong_violet=(83, 55, 122),
-                    vivid_orange_yellow=(255, 142, 0),
-                    strong_purplish_red=(179, 40, 81),
-                    vivid_greenish_yellow=(244, 200, 0),
-                    strong_reddish_brown=(127, 24, 13),
-                    vivid_yellowish_green=(147, 170, 0),
-                    deep_yellowish_brown=(89, 51, 21),
-                    vivid_reddish_orange=(241, 58, 19),
-                    dark_olive_green=(35, 44, 22))
-
-high_contrast_colors = boynton_colors.values() + kelly_colors.values()
 
 import randomcolor
 

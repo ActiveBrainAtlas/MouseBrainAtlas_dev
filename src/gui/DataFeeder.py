@@ -255,6 +255,17 @@ class ImageDataFeeder_v2(object):
             elif self.orientation == 'horizontal':
                 self.x_dim = arbitrary_img.width()
                 self.z_dim = arbitrary_img.height()
+            sys.stderr.write("Dimension computed successfully.\n")
+        else:
+            sys.stderr.write("Failed to compute dimension for datafeeder %s.\n" % self.name)
+            # if not hasattr(self, 'resolution'):
+            #     raise Exception("Cannot compute dimension because resolution of datafeeder is not set.")
+            # elif not hasattr(self, 'orientation'):
+            #     raise Exception("Cannot compute dimension because orientation of datafeeder is not set.")
+            # elif self.resolution not in self.image_cache:
+            #     raise Exception("Cannot compute dimension because resolution %s is not in image_cache." % self.resolution)
+            # else:
+            #     raise
 
     def set_resolution(self, resolution):
         print 'resolution set to', resolution
@@ -307,7 +318,7 @@ class ImageDataFeeder_v2(object):
 
                 # wait for the image to load.
                 t1 = time.time()
-                for t in range(100):
+                for t in range(10):
                     time.sleep(.1)
                     # if sec in self.image_cache[downsample]:
                     if sec in self.image_cache[resolution]:

@@ -228,6 +228,7 @@ class BrainLabelingGUI(QMainWindow, Ui_BrainLabelingGui):
                     coronal_volume_resection_feeder.set_volume_cache(self.volume_cache)
                     coronal_volume_resection_feeder.set_orientation(plane)
                     coronal_volume_resection_feeder.set_resolution(self.volume_cache.keys()[0])
+                    print 'tb_' + plane
                     self.gscenes['tb_' + plane].set_data_feeder(coronal_volume_resection_feeder)
                     self.gscenes['tb_' + plane].set_active_i(0)
                     self.gscenes['tb_' + plane].converter.derive_three_view_frames(base_frame_name='data',
@@ -1147,6 +1148,9 @@ class BrainLabelingGUI(QMainWindow, Ui_BrainLabelingGui):
 
         if self.gscenes['main_sagittal'].active_section is not None:
 
+            if self.gscenes['main_sagittal'].active_section not in metadata_cache['sections_to_filenames'][self.stack]:
+                return
+
             if self.THUMBNAIL_VOLUME_LOADED:
 
                 self.setWindowTitle('BrainLabelingGUI, stack %(stack)s, fn %(fn)s, section %(sec)d, z=%(z).2f, x=%(x).2f, y=%(y).2f voxel units' % \
@@ -1160,6 +1164,7 @@ class BrainLabelingGUI(QMainWindow, Ui_BrainLabelingGui):
                 y=self.gscenes['tb_horizontal'].active_i if self.gscenes['tb_horizontal'].active_i is not None else 0))
 
             else:
+
                 self.setWindowTitle('BrainLabelingGUI, stack %(stack)s, fn %(fn)s, section %(sec)d' % \
                 dict(stack=self.stack,
                 sec=self.gscenes['main_sagittal'].active_section

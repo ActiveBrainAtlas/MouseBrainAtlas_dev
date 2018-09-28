@@ -3,7 +3,7 @@ import os
 import time
 
 import numpy as np
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 from matplotlib.path import Path
 from shapely.geometry import Polygon
 from pandas import read_hdf, DataFrame, read_csv
@@ -33,7 +33,14 @@ sys.path.append('/home/yuncong/csd395/xgboost/python-package')
 try:
     from xgboost.sklearn import XGBClassifier
 except:
-    sys.stderr.write('xgboost is not loaded.')
+    sys.stderr.write('xgboost is not loaded.\n')
+
+def gpu_device(gpu_number=0):
+    try:
+        _ = mx.nd.array([1, 2, 3], ctx=mx.gpu(gpu_number))
+    except mx.MXNetError:
+        return None
+    return mx.gpu(gpu_number)
 
 def compute_classification_metrics(probs, labels):
     """
@@ -256,7 +263,6 @@ def plot_pr_curve(precision_allthresh, recall_allthresh, optimal_th, title=''):
     plt.show();
 
 def load_mxnet_model(model_dir_name, model_name, num_gpus=8, batch_size = 256, output_symbol_name='flatten_output'):
-    
     download_from_s3(os.path.join(MXNET_MODEL_ROOTDIR, model_dir_name), is_dir=True)
     model_iteration = 0
     # output_symbol_name = 'flatten_output'
@@ -270,12 +276,18 @@ def load_mxnet_model(model_dir_name, model_name, num_gpus=8, batch_size = 256, o
     # if HOST_ID == 'workstation':
     # model = mx.mod.Module(context=[mx.gpu(i) for i in range(1)], symbol=flatten_output)
     # else:
-    model = mx.mod.Module(context=[mx.gpu(i) for i in range(num_gpus)], symbol=flatten_output)
+
+    if not gpu_device():
+        print('No GPU device found! Use CPU for mxnet feature extraction.')
+        model = mx.mod.Module(context=mx.cpu(), symbol=flatten_output)
+    else:
+        model = mx.mod.Module(context=[mx.gpu(i) for i in range(num_gpus)], symbol=flatten_output)
 
     # Increase batch_size to 500 does not save any time.
     model.bind(data_shapes=[('data', (batch_size,1,224,224))], for_training=False)
     model.set_params(arg_params=arg_params, aux_params=aux_params, allow_missing=True)
     return model, mean_img
+
 
 def get_glcm_feature_vector(patch, levels):
 
@@ -354,11 +366,11 @@ def convert_image_patches_to_features_v2(patches, model, mean_img, batch_size):
     """
 
     features_list = []
-        
+
     for i in range(0, len(patches), 80000):
-                
+
         assert all([p.shape == (224, 224) for p in patches])
-                    
+
         patches_mean_subtracted = np.array(patches[i:i+80000]) - mean_img
         patches_mean_subtracted_input = patches_mean_subtracted[:, None, :, :] # n x 1 x 224 x 224
 
@@ -800,7 +812,7 @@ def extract_patches_given_locations(patch_size,
         patch_size (int): size of the square patch in pixel.
         locs ((n,2)-array): list of patch centers
         img: the image. If not given, must provide stack, sec, version and prep_id (default=2).
-        normalization_scheme (str): the normalization method applied to the patches.
+        normalization_scheme (str): patch normalization to be performed on top of input version images. Default is 'none' which means use input version directly without additional normalization.
 
     Returns:
         list of (patch_size, patch_size)-arrays.
@@ -867,7 +879,7 @@ def extract_patches_given_locations(patch_size,
         t = time.time()
         patches = [img[y-half_size:y+half_size, x-half_size:x+half_size].copy() for x, y in locs]
         sys.stderr.write('Crop patches: %.2f seconds.\n' % (time.time() - t))
-        
+
         assert all([p.shape == (output_patch_size, output_patch_size) for p in patches])
 
         if normalization_scheme == 'normalize_mu_region_sigma_wholeImage_(-1,9)':
@@ -1322,7 +1334,7 @@ def win_id_to_gridspec(win_id, stack=None, image_shape=None):
 
 
 def generate_annotation_to_grid_indices_lookup_v2(stack, by_human, win_id,
-                                               stack_m='atlasV5',
+                                               stack_m,
                                                detector_id_m=None,
                                                 detector_id_f=None,
                                                 warp_setting=17, trial_idx=None,
@@ -1374,10 +1386,13 @@ def generate_annotation_to_grid_indices_lookup_v2(stack, by_human, win_id,
                                                               trial_idx=trial_idx, suffix='contours', timestamp=timestamp,
                                                     return_timestamp=False)
 
-        contours = contours_df[(contours_df['orientation'] == 'sagittal') & (contours_df['downsample'] == 1)]
-        contours = contours.drop_duplicates(subset=['section', 'name', 'side', 'filename', 'downsample', 'creator'])
+        # contours = contours_df[(contours_df['orientation'] == 'sagittal') & (contours_df['downsample'] == 1)]
+        # contours = contours.drop_duplicates(subset=['section', 'name', 'side', 'filename', 'downsample', 'creator'])
+        contours = contours_df[(contours_df['orientation'] == 'sagittal') & (contours_df['resolution'] == 'raw')]
+        contours = contours.drop_duplicates(subset=['section', 'name', 'side', 'filename', 'resolution', 'creator'])
 
-        contours_df = convert_annotation_v3_original_to_aligned_cropped(contours, stack=stack)
+        # contours_df = convert_annotation_v3_original_to_aligned_cropped(contours, stack=stack)
+        contours_df = convert_annotation_v3_original_to_aligned_cropped_v2(contours, stack=stack, out_resolution='raw', prep_id=prep_id)
 
         download_from_s3(DataManager.get_thumbnail_mask_dir_v3(stack=stack, prep_id=prep_id), is_dir=True)
 
@@ -2942,7 +2957,7 @@ def compute_and_save_features_one_section(scheme, win_id, stack=None, prep_id=2,
     Args:
         scheme (str): normalization scheme
         win_id (int): windowing id, determines patch size and spacing.
-        prep_id (int): the prep_id the `bbox` is relative to. Default to 2.
+        prep_id (int or str): the prep_id the `bbox` is relative to. Default to 2(alignedBrainstemCrop).
         bbox (4-tuple): (xmin, xmax, ymin, ymax) in raw resolution. If not given, use the whole image.
         feature (str): cnn or mean
         model_name (str): model name. For forming filename of saved features.
@@ -2975,7 +2990,7 @@ def compute_and_save_features_one_section(scheme, win_id, stack=None, prep_id=2,
                                         bbox_lossless=(roi_xmin, roi_ymin, roi_w, roi_h),
                                        return_locations=True)
         sys.stderr.write('locate patches: %.2f seconds\n' % (time.time() - t))
-        
+
     features_roi = np.zeros((len(locations_roi), 1024))
 
     if recompute:
@@ -3027,7 +3042,6 @@ def compute_and_save_features_one_section(scheme, win_id, stack=None, prep_id=2,
 
         t = time.time()
         if method == 'cnn':
-            # save_dnn_features_v2() on dataManager line 4292
             DataManager.save_dnn_features_v2(features=features, locations=locations_roi,
                                          stack=stack, sec=sec, fn=fn, prep_id=prep_id,
                                          win_id=win_id, normalization_scheme=scheme,
@@ -3073,7 +3087,8 @@ def draw_scoremap(clfs, scheme, stack, win_id, prep_id=2,
                   bbox=None,
                   user_mask=None,
                   sec=None, fn=None, bg_img=None,
-                  bg_img_local_region=None, 
+                  bg_img_local_region=None,
+                  bg_img_version=None,
                   return_what='both',
                   out_resolution_um=None, in_resolution_um=None,
                   feature='cnn',
@@ -3117,10 +3132,10 @@ def draw_scoremap(clfs, scheme, stack, win_id, prep_id=2,
         roi_xmin, roi_xmax, roi_ymin, roi_ymax = bbox
         roi_w = roi_xmax + 1 - roi_xmin
         roi_h = roi_ymax + 1 - roi_ymin
-
+        
     if fn is None:
         fn = metadata_cache['sections_to_filenames'][stack][sec]
-
+        
     ##########################################################################################
 
     t = time.time()
@@ -3132,20 +3147,24 @@ def draw_scoremap(clfs, scheme, stack, win_id, prep_id=2,
 
     sample_locations_roi = grid_parameters_to_sample_locations(grid_spec=grid_spec)[indices_roi]
     if len(sample_locations_roi) == 0:
-        raise Exception('No samples are within the given ROI.')        
+        raise Exception('No samples are within the given ROI.')
 
     try:
         t = time.time()
 
         assert feature == 'cnn'
-
         features, locations = DataManager.load_dnn_features_v2(stack=stack, sec=sec, fn=fn,
                                                     prep_id=prep_id,
                                                     win_id=win_id,
                               normalization_scheme=scheme,
                                              model_name=model_name)
-
+        
         location_to_index = {tuple(loc): idx for idx, loc in enumerate(locations)}
+        sample_locations_roi_set = set(map(tuple, sample_locations_roi))
+        locations_set = set(map(tuple, locations))
+        print len(sample_locations_roi_set), 'ROI sampled locations'
+        print len(locations_set), 'pre-computed locations'
+        assert len(sample_locations_roi_set - locations_set) == 0, '%d in ROI sampled locations but not in pre-computed locations' % len(sample_locations_roi_set - locations_set)
         indices_roi = [location_to_index[tuple(loc)] for loc in sample_locations_roi]
         features = features[indices_roi]
 
@@ -3153,7 +3172,7 @@ def draw_scoremap(clfs, scheme, stack, win_id, prep_id=2,
 
     except Exception as e:
 
-        sys.stderr.write('%s\nNo pre-computed features found... computing from scratch.\n' % str(e))
+        sys.stderr.write('No pre-computed features found. Computing from scratch. Error: %s\n' % str(e))
 
         t = time.time()
 
@@ -3200,19 +3219,17 @@ def draw_scoremap(clfs, scheme, stack, win_id, prep_id=2,
     out_downscale = out_resolution_um / in_resolution_um
 
     #############################
-        
+
     scoremap_viz_all_clfs = {}
     scoremap_local_region_all_clfs = {}
-    
+
     if return_what == 'both' or return_what == 'viz':
-        
+
         t = time.time()
         if bg_img_local_region is None:
             if bg_img is None:
-                if stack in ['CHATM2', 'CHATM3', 'MD661', 'MD662', 'MD658']:
-                    bg_img = DataManager.load_image_v2(stack=stack, prep_id=prep_id, version='NtbNormalizedAdaptiveInvertedGammaJpeg', fn=fn, resol='raw')
-                else:
-                    bg_img = DataManager.load_image_v2(stack=stack, prep_id=prep_id, version='grayJpeg', fn=fn, resol='raw')
+                # if stack in ['CHATM2', 'CHATM3', 'MD661', 'MD662', 'MD658']:
+                bg_img = DataManager.load_image_v2(stack=stack, prep_id=prep_id, version=bg_img_version, fn=fn, resol='raw')
         bg_img_local_region = bg_img[roi_ymin:(roi_ymin+roi_h), roi_xmin:(roi_xmin+roi_w)]
         sys.stderr.write('Load background image: %.2f seconds\n' % (time.time() - t))
 
@@ -3239,10 +3256,10 @@ def draw_scoremap(clfs, scheme, stack, win_id, prep_id=2,
 
         if return_wholeimage:
             scoremap_local_region_all_clfs[name] = scoremap
-            
+
             if return_what == 'scoremap':
                 return scoremap_local_region_all_clfs
-            
+
             elif return_what == 'both' or return_what == 'viz':
                 t = time.time()
                 scoremap_viz = scoremap_overlay_on(bg=bg_img_outResol,
@@ -3261,9 +3278,9 @@ def draw_scoremap(clfs, scheme, stack, win_id, prep_id=2,
                     return scoremap_viz_all_clfs, scoremap_local_region_all_clfs
                 else:
                     return scoremap_viz_all_clfs
-                
+
         else:
-            
+
             scoremap_local_region = \
             scoremap[int(np.round(roi_ymin/out_downscale)):int(np.round((roi_ymin+roi_h)/out_downscale)),
                                          int(np.round(roi_xmin/out_downscale)):int(np.round((roi_xmin+roi_w)/out_downscale))]
@@ -3271,7 +3288,7 @@ def draw_scoremap(clfs, scheme, stack, win_id, prep_id=2,
 
             if return_waht == 'scoremap':
                 return scoremap_local_region_all_clfs
-            
+
             elif return_what == 'both' or return_what == 'viz':
                 t = time.time()
                 scoremap_viz_localRegion = scoremap_overlay_on(bg=bg_img_local_region_outResol,
@@ -3289,9 +3306,9 @@ def draw_scoremap(clfs, scheme, stack, win_id, prep_id=2,
                 if return_what == 'both':
                     return scoremap_viz_all_clfs, scoremap_local_region_all_clfs
                 else:
-                    return scoremap_viz_all_clfs            
+                    return scoremap_viz_all_clfs
 
-            
+
 def plot_result_wrt_ntrain(test_metrics_all_ntrain, ylabel='', title=''):
 
     for test_condition in test_metrics_all_ntrain.values()[0].keys():
