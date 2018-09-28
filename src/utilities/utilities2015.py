@@ -196,6 +196,7 @@ def csv_to_dict(fp):
     First column contains keys.
     """
     import pandas as pd
+    print 'FILEPATH : '+fp
     df = pd.read_csv(fp, index_col=0, header=None)
     d = df.to_dict(orient='index')
     d = {k: v.values() for k, v in d.iteritems()}
