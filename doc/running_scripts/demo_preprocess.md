@@ -398,7 +398,25 @@ DATA_ROOTDIR/
 
 ------------------------------------------------------------------------------------------------------------------------
 ##### Running Notes
+- **(HUMAN)** Create `from_wholeslice_to_brainstem.ini`. Specify prep2 (alignedBrainstemCrop) cropping box, based on alignedWithMargin or alignedPadded thumbnails.
+	- It seems this file doesn't need to be changed..
+	- `from_padded_to_wholeslice.ini` needs to be changed
+		- Add rostral_limit, caudal_limit, dorsal_limit, ventral_limit information!
+- Create `input_spec.ini` as (alignedWithMargin,NtbNormalizedAdaptiveInvertedGamma,raw). `python warp_crop.py --input_spec input_spec.ini --op_id from_wholeslice_to_brainstem`
+	- Output below
+```
 
+```
+- Create `input_spec.ini` as (alignedBrainstemCrop,NtbNormalizedAdaptiveInvertedGamma,raw). `python rescale.py input_spec.ini thumbnail -f 0.03125`
+	- Output below
+```
+
+```
+- Use the same `input_spec.ini` as previous step. `python compress_jpeg.py input_spec.ini`
+	- Output below
+```
+
+```
 ------------------------------------------------------------------------------------------------------------------------
 
 ## (Optional) Obtain a simple global alignment
