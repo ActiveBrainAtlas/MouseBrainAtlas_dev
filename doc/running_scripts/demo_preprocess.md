@@ -405,17 +405,35 @@ DATA_ROOTDIR/
 - Create `input_spec.ini` as (alignedWithMargin,NtbNormalizedAdaptiveInvertedGamma,raw). `python warp_crop.py --input_spec input_spec.ini --op_id from_wholeslice_to_brainstem`
 	- Output below
 ```
-
+DATA_ROOTDIR/
+|
+└── CSHL_data_processed
+        └── DEMO998_prep2_raw_NtbNormalizedAdaptiveInvertedGamma
+            ├── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_prep2_raw_NtbNormalizedAdaptiveInvertedGamma.tif
+            ├── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_prep2_raw_NtbNormalizedAdaptiveInvertedGamma.tif
+            └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep2_raw_NtbNormalizedAdaptiveInvertedGamma.tif
 ```
 - Create `input_spec.ini` as (alignedBrainstemCrop,NtbNormalizedAdaptiveInvertedGamma,raw). `python rescale.py input_spec.ini thumbnail -f 0.03125`
 	- Output below
 ```
-
+DATA_ROOTDIR/
+|
+└── CSHL_data_processed
+        └── DEMO998_prep2_thumbnail_NtbNormalizedAdaptiveInvertedGamma
+            ├── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_prep2_thumbnail_NtbNormalizedAdaptiveInvertedGamma.tif
+            ├── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_prep2_thumbnail_NtbNormalizedAdaptiveInvertedGamma.tif
+            └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep2_thumbnail_NtbNormalizedAdaptiveInvertedGamma.tif
 ```
 - Use the same `input_spec.ini` as previous step. `python compress_jpeg.py input_spec.ini`
 	- Output below
 ```
-
+DATA_ROOTDIR/
+|
+└── CSHL_data_processed
+        └── DEMO998_prep2_raw_NtbNormalizedAdaptiveInvertedGammaJpeg
+            ├── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_prep2_raw_NtbNormalizedAdaptiveInvertedGammaJpeg.jpg
+            ├── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_prep2_raw_NtbNormalizedAdaptiveInvertedGammaJpeg.jpg
+            └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep2_raw_NtbNormalizedAdaptiveInvertedGammaJpeg.jpg
 ```
 ------------------------------------------------------------------------------------------------------------------------
 
