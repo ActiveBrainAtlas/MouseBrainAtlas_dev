@@ -8,3 +8,4 @@
 - `align_v3.py` and `compose_v3.py` still use "sorted_image_name_list", changed to using "image_name_list".
 - `warp_crop` thumbnail must use more than 1 jobs, otherwise it will complain argument list too long. `--njobs 8` works fine. Time Sep 27 11:30 - Sep 27 16:09
 - `preprocess` GUI. "Edit transform" -> Make sure as you go through images, the right panel does not show double shadows (which means this consecutive pair of images are not aligned well).
+- extract features: Sep 27 23:08 - Sep 28 03:02
