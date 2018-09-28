@@ -32,7 +32,6 @@ from distributed_utilities import *
 
 input_spec = load_ini(args.input_spec)
 print input_spec
-image_name_list = input_spec['sorted_image_name_list']
 stack = input_spec['stack']
 prep_id = input_spec['prep_id']
 if prep_id == 'None':
@@ -41,6 +40,10 @@ resol = input_spec['resol']
 version = input_spec['version']
 if version == 'None':
     version = None
+image_name_list = input_spec['image_name_list']
+if image_name_list == 'all':
+    image_name_list = map(lambda x: x[0], sorted(DataManager.load_sorted_filenames(stack=stack)[0].items(), key=lambda x: x[1]))
+    #image_name_list = DataManager.load_sorted_filenames(stack=stack)[0].keys()
 
 if args.op is not None:
     op = load_ini(os.path.join(DATA_ROOTDIR, 'operation_configs', args.op + '.ini'))

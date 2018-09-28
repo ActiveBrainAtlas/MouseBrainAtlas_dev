@@ -88,7 +88,7 @@ def parse_operation_sequence(op_name, resol, return_str=False, stack=None):
     if inverse:
 	op_name = op_name[1:]
 
-    op = load_ini('demo_data/operation_configs/' + op_name + '.ini')
+    op = load_ini(os.path.join(DATA_ROOTDIR, 'operation_configs', op_name + '.ini'))
     if op is None:
 	raise Exception("Cannot load %s.ini" % op_name)
     if 'operation_sequence' in op: # composite operation
@@ -113,11 +113,14 @@ pad_color = args.pad_color
 if args.op_id is not None:
     
     input_spec = load_ini(args.input_spec)
-    image_name_list = input_spec['image_name_list']
     stack = input_spec['stack']
     prep_id = input_spec['prep_id']
     version = input_spec['version']
     resol = input_spec['resol']
+
+    image_name_list = input_spec['image_name_list']
+    if image_name_list == 'all':
+        image_name_list = DataManager.load_sorted_filenames(stack=stack)[0].keys()
 
     op_seq = parse_operation_sequence(args.op_id, resol=resol, return_str=True, stack=stack)
 
