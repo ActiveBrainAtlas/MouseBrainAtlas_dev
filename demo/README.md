@@ -91,11 +91,7 @@ This can serve two purposes:
 - Then run the `# Identify 3-d bounding box of each simpleGlobal aligned structure` part of `from_images_to_score_volume.ipynb` to generate structure ROIs.
 
 ## Compute patch features
-```
-python demo_compute_features.py DEMO998 --section 225 --version NtbNormalizedAdaptiveInvertedGamma
-python demo_compute_features.py DEMO998 --section 230 --version NtbNormalizedAdaptiveInvertedGamma
-python demo_compute_features.py DEMO998 --section 235 --version NtbNormalizedAdaptiveInvertedGamma
-```
+- Create `input_spec.ini` as (alignedBrainstemCrop,NtbNormalizedAdaptiveInvertedGamma,raw). `python demo_compute_features_v2.py DEMO998_input_spec.ini`
 
 If using GPU, the demo for each section should finish in about 1 minute. If using CPU, this takes about 1 hour.
 
