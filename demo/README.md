@@ -43,7 +43,7 @@ To use GUIs, install PyQt4 into the virtualenv according to [this answer](https:
 
 - Run `download_demo_data_preprocessing.py` to download 4 JPEG2000 images of the demo brain.
 - **(HUMAN)** create `DEMO998.ini` and put it under `demo_data/brains_info/`
-- Create `DEMO998_input_spec.json`. `python jp2_to_tiff.py DEMO998 DEMO998_input_spec.json`.
+- Create `DEMO998_input_spec.json`. `python jp2_to_tiff.py DEMO998 DEMO998_raw_input_spec.json`.
 - Create `input_spec.ini` as (None,None,raw). `python extract_channel.py input_spec.ini 2 Ntb`
 - Create `input_spec.ini` as (None,Ntb,raw). `python rescale.py input_spec.ini thumbnail -f 0.03125`
 ### Global intensity normalization
@@ -51,7 +51,7 @@ To use GUIs, install PyQt4 into the virtualenv according to [this answer](https:
 ### Intra-stack align
 - **(HUMAN)** Browse thumbnails to verify orientations are all correct.
 - **(HUMAN)** Create `from_none_to_aligned.ini` to describe intra-stack alignment operation.
-- Create `input_spec.ini` as (None,NtbNormalized,thumbnail). Note that in this file specify `sorted_image_name_list` rather than `image_name_list`. `python align_compose.py input_spec.ini --op from_none_to_aligned`
+- Create `input_spec.ini` as (None,NtbNormalized,thumbnail). `python align_compose.py input_spec.ini --op from_none_to_aligned`
 - `python warp_crop.py --input_spec input_spec.ini --op_id from_none_to_padded`
 - **(HUMAN)** Inspect aligned images using preprocessGUI `preprocess_gui.py`, correct pairwise transforms and check each image's order in stack.
 ### Create masks
@@ -137,12 +137,8 @@ Input and expected output will be downloaded from an open S3 bucket
 
 ## Learn structure textures
 
-### Assign class labels to image patches, according to manually annotated boundaries
-
-`python label_patches.py DEMO998 --win_id 7`
-
-### Train classifiers
-
-`python train_classifiers.py DEMO998 --win_id 7 --classifier_id 898 --structure_list "[\"3N\"]"`
+- Generate annotation boundaries using `brain_labeling_gui_v28.py`.
+- Assign class labels to image patches, according to manually annotated boundaries. `python label_patches.py DEMO998 --win_id 7`
+- Train classifiers. `python train_classifiers.py DEMO998 --win_id 7 --classifier_id 898 --structure_list "[\"3N\"]"`
 
 ## Estimate structure shapes and positions
