@@ -57,7 +57,7 @@ Note that the `input_spec.ini` files for most steps are different and must be ma
 - **(HUMAN)** Browse thumbnails to verify orientations are all correct.
 - **(HUMAN)** Create `from_none_to_aligned.ini` to describe intra-stack alignment operation.
 - Create `input_spec.ini` as (None,NtbNormalized,thumbnail). `python align_compose.py input_spec.ini --op from_none_to_aligned`
-- `python warp_crop.py --input_spec input_spec.ini --op_id from_none_to_padded`
+- `python warp_crop.py --input_spec input_spec.ini --op_id from_none_to_padded --njobs 8`
 - **(HUMAN)** Inspect aligned images using preprocessGUI `preprocess_gui.py`, correct pairwise transforms and check each image's order in stack.
 ### Create masks
 - **(HUMAN)** On a machine with monitor, launch the maskingGUI. `DATA_ROOTDIR=/media/yuncong/brainstem/home/yuncong/MouseBrainAtlas/demo/demo_data python mask_editing_tool_v4.py DEMO998`.
