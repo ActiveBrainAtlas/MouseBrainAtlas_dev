@@ -7,7 +7,7 @@ import json
 
 # import boto3
 
-from utilities2015 import execute_command, shell_escape
+from utilities2015 import execute_command, shell_escape, create_if_not_exists
 from metadata import *
 
 default_root = dict(localhost='/home/yuncong',
@@ -265,7 +265,7 @@ def run_distributed5(command, argument_type='single', kwargs_list=None, jobs_per
     if use_aws:
         execute_command('rm -f /home/ubuntu/stderr_*; rm -f /home/ubuntu/stdout_*')
     else:
-        execute_command('rm -f ~/stderr_*; rm -f ~/stdout_*')
+        execute_command('rm -f %s; rm -f %s' % (os.path.join(DATA_ROOTDIR, 'mousebrainatlas_tmp', 'stderr_*'), os.path.join(DATA_ROOTDIR, 'mousebrainatlas_tmp', 'stdout_*')))
 
     if local_only:
         sys.stderr.write("Run locally.\n")
@@ -299,9 +299,12 @@ def run_distributed5(command, argument_type='single', kwargs_list=None, jobs_per
 
     assert argument_type in ['single', 'list', 'list2'], 'argument_type must be one of single, list, list2.'
 
+
+    create_if_not_exists(os.path.join(DATA_ROOTDIR, 'mousebrainatlas_tmp'))
+
     for node_i, (fi, li) in enumerate(first_last_tuples_distribute_over(0, len(kwargs_list_as_list)-1, n_hosts)):
 
-        temp_script = '/home/yuncong/runall.sh'
+        temp_script = os.path.join(DATA_ROOTDIR, 'mousebrainatlas_tmp', 'runall.sh')
         temp_f = open(temp_script, 'w')
 
         for j, (fj, lj) in enumerate(first_last_tuples_distribute_over(fi, li, jobs_per_node)):
@@ -333,8 +336,8 @@ def run_distributed5(command, argument_type='single', kwargs_list=None, jobs_per
             stdout_template = '/home/ubuntu/stdout_%d.log'
             stderr_template = '/home/ubuntu/stderr_%d.log'
         else:
-            stdout_template = '/home/yuncong/stdout_%d.log'
-            stderr_template = '/home/yuncong/stderr_%d.log'
+            stdout_template = os.path.join(DATA_ROOTDIR, 'mousebrainatlas_tmp', 'stdout_%d.log')
+            stderr_template = os.path.join(DATA_ROOTDIR, 'mousebrainatlas_tmp', 'stderr_%d.log')
         
         if local_only:
             stdout_f = open(stdout_template % node_i, "w")
