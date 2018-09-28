@@ -358,7 +358,36 @@ DATA_ROOTDIR/
 
 ------------------------------------------------------------------------------------------------------------------------
 ##### Running Notes
-
+- **(HUMAN)** Create `from_none_to_wholeslice.ini`. In this file specify the cropbox for the domain `alignedWithMargin ` based on `alignedPadded` images. This cropbox can also be automatically inferred as padding 20 thumbnail-resolution pixels surrounding the `alignedPadded` masks.
+    - Below is the file contents I found from Yuncong's tests
+```
+[DEFAULT]
+operation_sequence = from_none_to_aligned
+	from_aligned_to_wholeslice
+```
+- Create `input_spec.ini` as (None,NtbNormalizedAdaptiveInvertedGamma,raw). `python warp_crop.py --input_spec input_spec.ini --op_id from_none_to_wholeslice`
+    - Ran with: `python warp_crop.py --input_spec input_spec.ini --op_id /media/alexn/BstemAtlasDataBackup/demo_preprocess/operation_configs/from_none_to_wholeslice`
+    - Output below
+```
+DATA_ROOTDIR/
+|
+└── CSHL_data_processed
+        └── DEMO998_prep5_raw_NtbNormalizedAdaptiveInvertedGamma
+            ├── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_prep5_raw_NtbNormalizedAdaptiveInvertedGamma.tif
+            ├── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_prep5_raw_NtbNormalizedAdaptiveInvertedGamma.tif
+            └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep5_raw_NtbNormalizedAdaptiveInvertedGamma.tif
+```
+- Create `input_spec.ini` as (alignedWithMargin,NtbNormalizedAdaptiveInvertedGamma,raw). `python rescale.py input_spec.ini thumbnail -f 0.03125`
+    - Output below
+```
+DATA_ROOTDIR/
+|
+└── CSHL_data_processed
+        └── DEMO998_prep5_thumbnail_NtbNormalizedAdaptiveInvertedGamma
+            ├── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_prep5_thumbnail_NtbNormalizedAdaptiveInvertedGamma.tif
+            ├── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_prep5_thumbnail_NtbNormalizedAdaptiveInvertedGamma.tif
+            └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep5_thumbnail_NtbNormalizedAdaptiveInvertedGamma.tif
+```
 ------------------------------------------------------------------------------------------------------------------------
 
 ### Brainstem crop
