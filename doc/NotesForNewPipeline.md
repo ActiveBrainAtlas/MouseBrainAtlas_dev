@@ -1,3 +1,4 @@
+- If raw data needs flip/rotation first, use `warp_crop.py` with one of the rotate operations (e.g. "rotate_transverse", "rotate_transpose", "rotate90").
 - Whether the data folder is located at an external drive or a PCIe-connected local drive makes a big difference on preprocessing speed as a large amount of IO is involved.
 - Raw data folder might contain images with different filenames but are of the same slice. One can be the re-scanned version of the other. So the number of retrieved files by searching data folder might be more than that provided in the sorted filename list.
 - 444 images found. convert jp2 to raw tiff: Sep 26 07:25 - Sep 26 10:19. Using more than one process tends to blow up memory and cause IO thrashing. Also, remember to run these commands in a `screen` session, so that a disconnected ssh connection will not stop the program.
@@ -6,5 +7,6 @@
 - thumbnail: Sep 27 07:29 - Sep 27 08:11
 - I should make `from_none_to_aligned.ini` not dependent on DATA_ROOTDIR (TODO).
 - `align_v3.py` and `compose_v3.py` still use "sorted_image_name_list", changed to using "image_name_list".
-- `warp_crop` thumbnail must use more than 1 jobs, otherwise it will complain argument list too long. `--njobs 8` works fine.
-
+- `warp_crop` thumbnail must use more than 1 jobs, otherwise it will complain argument list too long. `--njobs 8` works fine. Time Sep 27 11:30 - Sep 27 16:09
+- `preprocess` GUI. "Edit transform" -> Make sure as you go through images, the right panel does not show double shadows (which means this consecutive pair of images are not aligned well).
+- extract features: Sep 27 23:08 - Sep 28 03:02
