@@ -33,13 +33,18 @@ cd demo
 - The demos are written in Python 2.7.2 and have been tested on a machine with Intel Xeon W5580 3.20GHz 16-core CPU, 128GB RAM and a Nvidia Titan X GPU, running Linux Ubuntu 16.04. 
 - The default `requirements.txt` assumes CUDA version of 9.0. If your CUDA version (check using `nvcc -v` or `cat /usr/local/cuda/version.txt`) is 9.1, replace `mxnet-cu90` with `mxnet-cu91` in `requirements.txt`. If your machine does not have a GPU, replace `mxnet-cu90` with `mxnet`. Refer to [official mxnet page](https://mxnet.incubator.apache.org/install/index.html?platform=Linux&language=Python&processor=CPU) for available pips.
 
+### Install non-python packages
+
+- Install ImageMagick 6.8.9. `sudo apt-get install imagemagick`
+- To use GUIs, install PyQt4 into the virtualenv according to [this answer](https://stackoverflow.com/a/28850104).
+    - Install python-qt4 globaly: `sudo apt-get install python-qt4`
+    - Create symbolic link of PyQt4 to your virtual env: `ln -s /usr/lib/python2.7/dist-packages/PyQt4/ mousebrainatlas_virtualenv/lib/python2.7/site-packages/`
+    - Create symbolic link of sip.so to your virtual env: `ln -s /usr/lib/python2.7/dist-packages/sip.x86_64-linux-gnu.so mousebrainatlas_virtualenv/lib/python2.7/site-packages/`
+
+
 ## Preprocess
 
-Install ImageMagick 6.8.9.
-
 Note that the `input_spec.ini` files for most steps are different and must be manually created according to the actual input. In the following instructions, "create `input_spec.ini` as (prep_id, version, resolution)" means using the same set of image names as `image_name_list` but set the `prep_id`, `version` and `resolution` accordingly.
-
-To use GUIs, install PyQt4 into the virtualenv according to [this answer](https://stackoverflow.com/a/28850104).
 
 - Run `download_demo_data_preprocessing.py` to download 4 JPEG2000 images of the demo brain.
 - **(HUMAN)** create `DEMO998.ini` and put it under `demo_data/brains_info/`
@@ -52,7 +57,7 @@ To use GUIs, install PyQt4 into the virtualenv according to [this answer](https:
 - **(HUMAN)** Browse thumbnails to verify orientations are all correct.
 - **(HUMAN)** Create `from_none_to_aligned.ini` to describe intra-stack alignment operation.
 - Create `input_spec.ini` as (None,NtbNormalized,thumbnail). `python align_compose.py input_spec.ini --op from_none_to_aligned`
-- `python warp_crop.py --input_spec input_spec.ini --op_id from_none_to_padded`
+- `python warp_crop.py --input_spec input_spec.ini --op_id from_none_to_padded --njobs 8`
 - **(HUMAN)** Inspect aligned images using preprocessGUI `preprocess_gui.py`, correct pairwise transforms and check each image's order in stack.
 ### Create masks
 - **(HUMAN)** On a machine with monitor, launch the maskingGUI. `DATA_ROOTDIR=/media/yuncong/brainstem/home/yuncong/MouseBrainAtlas/demo/demo_data python mask_editing_tool_v4.py DEMO998`.
@@ -86,11 +91,7 @@ This can serve two purposes:
 - Then run the `# Identify 3-d bounding box of each simpleGlobal aligned structure` part of `from_images_to_score_volume.ipynb` to generate structure ROIs.
 
 ## Compute patch features
-```
-python demo_compute_features.py DEMO998 --section 225 --version NtbNormalizedAdaptiveInvertedGamma
-python demo_compute_features.py DEMO998 --section 230 --version NtbNormalizedAdaptiveInvertedGamma
-python demo_compute_features.py DEMO998 --section 235 --version NtbNormalizedAdaptiveInvertedGamma
-```
+- Create `input_spec.ini` as (alignedBrainstemCrop,NtbNormalizedAdaptiveInvertedGamma,raw). `python demo_compute_features_v2.py DEMO998_input_spec.ini`
 
 If using GPU, the demo for each section should finish in about 1 minute. If using CPU, this takes about 1 hour.
 
