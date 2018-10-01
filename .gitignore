@@ -5,4 +5,3 @@ demo/demo_data/
 mousebrainatlas_virtualenv/
 
 *.pyc
-*.ini

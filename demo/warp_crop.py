@@ -91,7 +91,7 @@ def parse_operation_sequence(op_name, resol, return_str=False, stack=None):
     if inverse:
 	op_name = op_name[1:]
 
-    op = load_ini(os.path.join(DATA_ROOTDIR, 'operation_configs', op_name + '.ini'))
+    op = load_ini(os.path.join(DATA_ROOTDIR, 'CSHL_data_processed', stack, 'operation_configs', op_name + '.ini'))
     if op is None:
 	raise Exception("Cannot load %s.ini" % op_name)
     if 'operation_sequence' in op: # composite operation
@@ -144,27 +144,7 @@ if args.op_id is not None:
 
     # sequantial_dispatcher argument cannot be too long, so we must limit the number of images processed each time
     batch_size = 100
-    batch_size=len(image_name_list)
     for batch_id in range(0, len(image_name_list), batch_size):
-        print '**********************************'
-        print(image_name_list)
-        print '**********************************'
-        print image_name_list[batch_id:batch_id+batch_size]
-        print '**********************************'
-        print batch_id
-        print batch_size
-        for img_name in image_name_list[batch_id:batch_id+batch_size]:
-            print img_name
-        print '**********************************'
-        print 'python %(script)s --input_fp \"%%(input_fp)s\" --output_fp \"%%(output_fp)s\" %%(ops_str)s --pad_color %%(pad_color)s' % \
-		{'script':  os.path.join(os.getcwd(), 'warp_crop.py'),
-		}
-        print 'input'
-        print DataManager.get_image_filepath_v2(stack=stack, fn=img_name, prep_id=prep_id, version=version, resol=resol)
-        print 'ouput'
-        print DataManager.get_image_filepath_v2(stack=stack, fn=img_name, prep_id=out_prep_id, version=version, resol=resol)
-        print '**********************************'
-        print 'python %(script)s --input_fp '+DataManager.get_image_filepath_v2(stack=stack, fn=img_name, prep_id=prep_id, version=version, resol=resol)+' --output_fp '+DataManager.get_image_filepath_v2(stack=stack, fn=img_name, prep_id=out_prep_id, version=version, resol=resol)+' '+ops_str_all_images[img_name]+' --pad_color %%(pad_color)s'
 
         run_distributed('python %(script)s --input_fp \"%%(input_fp)s\" --output_fp \"%%(output_fp)s\" %%(ops_str)s --pad_color %%(pad_color)s' % \
 		{'script':  os.path.join(os.getcwd(), 'warp_crop.py'),

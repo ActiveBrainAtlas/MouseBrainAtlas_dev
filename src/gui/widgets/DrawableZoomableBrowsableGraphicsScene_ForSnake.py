@@ -128,7 +128,7 @@ class DrawableZoomableBrowsableGraphicsScene_ForSnake(DrawableZoomableBrowsableG
             self.set_mode('add vertices consecutively')
 
         elif selected_action == action_deletePolygon:
-            self.polygon_deleted.emit(self.active_polygon)
+            self.polygon_deleted.emit(self.active_polygon, self.active_i, self.drawings[self.active_i].index(self.active_polygon))
             sys.stderr.write('%s: polygon_deleted signal emitted.\n' % (self.id))
             self.drawings[self.active_i].remove(self.active_polygon)
             self.removeItem(self.active_polygon)
@@ -147,7 +147,7 @@ class DrawableZoomableBrowsableGraphicsScene_ForSnake(DrawableZoomableBrowsableG
             self.set_mode('add vertices consecutively')
 
         elif selected_action == action_deleteInitSnakeContour:
-            self.polygon_deleted.emit(self.active_polygon)
+            self.polygon_deleted.emit(self.active_polygon, self.active_i, self.drawings[self.active_i].index(self.active_polygon))
             sys.stderr.write('%s: polygon_deleted signal emitted.\n' % (self.id))
             self.drawings[self.active_i].remove(self.active_polygon)
             self.removeItem(self.active_polygon)

@@ -196,7 +196,6 @@ def csv_to_dict(fp):
     First column contains keys.
     """
     import pandas as pd
-    print 'FILEPATH : '+fp
     df = pd.read_csv(fp, index_col=0, header=None)
     d = df.to_dict(orient='index')
     d = {k: v.values() for k, v in d.iteritems()}
@@ -374,7 +373,8 @@ def plot_by_method_by_structure(data_all_stacks_all_structures, structures, stac
                                 stack_to_color=None, ylabel='', title='', ylim=[0,1],
                                 yspacing=.2, style='scatter',
                                figsize=(20, 6), spacing_btw_stacks=1,
-                               xticks_fontsize=20):
+                               xticks_fontsize=20, xlabel='Structures',
+                               legend_loc='best', legend_fontsize=None):
 
     if stack_to_color is None:
         stack_to_color = {stack: random_colors(1)[0] for stack in data_all_stacks_all_structures.keys()}
@@ -387,7 +387,7 @@ def plot_by_method_by_structure(data_all_stacks_all_structures, structures, stac
         data_all_structures = data_all_stacks_all_structures[stack]
         data_mean = [np.mean(data_all_structures[s]) for s in structures]
         data_std = [np.std(data_all_structures[s]) for s in structures]
-        plt.bar(stack_i + (n_stacks + spacing_btw_stacks) * np.arange(n_structures), data_mean, yerr=data_std, label=stack)
+        plt.bar(stack_i + (n_stacks + spacing_btw_stacks) * np.arange(n_structures), data_mean, yerr=data_std, label=stack, color=np.array(stack_to_color[stack])/255.)
 
         plt.gca().yaxis.grid(True, linestyle='-', which='major', color='grey', alpha=0.5)
         # Hide these grid behind plot objects
@@ -402,11 +402,11 @@ def plot_by_method_by_structure(data_all_stacks_all_structures, structures, stac
     plt.yticks(np.arange(ylim[0], ylim[1] + yspacing, yspacing),
                map(lambda x: '%.2f'%x, np.arange(ylim[0], ylim[1]+yspacing, yspacing)),
                fontsize=20);
-    plt.xlabel('Structures', fontsize=20);
+    plt.xlabel(xlabel, fontsize=20);
     plt.ylabel(ylabel, fontsize=20);
     plt.xlim([-1, len(structures) * (n_stacks + spacing_btw_stacks) + 1]);
     plt.ylim(ylim);
-    plt.legend();
+    plt.legend(loc=legend_loc, fontsize=legend_fontsize);
     plt.title(title, fontsize=20);
 
 
@@ -433,6 +433,33 @@ def plot_by_stack_by_structure(data_all_stacks_all_structures, structures,
             vals = [data_all_structures[s] if s in data_all_structures else None
                     for i, s in enumerate(structures)]
             ax.scatter(range(len(vals)), vals, marker='o', s=100, label=stack, c=np.array(stack_to_color[stack])/255.);
+            
+    elif style == 'boxplot2': # {stack: {structure: [v1,v2,v3...]}}
+        
+        boxes = []
+        
+        for stack in data_all_stacks_all_structures.keys():
+            
+            D = [data_all_stacks_all_structures[stack][struct]
+                 for struct in structures 
+                 if struct in data_all_stacks_all_structures[stack]]
+        
+            bplot = plt.boxplot(np.array(D).T, positions=range(0, len(structures)), patch_artist=True);
+            boxes.append(bplot['boxes'][0])
+            
+            for patch in bplot['boxes']:
+                patch.set_facecolor(np.array(stack_to_color[stack])/255.)
+            
+            for k in ['fliers', 'medians', 'means', 'whiskers', 'caps']:
+                for patch in bplot[k]:
+                    patch.set_color(np.array(stack_to_color[stack])/255.)
+                
+            ax.yaxis.grid(True, linestyle='-', which='major', color='grey', alpha=0.5)
+            # Hide these grid behind plot objects
+            ax.set_axisbelow(True)
+        
+        ax.legend(boxes, data_all_stacks_all_structures.keys(), loc='upper right')
+            
     elif style == 'boxplot':
 
         D = [[data_all_stacks_all_structures[stack][struct]
