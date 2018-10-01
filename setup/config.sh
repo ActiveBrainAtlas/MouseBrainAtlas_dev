@@ -12,10 +12,12 @@ cyan='\e[1;36m'
 NC='\033[0m' # No Color
 
 export REPO_DIR=$PROJECT_DIR/src
-export ROOT_DIR=/media/alexn/BstemAtlasDataBackup/demo_preprocess/
-export DATA_ROOTDIR=/media/alexn/BstemAtlasDataBackup/demo_preprocess/
-export THUMBNAIL_DATA_ROOTDIR=/media/alexn/BstemAtlasDataBackup/demo_preprocess/
-
+# export ROOT_DIR=/media/alexn/BstemAtlasDataBackup/demo_preprocess/
+# export DATA_ROOTDIR=/media/alexn/BstemAtlasDataBackup/demo_preprocess/
+# export THUMBNAIL_DATA_ROOTDIR=/media/alexn/BstemAtlasDataBackup/demo_preprocess/
+export ROOT_DIR=/media/alexn/BstemAtlasDataBackup/ucsd_brain/
+export DATA_ROOTDIR=/media/alexn/BstemAtlasDataBackup/ucsd_brain/
+export THUMBNAIL_DATA_ROOTDIR=/media/alexn/BstemAtlasDataBackup/ucsd_brain/
 
 if [ ! -d $virtualenv ]; then
         echo ""
