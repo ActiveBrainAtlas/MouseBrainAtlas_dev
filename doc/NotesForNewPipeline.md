@@ -1,3 +1,4 @@
+- If raw data needs flip/rotation first, use `warp_crop.py` with one of the rotate operations (e.g. "rotate_transverse", "rotate_transpose", "rotate90").
 - Whether the data folder is located at an external drive or a PCIe-connected local drive makes a big difference on preprocessing speed as a large amount of IO is involved.
 - Raw data folder might contain images with different filenames but are of the same slice. One can be the re-scanned version of the other. So the number of retrieved files by searching data folder might be more than that provided in the sorted filename list.
 - 444 images found. convert jp2 to raw tiff: Sep 26 07:25 - Sep 26 10:19. Using more than one process tends to blow up memory and cause IO thrashing. Also, remember to run these commands in a `screen` session, so that a disconnected ssh connection will not stop the program.
