@@ -151,7 +151,7 @@ class DrawableZoomableBrowsableGraphicsScene_ForMasking(DrawableZoomableBrowsabl
     def _submask_clicked(self, polygon):
         submask_ind = self.drawings[self.active_i].index(polygon)
         sys.stderr.write('Submask %d clicked.\n' % submask_ind)
-
+        print(self._submask_decisions[self.active_section])
         curr_decision = self._submask_decisions[self.active_section][submask_ind]
         self.set_submask_decision(submask_ind=submask_ind, decision=not curr_decision, sec=self.active_section)
 

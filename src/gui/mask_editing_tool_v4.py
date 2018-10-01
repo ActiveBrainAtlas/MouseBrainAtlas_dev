@@ -32,10 +32,11 @@ from DataFeeder import ImageDataFeeder_v2
 # STR_USING_USER = 'Using USER (Click to switch to AUTO)'
 
 class MaskEditingGUI(QMainWindow):
-    def __init__(self, parent=None, stack=None):
+    def __init__(self, parent=None, stack=None, version=None):
         QMainWindow.__init__(self, parent)
 
         self.stack = stack
+        self.version = version
 
         self.ui = Ui_MaskEditingGui()
         self.dialog = QDialog(self)
@@ -122,8 +123,8 @@ class MaskEditingGUI(QMainWindow):
         self.auto_masks_feeder = ImageDataFeeder_v2(name='init_snake_contours', stack=self.stack, \
                                     sections=self.valid_sections, auto_load=True,
                                     resolution='thumbnail',
-                                    prep_id=1,
-                                    version='NtbNormalized',
+                                    prep_id='alignedPadded',
+                                    version=self.version,
                                     use_thread=False)
                                     # labeled_filenames={sec: os.path.join(RAW_DATA_DIR, self.stack, fn + ".png")
                                         # for sec, fn in self.valid_sections_to_filenames.iteritems()})
@@ -146,8 +147,8 @@ class MaskEditingGUI(QMainWindow):
         self.user_submasks_feeder = ImageDataFeeder_v2(name='user_submasks', stack=self.stack, \
                                     sections=self.valid_sections, auto_load=True,
                                     resolution='thumbnail',
-                                    prep_id=1,
-                                    version='NtbNormalized',
+                                    prep_id='alignedPadded',
+                                    version=self.version,
                                     use_thread=False)
         self.user_submasks_gscene.set_data_feeder(self.user_submasks_feeder)
         self.user_submasks_gscene.submask_decision_updated.connect(self.user_submask_decision_updated)
@@ -210,7 +211,7 @@ class MaskEditingGUI(QMainWindow):
 
 
     def load_anchor_contours(self):
-        contours_on_anchor_sections = load_pickle(DataManager.get_anchor_initial_snake_contours_filepath(stack))
+        contours_on_anchor_sections = load_pickle(DataManager.get_anchor_initial_snake_contours_filepath(self.stack))
         for sec, vertices in contours_on_anchor_sections.iteritems():
             self.auto_submasks_gscene.set_init_snake_contour(section=sec, vertices=vertices)
             self.auto_submasks_gscene.set_section_as_anchor(section=sec)
@@ -219,12 +220,12 @@ class MaskEditingGUI(QMainWindow):
         contours_on_anchor_sections = \
             {sec: vertices_from_polygon(self.auto_submasks_gscene.init_snake_contour_polygons[sec])
             for sec in self.auto_submasks_gscene.anchor_sections}
-        fp = DataManager.get_anchor_initial_snake_contours_filepath(stack)
+        fp = DataManager.get_anchor_initial_snake_contours_filepath(self.stack)
         save_pickle(contours_on_anchor_sections, fp)
         print 'Anchor contours saved to', fp
 
     def load_all_init_snake_contours(self):
-        init_snake_contours_on_all_sections = load_pickle(DataManager.get_initial_snake_contours_filepath(stack=stack))
+        init_snake_contours_on_all_sections = load_pickle(DataManager.get_initial_snake_contours_filepath(stack=self.stack))
         for fn, vertices in init_snake_contours_on_all_sections.iteritems():
             try:
                 self.auto_submasks_gscene.set_init_snake_contour(section=self.valid_filenames_to_sections[fn], vertices=vertices)
@@ -239,7 +240,7 @@ class MaskEditingGUI(QMainWindow):
                 init_snake_contours_on_all_sections[fn] = vertices_from_polygon(self.auto_submasks_gscene.init_snake_contour_polygons[sec])
             else:
                 sys.stderr.write("Image %s (section %d) does not have any initial snake contour.\n" % (fn, sec))
-        fp = DataManager.get_initial_snake_contours_filepath(stack=stack)
+        fp = DataManager.get_initial_snake_contours_filepath(stack=self.stack)
         save_pickle(init_snake_contours_on_all_sections, fp)
         print 'Initial contours for all sections saved to', fp
 
@@ -258,11 +259,10 @@ class MaskEditingGUI(QMainWindow):
         # self.export_final_masks(sec=sec)
 
     def export_final_masks_all_sections(self):
-        # create_if_not_exists(DataManager.get_thumbnail_mask_dir_v3(stack=self.stack, version='aligned'))
-        create_if_not_exists(DataManager.get_thumbnail_mask_dir_v3(stack=self.stack, prep_id=1))
+        create_if_not_exists(DataManager.get_thumbnail_mask_dir_v3(stack=self.stack, prep_id='alignedPadded'))
         for sec in self.valid_sections:
             # imsave(DataManager.get_thumbnail_mask_filename_v3(stack=self.stack, section=sec, version='aligned'), self.merged_mask_vizs[sec])
-            imsave(DataManager.get_thumbnail_mask_filename_v3(stack=self.stack, section=sec, prep_id=1), self.merged_mask_vizs[sec])
+            imsave(DataManager.get_thumbnail_mask_filename_v3(stack=self.stack, section=sec, prep_id='alignedPadded'), self.merged_mask_vizs[sec])
         sys.stderr.write('Export is completed.\n')
 
     def save_submasks_and_decisions(self, sec):
@@ -373,7 +373,7 @@ class MaskEditingGUI(QMainWindow):
     def update_contrast_stretched_image(self, sec):
         if sec not in self.original_images:
             # img = DataManager.load_image_v2(stack=self.stack, section=sec, resol='thumbnail', prep_id=1, ext='tif')
-            img = DataManager.load_image_v2(stack=self.stack, section=sec, resol='thumbnail', prep_id=1, ext='tif', version='NtbNormalized')
+            img = DataManager.load_image_v2(stack=self.stack, section=sec, resol='thumbnail', prep_id='alignedPadded', ext='tif', version=self.version)
             self.original_images[sec] = brightfieldize_image(img)
         if sec not in self.selected_channels:
             self.selected_channels[sec] = DEFAULT_MASK_CHANNEL
@@ -494,14 +494,12 @@ if __name__ == "__main__":
         formatter_class=argparse.RawDescriptionHelpFormatter,
         description='Mask Editing GUI')
     parser.add_argument("stack", type=str, help="stack name")
+    parser.add_argument("version", type=str, help="version")
     args = parser.parse_args()
-    stack = args.stack
-
-    print '#################', DATA_ROOTDIR
-
+    
     app = QApplication(sys.argv)
 
-    m = MaskEditingGUI(stack=stack)
+    m = MaskEditingGUI(stack=args.stack, version=args.version)
     # m.showMaximized()
     m.show()
     sys.exit(app.exec_())

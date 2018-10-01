@@ -20,7 +20,7 @@ class DrawableZoomableBrowsableGraphicsScene(ZoomableBrowsableGraphicsSceneWithR
 
     drawings_updated = pyqtSignal(object)
     polygon_completed = drawings_updated
-    polygon_deleted = pyqtSignal(object, int, int)
+    polygon_deleted = pyqtSignal(object, int, int) # polygon, image index, polygon index
     polygon_changed = pyqtSignal(int, int) # Notify upper parties to re-compute data for the changed polygon (e.g. binary masks)
 
     def __init__(self, id, gview=None, parent=None):

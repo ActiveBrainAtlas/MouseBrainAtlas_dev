@@ -593,7 +593,7 @@ XY_PIXEL_DISTANCE_TB_AXIOSCAN = XY_PIXEL_DISTANCE_LOSSLESS_AXIOSCAN * 32
 #all_annotated_ntb_stacks = ['MD635']
 #all_annotated_stacks = all_annotated_nissl_stacks + all_annotated_ntb_stacks
 
-all_nissl_stacks = []
+all_nissl_stacks = ['MD585', 'MD594', 'MD589']
 all_ntb_stacks = ['DEMO998']
 all_stacks = all_nissl_stacks + all_ntb_stacks
 
@@ -637,7 +637,7 @@ print planar_resolution
 ########################################
 
 # prep_id_to_str_2d = {0: 'raw', 1: 'alignedPadded', 2: 'alignedCroppedBrainstem', 3: 'alignedCroppedThalamus', 4: 'alignedNoMargin', 5: 'alignedWithMargin', 6: 'rawCropped'}
-prep_id_to_str_2d = {0: 'raw', 1: 'alignedPadded', 2: 'alignedBrainstemCrop', 3: 'alignedThalamusCrop', 4: 'alignedNoMargin', 5: 'alignedWithMargin', 6: 'rawCropped'}
+prep_id_to_str_2d = {0: 'raw', 1: 'alignedPadded', 2: 'alignedBrainstemCrop', 3: 'alignedThalamusCrop', 4: 'alignedNoMargin', 5: 'alignedWithMargin', 6: 'rawCropped', 7: 'rawBeforeRotation'}
 prep_str_to_id_2d = {s: i for i, s in prep_id_to_str_2d.iteritems()}
 
 #######################################
@@ -707,5 +707,6 @@ LEVEL_TO_COLOR_VERTEX2 = {0.1: (0,125,0), 0.25: (0,0,255), 0.5: (125,0,125), 0.7
 orientation_argparse_str_to_imagemagick_str = \
 {'transpose': '-transpose',
  'transverse': '-transverse',
- 'rotate90': '-rotate 90'
+ 'rotate90': '-rotate 90',
+ 'rotate270': '-rotate 270'
 }
