@@ -446,3 +446,19 @@ This can serve two purposes:
 - Pick the center of 12N and of 3N at sagittal midline. Input them into `registration_v7_atlasV7_simpleGlobal.ipynb` to compute the simple global transform.
 - Then run the `# Identify 3-d bounding box of each simpleGlobal aligned structure` part of `from_images_to_score_volume.ipynb` to generate structure ROIs.
 
+---
+
+## Notes
+### Prep IDs
+As the preprocessing stage relies on a series of image manipulations, there is a coding system that caries information on what manipulations have ben applied to the given image. In the filename there will be the string 'prep#' where the number represents the stage it is at.
+
+0) 'raw'
+	- No changes except all slices have been rotated: rostral left, caudal right
+1) 'alignedPadded'
+2) 'alignedBrainstemCrop'
+3) 'alignedThalamusCrop'
+4) 'alignedNoMargin'
+5) 'alignedWithMargin'
+6) 'rawCropped'
+7) 'rawBeforeRotation'
+	- Unprocessed, unrotated. The very beginning for most stacks
