@@ -1091,6 +1091,8 @@ class DataManager(object):
         if not os.path.exists(fp):
             sys.stderr.write("No anchor.txt is found. Seems we are using the operation ini to provide anchor. Try to load operation ini.\n")
             fp = DataManager.get_anchor_filename_filename_v2(stack) # ini
+            print fp
+            print '****************************************************************'
             anchor_image_name = load_ini(fp)['anchor_image_name']
         else:
             # download_from_s3(fp, local_root=THUMBNAIL_DATA_ROOTDIR)
@@ -1281,7 +1283,6 @@ class DataManager(object):
             fp = DataManager.get_cropbox_filename_v2(stack=stack, anchor_fn=anchor_fn, prep_id=prep_id)
         else:
             raise Exception("prep_id %s must be either str or int" % prep_id)
-
         if not os.path.exists(fp):
             sys.stderr.write("Seems you are using operation INIs to provide cropbox.\n")
             if prep_id == 2 or prep_id == 'alignedBrainstemCrop':

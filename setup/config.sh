@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # User can modify this part
-PROJECT_DIR=/home/yuncong/MouseBrainAtlas
+PROJECT_DIR=/home/alexn/brainDev
 virtualenv="mousebrainatlas_virtualenv"
 ##################################################
 
@@ -12,12 +12,12 @@ cyan='\e[1;36m'
 NC='\033[0m' # No Color
 
 export REPO_DIR=$PROJECT_DIR/src
-#export ROOT_DIR=$PROJECT_DIR/demo/demo_data/
-#export DATA_ROOTDIR=$PROJECT_DIR/demo/demo_data/
-#export THUMBNAIL_DATA_ROOTDIR=$PROJECT_DIR/demo/demo_data/
-export ROOT_DIR=/media/yuncong/BstemAtlasData/atlas_data
-export DATA_ROOTDIR=/media/yuncong/BstemAtlasData/atlas_data
-export THUMBNAIL_DATA_ROOTDIR=/media/yuncong/BstemAtlasData/atlas_data
+# export ROOT_DIR=/media/alexn/BstemAtlasDataBackup/demo_preprocess/
+# export DATA_ROOTDIR=/media/alexn/BstemAtlasDataBackup/demo_preprocess/
+# export THUMBNAIL_DATA_ROOTDIR=/media/alexn/BstemAtlasDataBackup/demo_preprocess/
+export ROOT_DIR=/media/alexn/BstemAtlasDataBackup/demo_visualize/
+export DATA_ROOTDIR=/media/alexn/BstemAtlasDataBackup/demo_visualize/
+export THUMBNAIL_DATA_ROOTDIR=/media/alexn/BstemAtlasDataBackup/demo_visualize/
 
 
 if [ ! -d $virtualenv ]; then

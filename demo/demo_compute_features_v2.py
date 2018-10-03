@@ -79,5 +79,7 @@ for image_name in image_name_list:
         attach_timestamp=False, 
         recompute=True)
     except Exception as e:
-	sys.stderr.write("Failed to compute and save patch features for image %s: %s\n" % (image_name, e.message))
+        print '\nError'
+        print e
+	sys.stderr.write("\nFailed to compute and save patch features for image %s: %s\n" % (image_name, e.message))
 	continue
