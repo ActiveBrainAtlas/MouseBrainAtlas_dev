@@ -116,6 +116,8 @@ If using GPU, the demo for each section should finish in about 1 minute. If usin
 
 The outputs include the transform parameters and transformed atlas structures.
 
+## Generate intensity volume
+- `python construct_intensity_volume.py --tb_version NtbNormalizedAdaptiveInvertedGamma`
 
 ## Visualize registration results
 
