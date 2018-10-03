@@ -31,8 +31,8 @@ Note that the `input_spec.ini` files for most steps are different and must be ma
 
 To use GUIs, install PyQt4 into the virtualenv according to [this answer](https://stackoverflow.com/a/28850104).
 
-- I used these commands successfully:
 - Note, double check the names of `sip*.so` and `PyQt3/*`
+- I used thw following commands successfully:
 ```
 sudo apt-get install python-qt4
 sudo ln -s /usr/lib/python2.7/dist-packages/PyQt4/ /home/alexn/brainDev/mousebrainatlas_virtualenv/lib/python2.7/site-packages/
