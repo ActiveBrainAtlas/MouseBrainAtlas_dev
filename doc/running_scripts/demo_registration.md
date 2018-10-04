@@ -212,12 +212,11 @@ CSHL_volumes/
 
 ##### For command 4, `demo/visualize_registration_demo_3_structures.py`:
 ```
-CSHL_volumes/
-└── CSHL_registration_visualization
-    └── DEMO998_atlas_aligned_multilevel_down16_all_structures
-        └── NtbNormalizedAdaptiveInvertedGammaJpeg
-            ├── DEMO998_NtbNormalizedAdaptiveInvertedGammaJpeg_230.jpg
-            └── DEMO998_NtbNormalizedAdaptiveInvertedGammaJpeg_235.jpg
+CSHL_registration_visualization
+ └── DEMO998_atlas_aligned_multilevel_down16_all_structures
+     └── NtbNormalizedAdaptiveInvertedGammaJpeg
+         ├── DEMO998_NtbNormalizedAdaptiveInvertedGammaJpeg_230.jpg
+         └── DEMO998_NtbNormalizedAdaptiveInvertedGammaJpeg_235.jpg
 
 ```
 
