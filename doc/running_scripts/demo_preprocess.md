@@ -444,7 +444,36 @@ This can serve two purposes:
 2. It can be used as a starting point for the structure-specific registration later.
 
 - Pick the center of 12N and of 3N at sagittal midline. Input them into `registration_v7_atlasV7_simpleGlobal.ipynb` to compute the simple global transform.
+```
+DATA_ROOTDIR/
+|
+└── CSHL_simple_global_registration
+    └── DEMO998_T_atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol.txt
+```
 - Then run the `# Identify 3-d bounding box of each simpleGlobal aligned structure` part of `from_images_to_score_volume.ipynb` to generate structure ROIs.
+
+------------------------------------------------------------------------------------------------------------------------
+##### Running Notes
+
+- Pick the center of 12N and of 3N at sagittal midline. Input them into `src/registration/registration_v7_atlasV7_simpleGlobal.ipynb` to compute the simple global transform.
+	- Output below:
+```
+DATA_ROOTDIR/
+|
+└── CSHL_simple_global_registration
+    ├── DEMO998_T_atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol.bp
+    └── DEMO998_T_atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol.txt
+```
+- Then run the `# Identify 3-d bounding box of each simpleGlobal aligned structure` part of `src/learning/from_images_to_score_volume.ipynb` to generate structure ROIs.
+	- Output below:
+```
+DATA_ROOTDIR/
+|
+└── CSHL_simple_global_registration
+    └── DEMO998_registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners.json
+```
+
+------------------------------------------------------------------------------------------------------------------------
 
 ---
 
