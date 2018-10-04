@@ -212,39 +212,33 @@ CSHL_volumes/
 
 ##### For command 4, `demo/visualize_registration_demo_3_structures.py`:
 ```
-Traceback (most recent call last):
-  File "demo/visualize_registration_demo_3_structures.py", line 198, in <module>
-    resolution='10.0um', level=levels, sample_every=5)
-  File "demo/visualize_registration_demo_3_structures.py", line 48, in get_structure_contours_from_structure_volumes_v3
-    converter = CoordinatesConverter(stack=stack, section_list=metadata_cache['sections_to_filenames'][stack].keys())
-  File "/home/alexn/brainDev/setup/../src/utilities/data_manager.py", line 126, in __init__
-    cropbox_origin_xy_wrt_wholebrain_tbResol = DataManager.load_cropbox_v2(stack=stack, prep_id='alignedBrainstemCrop', only_2d=True)[[0,2]]
-  File "/home/alexn/brainDev/setup/../src/utilities/data_manager.py", line 1283, in load_cropbox_v2
-    cropbox_dict = load_ini(fp, section=prep_id_str)
-  File "/home/alexn/brainDev/setup/../src/utilities/metadata.py", line 609, in load_ini
-    raise Exception("ini file %s does not exist." % fp)
-Exception: ini file /media/alexn/BstemAtlasDataBackup/demo/CSHL_data_processed/DEMO999/DEMO999_cropbox.ini does not exist.
+CSHL_volumes/
+└── CSHL_registration_visualization
+    └── DEMO998_atlas_aligned_multilevel_down16_all_structures
+        └── NtbNormalizedAdaptiveInvertedGammaJpeg
+            ├── DEMO998_NtbNormalizedAdaptiveInvertedGammaJpeg_230.jpg
+            └── DEMO998_NtbNormalizedAdaptiveInvertedGammaJpeg_235.jpg
 
 ```
 
 ##### Downloaded from S3 before any outputs generated:
 ```
 CSHL_volumes/
-└── atlasV7
-    └── atlasV7_10.0um_scoreVolume
-        └── score_volumes
-            ├── atlasV7_10.0um_scoreVolume_12N.bp
-            ├── atlasV7_10.0um_scoreVolume_12N_origin_wrt_canonicalAtlasSpace.txt
-            ├── atlasV7_10.0um_scoreVolume_12N_surround_200um.bp
-            ├── atlasV7_10.0um_scoreVolume_12N_surround_200um_origin_wrt_canonicalAtlasSpace.txt
-            ├── atlasV7_10.0um_scoreVolume_3N_R.bp
-            ├── atlasV7_10.0um_scoreVolume_3N_R_origin_wrt_canonicalAtlasSpace.txt
-            ├── atlasV7_10.0um_scoreVolume_3N_R_surround_200um.bp
-            ├── atlasV7_10.0um_scoreVolume_3N_R_surround_200um_origin_wrt_canonicalAtlasSpace.txt
-            ├── atlasV7_10.0um_scoreVolume_4N_R.bp
-            ├── atlasV7_10.0um_scoreVolume_4N_R_origin_wrt_canonicalAtlasSpace.txt
-            ├── atlasV7_10.0um_scoreVolume_4N_R_surround_200um.bp
-            └── atlasV7_10.0um_scoreVolume_4N_R_surround_200um_origin_wrt_canonicalAtlasSpace.txt
+    └── atlasV7
+        └── atlasV7_10.0um_scoreVolume
+            └── score_volumes
+                ├── atlasV7_10.0um_scoreVolume_12N.bp
+                ├── atlasV7_10.0um_scoreVolume_12N_origin_wrt_canonicalAtlasSpace.txt
+                ├── atlasV7_10.0um_scoreVolume_12N_surround_200um.bp
+                ├── atlasV7_10.0um_scoreVolume_12N_surround_200um_origin_wrt_canonicalAtlasSpace.txt
+                ├── atlasV7_10.0um_scoreVolume_3N_R.bp
+                ├── atlasV7_10.0um_scoreVolume_3N_R_origin_wrt_canonicalAtlasSpace.txt
+                ├── atlasV7_10.0um_scoreVolume_3N_R_surround_200um.bp
+                ├── atlasV7_10.0um_scoreVolume_3N_R_surround_200um_origin_wrt_canonicalAtlasSpace.txt
+                ├── atlasV7_10.0um_scoreVolume_4N_R.bp
+                ├── atlasV7_10.0um_scoreVolume_4N_R_origin_wrt_canonicalAtlasSpace.txt
+                ├── atlasV7_10.0um_scoreVolume_4N_R_surround_200um.bp
+                └── atlasV7_10.0um_scoreVolume_4N_R_surround_200um_origin_wrt_canonicalAtlasSpace.txt
 ```
 
 
@@ -264,6 +258,20 @@ CSHL_volumes/
 
 #### For running the second command `demo/register_brains_demo_3N_R_4N_R.py`:
 - Outputs shown in summary, too many to list properly.
+
+---
+### PRE-VISUALIZATION
+- This step currently missing from the pipeline!
+- Run `python ../src/reconstruct/construct_intensity_volume.py STACK --tb_version NtbNormalizedAdaptiveInvertedGamma --tb_resol thumbnail --output_resol 10.0um`
+    - Output below
+```
+└── CSHL_volumes
+    └── DEMO998
+        └── DEMO998_wholebrainWithMargin_10.0um_intensityVolume
+            ├── DEMO998_wholebrainWithMargin_10.0um_intensityVolume.bp
+            └── DEMO998_wholebrainWithMargin_10.0um_intensityVolume_origin_wrt_wholebrain.txt
+```
+---
 
 ### For running the third command `demo/visualize_registration_demo_3_structures.py`:
 - Outputs shown in summary, too many to list properly.
