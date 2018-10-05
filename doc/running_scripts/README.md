@@ -7,7 +7,7 @@ A description of the environment variables are given in the [Environment Variabl
 ## The scripts
 
 There are 4 scripts that encapsulate the entire pipeline, they are listed below:
-- __[Preprocessing](demo_preprocess.md)__ [unfinished]
+- __[Preprocessing](demo_preprocess.md)__ 
 - __[Compute Patch Features](demo_compute_patch_features.md)__
 - __[Generate Probability Volumes](demo_generate_probability_volumes.md)__
 - __[Registration & Visualization](demo_registration.md)__

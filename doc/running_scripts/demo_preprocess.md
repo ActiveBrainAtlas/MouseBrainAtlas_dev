@@ -31,8 +31,8 @@ Note that the `input_spec.ini` files for most steps are different and must be ma
 
 To use GUIs, install PyQt4 into the virtualenv according to [this answer](https://stackoverflow.com/a/28850104).
 
-- I used these commands successfully:
 - Note, double check the names of `sip*.so` and `PyQt3/*`
+- I used thw following commands successfully:
 ```
 sudo apt-get install python-qt4
 sudo ln -s /usr/lib/python2.7/dist-packages/PyQt4/ /home/alexn/brainDev/mousebrainatlas_virtualenv/lib/python2.7/site-packages/
@@ -444,5 +444,50 @@ This can serve two purposes:
 2. It can be used as a starting point for the structure-specific registration later.
 
 - Pick the center of 12N and of 3N at sagittal midline. Input them into `registration_v7_atlasV7_simpleGlobal.ipynb` to compute the simple global transform.
+```
+DATA_ROOTDIR/
+|
+└── CSHL_simple_global_registration
+    └── DEMO998_T_atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol.txt
+```
 - Then run the `# Identify 3-d bounding box of each simpleGlobal aligned structure` part of `from_images_to_score_volume.ipynb` to generate structure ROIs.
 
+------------------------------------------------------------------------------------------------------------------------
+##### Running Notes
+
+- Pick the center of 12N and of 3N at sagittal midline. Input them into `src/registration/registration_v7_atlasV7_simpleGlobal.ipynb` to compute the simple global transform.
+	- Output below:
+```
+DATA_ROOTDIR/
+|
+└── CSHL_simple_global_registration
+    ├── DEMO998_T_atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol.bp
+    └── DEMO998_T_atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol.txt
+```
+- Then run the `# Identify 3-d bounding box of each simpleGlobal aligned structure` part of `src/learning/from_images_to_score_volume.ipynb` to generate structure ROIs.
+	- Output below:
+```
+DATA_ROOTDIR/
+|
+└── CSHL_simple_global_registration
+    └── DEMO998_registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners.json
+```
+
+------------------------------------------------------------------------------------------------------------------------
+
+---
+
+## Notes
+### Prep IDs
+As the preprocessing stage relies on a series of image manipulations, there is a coding system that caries information on what manipulations have ben applied to the given image. In the filename there will be the string 'prep#' where the number represents the stage it is at.
+
+0) 'raw'
+	- No changes except all slices have been rotated: rostral left, caudal right
+1) 'alignedPadded'
+2) 'alignedBrainstemCrop'
+3) 'alignedThalamusCrop'
+4) 'alignedNoMargin'
+5) 'alignedWithMargin'
+6) 'rawCropped'
+7) 'rawBeforeRotation'
+	- Unprocessed, unrotated. The very beginning for most stacks

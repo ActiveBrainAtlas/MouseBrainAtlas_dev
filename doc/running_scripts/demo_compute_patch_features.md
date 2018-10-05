@@ -63,7 +63,9 @@ For the first command: `demo/download_demo_data_compute_features.py`:
   - `DEMO999_sorted_filenames.txt`
   - `DEMO999_anchor.txt`
   - `DEMO999_alignedTo_MD662&661-F116-2017.06.07-04.39.41_MD661_1_0346_prep2_sectionLimits.json`
+    - `{"left_section_limit": 85, "right_section_limit": 356}`
   - `DEMO999_alignedTo_MD662&661-F116-2017.06.07-04.39.41_MD661_1_0346_prep2_cropbox.json`
+    - `{"rostral_limit": 468, "ventral_limit": 620, "caudal_limit": 1244, "dorsal_limit": 129}`
 - After these are downloaded, a for loop is traversed to download the `*_prep1_thumbnail_mask.png` for every section downloading into `THUMBNAIL_DATA_ROOTDIR/CSHL_data_processed/DEMO999_prep1_thumbnail_mask/`. 
  - 272 `*_MD661_#_####_prep1_thumbnail_mask.png` files
 - Following that, two `*_prep2_raw_NtbNormalizedAdaptiveInvertedGamma.tif` files are downloaded into `THUMBNAIL_DATA_ROOTDIR/CSHL_data_processed/DEMO999_prep2_raw_NtbNormalizedAdaptiveInvertedGamma/`
