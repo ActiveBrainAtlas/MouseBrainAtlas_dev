@@ -818,6 +818,7 @@ class DataManager(object):
                                  include_only="*win%(win_id)d*warp*grid_indices_lookup*" % {'win_id':win_id}, redownload=True)
                 timestamps = []
                 for fn in os.listdir(os.path.join(ANNOTATION_ROOTDIR, stack)):
+                    print fn
                     if 'lookup' not in fn:
                         continue
 
@@ -1081,7 +1082,7 @@ class DataManager(object):
 
     @staticmethod
     def get_anchor_filename_filename_v2(stack):
-        fp = os.path.join(DATA_ROOTDIR, 'operation_configs', 'from_none_to_aligned.ini')
+        fp = os.path.join(DATA_ROOTDIR, 'CSHL_data_processed', stack, 'operation_configs', 'from_none_to_aligned.ini')
         return fp
 
     @staticmethod
@@ -1090,6 +1091,8 @@ class DataManager(object):
         if not os.path.exists(fp):
             sys.stderr.write("No anchor.txt is found. Seems we are using the operation ini to provide anchor. Try to load operation ini.\n")
             fp = DataManager.get_anchor_filename_filename_v2(stack) # ini
+            print fp
+            print '****************************************************************'
             anchor_image_name = load_ini(fp)['anchor_image_name']
         else:
             # download_from_s3(fp, local_root=THUMBNAIL_DATA_ROOTDIR)
@@ -1266,7 +1269,7 @@ class DataManager(object):
                         return_origin_instead_of_bbox=False,
                        return_dict=False, only_2d=True):
         """
-        Loads the cropping box for the given crop.
+        Loads the cropping box for the given crop at thumbnail (downsample 32 times from raw) resolution.
 
         Args:
             convert_section_to_z (bool): If true, return (xmin,xmax,ymin,ymax,zmin,zmax) where z=0 is section #1; if false, return (xmin,xmax,ymin,ymax,secmin,secmax)
@@ -1280,13 +1283,12 @@ class DataManager(object):
             fp = DataManager.get_cropbox_filename_v2(stack=stack, anchor_fn=anchor_fn, prep_id=prep_id)
         else:
             raise Exception("prep_id %s must be either str or int" % prep_id)
-
         if not os.path.exists(fp):
             sys.stderr.write("Seems you are using operation INIs to provide cropbox.\n")
             if prep_id == 2 or prep_id == 'alignedBrainstemCrop':
-                fp = os.path.join(DATA_ROOTDIR, 'operation_configs', 'from_padded_to_brainstem.ini')
+                fp = os.path.join(DATA_ROOTDIR, 'CSHL_data_processed', stack, 'operation_configs', 'from_padded_to_brainstem.ini')
             elif prep_id == 5 or prep_id == 'alignedWithMargin':
-                fp = os.path.join(DATA_ROOTDIR, 'operation_configs', 'from_padded_to_wholeslice.ini')
+                fp = os.path.join(DATA_ROOTDIR, 'CSHL_data_processed', stack, 'operation_configs', 'from_padded_to_wholeslice.ini')
             else:
                 raise Exception("Not implemented")
         else:
@@ -4370,8 +4372,8 @@ class DataManager(object):
             what (str): "features" or "locations"
 
         Note:
-            If what == "locations", the output has extension '.bp'
-            but it is actually a text file. This is largely a legacy issue.
+            If what == "locations", the output has extension '.bp' 
+            but it is actually a text file. This is a legacy mistake.
         """
 
         if timestamp == 'now':
@@ -4439,7 +4441,7 @@ class DataManager(object):
                               normalization_scheme=normalization_scheme,
                                              model_name=model_name, what='features', timestamp=timestamp)
         create_parent_dir_if_not_exists(features_fp)
-        bp.pack_ndarray_file(features, features_fp)
+        bp.pack_ndarray_file(np.array(features), features_fp)
 
         if ENABLE_UPLOAD_S3:
             upload_to_s3(features_fp)
@@ -4640,7 +4642,7 @@ class DataManager(object):
     #     return image_dir
 
     @staticmethod
-    def load_image_v2(stack, prep_id, resol='raw', version=None, section=None, fn=None, data_dir=DATA_DIR, ext=None, thumbnail_data_dir=THUMBNAIL_DATA_DIR):
+    def load_image_v2(stack, prep_id, resol='raw', version=None, section=None, fn=None, data_dir=DATA_DIR, ext=None, thumbnail_data_dir=THUMBNAIL_DATA_DIR, convert_from_alternative=True):
 
         img_fp = DataManager.get_image_filepath_v2(stack=stack, prep_id=prep_id, resol=resol, version=version,
                                                        section=section, fn=fn, data_dir=data_dir, ext=ext,
@@ -4674,26 +4676,29 @@ class DataManager(object):
         else:
             # sys.stderr.write("Not using image_cache.\n")
             img = cv2.imread(img_fp, -1)
-            if img is None:
-                sys.stderr.write("cv2.imread fails to load. Try skimage.imread.\n")
+	    if not os.path.exists(img_fp):
+		sys.stderr.write("File %s does not exists. Give up loading.\n" % img_fp)
+		img = None
+	    elif img is None:
+                sys.stderr.write("cv2.imread fails to load %s. Try skimage.imread.\n" % img_fp)
                 try:
                     img = imread(img_fp, -1)
                 except:
-                    sys.stderr.write("skimage.imread fails to load.\n")
+                    sys.stderr.write("skimage.imread fails to load %s.\n" % img_fp)
                     img = None
 
-        if img is None:
+        if img is None and convert_from_alternative:
             sys.stderr.write("Image fails to load. Trying to convert from other resol/versions.\n")
 
             if resol != 'raw':
                 try:
-                    sys.stderr.write("Resolution %s is not available. Instead, try loading raw and then downscale...\n" % resol)
-                    img = DataManager.load_image_v2(stack=stack, prep_id=prep_id, resol='raw', version=version, section=section, fn=fn, data_dir=data_dir, ext=ext, thumbnail_data_dir=thumbnail_data_dir)
+                    sys.stderr.write("Resolution %s is not available. Try to load raw and then downscale.\n" % resol)
+                    img = DataManager.load_image_v2(stack=stack, prep_id=prep_id, resol='raw', version=version, section=section, fn=fn, data_dir=data_dir, ext=ext, thumbnail_data_dir=thumbnail_data_dir, convert_from_other=False)
 
                     downscale_factor = convert_resolution_string_to_um(resolution='raw', stack=stack)/convert_resolution_string_to_um(resolution=resol, stack=stack)
                     img = rescale_by_resampling(img, downscale_factor)
                 except:
-                    sys.stderr.write('Cannot load raw either.')
+                    sys.stderr.write('Cannot load raw.\n')
 
                     if version == 'blue':
                         img = DataManager.load_image_v2(stack=stack, prep_id=prep_id, resol=resol, version=None, section=section, fn=fn, data_dir=data_dir, ext=ext, thumbnail_data_dir=thumbnail_data_dir)[..., 2]
@@ -4710,22 +4715,21 @@ class DataManager(object):
                         img = DataManager.load_image_v2(stack=stack, prep_id=prep_id, resol=resol, version=None, section=section, fn=fn, data_dir=data_dir, ext=ext, thumbnail_data_dir=thumbnail_data_dir)
                         img = img[..., 2]
                     elif version == 'mask' and (resol == 'down32' or resol == 'thumbnail'):
-                        if isinstance(prep_id, str):
-                            prep_id = prep_str_to_id_2d[prep_id]
+			sys.stderr.write("prep_id = %s\n" % prep_id)
 
-                        if prep_id == 5:
+                        if prep_id == 5 or prep_id == 'alignedWithMargin':
                             sys.stderr.write('Cannot load mask %s, section=%s, fn=%s, prep=%s\n' % (stack, section, fn, prep_id))
                             sys.stderr.write('Try finding prep1 masks.\n')
-                            mask_prep1 = DataManager.load_image_v2(stack=stack, section=section, fn=fn, prep_id=1, version='mask', resol='thumbnail')
+                            mask_prep1 = DataManager.load_image_v2(stack=stack, section=section, fn=fn, prep_id=1, version='mask', resol='thumbnail', convert_from_alternative=False)
                             xmin,xmax,ymin,ymax = DataManager.load_cropbox_v2(stack=stack, prep_id=prep_id, return_dict=False, only_2d=True)
                             mask_prep2 = mask_prep1[ymin:ymax+1, xmin:xmax+1].copy()
                             return mask_prep2.astype(np.bool)
 
-                        elif prep_id == 2:
+                        elif prep_id == 2 or prep_id == 'alignedBrainstemCrop':
                             # get prep 2 masks directly from prep 5 masks.
                             try:
                                 sys.stderr.write('Try to find prep5 mask.\n')
-                                mask_prep5 = DataManager.load_image_v2(stack=stack, section=section, fn=fn, prep_id=5, version='mask', resol='thumbnail')
+                                mask_prep5 = DataManager.load_image_v2(stack=stack, section=section, fn=fn, prep_id=5, version='mask', resol='thumbnail', convert_from_alternative=False)
                                 xmin,xmax,ymin,ymax = DataManager.load_cropbox_v2_relative(stack=stack, prep_id=prep_id, wrt_prep_id=5, out_resolution='down32')
                                 mask_prep2 = mask_prep5[ymin:ymax+1, xmin:xmax+1].copy()
                                 return mask_prep2.astype(np.bool)
@@ -4734,7 +4738,7 @@ class DataManager(object):
                                 sys.stderr.write('Failed to load prep5 mask.\n')
                                 sys.stderr.write('Try to find prep1 mask.\n')
                                 try:
-                                    mask_prep1 = DataManager.load_image_v2(stack=stack, section=section, fn=fn, prep_id=1, version='mask', resol='thumbnail')
+                                    mask_prep1 = DataManager.load_image_v2(stack=stack, section=section, fn=fn, prep_id=1, version='mask', resol='thumbnail', convert_from_alternative=False)
                                     sys.stderr.write('Loaded prep1 mask.\n')
                                 except:
                                     sys.stderr.write('Failed to find prep1 mask. Give up.\n')
@@ -4744,7 +4748,7 @@ class DataManager(object):
                                 return mask_prep2.astype(np.bool)
                         else:
                             try:
-                                mask = DataManager.load_image_v2(stack=stack, section=section, fn=fn, prep_id=prep_id, version='mask', resol='down32')
+                                mask = DataManager.load_image_v2(stack=stack, section=section, fn=fn, prep_id=prep_id, version='mask', resol='thumbnail', convert_from_alternative=False)
                                 return mask.astype(np.bool)
                             except:
                                 sys.stderr.write('Cannot load mask %s, section=%s, fn=%s, prep=%s\n' % (stack, section, fn, prep_id))
@@ -4908,17 +4912,19 @@ class DataManager(object):
 
 
     @staticmethod
-    def get_image_dimension(stack):
+    def get_image_dimension(stack, prep_id='alignedBrainstemCrop'):
         """
+        Returns the dimensions at raw resolution for the alignedBrainstemCrop images.
+        
         Returns:
-            (image width, image height).
+            (raw image width, raw image height)
         """
 
         # first_sec, last_sec = DataManager.load_cropbox(stack)[4:]
         # anchor_fn = DataManager.load_anchor_filename(stack)
         # filename_to_section, section_to_filename = DataManager.load_sorted_filenames(stack)
 
-        xmin, xmax, ymin, ymax = DataManager.load_cropbox_v2(stack=stack, prep_id=2)
+        xmin, xmax, ymin, ymax = DataManager.load_cropbox_v2(stack=stack, prep_id=prep_id)
         return (xmax - xmin + 1) * 32, (ymax - ymin + 1) * 32
 
         # for i in range(10, 13):
