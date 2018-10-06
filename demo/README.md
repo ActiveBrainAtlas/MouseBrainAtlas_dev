@@ -22,7 +22,7 @@ All generated and downloaded data are stored in `demo/demo_data/`.
 
 ## Installation
 
-A configuration script is provided to create a [virtualenv](https://virtualenv.pypa.io/en/stable/) called **mousebrainatlas** and install necessary packages.
+A configuration script is provided to create a [virtualenv](https://virtualenv.pypa.io/en/stable/) called **mousebrainatlas_virtualenv** and install necessary packages.
 ```
 # Modify the first a few lines of config.sh according to your specific use case, then
 source setup/config.sh
