@@ -6,7 +6,7 @@
 - In `MD585_input_spec.ini`, set image list to "all". This will expand to all image names according to the sorted filename list. To get a RGB-average gray channel rather than the blue channel, `python extract_channel.py MD585_input_spec.ini -1 gray` Sep 26 18:30 - Sep 27 01:01. Can only use one process.
 - thumbnail: Sep 27 07:29 - Sep 27 08:11
 - I should make `from_none_to_aligned.ini` not dependent on DATA_ROOTDIR (TODO). IDEA: assign "default" to the keys.
-- `align_v3.py` and `compose_v3.py` still use "sorted_image_name_list", changed to using "image_name_list". This runs from xxx- xxx
+- `align_v3.py` and `compose_v3.py` still use "sorted_image_name_list", changed to using "image_name_list". This runs from Oct  7 19:01 - Oct  7 23:32
 - `warp_crop` thumbnail must use more than 1 jobs, otherwise it will complain argument list too long. `--njobs 8` works fine. Time Sep 27 11:30 - Sep 27 16:09
 - `preprocess` GUI. "Edit transform" -> Make sure as you go through images, the right panel does not show double shadows (which means this consecutive pair of images are not aligned well).
 - extract features: Sep 27 23:08 - Sep 28 03:02
