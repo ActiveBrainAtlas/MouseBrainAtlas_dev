@@ -47,6 +47,9 @@ if args.channel == -1:
                 jobs_per_node=args.njobs,
                 local_only=True)
 else:
+    print '\nRUNNING: '
+    print 'convert \"'+DataManager.get_image_filepath_v2(stack=stack, prep_id=prep_id, resol=resol, version=version, fn=image_name_list[0])+'\" -channel %(channel)s -separate \"'+DataManager.get_image_filepath_v2(stack=stack, prep_id=prep_id, resol=resol, version=args.out_version, fn=image_name_list[0])+'\"\n'% {'channel': 'RGB'[args.channel]}
+    
     run_distributed('convert \"%%(in_fp)s\" -channel %(channel)s -separate \"%%(out_fp)s\"' % {'channel': 'RGB'[args.channel]},
                 kwargs_list=[{'in_fp': DataManager.get_image_filepath_v2(stack=stack, prep_id=prep_id, 
                                         resol=resol, version=version, fn=img_name),
