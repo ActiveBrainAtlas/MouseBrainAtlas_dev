@@ -1,17 +1,12 @@
-Yuncong has already done the installation part. The user just need to follow instructions in "Regular use".
-
 # Installation
+
+This part needs to be done only once. It has already been done on the atlas room workstation. No need to do it for regular uses.
 
 ```
 ＃ Install vtk 7.1.1 (Cannot use newest version 8 because the window crashes immediately after it launches)
 cd /home/yuncong/MouseBrainAtlas/setup/
 wget https://www.vtk.org/files/release/7.1/vtkpython-7.1.1-Linux-64bit.tar.gz
 tar xfz vtkpython-7.1.1-Linux-64bit.tar.gz
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:`pwd`/vtkpython-7.1.1-Linux-64bit/lib/
-export PYTHONPATH=$PYTHONPATH:`pwd`/vtkpython-7.1.1-Linux-64bit/lib/python2.7/site-packages/
-
-# Enter the repository folder (your path might be different from this)
-cd /home/yuncong/MouseBrainAtlas
 
 # Install required python packages
 sudo apt-get install libgeos-dev
