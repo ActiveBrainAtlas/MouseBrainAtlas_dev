@@ -385,8 +385,8 @@ def plot_by_method_by_structure(data_all_stacks_all_structures, structures, stac
     plt.figure(figsize=figsize);
     for stack_i, stack in enumerate(stacks):
         data_all_structures = data_all_stacks_all_structures[stack]
-        data_mean = [np.mean(data_all_structures[s]) for s in structures]
-        data_std = [np.std(data_all_structures[s]) for s in structures]
+        data_mean = [np.mean(data_all_structures[s]) if s in data_all_structures else 0 for s in structures]
+        data_std = [np.std(data_all_structures[s])  if s in data_all_structures else 0 for s in structures]
         plt.bar(stack_i + (n_stacks + spacing_btw_stacks) * np.arange(n_structures), data_mean, yerr=data_std, label=stack, color=np.array(stack_to_color[stack])/255.)
 
         plt.gca().yaxis.grid(True, linestyle='-', which='major', color='grey', alpha=0.5)

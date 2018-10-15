@@ -4,4 +4,7 @@ demo/demo_data/
 # Exclude virtualenv
 mousebrainatlas_virtualenv/
 
+# Exclude vtk installation
+setup/vtk*
+
 *.pyc

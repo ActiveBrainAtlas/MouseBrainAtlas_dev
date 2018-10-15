@@ -56,7 +56,7 @@ download_to_demo(rel_fp)
 # Download Lauren's experiment's markers that are before aligning to atlas.
 
 marker_resolution = '10.0um'
-for brain_name in ['LM94_LM96_LM25', 'LM38', 'LM30new', 'LM27', 'LM37', 'LM22', 'LM32', 'LM17', 'LM48', 'LM31', 'LM95', 'LM41', 'LM84', 'LM40new', 'LM86', 'LM54', 'LM46']:
+for brain_name in ['LM94_LM96_LM25', 'LM38', 'LM30new', 'LM27', 'LM37', 'LM22', 'LM32', 'LM17', 'LM48', 'LM31', 'LM95', 'LM41', 'LM84', 'LM40new', 'LM86', 'LM54', 'LM46', 'LM51', 'LM107', 'LM106', 'LM105']:
     fp = DataManager.get_lauren_markers_filepath(brain_name, structure='All', resolution=marker_resolution)
     rel_fp = relative_to_local(fp, local_root=DATA_ROOTDIR)
     download_to_demo(rel_fp)

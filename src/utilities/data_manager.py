@@ -2306,7 +2306,7 @@ class DataManager(object):
                       levels=.5):
         """
         Args:
-            levels (float or a list of float): levels to load
+            levels (float or a list of float, or dict of float): levels to load
         """
 
         kwargs = locals()
@@ -2333,22 +2333,43 @@ class DataManager(object):
                     sys.stderr.write('Error loading mesh for %s: %s\n' % (structure, e))
             return meshes
 
-        else:
+	elif isinstance(levels, list):
             meshes_all_levels_all_structures = defaultdict(dict)
-            for structure in structures:
-                for level in levels:
-                    try:
-                        meshes[structure][level] = DataManager.load_mesh_v2(brain_spec=brain_spec,
+	    for structure in structures:
+    	        for level in levels:
+		    try:
+                        meshes_all_levels_all_structures[structure][level] = DataManager.load_mesh_v2(brain_spec=brain_spec,
                                                                      structure=structure,
                                                                      resolution=resolution,
                                                                      return_polydata_only=return_polydata_only,
                                                                     level=level)
                     except Exception as e:
-                        raise e
+                        #raise e
                         sys.stderr.write('Error loading mesh for %s: %s\n' % (structure, e))
             meshes_all_levels_all_structures.default_factory = None
+	    return meshes_all_levels_all_structures
 
-            return meshes_all_levels_all_structures
+	elif isinstance(levels, dict):
+
+	    meshes_all_structures = defaultdict()
+
+	    for structure in structures:
+		
+		assert isinstance(levels[structure], float)
+		try:
+                    meshes_all_structures[structure] = DataManager.load_mesh_v2(brain_spec=brain_spec,
+                                                                     structure=structure,
+                                                                     resolution=resolution,
+                                                                     return_polydata_only=return_polydata_only,
+                                                                    level=levels[structure])
+                except Exception as e:
+                    #raise e
+                    sys.stderr.write('Error loading mesh for %s: %s\n' % (structure, e))
+            meshes_all_structures.default_factory = None
+	    return meshes_all_structures
+	else:
+	    raise Exception("Argument `levels` must be either dict or list")
+
 
     @staticmethod
     def get_atlas_canonical_centroid_filepath(atlas_name, **kwargs):
