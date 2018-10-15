@@ -1,0 +1,10 @@
+set(vtkPython_LOADED 1)
+set(vtkPython_DEPENDS "vtkCommonCore")
+set(vtkPython_LIBRARIES "/home/kitware/code/vtk/build-sb/install/lib/libpython2.7.so")
+set(vtkPython_INCLUDE_DIRS "${VTK_INSTALL_PREFIX}/include/vtk-7.1;/home/kitware/code/vtk/build-sb/install/include/python2.7")
+set(vtkPython_LIBRARY_DIRS "")
+set(vtkPython_RUNTIME_LIBRARY_DIRS "${VTK_INSTALL_PREFIX}/lib")
+set(vtkPython_WRAP_HIERARCHY_FILE "${CMAKE_CURRENT_LIST_DIR}/vtkPythonHierarchy.txt")
+set(vtkPython_KIT "")
+set(vtkPython_EXCLUDE_FROM_WRAPPING 1)
+

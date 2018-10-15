@@ -7,6 +7,8 @@ try:
     from vtk.util import numpy_support
 except:
     sys.stderr.write('No vtk\n')
+import vtk
+from vtk.util import numpy_support
 
 try:
     import mcubes # https://github.com/pmneila/PyMCubes
@@ -20,6 +22,7 @@ sys.path.append(os.path.join(os.environ['REPO_DIR'], 'utilities'))
 from utilities2015 import *
 from metadata import *
 from data_manager import *
+print os.environ['REPO_DIR']
 
 #######################################################################
 

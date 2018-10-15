@@ -2323,29 +2323,29 @@ class DataManager(object):
         if isinstance(levels, float) or levels is None:
             meshes = {}
             for structure in structures:
-                try:
+                #try:
                     meshes[structure] = DataManager.load_mesh_v2(brain_spec=brain_spec,
                                                                  structure=structure,
                                                                  resolution=resolution,
                                                                  return_polydata_only=return_polydata_only,
                                                                 level=levels)
-                except Exception as e:
-                    sys.stderr.write('Error loading mesh for %s: %s\n' % (structure, e))
+                #except Exception as e:
+                    #sys.stderr.write('Error loading mesh for %s: %s\n' % (structure, e))
             return meshes
 
         else:
             meshes_all_levels_all_structures = defaultdict(dict)
             for structure in structures:
                 for level in levels:
-                    try:
+                    #try:
                         meshes[structure][level] = DataManager.load_mesh_v2(brain_spec=brain_spec,
                                                                      structure=structure,
                                                                      resolution=resolution,
                                                                      return_polydata_only=return_polydata_only,
                                                                     level=level)
-                    except Exception as e:
-                        raise e
-                        sys.stderr.write('Error loading mesh for %s: %s\n' % (structure, e))
+                    #except Exception as e:
+                        #raise e
+                        #sys.stderr.write('Error loading mesh for %s: %s\n' % (structure, e))
             meshes_all_levels_all_structures.default_factory = None
 
             return meshes_all_levels_all_structures
