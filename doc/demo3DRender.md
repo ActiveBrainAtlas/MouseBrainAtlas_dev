@@ -26,8 +26,9 @@ cd setup
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:`pwd`/vtkpython-7.1.1-Linux-64bit/lib/
 export PYTHONPATH=$PYTHONPATH:`pwd`/vtkpython-7.1.1-Linux-64bit/lib/python2.7/site-packages/
 
-python demo/download_demo_data_render3d.py (Not necessary since all data are already downloaded)
-python demo/demo_render3d.py --render_config_atlas render_config_atlas.csv --experiments_config demo/lauren_experiments.csv 
+cd ../demo/
+python download_demo_data_render3d.py (Not necessary since all data are already downloaded)
+python demo_render3d.py --render_config_atlas render_config_atlas.csv --experiments_config demo/lauren_experiments.csv 
 ```
 
 - The file `lauren_experiments.csv` specifies which experiments to display markers for and the color of each.
