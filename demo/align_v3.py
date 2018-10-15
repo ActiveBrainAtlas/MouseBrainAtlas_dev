@@ -44,10 +44,9 @@ image_name_list = input_spec['image_name_list']
 if image_name_list == 'all':
     image_name_list = map(lambda x: x[0], sorted(DataManager.load_sorted_filenames(stack=stack)[0].items(), key=lambda x: x[1]))
     #image_name_list = DataManager.load_sorted_filenames(stack=stack)[0].keys()
-    
+
 if args.op is not None:
-    #op = load_ini(os.path.join(DATA_ROOTDIR, 'operation_configs', args.op + '.ini'))
-    op = load_ini(os.path.join(DATA_ROOTDIR, 'CSHL_data_processed', stack, 'operation_configs', args.op + '.ini'))
+    op = load_ini(os.path.join(DATA_ROOTDIR, 'operation_configs', args.op + '.ini'))
     assert op['type'] == 'warp', "Op must be a warp"
     elastix_output_dir = op['elastix_output_dir']
     params_fp = op['elastix_parameter_fp']

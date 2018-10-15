@@ -46,10 +46,7 @@ for img_name in image_name_list:
     create_parent_dir_if_not_exists(out_fp)
     
     img = imread(in_fp)
-       
-    print img_name
     print in_fp
-    print out_fp
     print img.dtype
     
     img_tb = img[::int(1./args.rescale_factor), ::int(1./args.rescale_factor)]

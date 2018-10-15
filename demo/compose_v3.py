@@ -32,7 +32,6 @@ from preprocess_utilities import *
 from data_manager import DataManager
 
 input_spec = load_ini(args.input_spec)
-print input_spec
 image_name_list = input_spec['image_name_list']
 if image_name_list == 'all':
     #image_name_list = DataManager.load_sorted_filenames(stack=stack)[0].keys()
