@@ -1,12 +1,13 @@
 - If raw data needs flip/rotation first, use `warp_crop.py` with one of the rotate operations (e.g. "rotate_transverse", "rotate_transpose", "rotate90").
-- Whether the data folder is located at an external drive or a PCIe-connected local drive makes a big difference on preprocessing speed as a large amount of IO is involved.
+- Whether the data folder is located at an external drive or a PCIe-connected local drive, also HDD or SSD, makes a big difference on preprocessing speed as a large amount of IO is involved. The timings reported below are for the case that raw data are stored in an external HDD connected via a USB 2.0 (?) port - it is way too slow than reasonable, suggesting a lot of thrashing was happening.
 - Raw data folder might contain images with different filenames but are of the same slice. One can be the re-scanned version of the other. So the number of retrieved files by searching data folder might be more than that provided in the sorted filename list.
 - 444 images found. convert jp2 to raw tiff: Sep 26 07:25 - Sep 26 10:19. Using more than one process tends to blow up memory and cause IO thrashing. Also, remember to run these commands in a `screen` session, so that a disconnected ssh connection will not stop the program.
 - Put `MD585_sorted_filenames.txt` under data folder.
 - In `MD585_input_spec.ini`, set image list to "all". This will expand to all image names according to the sorted filename list. To get a RGB-average gray channel rather than the blue channel, `python extract_channel.py MD585_input_spec.ini -1 gray` Sep 26 18:30 - Sep 27 01:01. Can only use one process.
 - thumbnail: Sep 27 07:29 - Sep 27 08:11
-- I should make `from_none_to_aligned.ini` not dependent on DATA_ROOTDIR (TODO).
-- `align_v3.py` and `compose_v3.py` still use "sorted_image_name_list", changed to using "image_name_list".
+- I should make `from_none_to_aligned.ini` not dependent on DATA_ROOTDIR (TODO). IDEA: assign "default" to the keys. Also, custom output dir should be `MD585_custom_transforms`
+- `align_v3.py` and `compose_v3.py` still use "sorted_image_name_list", changed to using "image_name_list". This runs from Oct  7 19:01 - Oct  7 23:42
+- Copy from template operation folder these two files `from_none_to_padded.ini` and `from_aligned_to_padded.ini` - no need to change anything.
 - `warp_crop` thumbnail must use more than 1 jobs, otherwise it will complain argument list too long. `--njobs 8` works fine. Time Sep 27 11:30 - Sep 27 16:09
 - `preprocess` GUI. "Edit transform" -> Make sure as you go through images, the right panel does not show double shadows (which means this consecutive pair of images are not aligned well).
 - extract features: Sep 27 23:08 - Sep 28 03:02
