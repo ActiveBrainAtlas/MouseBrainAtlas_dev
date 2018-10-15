@@ -32,6 +32,7 @@ python demo_render3d.py --render_config_atlas render_config_atlas.csv --experime
 - The file `lauren_experiments.csv` specifies which experiments to display markers for and the color of each.
 - The file `render_config_atlas.csv` specifies the color/opacity of each atlas structure.
 - If want to show SNR_L with the largest possible probability level, in `demo_render3d.py` set `use_big_snr_l` to True.
+- You can also choose to show all markers or a subset of them in `demo_render3d.py` (line 110).
 - In the 3D viewer, use mouse wheel to zoom and SHIFT+drag to move. Press Q to quit.
 
 If encounter the error "X Error of failed request", follow [this fix](https://askubuntu.com/a/882047).
