@@ -1275,7 +1275,6 @@ class DataManager(object):
             convert_section_to_z (bool): If true, return (xmin,xmax,ymin,ymax,zmin,zmax) where z=0 is section #1; if false, return (xmin,xmax,ymin,ymax,secmin,secmax)
             prep_id (int)
         """
-
         if isinstance(prep_id, str) or isinstance(prep_id, unicode):
             fp = DataManager.get_cropbox_filename_v2(stack=stack, anchor_fn=anchor_fn, prep_id=prep_id)
         elif isinstance(prep_id, int):
@@ -1283,6 +1282,7 @@ class DataManager(object):
             fp = DataManager.get_cropbox_filename_v2(stack=stack, anchor_fn=anchor_fn, prep_id=prep_id)
         else:
             raise Exception("prep_id %s must be either str or int" % prep_id)
+        
         if not os.path.exists(fp):
             sys.stderr.write("Seems you are using operation INIs to provide cropbox.\n")
             if prep_id == 2 or prep_id == 'alignedBrainstemCrop':
@@ -1315,6 +1315,7 @@ class DataManager(object):
                     raise
 
                 if fp.endswith('cropbox.ini'):
+                    print 'YUH'
                     cropbox_dict = load_ini(fp, section=prep_id_str)
                 elif '_to_' in fp:
                     cropbox_dict = load_ini(fp)

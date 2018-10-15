@@ -594,6 +594,7 @@ XY_PIXEL_DISTANCE_TB_AXIOSCAN = XY_PIXEL_DISTANCE_LOSSLESS_AXIOSCAN * 32
 #all_annotated_stacks = all_annotated_nissl_stacks + all_annotated_ntb_stacks
 
 all_nissl_stacks = ['MD585', 'MD594', 'MD589']
+all_nissl_stacks = ['MD662']
 all_nissl_stacks = []
 #all_ntb_stacks = ['DEMO998','UCSD001']
 all_ntb_stacks = ['UCSD001']
