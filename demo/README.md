@@ -66,7 +66,7 @@ Draw initial snake contours.
 - Create `input_spec.ini` as (alignedPadded,NtbNormalized,thumbnail). `python masking.py input_spec.ini demo_data/CSHL_data_processed/DEMO998/DEMO998_prep1_thumbnail_initSnakeContours.pkl`
 - **(HUMAN)** Return to masking GUI to inspect and correct the automatically generated masks.
 - Create `input_spec.ini` as (None,NtbNormalized,thumbnail). `python generate_original_image_crop_csv.py --inpout_spec input_spec.ini`. This creates `DEMO998_original_image_crop.csv` under data dir. In this file each row is x,y,width,height in thumbnail resolution.
-- Create `input_spec.ini` as (alignedPadded,mask,thumbnail). `python warp_crop.py --input_spec input_spec.ini --op_id from_padded_to_none`.
+- Create `input_spec.ini` as (alignedPadded,mask,thumbnail). Copy template `from_padded_to_none.ini`. Copy and modify operation `crop_orig.ini`. `python warp_crop.py --input_spec input_spec.ini --op_id from_padded_to_none`.
  
 ### Local adaptive intensity normalization
 - Create `input_spec.ini` as (None,Ntb,raw). `python normalize_intensity_adaptive.py input_spec.ini NtbNormalizedAdaptiveInvertedGamma`
