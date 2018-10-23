@@ -1,37 +1,37 @@
 
 ## MouseInfo: the information about a single experimental mouse
 
-* Number 
+* __Number__
   - Unique designation for each mouse. The mouse's "name".
   - `2018-0129 04`
-* Storage
+* __Storage__
   - `Stock Room -80C`
-* Genotype
+* __Genotype__
   - `c57 p56`
-* Gender
+* __Gender__
   - `M`
-* Weight
+* __Weight__
   - Mouse weight in grams.
   - `24.4g`
-* DOB
+* __DOB__
   - Mouse date of birth.
   - `2017/12/05`
-* Perfuse date
+* __Perfuse date__
   - `2018_01_29`
-* Fix Type	
+* __Fix Type__
   - `4% PFA`
-* Fix Date	
+* __Fix Date__
   - `2018/01/29`
-* Sucrose Date	
+* __Sucrose Date__
   - `2018/01/31`
-* brain photo	
+* __brain photo__
   - `yes`
-* OCT Freeze Date	
+* __OCT Freeze Date__
   - `2018_02_05`
-* sectioned	
+* __sectioned__
   - `2018_08-18`
-* slides	
+* __slides__
   - `125`
-* sections
+* __sections__
   - `540`
 		 												
