@@ -2,16 +2,19 @@
 ## MouseInfo: the information about a single experimental mouse
 
 * Number 
+  - Unique designation for each mouse. The mouse's "name".
   - `2018-0129 04`
-* Storage	
+* Storage
   - `Stock Room -80C`
 * Genotype
   - `c57 p56`
-* Gender	
+* Gender
   - `M`
-* Weight	
+* Weight
+  - Mouse weight in grams.
   - `24.4g`
-* DOB	
+* DOB
+  - Mouse date of birth.
   - `2017/12/05`
 * Perfuse date
   - `2018_01_29`
