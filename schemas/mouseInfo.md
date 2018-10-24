@@ -5,10 +5,12 @@
   - Unique designation for each mouse. The mouse's "name".
   - `2018-0129 04`
 * __Storage__
+  - Location where mouse was stored.
   - `Stock Room -80C`
 * __Genotype__
   - `c57 p56`
 * __Gender__
+  - Gender of the mouse, either M or F.
   - `M`
 * __Weight__
   - Mouse weight in grams.
@@ -17,6 +19,7 @@
   - Mouse date of birth.
   - `2017/12/05`
 * __Perfuse date__
+  - Date the brain was perfused.
   - `2018_01_29`
 * __Fix Type__
   - `4% PFA`
@@ -31,7 +34,9 @@
 * __sectioned__
   - `2018_08-18`
 * __slides__
+  - Number of slides scanned. Each slide can have multiple sections.
   - `125`
 * __sections__
+  - Total number of slices in the brain stack.
   - `540`
 		 												
