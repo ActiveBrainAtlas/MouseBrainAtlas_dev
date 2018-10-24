@@ -44,3 +44,17 @@
   - Ach and Diams : Should it be included in the global analysis of ACH and Diams? : `YES`
   - Diams : Are the diameter traces usable?  `YES`
   - Contains reference to the analysis files, diameters time series, CNIFER time series, calcium imaging time series, and synchronized electrophysiology.
+
+## Constants for certain experiments
+
+__For Arbscans__:
+- Meta file : contains the metadata necessary to the arbscan analysis
+
+__For calcium imaging and cnifer imaging__: 
+- Image file including metadata : 6-10 GB
+- .ROI file : containing the position of the imaged regions
+
+__For all experiments__:
+- Pupil Diameter movie : .AVI file : 700-1Gb
+- Full animal behavior camera : .wmv  file 550 Mb
+- Electrophysiology, synchronization and accelerometer : ADICHT file 300 Mb
