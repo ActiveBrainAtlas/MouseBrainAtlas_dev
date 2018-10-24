@@ -20,7 +20,7 @@ The Atlas takes in histology sections as input and constructs a 3D atlas with gn
   
 - __Preprocessing Stages__
   - Downsampling factor: All thumbnail images will be downsampled by this amount: `32X`
-  - Everything below this point is a stack of images with a certain transformation/normalization/cut applied to them.
+  - *Everything below this point is a stack of images with a certain transformation/normalization/cut applied to them.*
   - Thumbnail: 
   - Aligned thumbnails: 
   - Global intensity normalization: 
