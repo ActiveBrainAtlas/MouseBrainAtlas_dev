@@ -8,6 +8,7 @@ The Atlas takes in histology sections as input and constructs a 3D atlas with gn
   - [Mouse table](mouse_info.md)
   
 - __Raw Stack__
+  - Brain Name: the designated name of the mouse brain: `UCSD001`
   - Orientation: saggital, coronal, or horozontal: `saggital`
   - Number of sections: total number of histology sections made: `500`
   - List of unusable sections: Should be a part of "Sorted Filenames"
