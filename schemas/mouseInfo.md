@@ -8,6 +8,7 @@
   - Location where mouse was stored.
   - `Stock Room -80C`
 * __Genotype__
+  - Strain of the mouse used.
   - `c57 p56`
 * __Gender__
   - Gender of the mouse, either M or F.
@@ -22,16 +23,21 @@
   - Date the brain was perfused.
   - `2018_01_29`
 * __Fix Type__
+  - What reagent was used for brain fixation.
   - `4% PFA`
 * __Fix Date__
+  - Date the brain was fixated.
   - `2018/01/29`
 * __Sucrose Date__
   - `2018/01/31`
 * __brain photo__
+  - Boolean, whether a calibrated image of the unsliced whole-brain was taken.
   - `yes`
 * __OCT Freeze Date__
+  - Optimal cutting temperature freeze date.
   - `2018_02_05`
 * __sectioned__
+  - Date the brain was sectioned.
   - `2018_08-18`
 * __slides__
   - Number of slides scanned. Each slide can have multiple sections.
