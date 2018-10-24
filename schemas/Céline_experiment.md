@@ -1,5 +1,6 @@
 ## Two Photon Imaging Experiment
 
+Céline Matéo conducts two photon imaging experiments on mice concerning the REM stage of sleep.
 
 ## Collection of tables
 
