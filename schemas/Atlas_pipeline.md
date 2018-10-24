@@ -28,7 +28,9 @@ The Atlas takes in histology sections as input and constructs a 3D atlas with gn
   - Lossless Local Adaptive Intensity Normalized Brainstem Crops: 
   
 - __Patch Features__
-  - 
+  - Inception-bn-blue: Pretrained neural network used for probabalistic segmentation, needed as input.
+  - Feature data for each slice: `SLICENAME_prep2_none_win7_inception-bn-blue_features.bp`
+  - Location data for each slice: `SLICENAME_prep2_none_win7_inception-bn-blue_locations.bp`
 
 - __Probability Volumes__
   - 
