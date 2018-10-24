@@ -30,7 +30,6 @@
   - Alpha 1: Have ALPHA 1 CNIFER been imaged? `NO`
 
 - __Analysis__
-  - RESULT FOLDER	 : Where is the data stored? : `S:\CM_DISK_10\CM_332_D8_GFAP_AI95`
   - Page in notebook : `45`
   - TO ANALYSE: Should this file be analysed? `YES`
   - ANALYSED : Has this file been analysed? `YES`
