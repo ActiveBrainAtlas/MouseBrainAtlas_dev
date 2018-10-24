@@ -33,4 +33,9 @@ The Atlas takes in histology sections as input and constructs a 3D atlas with gn
   - Location data for each slice: `SLICENAME_prep2_none_win7_inception-bn-blue_locations.bp`
 
 - __Probability Volumes__
-  - 
+  - Inception-bn-blue: Pretrained neural network used for probabalistic segmentation, needed as input.
+  - Classifier settings: region classifier settings encoded as a 3 digit number: `899`
+  - Regions: regions of interest that probability volumes are generated for: `3N, 4N, 12N`
+  - Volumes: Files with probabalistic score voluems, gradients, and global coordinates
+  - Scoremaps: Scoremaps for every ROI
+  - Contour images: jpeg files of slices overlain with probability contours
