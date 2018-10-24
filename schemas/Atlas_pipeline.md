@@ -5,7 +5,7 @@ The Atlas takes in histology sections as input and constructs a 3D atlas with gn
 ## Collection of tables
 
 - __Mouse__
-  - (Mouse table)[mouse_info.md]
+  - [Mouse table](mouse_info.md)
   
 - __Raw Stack__
   - Orientation: saggital, coronal, or horozontal: `saggital`
