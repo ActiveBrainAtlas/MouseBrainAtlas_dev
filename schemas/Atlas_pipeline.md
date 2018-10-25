@@ -18,10 +18,12 @@ The Atlas takes in histology sections as input and constructs a 3D atlas with gn
   - Section thickness: The thickness in microns of each slice: `20um`
   - Stain type: Injected compound for neuron visualization: `Ntb`
   - Stack: The stack itself, nearly 1 terrabyte. A series of images about 2GB each.
+    - Raw data stored on AWS S3, bucketname "mousebrainatlas-rawdata": [LINK](https://s3.console.aws.amazon.com/s3/buckets/mousebrainatlas-rawdata/?region=us-east-1&tab=overview)
   
 - __Preprocessing Stages__
   - Downsampling factor: All thumbnail images will be downsampled by this amount: `32X`
   - *Everything below this point is a stack of images with a certain transformation/normalization/cut applied to them.*
+    - All this data can be found on AWS S3, bucketname "mousebrainatlas-data", folder "CSHL_data_processed/": [LINK](https://s3.console.aws.amazon.com/s3/buckets/mousebrainatlas-data/CSHL_data_processed/?region=us-east-1&tab=overview)
   - Thumbnail: 
   - Aligned thumbnails: 
   - Global intensity normalization: 
