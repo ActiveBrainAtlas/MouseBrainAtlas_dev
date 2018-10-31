@@ -40,7 +40,6 @@ image_name_list = input_spec['image_name_list']
 if image_name_list == 'all':
     image_name_list = DataManager.load_sorted_filenames(stack=stack)[0].keys()
 
-
 min_size = args.min_size
 default_channel = args.default_channel
 lambda1 = args.shrink
@@ -86,8 +85,9 @@ def generate_contours(img_name, init_cnt):
     
 t = time.time()
 
-# pool = Pool(NUM_CORES/2)
-pool = Pool(NUM_CORES)
+pool = Pool(NUM_CORES/2)
+#pool = Pool(1) # STILL BAD
+#pool = Pool(NUM_CORES) BAD
 pool.map(lambda img_name: generate_contours(img_name, init_snake_contour_vertices[img_name]), image_name_list)
 pool.close()
 pool.join()

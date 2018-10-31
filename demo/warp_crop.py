@@ -19,7 +19,7 @@ parser.add_argument("--op", action='append', nargs=2,
 help="operation list")
 parser.add_argument("--input_fp", type=str, help="input filepath")
 parser.add_argument("--output_fp", type=str, help="output filepath")
-parser.add_argument("--pad_color", type=str, help="background color (black or white)", default='auto')
+parser.add_argument("--pad_color", type=str, help="background color (black or white)", default='black')
 parser.add_argument("--njobs", type=int, help="Number of parallel jobs", default=1)
 
 args = parser.parse_args()
@@ -62,6 +62,7 @@ def convert_operation_to_arr(op, resol, inverse=False, return_str=False, stack=N
 	    cropboxes_all = csv_to_dict(op['cropboxes_csv'])
 
 	    cropboxes = {}
+            print cropboxes_all
 	    for img_name in image_name_list:
 		arr_xxyy = convert_cropbox_fmt(data=cropboxes_all[img_name], in_fmt='arr_xywh', out_fmt='arr_xxyy')
 		if inverse:
@@ -123,7 +124,6 @@ if args.op_id is not None:
     image_name_list = input_spec['image_name_list']
     if image_name_list == 'all':
         image_name_list = DataManager.load_sorted_filenames(stack=stack)[0].keys()
-
     op_seq = parse_operation_sequence(args.op_id, resol=resol, return_str=True, stack=stack)
 
     ops_in_prep_id = op_seq[0][2]

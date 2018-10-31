@@ -1282,6 +1282,7 @@ class DataManager(object):
         else:
             raise Exception("prep_id %s must be either str or int" % prep_id)
 
+        print fp
         if not os.path.exists(fp):
             sys.stderr.write("Seems you are using operation INIs to provide cropbox.\n")
             if prep_id == 2 or prep_id == 'alignedBrainstemCrop':
@@ -1291,7 +1292,8 @@ class DataManager(object):
             else:
                 raise Exception("Not implemented")
         else:
-            raise Exception("Cannot find any cropbox specification.")
+            print 'TESTING'
+            #raise Exception("Cannot find any cropbox specification.")
 
             # download_from_s3(fp, local_root=THUMBNAIL_DATA_ROOTDIR)
 
@@ -2279,6 +2281,7 @@ class DataManager(object):
                          '%(basename)s_%(struct)s.stl') % \
     {'stack':brain_spec['name'], 'basename':basename, 'struct':structure}
             else:
+                print level
                 mesh_fp = os.path.join(MESH_ROOTDIR, '%(stack)s',
                           '%(basename)s',
                          '%(basename)s_%(struct)s_l%(level).1f.stl') % \

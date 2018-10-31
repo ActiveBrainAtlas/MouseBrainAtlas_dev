@@ -259,9 +259,12 @@ class MaskEditingGUI(QMainWindow):
         # self.export_final_masks(sec=sec)
 
     def export_final_masks_all_sections(self):
-        create_if_not_exists(DataManager.get_thumbnail_mask_dir_v3(stack=self.stack, prep_id='alignedPadded'))
+        #create_if_not_exists(DataManager.get_thumbnail_mask_dir_v3(stack=self.stack, prep_id='alignedPadded'))
+        create_if_not_exists(DataManager.get_thumbnail_mask_dir_v3(stack=self.stack, prep_id=1))
         for sec in self.valid_sections:
             # imsave(DataManager.get_thumbnail_mask_filename_v3(stack=self.stack, section=sec, version='aligned'), self.merged_mask_vizs[sec])
+            print sec
+            print self.merged_mask_vizs
             imsave(DataManager.get_thumbnail_mask_filename_v3(stack=self.stack, section=sec, prep_id='alignedPadded'), self.merged_mask_vizs[sec])
         sys.stderr.write('Export is completed.\n')
 
