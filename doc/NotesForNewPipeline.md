@@ -1,3 +1,4 @@
+- First of all, musy ensure `REPO_DIR` environment variable is set to the desired. `echo $REPO_DIR`.
 - If raw data needs flip/rotation first, use `warp_crop.py` with one of the rotate operations (e.g. "rotate_transverse", "rotate_transpose", "rotate90").
 - Whether the data folder is located at an external drive or a PCIe-connected local drive, also HDD or SSD, makes a big difference on preprocessing speed as a large amount of IO is involved. The timings reported below are for the case that raw data are stored in an external HDD connected via a USB 2.0 (?) port - it is way too slow than reasonable, suggesting a lot of thrashing was happening.
 - Raw data folder might contain images with different filenames but are of the same slice. One can be the re-scanned version of the other. So the number of retrieved files by searching data folder might be more than that provided in the sorted filename list.
