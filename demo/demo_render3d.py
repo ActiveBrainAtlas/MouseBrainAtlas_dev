@@ -34,7 +34,7 @@ args = parser.parse_args()
 
 # Set this to true if want to show a largest possible SNR_L with the lowest possible level.
 #use_big_snr_l = True
-use_big_snr_l = False
+use_big_snr_l = True
 
 render_config_atlas = pd.read_csv(args.render_config_atlas, index_col='name').to_dict()
 render_config_atlas['color'] = {s: eval(c) for s, c in render_config_atlas['color'].iteritems()}
@@ -108,8 +108,8 @@ for brain_name, experiment_info in experiments.iteritems():
     markers = load_data(DataManager.get_lauren_markers_filepath(brain_name, structure='All', resolution=marker_resolution))
 
     #sample_n = min(len(markers), max(len(markers)/5, 10))	# Choice: sample 20% of each experiment but at least 10 markers
-    sample_n = min(len(markers), 50) 	# Choice: randomly sample 50 markers for each experiment
-    #sample_n = len(markers)		# Choice: show all markers		
+    sample_n = min(len(markers), 150) 	# Choice: randomly sample 50 markers for each experiment
+    #sample_n = len(markers)		# Choice: show all markers
     print brain_name, 'showing', sample_n, '/', len(markers)
     markers = markers[np.random.choice(range(len(markers)), size=sample_n, replace=False)]
 
@@ -131,7 +131,7 @@ for brain_name, experiment_info in experiments.iteritems():
 
     markers_rel2atlas_actors[brain_name] = [actor_sphere(position=(x,y,z), radius=20,
                                                         color=literal_eval(experiment_info['marker_color']),
-                                                        opacity=.8 )
+                                                        opacity=.7 )
                                for marker_id, (x,y,z) in aligned_markers_rel2atlas_um.iteritems()]
 
 
@@ -141,5 +141,8 @@ launch_vtk(
           + [shell_actor_um_wrt_canonicalAtlasSpace] \
           #+ [actor_sphere(position=(0,0,0), radius=5, color=(1,1,1), opacity=1.)]
            ,
-           init_angle='sagittal'
+          init_angle='sagittal'
+          #init_angle='horizontal_topDown'
+        #init_angle='coronal_posteriorToAnterior'
+
           )

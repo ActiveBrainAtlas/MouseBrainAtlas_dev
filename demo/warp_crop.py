@@ -29,11 +29,11 @@ import os
 import numpy as np
 
 sys.path.append(os.path.join(os.environ['REPO_DIR'], 'utilities'))
+print os.environ['REPO_DIR']
 from utilities2015 import *
 from data_manager import *
 from distributed_utilities import *
 from metadata import orientation_argparse_str_to_imagemagick_str
-
 
 def convert_operation_to_arr(op, resol, inverse=False, return_str=False, stack=None):
     """
@@ -202,12 +202,15 @@ elif args.op is not None:
 
     create_parent_dir_if_not_exists(output_fp)
 
-    execute_command("convert \"%(input_fp)s\"  +repage -virtual-pixel background -background %(bg_color)s %(op_str)s -flatten -compress lzw \"%(output_fp)s\"" % \
+    try:
+	execute_command("convert \"%(input_fp)s\"  +repage -virtual-pixel background -background %(bg_color)s %(op_str)s -flatten -compress lzw \"%(output_fp)s\"" % \
                 {
 'op_str': op_str,
      'input_fp': input_fp,
      'output_fp': output_fp,
      'bg_color': pad_color
-}
-)
+})
+    except Exception as e:
+	sys.stderr.write("ImageMagick convert failed for input_fp %s: %s\n" % (input_fp, e.message))
+
 

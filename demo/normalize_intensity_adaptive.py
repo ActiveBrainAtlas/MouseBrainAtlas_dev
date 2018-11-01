@@ -4,7 +4,7 @@ import argparse
 
 parser = argparse.ArgumentParser(
     formatter_class=argparse.RawDescriptionHelpFormatter,
-    description='Linearly normalize intensity to between 0 and 255')
+    description='Perform local-window adaptive intensity normalization')
 
 parser.add_argument("input_spec", type=str, help="Input specification")
 parser.add_argument("out_version", type=str, help="Output image version")

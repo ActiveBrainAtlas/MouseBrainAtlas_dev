@@ -2293,6 +2293,7 @@ class DataManager(object):
         mesh_fp = DataManager.get_mesh_filepath_v2(brain_spec=brain_spec, structure=structure, resolution=resolution, level=level)
         mesh = load_mesh_stl(mesh_fp, return_polydata_only=return_polydata_only)
         if mesh is None:
+            print mesh
             raise Exception('Mesh is empty: %s.' % structure)
         return mesh
 
@@ -2354,7 +2355,7 @@ class DataManager(object):
 	    meshes_all_structures = defaultdict()
 
 	    for structure in structures:
-		
+
 		assert isinstance(levels[structure], float)
 		try:
                     meshes_all_structures[structure] = DataManager.load_mesh_v2(brain_spec=brain_spec,
@@ -4392,7 +4393,7 @@ class DataManager(object):
             what (str): "features" or "locations"
 
         Note:
-            If what == "locations", the output has extension '.bp' 
+            If what == "locations", the output has extension '.bp'
             but it is actually a text file. This is a legacy mistake.
         """
 
@@ -4935,7 +4936,7 @@ class DataManager(object):
     def get_image_dimension(stack, prep_id='alignedBrainstemCrop'):
         """
         Returns the dimensions at raw resolution for the alignedBrainstemCrop images.
-        
+
         Returns:
             (raw image width, raw image height)
         """
