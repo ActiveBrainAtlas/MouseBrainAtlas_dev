@@ -37,3 +37,20 @@ python demo_render3d.py --render_config_atlas render_config_atlas.csv --experime
 - In the 3D viewer, use mouse wheel to zoom and SHIFT+drag to move. Press Q to quit.
 
 If encounter the error "X Error of failed request", follow [this fix](https://askubuntu.com/a/882047).
+
+## Changing initial viewing angle
+
+The angle is controlled by three parameters:
+- view_up: vector representing the up direction
+- position: position of the camera
+- focal: position of focal point
+
+I have defined a few presets of these parameters in the function launch_vtk() in src/utilities/vis3d_utilities.py.
+The presets are: 15 (meaning 15 degrees from above), 30, 45, sagittal, coronal_posteriorToAnterior, horizontal_bottomUp, horizontal_topDown
+
+You can choose which preset to use by modifying Line 144 of demo/demo_render3d.py, just change the argument init_angle='sagittal' to any of above.
+
+Alternatively, you can choose to directly set the three arguments (view_up, position and focal).
+
+To obtain the values of these parameters, just rotate/move/zoom the atlas in the viewer until you are satisfied with the angle. Then press "g". These parameters will be printed in the terminal.
+Then you can feed them as arguments to launch_vtk(). The next time you run the code, the viewer will initialize to this angle.
