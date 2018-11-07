@@ -3,10 +3,8 @@
 ### Buckets
 
  Generated using AWS CLI command: `aws s3 ls` :
-* 2017-09-13 11:19:25 mousebrainatlas-data
-* 2018-06-26 18:09:52 mousebrainatlas-data-alexn
-* 2017-08-14 12:23:57 mousebrainatlas-rawdata
-* 2018-06-26 18:34:38 mousebrainatlas-rawdata-alexn
+* 2017-09-13 11:19:25 __mousebrainatlas-data__
+* 2017-08-14 12:23:57 __mousebrainatlas-rawdata__
 * 2017-05-16 15:59:36 mousebrainatlas-scripts
 * 2018-07-10 20:10:09 mousebraindata-open
 * 2017-05-10 17:30:28 yoav-seed-backup
@@ -49,17 +47,17 @@
 * raw_image_histograms_log/
 * raw_image_histograms_log_fullImage/
 * stacy_data/
-* training_examples/
-
-- CSHL_data  **Yoav:**  I don't see this subdirectory of mousebrainatlas-data. [Here is the output of a current ls (7/21)](ListingOf_mousebrainatlas-data)
-  - MD###                 '###' is a 3 digit brain designation
-    - *_lossless.jp2 
-    - *.lossy.jp2    
-    - *.tif     
-    - *.png    
+* training_examples/ 
     
 *_lossless.jp2 is the only file that is NOT a thumbnail. Everything else is downsized.
 
 ##### Bucket 2: mousebrainatlas-rawdata
-A lot of stuff here, will take a while.
+All files stored in glacier.
 
+Contains only raw, unprocessed files, labelled as *lossless. These files are in the folder named May be in either .jp2 or .tiff format, depends on the institution supplying the stacks.
+
+The following is a list of the possible files stored in each brain's folder.
+    - *_lossless.jp2 
+      - raw stack
+    - *.lossy.jp2    
+      - downsampled 32X
