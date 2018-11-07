@@ -49,15 +49,15 @@
 * stacy_data/
 * training_examples/ 
     
-*_lossless.jp2 is the only file that is NOT a thumbnail. Everything else is downsized.
-
+    
 ##### Bucket 2: mousebrainatlas-rawdata
+
 All files stored in glacier.
 
 Contains only raw, unprocessed files, labelled as *lossless. These files are in the folder named May be in either .jp2 or .tiff format, depends on the institution supplying the stacks.
 
-The following is a list of the possible files stored in each brain's folder.
-    - *_lossless.jp2 
-      - raw stack
-    - *.lossy.jp2    
-      - downsampled 32X
+The following is a list of the possible files stored in each brain's folder:
+- *_lossless.jp2 
+  - raw stack
+- *.lossy.jp2    
+  - downsampled 32X
