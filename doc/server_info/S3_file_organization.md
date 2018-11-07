@@ -59,5 +59,5 @@ Contains only raw, unprocessed files, labelled as *lossless. These files are in 
 The following is a list of the possible files stored in each brain's folder:
 - *_lossless.jp2 
   - raw stack
-- *.lossy.jp2    
+- *_lossy.jp2    
   - downsampled 32X
