@@ -25,7 +25,7 @@
 * CSHL_annotation_viz/
 * CSHL_cells_v2/
 * CSHL_classifiers/
-* CSHL_data_processed/
+* __CSHL_data_processed/__
 * CSHL_labelings_thalamus/
 * CSHL_labelings_v3/
 * CSHL_meshes/
@@ -40,7 +40,8 @@
 * CSHL_scoremap_viz_grid/
 * CSHL_scoremaps/
 * CSHL_simple_global_registration/
-* **CSHL_volumes/** the location of the information about the shape of the structures.
+* __CSHL_volumes/__ 
+   * The location of the information about the shape of the structures.
    * The directory Yoav used to create a 3D visualization of the atlas: CSHL_volumes/atlasV7/atlasV7_10.0um_scoreVolume/score_volumes/
 * Dropbox/
 * HRNTS2017/
