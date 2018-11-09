@@ -137,11 +137,9 @@ resol = raw
 DATA_ROOTDIR/
 |
 └── CSHL_data_processed
-    └── DEMO998
-        └── DEMO998_raw_Ntb
-            ├── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_raw_Ntb.tif
-            ├── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_raw_Ntb.tif
-            └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_raw_Ntb.tif
+    └── STACK
+        └── STACK_raw_Ntb
+            └── SLICE_raw_Ntb.tif
 ```
 - Create `input_spec.ini` as (None,Ntb,raw). `python rescale.py input_spec.ini thumbnail -f 0.03125`
 ```
@@ -158,11 +156,9 @@ resol = raw
 DATA_ROOTDIR/
 |
 └── CSHL_data_processed
-    └── DEMO998
-       └── DEMO998_thumbnail_Ntb
-            ├── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_thumbnail_Ntb.tif
-            ├── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_thumbnail_Ntb.tif
-            └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_thumbnail_Ntb.tif
+    └── STACK
+       └── STACK_thumbnail_Ntb
+            └── SLICE_thumbnail_Ntb.tif
 ```
 
 ------------------------------------------------------------------------------------------------------------------------
@@ -176,11 +172,8 @@ DATA_ROOTDIR/
 - From now on the `input_spec.ini` file contents that are used will remain in the notebook.
 ```
 DATA_ROOTDIR/
-        |
-        └── DEMO998_thumbnail_NtbNormalized
-            ├── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_thumbnail_NtbNormalized.tif
-            ├── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_thumbnail_NtbNormalized.tif
-            └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_thumbnail_NtbNormalized.tif
+        └── STACK_thumbnail_NtbNormalized
+            └── SLICE_thumbnail_NtbNormalized.tif
 ```
 
 ------------------------------------------------------------------------------------------------------------------------
@@ -198,21 +191,10 @@ Output from running `python align_compose.py input_spec.ini --op from_none_to_al
   - NOTE: Some trouble on where to save .ini files. `input_spec.ini` always in repo's demo/ folder. `from_none_to_aligned_content.ini` will be ignored here, save to DATA_ROOTDIR.
 ```
 DATA_ROOTDIR/
-|
 └── CSHL_data_processed
-    └── DEMO998
-        ├── DEMO998_elastix_output
-        │   ├── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_to_MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242
-        │   │   ├── elastix.log
-        │   │   ├── IterationInfo.0.R0.txt
-        │   │   ├── IterationInfo.0.R1.txt
-        │   │   ├── IterationInfo.0.R2.txt
-        │   │   ├── IterationInfo.0.R3.txt
-        │   │   ├── IterationInfo.0.R4.txt
-        │   │   ├── IterationInfo.0.R5.txt
-        │   │   ├── result.0.tif
-        │   │   └── TransformParameters.0.txt
-        │   └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_to_MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250
+    └── STACK
+        ├── STACK_elastix_output
+        │   └── SLICE1_to_SLICE2
         │       ├── elastix.log
         │       ├── IterationInfo.0.R0.txt
         │       ├── IterationInfo.0.R1.txt
@@ -222,19 +204,16 @@ DATA_ROOTDIR/
         │       ├── IterationInfo.0.R5.txt
         │       ├── result.0.tif
         │       └── TransformParameters.0.txt
-        └── DEMO998_transforms_to_anchor.csv
+        └── STACK_transforms_to_anchor.csv
 ```
 - Output running `python warp_crop.py --input_spec input_spec.ini --op_id from_none_to_padded`
     - Note: warp_crop.py line 92 changed to load_ini from `DATA_ROOTDIR + 'operation_configs/' + op_name + '.ini'`
 ```
 DATA_ROOTDIR/
-|
 └── CSHL_data_processed
-    └── DEMO998
-        └── DEMO998_prep1_thumbnail_NtbNormalized
-            ├── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_prep1_thumbnail_NtbNormalized.tif
-            ├── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_prep1_thumbnail_NtbNormalized.tif
-            └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep1_thumbnail_NtbNormalized.tif
+    └── STACK
+        └── STACK_prep1_thumbnail_NtbNormalized
+            └── SLICE_prep1_thumbnail_NtbNormalized.tif
 
 ```
 NOTE: By the end of GUI step a new STACK_sorted_filenames.txt will be generated, should replace the first and be more accurate. The GUI allows the user to correct files in the wrong order.
@@ -256,40 +235,22 @@ Draw initial snake contours.
 - Create `input_spec.ini` as (alignedPadded,NtbNormalized,thumbnail). `python masking.py input_spec.ini demo_data/CSHL_data_processed/DEMO998/DEMO998_prep1_thumbnail_initSnakeContours.pkl`
 ```
 DATA_ROOTDIR/
-|
 └── CSHL_data_processed
-        └── DEMO998_prep1_thumbnail_autoSubmasks
-            ├── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242
-            │   ├── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_prep1_thumbnail_autoSubmask_0.png
-            │   └── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_prep1_thumbnail_autoSubmaskDecisions.csv
-            ├── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250
-            │   ├── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_prep1_thumbnail_autoSubmask_0.png
-            │   └── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_prep1_thumbnail_autoSubmaskDecisions.csv
-            └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257
-                ├── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep1_thumbnail_autoSubmask_0.png
-                └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep1_thumbnail_autoSubmaskDecisions.csv
+        └── STACK_prep1_thumbnail_autoSubmasks
+            └── SLICE
+                ├── SLICE_prep1_thumbnail_autoSubmask_0.png
+                └── SLICE_prep1_thumbnail_autoSubmaskDecisions.csv
 ```
 - **(HUMAN)** Return to masking GUI to inspect and correct the automatically generated masks.
 ```
 DATA_ROOTDIR/
-|
 └── CSHL_data_processed
-        └── DEMO998_prep1_thumbnail_userModifiedSubmasks
-            ├── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242
-            │   ├── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_prep1_thumbnail_userModifiedParameters.json
-            │   ├── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_prep1_thumbnail_userModifiedSubmask_0.png
-            │   ├── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_prep1_thumbnail_userModifiedSubmaskContourVertices.pkl
-            │   └── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_prep1_thumbnail_userModifiedSubmaskDecisions.csv
-            ├── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250
-            │   ├── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_prep1_thumbnail_userModifiedParameters.json
-            │   ├── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_prep1_thumbnail_userModifiedSubmask_0.png
-            │   ├── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_prep1_thumbnail_userModifiedSubmaskContourVertices.pkl
-            │   └── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_prep1_thumbnail_userModifiedSubmaskDecisions.csv
-            └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257
-                ├── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep1_thumbnail_userModifiedParameters.json
-                ├── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep1_thumbnail_userModifiedSubmask_0.png
-                ├── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep1_thumbnail_userModifiedSubmaskContourVertices.pkl
-                └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep1_thumbnail_userModifiedSubmaskDecisions.csv
+        └── STACK_prep1_thumbnail_userModifiedSubmasks
+            └── SLICE
+                ├── SLICE_prep1_thumbnail_userModifiedParameters.json
+                ├── SLICE_prep1_thumbnail_userModifiedSubmask_0.png
+                ├── SLICE_prep1_thumbnail_userModifiedSubmaskContourVertices.pkl
+                └── SLICE_prep1_thumbnail_userModifiedSubmaskDecisions.csv
 ```
 - **(HUMAN)** Create `DEMO998_original_image_crop.csv`. In this file each row is x,y,width,height in thumbnail resolution.
         - DEMO998_original_image_crop.csv is annoying to make. Need to do this for every single slice??
@@ -302,13 +263,12 @@ MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257,77,86,1175,524
     - Output below
 ```
 DATA_ROOTDIR/
-|
 └── CSHL_data_processed
-    └── DEMO998
-        └── DEMO998_thumbnail_mask
-            ├── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_thumbnail_mask.png
-            ├── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_thumbnail_mask.png
-            └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_thumbnail_mask.png
+    └── STACK
+        └── STACK_thumbnail_mask
+            ├── SLICE_thumbnail_mask.png
+            ├── SLICE_thumbnail_mask.png
+            └── SLICE_thumbnail_mask.png
 ```
 
 ------------------------------------------------------------------------------------------------------------------------
@@ -321,33 +281,20 @@ DATA_ROOTDIR/
 
 ```
 DATA_ROOTDIR/
-|
 └── CSHL_data_processed
         └── DEMO998_intensity_normalization_results
             ├── floatHistogram
-            │   ├── DEMO998_MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_raw_floatHistogram.png
-            │   ├── DEMO998_MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_raw_floatHistogram.png
-            │   └── DEMO998_MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_raw_floatHistogram.png
+            │   └── SLICE_raw_floatHistogram.png
             ├── meanMap
-            │   ├── DEMO998_MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_raw_meanMap.bp
-            │   ├── DEMO998_MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_raw_meanMap.bp
-            │   └── DEMO998_MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_raw_meanMap.bp
+            │   └── SLICE_raw_meanMap.bp
             ├── meanStdAllRegions
-            │   ├── DEMO998_MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_raw_meanStdAllRegions.bp
-            │   ├── DEMO998_MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_raw_meanStdAllRegions.bp
-            │   └── DEMO998_MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_raw_meanStdAllRegions.bp
+            │   └── SLICE_raw_meanStdAllRegions.bp
             ├── normalizedFloatMap
-            │   ├── DEMO998_MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_raw_normalizedFloatMap.bp
-            │   ├── DEMO998_MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_raw_normalizedFloatMap.bp
-            │   └── DEMO998_MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_raw_normalizedFloatMap.bp
+            │   └── SLICE_raw_normalizedFloatMap.bp
             ├── regionCenters
-            │   ├── DEMO998_MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_raw_regionCenters.bp
-            │   ├── DEMO998_MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_raw_regionCenters.bp
-            │   └── DEMO998_MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_raw_regionCenters.bp
+            │   └── SLICE_raw_regionCenters.bp
             └── stdMap
-                ├── DEMO998_MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_raw_stdMap.bp
-                ├── DEMO998_MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_raw_stdMap.bp
-                └── DEMO998_MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_raw_stdMap.bp
+                └── SLICE_raw_stdMap.bp
 ```
 ------------------------------------------------------------------------------------------------------------------------
 
@@ -372,10 +319,8 @@ operation_sequence = from_none_to_aligned
 DATA_ROOTDIR/
 |
 └── CSHL_data_processed
-        └── DEMO998_prep5_raw_NtbNormalizedAdaptiveInvertedGamma
-            ├── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_prep5_raw_NtbNormalizedAdaptiveInvertedGamma.tif
-            ├── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_prep5_raw_NtbNormalizedAdaptiveInvertedGamma.tif
-            └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep5_raw_NtbNormalizedAdaptiveInvertedGamma.tif
+        └── STACK_prep5_raw_NtbNormalizedAdaptiveInvertedGamma
+            └── SLICE_prep5_raw_NtbNormalizedAdaptiveInvertedGamma.tif
 ```
 - Create `input_spec.ini` as (alignedWithMargin,NtbNormalizedAdaptiveInvertedGamma,raw). `python rescale.py input_spec.ini thumbnail -f 0.03125`
     - Output below
@@ -383,10 +328,8 @@ DATA_ROOTDIR/
 DATA_ROOTDIR/
 |
 └── CSHL_data_processed
-        └── DEMO998_prep5_thumbnail_NtbNormalizedAdaptiveInvertedGamma
-            ├── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_prep5_thumbnail_NtbNormalizedAdaptiveInvertedGamma.tif
-            ├── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_prep5_thumbnail_NtbNormalizedAdaptiveInvertedGamma.tif
-            └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep5_thumbnail_NtbNormalizedAdaptiveInvertedGamma.tif
+        └── STACK_prep5_thumbnail_NtbNormalizedAdaptiveInvertedGamma
+            └── SLICE_prep5_thumbnail_NtbNormalizedAdaptiveInvertedGamma.tif
 ```
 ------------------------------------------------------------------------------------------------------------------------
 
@@ -406,34 +349,25 @@ DATA_ROOTDIR/
 	- Output below
 ```
 DATA_ROOTDIR/
-|
 └── CSHL_data_processed
-        └── DEMO998_prep2_raw_NtbNormalizedAdaptiveInvertedGamma
-            ├── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_prep2_raw_NtbNormalizedAdaptiveInvertedGamma.tif
-            ├── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_prep2_raw_NtbNormalizedAdaptiveInvertedGamma.tif
-            └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep2_raw_NtbNormalizedAdaptiveInvertedGamma.tif
+        └── STACK_prep2_raw_NtbNormalizedAdaptiveInvertedGamma
+            └── SLICE_prep2_raw_NtbNormalizedAdaptiveInvertedGamma.tif
 ```
 - Create `input_spec.ini` as (alignedBrainstemCrop,NtbNormalizedAdaptiveInvertedGamma,raw). `python rescale.py input_spec.ini thumbnail -f 0.03125`
 	- Output below
 ```
 DATA_ROOTDIR/
-|
 └── CSHL_data_processed
-        └── DEMO998_prep2_thumbnail_NtbNormalizedAdaptiveInvertedGamma
-            ├── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_prep2_thumbnail_NtbNormalizedAdaptiveInvertedGamma.tif
-            ├── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_prep2_thumbnail_NtbNormalizedAdaptiveInvertedGamma.tif
-            └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep2_thumbnail_NtbNormalizedAdaptiveInvertedGamma.tif
+        └── STACK_prep2_thumbnail_NtbNormalizedAdaptiveInvertedGamma
+            └── SLICE_prep2_thumbnail_NtbNormalizedAdaptiveInvertedGamma.tif
 ```
 - Use the same `input_spec.ini` as previous step. `python compress_jpeg.py input_spec.ini`
 	- Output below
 ```
 DATA_ROOTDIR/
-|
 └── CSHL_data_processed
-        └── DEMO998_prep2_raw_NtbNormalizedAdaptiveInvertedGammaJpeg
-            ├── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_prep2_raw_NtbNormalizedAdaptiveInvertedGammaJpeg.jpg
-            ├── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_prep2_raw_NtbNormalizedAdaptiveInvertedGammaJpeg.jpg
-            └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep2_raw_NtbNormalizedAdaptiveInvertedGammaJpeg.jpg
+        └── STACK_prep2_raw_NtbNormalizedAdaptiveInvertedGammaJpeg
+            └── SLICE_prep2_raw_NtbNormalizedAdaptiveInvertedGammaJpeg.jpg
 ```
 ------------------------------------------------------------------------------------------------------------------------
 
@@ -446,9 +380,8 @@ This can serve two purposes:
 - Pick the center of 12N and of 3N at sagittal midline. Input them into `registration_v7_atlasV7_simpleGlobal.ipynb` to compute the simple global transform.
 ```
 DATA_ROOTDIR/
-|
 └── CSHL_simple_global_registration
-    └── DEMO998_T_atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol.txt
+    └── STACK_T_atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol.txt
 ```
 - Then run the `# Identify 3-d bounding box of each simpleGlobal aligned structure` part of `from_images_to_score_volume.ipynb` to generate structure ROIs.
 
@@ -459,10 +392,9 @@ DATA_ROOTDIR/
 	- Output below:
 ```
 DATA_ROOTDIR/
-|
 └── CSHL_simple_global_registration
-    ├── DEMO998_T_atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol.bp
-    └── DEMO998_T_atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol.txt
+    ├── STACK_T_atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol.bp
+    └── STACK_T_atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol.txt
 ```
 - Then run the `# Identify 3-d bounding box of each simpleGlobal aligned structure` part of `src/learning/from_images_to_score_volume.ipynb` to generate structure ROIs.
 	- Output below:
@@ -470,7 +402,7 @@ DATA_ROOTDIR/
 DATA_ROOTDIR/
 |
 └── CSHL_simple_global_registration
-    └── DEMO998_registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners.json
+    └── STACK_registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners.json
 ```
 
 ------------------------------------------------------------------------------------------------------------------------
