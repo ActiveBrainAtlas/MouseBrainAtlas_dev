@@ -108,8 +108,8 @@ for brain_name, experiment_info in experiments.iteritems():
     markers = load_data(DataManager.get_lauren_markers_filepath(brain_name, structure='All', resolution=marker_resolution))
 
     #sample_n = min(len(markers), max(len(markers)/5, 10))	# Choice: sample 20% of each experiment but at least 10 markers
-    sample_n = min(len(markers), 50) 	# Choice: randomly sample 50 markers for each experiment
-    #sample_n = len(markers)		# Choice: show all markers		
+    sample_n = min(len(markers), 200) 	# Choice: randomly sample 50 markers for each experiment
+    #sample_n = len(markers)		# Choice: show all markers
     print brain_name, 'showing', sample_n, '/', len(markers)
     markers = markers[np.random.choice(range(len(markers)), size=sample_n, replace=False)]
 
@@ -131,7 +131,7 @@ for brain_name, experiment_info in experiments.iteritems():
 
     markers_rel2atlas_actors[brain_name] = [actor_sphere(position=(x,y,z), radius=20,
                                                         color=literal_eval(experiment_info['marker_color']),
-                                                        opacity=.8 )
+                                                        opacity=.7 )
                                for marker_id, (x,y,z) in aligned_markers_rel2atlas_um.iteritems()]
 
 

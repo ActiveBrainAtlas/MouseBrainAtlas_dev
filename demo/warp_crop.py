@@ -6,7 +6,6 @@ parser = argparse.ArgumentParser(
     description="""A versatile warp/crop script. 
 Usage 1: warp_crop.py --input_spec in.ini --op_id align1crop1
 This is the high-level usage. The operations are defined as ini files in the operation_configs/ folder.
-
 Usage 2: warp_crop.py --input_fp in.tif --output_fp out.tif --op warp 0.99,0,0,0,1.1,0 --op crop 100,100,20,10
 This is the low-level usage. Note that the user must ensure the warp parameters and crop coordinates are consistent with the resolution of the input image.
 """
@@ -19,7 +18,7 @@ parser.add_argument("--op", action='append', nargs=2,
 help="operation list")
 parser.add_argument("--input_fp", type=str, help="input filepath")
 parser.add_argument("--output_fp", type=str, help="output filepath")
-parser.add_argument("--pad_color", type=str, help="background color (black or white)", default='black')
+parser.add_argument("--pad_color", type=str, help="background color (black or white)", default='auto')
 parser.add_argument("--njobs", type=int, help="Number of parallel jobs", default=1)
 
 args = parser.parse_args()
@@ -33,6 +32,7 @@ from utilities2015 import *
 from data_manager import *
 from distributed_utilities import *
 from metadata import orientation_argparse_str_to_imagemagick_str
+
 
 def convert_operation_to_arr(op, resol, inverse=False, return_str=False, stack=None):
     """
@@ -62,7 +62,6 @@ def convert_operation_to_arr(op, resol, inverse=False, return_str=False, stack=N
 	    cropboxes_all = csv_to_dict(op['cropboxes_csv'])
 
 	    cropboxes = {}
-            print cropboxes_all
 	    for img_name in image_name_list:
 		arr_xxyy = convert_cropbox_fmt(data=cropboxes_all[img_name], in_fmt='arr_xywh', out_fmt='arr_xxyy')
 		if inverse:
@@ -93,6 +92,7 @@ def parse_operation_sequence(op_name, resol, return_str=False, stack=None):
 	op_name = op_name[1:]
 
     op = load_ini(os.path.join(DATA_ROOTDIR, 'CSHL_data_processed', stack, 'operation_configs', op_name + '.ini'))
+    #op = load_ini(os.path.join(DATA_ROOTDIR, 'operation_configs', op_name + '.ini'))
     if op is None:
 	raise Exception("Cannot load %s.ini" % op_name)
     if 'operation_sequence' in op: # composite operation
@@ -124,6 +124,7 @@ if args.op_id is not None:
     image_name_list = input_spec['image_name_list']
     if image_name_list == 'all':
         image_name_list = DataManager.load_sorted_filenames(stack=stack)[0].keys()
+
     op_seq = parse_operation_sequence(args.op_id, resol=resol, return_str=True, stack=stack)
 
     ops_in_prep_id = op_seq[0][2]
@@ -197,6 +198,8 @@ elif args.op is not None:
     assert args.input_fp is not None and args.output_fp is not None
     input_fp = args.input_fp
     output_fp = args.output_fp
+    print 'INPUT: '+input_fp
+    print 'OUTPUT: '+output_fp
 
     create_parent_dir_if_not_exists(output_fp)
 
