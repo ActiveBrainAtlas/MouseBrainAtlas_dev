@@ -115,7 +115,7 @@ Draw initial snake contours.
 			└── SLICE_prep1_thumbnail_autoSubmaskDecisions.csv
 	```
 - **(HUMAN)** Return to masking GUI to inspect and correct the automatically generated masks.
-	- Output:
+	- Output after correcting masks:
 	```
 	DATA_ROOTDIR/
 	└── CSHL_data_processed
@@ -127,11 +127,16 @@ Draw initial snake contours.
 			├── SLICE_prep1_thumbnail_userModifiedSubmaskContourVertices.pkl
 			└── SLICE_prep1_thumbnail_userModifiedSubmaskDecisions.csv
 	```
+	- Output after exporting masks as PNGs:
+	```
+	DATA_ROOTDIR/
+	└── CSHL_data_processed
+	    └── STACK
+		└── STACK_prep1_thumbnail_masks
+		    └── SLICE
+			└── SLICE_prep1_thumbnail_mask.png
+	```
 - Create `input_spec.ini` as (None,NtbNormalized,thumbnail). `python generate_original_image_crop_csv.py --input_spec input_spec.ini`. This creates `DEMO998_original_image_crop.csv` under data dir. In this file each row is x,y,width,height in thumbnail resolution.
-	- Output:
-	```
-	```
-- Create `input_spec.ini` as (alignedPadded,mask,thumbnail). Copy template `from_padded_to_none.ini`. Copy and modify operation `crop_orig.ini`. `python warp_crop.py --input_spec input_spec.ini --op_id from_padded_to_none`.
 	- Output:
 	```
 	DATA_ROOTDIR/
@@ -139,6 +144,11 @@ Draw initial snake contours.
 	    └── STACK
 		└── STACK_thumbnail_mask
 		    └── SLICE_thumbnail_mask.png
+	```
+- Create `input_spec.ini` as (alignedPadded,mask,thumbnail). Copy template `from_padded_to_none.ini`. Copy and modify operation `crop_orig.ini`. `python warp_crop.py --input_spec input_spec.ini --op_id from_padded_to_none`.
+	- Output:
+	```
+	
 	```
  
 ### Local adaptive intensity normalization
