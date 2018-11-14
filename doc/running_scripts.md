@@ -153,7 +153,7 @@ Draw initial snake contours.
 	```
 	DATA_ROOTDIR/
 	└── CSHL_data_processed
-		└── DEMO998_intensity_normalization_results
+		└── STACK_intensity_normalization_results
 		    ├── floatHistogram
 		    │   └── SLICE_raw_floatHistogram.png
 		    ├── meanMap
