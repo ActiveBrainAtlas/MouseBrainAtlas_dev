@@ -231,8 +231,17 @@ This can serve two purposes:
 
 ## Compute patch features
 - Create `input_spec.ini` as (alignedBrainstemCrop,NtbNormalizedAdaptiveInvertedGamma,raw). `python demo_compute_features_v2.py DEMO998_input_spec.ini`
-
-If using GPU, the demo for each section should finish in about 1 minute. If using CPU, this takes about 1 hour.
+	-If using GPU, the demo for each section should finish in about 1 minute. If using CPU, this takes about 1 hour.
+	- Output:
+	```
+	ROOT_DIR/
+	└── CSHL_patch_features
+		└── inception-bn-blue
+			└── STACK
+				└── STACK_prep2_none_win7
+					├── SLICE_prep2_none_win7_inception-bn-blue_features.bp
+					└── SLICE_prep2_none_win7_inception-bn-blue_locations.bp
+	```
 
 ## Generate probability volumes
 
