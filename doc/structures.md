@@ -1,45 +1,47 @@
 ## Structure names
 
+- `3N_L/R`
+  - oculomotor nucleus
 - `4N_L/R`
   - trochlear nucleus
+- `5N_L/R`
+  - motor trigeminal nucleus
 - `6N_L/R`
   - abducens nucleus
+- `7N_L/R`
+  - facial nucleus
+- `7n_L/R`
+  - facial nerve
+- `10N_L/R`
+  - dorsal motor nucleus of vagus
+- `12N`
+  - hypoglossal nucleus
 - `Amb_L/R`
   - ambiguus nucleus
 - `PBG_L/R`
   - parabigeminal nucleus
-- `10N_L/R`
-  - dorsal motor nucleus of vagus
 - `AP`
   - area postrema
-- `3N_L/R`
-  - oculomotor nucleus
 - `LC_L/R`
   - locus coeruleus
 - `SNC_L/R`
   - substantia nigra, compact part 
+- `SNR_L/R`
+  - substantia nigra, reticular part
 - `Tz_L/R`
   - nucleus of the trapezoid body
-- `7n_L/R`
-  - facial nerve
 - `RMC_L/R`
   - red nucleus, magnocellular part
-- `5N_L/R`
-  - motor trigeminal nucleus
-- `VCP_L/R`
-  - ventral cochlear nucleus, posterior part
-- `12N`
-  - hypoglossal nucleus
 - `LRt_L/R`
   - lateral reticular nucleus
-- `7N_L/R`
-  - facial nucleus
+- `DC_L/R`
+  - dorsal cochlear nucleus
+- `VCP_L/R`
+  - ventral cochlear nucleus, posterior part
 - `VCA_L/R`
   - ventral cochlear nucleus, anterior part
 - `VLL_L/R`
   - ventral nucleus of the lateral lemniscus
-- `DC_L/R`
-  - dorsal cochlear nucleus
 - `Sp5O_L/R`
   - spinal trigeminal nucleus, oral part
 - `Sp5I_L/R`
@@ -48,8 +50,6 @@
   - pontine nuclei
 - `RtTg`
   - reticulotegmental nucleus of the pons
-- `SNR_L/R`
-  - substantia nigra, reticular part
 - `Sp5C_L/R`
   - spinal trigeminal nucleus caudalis
 - `IC`
