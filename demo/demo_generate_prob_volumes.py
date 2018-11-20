@@ -123,11 +123,7 @@ for name_u in structure_list:
 
         (xmin, ymin, secmin), (xmax, ymax, secmax) = registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners[name_u]
 
-<<<<<<< HEAD
         for sec in range(max(secmin - section_margin, valid_secmin), min(secmax + 1 + section_margin, valid_secmax) + 1):
-=======
-        for sec in range(max(secmin - section_margin, valid_secmin), min(secmax + 1 + section_margin, valid_secmax)+1):
->>>>>>> 0c04b98d07f6f6b694c8fc1d63afd7a014566087
 
             if is_invalid(sec=sec, stack=stack):
                 continue
@@ -145,11 +141,7 @@ for name_u in structure_list:
     	if lname in registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners:
             (xmin, ymin, secmin), (xmax, ymax, secmax) = registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners[lname]
 
-<<<<<<< HEAD
         for sec in range(max(secmin - section_margin, valid_secmin), min(secmax + 1 + section_margin, valid_secmax) + 1):
-=======
-            for sec in range(max(secmin - section_margin, valid_secmin), min(secmax + 1 + section_margin, valid_secmax)+1):
->>>>>>> 0c04b98d07f6f6b694c8fc1d63afd7a014566087
 
                 if is_invalid(sec=sec, stack=stack):
                     continue
@@ -164,11 +156,7 @@ for name_u in structure_list:
     	if rname in registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners:
             (xmin, ymin, secmin), (xmax, ymax, secmax) = registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners[rname]
 
-<<<<<<< HEAD
-        for sec in range(max(secmin - section_margin, valid_secmin), min(secmax + 1 + section_margin, valid_secmax) + 1):
-=======
             for sec in range(max(secmin - section_margin, valid_secmin), min(secmax + 1 + section_margin, valid_secmax)+1):
->>>>>>> 0c04b98d07f6f6b694c8fc1d63afd7a014566087
 
                 if is_invalid(sec=sec, stack=stack):
                     continue
