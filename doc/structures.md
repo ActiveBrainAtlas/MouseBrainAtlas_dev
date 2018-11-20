@@ -1,37 +1,55 @@
 ## Structure names
 
 - `4N_L/R`
+  - trochlear nucleus
 - `6N_L/R`
+  - abducens nucleus
 - `Amb_L/R`
+  - ambiguus nucleus
 - `PBG_L/R`
+  - parabigeminal nucleus
 - `10N_L/R`
-  - tenth motor nucleus
+  - dorsal motor nucleus of vagus
 - `AP`
   - area postrema
 - `3N_L/R`
+  - oculomotor nucleus
 - `LC_L/R`
+  - locus coeruleus
 - `SNC_L/R`
+  - substantia nigra, compact part 
 - `Tz_L/R`
+  - nucleus of the trapezoid body
 - `7n_L/R`
+  - facial nerve
 - `RMC_L/R`
+  - red nucleus, magnocellular part
 - `5N_L/R`
-  - trigeminal motor nucleus
+  - motor trigeminal nucleus
 - `VCP_L/R`
+  - ventral cochlear nucleus, posterior part
 - `12N`
   - hypoglossal nucleus
 - `LRt_L/R`
+  - lateral reticular nucleus
 - `7N_L/R`
-  - facial motor nucleus
+  - facial nucleus
 - `VCA_L/R`
+  - ventral cochlear nucleus, anterior part
 - `VLL_L/R`
+  - ventral nucleus of the lateral lemniscus
 - `DC_L/R`
+  - dorsal cochlear nucleus
 - `Sp5O_L/R`
+  - spinal trigeminal nucleus, oral part
 - `Sp5I_L/R`
+  - spinal trigeminal nucleus, interpolar part
 - `Pn_L/R`
+  - pontine nuclei
 - `RtTg`
-  - reticulotegmental nucleus
+  - reticulotegmental nucleus of the pons
 - `SNR_L/R`
-  - substantia nigra reticulata
+  - substantia nigra, reticular part
 - `Sp5C_L/R`
   - spinal trigeminal nucleus caudalis
 - `IC`
@@ -42,6 +60,10 @@
 notes: 
 - `L/R` = This structures appears in both the right and left hemispheres
 - `N` = Motor Nucleas
+
+Structures mentioned in paper butnot part of pipeline: 
+- lateral parabrachial nucleus (LBP)
+- spinal trigeminal nucleus, caudal part (SP5C)
 
 ## Motor Nuclei Information
 
