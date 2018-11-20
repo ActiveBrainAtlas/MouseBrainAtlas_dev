@@ -231,7 +231,7 @@ This can serve two purposes:
 
 - Known dependencies for `registration_v7_atlasV7_simpleGlobal.ipynb`:
 	- `/CSHL_volumes/STACK/STACK_wholebrainWithMargin_10.0um_intensityVolume/STACK_wholebrainWithMargin_10.0um_intensityVolume.bp`
-- Temporary notes on this part of the pipeline can be found (here)[global_alignment_notes.md]
+- Temporary notes on this part of the pipeline can be found [here](global_alignment_notes.md)
 
 ## Compute patch features
 - Create `input_spec.ini` as (alignedBrainstemCrop,NtbNormalizedAdaptiveInvertedGamma,raw). `python demo_compute_features_v2.py DEMO998_input_spec.ini`
