@@ -1,3 +1,47 @@
+## Structure names
+
+- `4N_L/R`
+- `6N_L/R`
+- `Amb_L/R`
+- `PBG_L/R`
+- `10N_L/R`
+  - tenth motor nucleus
+- `AP`
+  - area postrema
+- `3N_L/R`
+- `LC_L/R`
+- `SNC_L/R`
+- `Tz_L/R`
+- `7n_L/R`
+- `RMC_L/R`
+- `5N_L/R`
+  - trigeminal motor nucleus
+- `VCP_L/R`
+- `12N`
+  - hypoglossal nucleus
+- `LRt_L/R`
+- `7N_L/R`
+  - facial motor nucleus
+- `VCA_L/R`
+- `VLL_L/R`
+- `DC_L/R`
+- `Sp5O_L/R`
+- `Sp5I_L/R`
+- `Pn_L/R`
+- `RtTg`
+  - reticulotegmental nucleus
+- `SNR_L/R`
+  - substantia nigra reticulata
+- `Sp5C_L/R`
+  - spinal trigeminal nucleus caudalis
+- `IC`
+  - inferior colliculus
+- `SC`
+  - superior colliculus
+
+notes: 
+- `L/R` = This structures appears in both the right and left hemispheres
+- `N` = Motor Nucleas
 
 ## Motor Nuclei Information
 
