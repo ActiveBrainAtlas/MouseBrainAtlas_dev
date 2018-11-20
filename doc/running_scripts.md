@@ -229,6 +229,9 @@ This can serve two purposes:
 - Pick the center of 12N and of 3N at sagittal midline. Input them into `registration_v7_atlasV7_simpleGlobal.ipynb` to compute the simple global transform.
 - Then run the `# Identify 3-d bounding box of each simpleGlobal aligned structure` part of `from_images_to_score_volume.ipynb` to generate structure ROIs.
 
+- Known dependencies for `registration_v7_atlasV7_simpleGlobal.ipynb`:
+	- `/CSHL_volumes/STACK/STACK_wholebrainWithMargin_10.0um_intensityVolume/STACK_wholebrainWithMargin_10.0um_intensityVolume.bp`
+
 ## Compute patch features
 - Create `input_spec.ini` as (alignedBrainstemCrop,NtbNormalizedAdaptiveInvertedGamma,raw). `python demo_compute_features_v2.py DEMO998_input_spec.ini`
 	-If using GPU, the demo for each section should finish in about 1 minute. If using CPU, this takes about 1 hour.
