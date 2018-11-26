@@ -314,3 +314,8 @@ As the preprocessing stage relies on a series of image manipulations, there is a
 6) 'rawCropped'
 7) 'rawBeforeRotation'
 	- Unprocessed, unrotated. The very beginning for most stacks
+
+Input_Spec shorthand:
+- aligned:
+- padded: 
+- brainstem: prep2
