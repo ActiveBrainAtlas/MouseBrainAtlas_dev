@@ -226,12 +226,14 @@ This can serve two purposes:
 1. It allows us to estimate a probable region of the brain volume for each structure. We can compute features only on these regions to save computation. 
 2. It can be used as a starting point for the structure-specific registration later.
 
+#### Notes
 - Pick the center of 12N and of 3N at sagittal midline. Input them into `registration_v7_atlasV7_simpleGlobal.ipynb` to compute the simple global transform.
 - Then run the `# Identify 3-d bounding box of each simpleGlobal aligned structure` part of `from_images_to_score_volume.ipynb` to generate structure ROIs.
 
 - Known dependencies for `registration_v7_atlasV7_simpleGlobal.ipynb`:
 	- `/CSHL_volumes/STACK/STACK_wholebrainWithMargin_10.0um_intensityVolume/STACK_wholebrainWithMargin_10.0um_intensityVolume.bp`
 - Temporary notes on this part of the pipeline can be found [here](global_alignment_notes.md)
+- `src/learning/from_images_to_score_volume.ipynb` will NOT run unless `src/utilities/learning_utilities.py`, Line __844__, is correct for this particular stack. NEEDS TO BE CHANGED  
 
 ## Compute patch features
 - Create `input_spec.ini` as (alignedBrainstemCrop,NtbNormalizedAdaptiveInvertedGamma,raw). `python demo_compute_features_v2.py DEMO998_input_spec.ini`
