@@ -316,6 +316,6 @@ As the preprocessing stage relies on a series of image manipulations, there is a
 	- Unprocessed, unrotated. The very beginning for most stacks
 
 Input_Spec shorthand:
-- aligned:
-- padded: 
+- aligned: ?
+- padded: prep1
 - brainstem: prep2
