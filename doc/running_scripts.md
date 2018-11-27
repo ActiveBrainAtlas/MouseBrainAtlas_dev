@@ -225,13 +225,20 @@ This can serve two purposes:
 
 #### Notes
 - Pick the center of 12N and of 3N at sagittal midline. Input them into `registration_v7_atlasV7_simpleGlobal.ipynb` to compute the simple global transform.
-- Then run the `# Identify 3-d bounding box of each simpleGlobal aligned structure` part of `from_images_to_score_volume.ipynb` to generate structure ROIs.
 	- Output:
 	```
 	ROOT_DIR/
 	└── CSHL_simple_global_registration
 		└── UCSD001_registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners
-			└── UCSD001_registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners.json
+			├── UCSD001_T_atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol.txt
+			└── UCSD001_T_atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol.bp
+	```
+- Then run the `# Identify 3-d bounding box of each simpleGlobal aligned structure` part of `from_images_to_score_volume.ipynb` to generate structure ROIs.
+	- Output:
+	```
+	ROOT_DIR/
+	└── CSHL_simple_global_registration
+		└── UCSD001_registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners.json
 	```
 	- Output:
 	```
@@ -240,8 +247,8 @@ This can serve two purposes:
 		└── STACK
 			└── STACK_detector799_10.0um_scoreVolume
 				├── score_volume_gradients
-					├── UCSD001_detector799_10.0um_scoreVolume_12N_gradients.bp
-					└── UCSD001_detector799_10.0um_scoreVolume_12N_origin_wrt_wholebrain.txt
+				|	├── UCSD001_detector799_10.0um_scoreVolume_12N_gradients.bp
+				|	└── UCSD001_detector799_10.0um_scoreVolume_12N_origin_wrt_wholebrain.txt
 				└── score_volumes
 					├── UCSD001_detector799_10.0um_scoreVolume_12N.bp
 					└── UCSD001_detector799_10.0um_scoreVolume_12N_origin_wrt_wholebrain.txt
