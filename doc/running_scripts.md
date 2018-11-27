@@ -229,6 +229,13 @@ This can serve two purposes:
 	- Output:
 	```
 	ROOT_DIR/
+	└── CSHL_simple_global_registration
+		└── UCSD001_registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners
+			└── UCSD001_registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners.json
+	```
+	- Output:
+	```
+	ROOT_DIR/
 	└── CSHL_volumes
 		└── STACK
 			└── STACK_detector799_10.0um_scoreVolume
