@@ -60,9 +60,6 @@ A download script is then used to download from S3 the full set of outputs that 
         └── STACK_thumbnail_NtbNormalized
             └── SLICE_thumbnail_NtbNormalized.tif
 	```
-	- Output:
-	```
-	```
 
 ### Intra-stack align
 - **(HUMAN)** Browse thumbnails to verify orientations are all correct.
@@ -229,6 +226,30 @@ This can serve two purposes:
 #### Notes
 - Pick the center of 12N and of 3N at sagittal midline. Input them into `registration_v7_atlasV7_simpleGlobal.ipynb` to compute the simple global transform.
 - Then run the `# Identify 3-d bounding box of each simpleGlobal aligned structure` part of `from_images_to_score_volume.ipynb` to generate structure ROIs.
+	- Output:
+	```
+	ROOT_DIR/
+	└── CSHL_volumes
+		└── STACK
+			└── STACK_detector799_10.0um_scoreVolume
+				├── score_volume_gradients
+					├── UCSD001_detector799_10.0um_scoreVolume_12N_gradients.bp
+					└── UCSD001_detector799_10.0um_scoreVolume_12N_origin_wrt_wholebrain.txt
+				└── score_volumes
+					├── UCSD001_detector799_10.0um_scoreVolume_12N.bp
+					└── UCSD001_detector799_10.0um_scoreVolume_12N_origin_wrt_wholebrain.txt
+	```
+	- Output:
+	```
+	ROOT_DIR/
+	└── CSHL_scoremap_viz
+		└── 10.0um
+			└── 12N
+				└── STACK
+					└── Detector799
+						└── 12N prep2
+							└── SLICE_prep2_10.0um_12N_detector799_scoremapViz.jpg
+	```
 
 - Known dependencies for `registration_v7_atlasV7_simpleGlobal.ipynb`:
 	- `/CSHL_volumes/STACK/STACK_wholebrainWithMargin_10.0um_intensityVolume/STACK_wholebrainWithMargin_10.0um_intensityVolume.bp`
