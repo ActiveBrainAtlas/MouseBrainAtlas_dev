@@ -12,4 +12,5 @@
 - `warp_crop` thumbnail must use more than 1 jobs, otherwise it will complain argument list too long. `--njobs 8` works fine. Time Sep 27 11:30 - Sep 27 16:09
 - `preprocess` GUI. "Edit transform" -> Make sure as you go through images, the right panel does not show double shadows (which means this consecutive pair of images are not aligned well).
 - extract features: Sep 27 23:08 - Sep 28 03:02
-- adaptive intensity adjustment: 11/30 08:54 - 12:26.
+- adaptive intensity adjustment: 11/30 08:54 - 12:26. Need to find thresholds for brightfield images. Skip this for now, just use gray version.
+- Whole-slice crop Nov 30 19:18 - Dec  1 04:16
