@@ -306,6 +306,16 @@ The outputs include the transform parameters and transformed atlas structures.
 
 ## Generate intensity volume
 - `python construct_intensity_volume.py DEMO998 --tb_version NtbNormalizedAdaptiveInvertedGamma`
+	- Output:
+	```
+	ROOT_DIR/
+	└── CSHL_volumes
+		└── STACK
+			└── STACK_wholebrainWithMargin_10.0um_intensityVolume
+				└── STACK_prep2_none_win7
+					├── STACK_wholebrainWithMargin_10.0um_intensityVolume.bp
+					└── STACK_wholebrainWithMargin_10.0um_intensityVolume_origin_wrt_wholebrain.txt
+	```
 
 ## Visualize registration results
 
