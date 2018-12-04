@@ -20,3 +20,4 @@
 - Pick the center of 12N and of 3N at sagittal midline. Input them into registration_v7_atlasV7_simpleGlobal.ipynb to compute the simple global transform.
 - Then run the # Identify 3-d bounding box of each simpleGlobal aligned structure part of from_images_to_score_volume.ipynb to generate structure ROIs.
 - Run `download_pretrained_classifiers.py`
+- `demo_generate_prob_volumes.py`
