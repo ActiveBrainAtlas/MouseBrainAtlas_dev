@@ -18,10 +18,6 @@ from metadata import *
 from data_manager import *
 
 
-metadata_cache1 = generate_metadata_cache()
-print metadata_cache1['sections_to_filenames'].keys()
-print DataManager.load_anchor_filename('DEMO999')
-
 def get_structure_contours_from_structure_volumes_v3(volumes, stack, sections, 
                                                      resolution, level, sample_every=1,
                                                     use_unsided_name_as_key=False):

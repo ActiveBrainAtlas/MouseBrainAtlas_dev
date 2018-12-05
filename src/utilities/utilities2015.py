@@ -206,30 +206,6 @@ def dict_to_csv(d, fp):
     df = pd.DataFrame.from_dict({k: np.array(v).flatten() for k, v in d.iteritems()}, orient='index')
     df.to_csv(fp, header=False)
 
-
-def load_ini(fp, split_newline=True, convert_none_str=True, section='DEFAULT'):
-    """
-    Value of string None will be converted to Python None.
-    """
-    import ConfigParser
-    config = ConfigParser.ConfigParser()
-    if not os.path.exists(fp):
-        raise Exception("ini file %s does not exist." % fp)
-    config.read(fp)
-    input_spec = dict(config.items(section))
-    input_spec = {k: v.split('\n') if '\n' in v else v for k, v in input_spec.iteritems()}
-    for k, v in input_spec.iteritems():
-	if not isinstance(v, list):
-	    if '.' not in v and v.isdigit():
-    	        input_spec[k] = int(v)
-	    elif v.replace('.','',1).isdigit():
-	        input_spec[k] = float(v)
-        elif v == 'None':
-	    if convert_none_str:
-    	        input_spec[k] = None
-    assert len(input_spec) > 0, "Failed to read data from ini file."
-    return input_spec
-
 def load_data(fp, polydata_instead_of_face_vertex_list=True, download_s3=True):
 
     from vis3d_utilities import load_mesh_stl
