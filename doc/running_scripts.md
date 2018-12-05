@@ -224,7 +224,10 @@ This can serve two purposes:
 2. It can be used as a starting point for the structure-specific registration later.
 
 #### Notes
-- Pick the center of 12N and of 3N at sagittal midline. Input them into `registration_v7_atlasV7_simpleGlobal.ipynb` to compute the simple global transform.
+- Pick the center of 12N and of 3N at sagittal midline.
+	- Command: `python src/gui/brain_labeling_gui_v28.py <STACK> --img_version NtbNormalizedAdaptiveInvertedGammaJpeg`
+	- Record X, Y, Z positions in midsaggital plane for 12N (ovalar on right) and 3N (circular on left)
+- Input the centers into `registration_v7_atlasV7_simpleGlobal.ipynb` to compute the simple global transform.
 	- Output:
 	```
 	ROOT_DIR/
