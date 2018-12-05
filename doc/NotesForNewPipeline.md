@@ -11,4 +11,17 @@
 - Copy from template operation folder these two files `from_none_to_padded.ini` and `from_aligned_to_padded.ini` - no need to change anything.
 - `warp_crop` thumbnail must use more than 1 jobs, otherwise it will complain argument list too long. `--njobs 8` works fine. Time Sep 27 11:30 - Sep 27 16:09
 - `preprocess` GUI. "Edit transform" -> Make sure as you go through images, the right panel does not show double shadows (which means this consecutive pair of images are not aligned well).
-- extract features: Sep 27 23:08 - Sep 28 03:02
+- adaptive intensity adjustment: 11/30 08:54 - 12:26. Need to find thresholds for brightfield images. Skip this for now, just use gray version.
+- Whole-slice crop Nov 30 19:18 - Dec  1 04:16
+- Copy from template `from_wholeslice_to_brainstem.ini`. Copy `from_padded_to_brainstem.ini` and modify it. Or if only `from_aligned_to_brainstem` is provided, bridge input/output using `from_aligned_to_padded`.
+- "extract features" requires `metadata_cache['image_shape']`, which reads from `atlas_data/CSHL_data_processed/MD585/operation_configs/from_padded_to_brainstem.ini`, so we need to create this file by copying from  `atlas_data/operation_configs/`. (TODO: certain operations should be local to each brain's folder, while some other fixed operations can be put in a global folder)
+- Create the section limit file `MD585_prep2_sectionLimits.ini`
+- Create the intensity volume by running `./construct_intensity_volume.py MD585 --tb_version gray --tb_resol thumbnail`
+- `./compute_simple_global_registration.py MD585 /media/yuncong/BstemAtlasData/atlas_data/CSHL_simple_global_registration/MD585_manual_anchor_points.ini`
+  - Pick the center of 12N and of 3N at sagittal midline. Input them into registration_v7_atlasV7_simpleGlobal.ipynb to compute the simple global transform.
+  - Then run the # Identify 3-d bounding box of each simpleGlobal aligned structure part of from_images_to_score_volume.ipynb to generate structure ROIs.
+- Run `download_pretrained_classifiers.py`
+- `python demo_generate_prob_volumes.py MD585 799 grayJpeg`
+- `python register_brains_demo.py MD585_fixed_brain_spec_12N.json demo_moving_brain_spec_12N.json -g`
+- `python register_brains_demo.py MD585_fixed_brain_spec_3N_R_4N_R.json demo_moving_brain_spec_3N_R_4N_R.json -g`
+- `python visualize_registration.py MD585_visualization_per_structure_alignment_spec.json -g MD585_visualization_global_alignment_spec.json`
