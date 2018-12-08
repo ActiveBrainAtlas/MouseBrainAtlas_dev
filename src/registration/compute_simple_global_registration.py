@@ -143,17 +143,17 @@ align_anchors(atlas_anchor1_wrt_canonicalAtlasSpace_atlasResol, atlas_anchor2_wr
 print T_atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol
 
 
-rand_vec = np.random.uniform(size=3)
-rand_vec = rand_vec / np.linalg.norm(rand_vec)
-rand_rot_amount = np.random.uniform(high=np.deg2rad(5))
-perturb_rot = quaternion_matrix(quaternion_about_axis(rand_rot_amount, rand_vec))
+#rand_vec = np.random.uniform(size=3)
+#rand_vec = rand_vec / np.linalg.norm(rand_vec)
+#rand_rot_amount = np.random.uniform(high=np.deg2rad(5))
+#perturb_rot = quaternion_matrix(quaternion_about_axis(rand_rot_amount, rand_vec))
 
-np.random.seed(0)
-perturb_xyz = np.random.choice(np.arange(-30, 30), 3)
+#np.random.seed(0)
+#perturb_xyz = np.random.choice(np.arange(-30, 30), 3)
 
-T_atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol = \
-np.dot(T_atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol, perturb_rot)
-T_atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol[:3, 3] += perturb_xyz
+#T_atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol = \
+#np.dot(T_atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol, perturb_rot)
+#T_atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol[:3, 3] += perturb_xyz
 
 print T_atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol
 

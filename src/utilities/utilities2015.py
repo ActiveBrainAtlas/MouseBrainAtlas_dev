@@ -34,7 +34,7 @@ from skimage.measure import find_contours, regionprops
 
 from skimage.filters import gaussian
 
-from metadata import ENABLE_UPLOAD_S3, ENABLE_DOWNLOAD_S3, convert_resolution_string_to_um
+from metadata import ENABLE_UPLOAD_S3, ENABLE_DOWNLOAD_S3, convert_resolution_string_to_um, load_ini
 
 #######################################
 

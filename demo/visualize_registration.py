@@ -119,6 +119,7 @@ parser = argparse.ArgumentParser(
 # parser.add_argument("fixed_brain_spec", type=str, help="Fixed brain name")
 # parser.add_argument("moving_brain_spec", type=str, help="Moving brain name")
 # parser.add_argument("registration_setting", type=int, help="Registration setting")
+parser.add_argument("image_version", type=str, help="Image version")
 parser.add_argument("per_structure_alignment_spec", type=str, help="per_structure_alignment_spec, json")
 parser.add_argument("-g", "--global_alignment_spec", type=str, help="global_alignment_spec, json")
 # parser.add_argument("--structure_list", type=str, help="Json-encoded list of structures (unsided) (Default: all known structures)")
@@ -127,6 +128,7 @@ args = parser.parse_args()
 # brain_f_spec = load_json(args.fixed_brain_spec)
 # brain_m_spec = load_json(args.moving_brain_spec)
 # registration_setting = args.registration_setting
+image_version = args.image_version
 per_structure_alignment_spec = load_json(args.per_structure_alignment_spec)
 simpleGlobal_alignment_spec = load_json(args.global_alignment_spec)
 
@@ -237,7 +239,7 @@ for sec in sorted(auto_contours_all_sec_all_structures_all_levels.keys()):
         continue
 
 #    for version in ['NtbNormalizedAdaptiveInvertedGammaJpeg']:
-    for version in ['grayJpeg']:
+    for version in [image_version]:
 #         for version in ['NtbNormalizedAdaptiveInvertedGammaJpeg', 'CHATJpeg']:
         
         try:

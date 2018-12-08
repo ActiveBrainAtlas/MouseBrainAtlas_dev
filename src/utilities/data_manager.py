@@ -7,8 +7,8 @@ from datetime import datetime
 import re
 
 sys.path.append(os.path.join(os.environ['REPO_DIR'], 'utilities'))
-from utilities2015 import *
 from metadata import *
+from utilities2015 import *
 # try:
 #     from vis3d_utilities import *
 # except:
@@ -17,6 +17,34 @@ from distributed_utilities import *
 
 use_image_cache = False
 image_cache = {}
+
+# def load_ini(fp, split_newline=True, convert_none_str=True, section='DEFAULT'):
+#     """
+#     Value of string None will be converted to Python None.
+    
+#     NOTE: This function is also defined in metadata.py because I cannot solve the cyclic import problem. 
+#     For now we must ensure these two implementations are identical.
+#     """
+#     import ConfigParser
+#     config = ConfigParser.RawConfigParser()
+#     config.optionxform = str
+#     if not os.path.exists(fp):
+#         raise Exception("ini file %s does not exist." % fp)
+#     config.read(fp)
+#     input_spec = dict(config.items(section))
+# #     input_spec = dict(config.defaults())
+#     input_spec = {k: v.split('\n') if '\n' in v else v for k, v in input_spec.iteritems()}
+#     for k, v in input_spec.iteritems():
+#         if not isinstance(v, list):
+#             if '.' not in v and v.isdigit():
+#                 input_spec[k] = int(v)
+#             elif v.replace('.','',1).isdigit():
+#                 input_spec[k] = float(v)
+#             elif v == 'None':
+#                 if convert_none_str:
+#                     input_spec[k] = None
+#     assert len(input_spec) > 0, "Failed to read data from ini file."
+#     return input_spec
 
 def get_random_masked_regions(region_shape, stack, num_regions=1, sec=None, fn=None):
     """
@@ -1118,11 +1146,13 @@ class DataManager(object):
         if isinstance(prep_id, str):
             prep_id = prep_str_to_id_2d[prep_id]
 
-        if anchor_fn is None:
-            anchor_fn = DataManager.load_anchor_filename(stack=stack)
+        try:
+            if anchor_fn is None:
+                anchor_fn = DataManager.load_anchor_filename(stack=stack)
 
-        fp = os.path.join(THUMBNAIL_DATA_DIR, stack, stack + '_alignedTo_' + anchor_fn + '_prep' + str(prep_id) + '_sectionLimits.json')
-        if not os.path.exists(fp):
+            fp = os.path.join(THUMBNAIL_DATA_DIR, stack, stack + '_alignedTo_' + anchor_fn + '_prep' + str(prep_id) + '_sectionLimits.json')
+            assert os.path.exists(fp), "Old style section limit file does not exist. Use new style."
+        except Exception as e:
             fp = os.path.join(DATA_DIR, stack, stack + '_prep' + str(prep_id) + '_sectionLimits.ini')
 
         return fp
