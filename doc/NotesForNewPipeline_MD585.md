@@ -21,7 +21,7 @@
   - Pick the center of 12N and of 3N at sagittal midline. Input them into registration_v7_atlasV7_simpleGlobal.ipynb to compute the simple global transform.
   - Then run the # Identify 3-d bounding box of each simpleGlobal aligned structure part of from_images_to_score_volume.ipynb to generate structure ROIs.
 - Run `download_pretrained_classifiers.py`
-- `python demo_generate_prob_volumes.py MD585 799 grayJpeg`
-- `python register_brains_demo.py MD585_fixed_brain_spec_12N.json demo_moving_brain_spec_12N.json -g`
-- `python register_brains_demo.py MD585_fixed_brain_spec_3N_R_4N_R.json demo_moving_brain_spec_3N_R_4N_R.json -g`
-- `python visualize_registration.py MD585_visualization_per_structure_alignment_spec.json -g MD585_visualization_global_alignment_spec.json`
+- `python pipeline/generate_prob_volumes.py MD585 799 grayJpeg`
+- `python pipeline/register_brains.py MD585_fixed_brain_spec_12N.json demo_moving_brain_spec_12N.json -g`
+- `python pipeline/register_brains.py MD585_fixed_brain_spec_3N_R_4N_R.json demo_moving_brain_spec_3N_R_4N_R.json -g`
+- `python pipeline/visualize_registration.py MD585_visualization_per_structure_alignment_spec.json -g MD585_visualization_global_alignment_spec.json`
