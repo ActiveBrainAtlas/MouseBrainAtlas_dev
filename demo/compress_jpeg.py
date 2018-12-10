@@ -25,10 +25,8 @@ args = parser.parse_args()
 
 
 input_spec = load_ini(args.input_spec)
+
 stack = input_spec['stack']
-image_name_list = input_spec['image_name_list']
-if image_name_list == 'all':
-    image_name_list = DataManager.load_sorted_filenames(stack=stack)[0].keys()
 prep_id = input_spec['prep_id']
 if prep_id == 'None':
     prep_id = None
@@ -37,6 +35,10 @@ version = input_spec['version']
 if version == 'None':
     version = None
 
+image_name_list = input_spec['image_name_list']
+if image_name_list == 'all':
+    image_name_list = DataManager.load_sorted_filenames(stack=stack)[0].keys()
+
 depth = args.depth
 quality = args.quality
 
@@ -44,11 +46,7 @@ for img_name in image_name_list:
 
     in_fp = DataManager.get_image_filepath_v2(stack=stack, prep_id=prep_id, resol=resol, version=version, fn=img_name)
     out_fp = DataManager.get_image_filepath_v2(stack=stack, prep_id=prep_id, resol=resol, version=version+'Jpeg', fn=img_name)
-    print '***********************************************'
-    print img_name
-    print "convert \"%(input_fp)s\" -depth %(depth)d -format jpg -quality %(quality)d \"%(output_fp)s\"" % dict(input_fp=in_fp, output_fp=out_fp, depth=depth, quality=quality)
-    print '***********************************************'
-    
+
     create_parent_dir_if_not_exists(out_fp)
     #download_from_s3(input_fp)
     execute_command("convert \"%(input_fp)s\" -depth %(depth)d -format jpg -quality %(quality)d \"%(output_fp)s\"" % dict(input_fp=in_fp, output_fp=out_fp, depth=depth, quality=quality))

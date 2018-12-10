@@ -145,7 +145,7 @@ for structure_m in structures_m:
         stack_m_spec = dict(name='atlasV7',
                    vol_type='score',
                    structure=s,
-                   resolution='10.0um'
+                    resolution='10.0um'
                    )
 
     #     stack_f_spec = dict(name=stack,

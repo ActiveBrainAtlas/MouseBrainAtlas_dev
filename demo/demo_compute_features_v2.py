@@ -63,21 +63,36 @@ model, mean_img = load_mxnet_model(model_dir_name=model_dir_name, model_name=mod
 for image_name in image_name_list:
 #for sec in sections:
 #for sec in range(220, 260):
-    try:
-        compute_and_save_features_one_section(
-                                version=version,
+#     try:
+#         compute_and_save_features_one_section(
+#                                 version=version,
+# #                                 scheme='normalize_mu_region_sigma_wholeImage_(-1,5)', 
+#                                 scheme='none', 
+# #                             bbox=(11217, 16886, 13859, 18404),
+# #                                 method='glcm',
+#                             method='cnn',
+#                             win_id=win_id, prep_id=prep_id,
+#                             stack=stack, sec=metadata_cache['filenames_to_sections'][stack][image_name], 
+#                             model=model, model_name=model_name,
+#                              mean_img=mean_img, 
+#                              batch_size=batch_size, 
+#         attach_timestamp=False, 
+#         recompute=True)
+#     except Exception as e:
+#         sys.stderr.write("Failed to compute and save patch features for image %s: %s\n" % (image_name, e.message))
+#         continue
+
+    compute_and_save_features_one_section(
+                            version=version,
 #                                 scheme='normalize_mu_region_sigma_wholeImage_(-1,5)', 
-                                scheme='none', 
+                            scheme='none', 
 #                             bbox=(11217, 16886, 13859, 18404),
 #                                 method='glcm',
-                            method='cnn',
-                            win_id=win_id, prep_id=prep_id,
-                            stack=stack, sec=metadata_cache['filenames_to_sections'][stack][image_name], 
-                            model=model, model_name=model_name,
-                             mean_img=mean_img, 
-                             batch_size=batch_size, 
-        attach_timestamp=False, 
-        recompute=True)
-    except Exception as e:
-	sys.stderr.write("Failed to compute and save patch features for image %s: %s\n" % (image_name, e.message))
-	continue
+                        method='cnn',
+                        win_id=win_id, prep_id=prep_id,
+                        stack=stack, sec=metadata_cache['filenames_to_sections'][stack][image_name], 
+                        model=model, model_name=model_name,
+                         mean_img=mean_img, 
+                         batch_size=batch_size, 
+    attach_timestamp=False, 
+    recompute=True)

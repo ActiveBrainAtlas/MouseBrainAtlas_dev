@@ -34,7 +34,7 @@ args = parser.parse_args()
 
 # Set this to true if want to show a largest possible SNR_L with the lowest possible level.
 #use_big_snr_l = True
-use_big_snr_l = False
+use_big_snr_l = True
 
 render_config_atlas = pd.read_csv(args.render_config_atlas, index_col='name').to_dict()
 render_config_atlas['color'] = {s: eval(c) for s, c in render_config_atlas['color'].iteritems()}
@@ -61,12 +61,12 @@ if use_big_snr_l:
     SNR_L_vol_10um, SNR_L_origin_10um_wrt_canonicalAtlasSpace =\
 DataManager.load_original_volume_v2(stack_spec=atlas_spec, structure='SNR_L', bbox_wrt='canonicalAtlasSpace')
 
-# SNR_R_vol_10um, SNR_R_ori_10um_wrt_canonicalAtlasSpace =\
-# DataManager.load_original_volume_v2(stack_spec=atlas_spec, structure='SNR_R', bbox_wrt='canonicalAtlasSpace')
-# SNR_L_nominal_location_1um_wrt_canonicalAtlasSpace = load_data(DataManager.get_structure_mean_positions_filepath(atlas_name=atlas_name, resolution='1um'))['SNR_L']
-# SNR_L_nominal_location_10um_wrt_canonicalAtlasSpace = SNR_L_nominal_location_1um_wrt_canonicalAtlasSpace / 10.
-# SNR_L_vol_10um, SNR_L_origin_10um_wrt_canonicalAtlasSpace = \
-# mirror_volume_v2(SNR_R_vol_10um, SNR_L_nominal_location_10um_wrt_canonicalAtlasSpace)
+#SNR_R_vol_10um, SNR_R_ori_10um_wrt_canonicalAtlasSpace =\
+#DataManager.load_original_volume_v2(stack_spec=atlas_spec, structure='SNR_R', bbox_wrt='canonicalAtlasSpace')
+#SNR_L_nominal_location_1um_wrt_canonicalAtlasSpace = load_data(DataManager.get_structure_mean_positions_filepath(atlas_name=atlas_name, resolution='1um'))['SNR_L']
+#SNR_L_nominal_location_10um_wrt_canonicalAtlasSpace = SNR_L_nominal_location_1um_wrt_canonicalAtlasSpace / 10.
+#SNR_L_vol_10um, SNR_L_origin_10um_wrt_canonicalAtlasSpace = \
+#mirror_volume_v2(SNR_R_vol_10um, SNR_L_nominal_location_10um_wrt_canonicalAtlasSpace)
 
     level = 0.000001
     num_simplify_iter = 4
@@ -94,7 +94,7 @@ shell_polydata_10um_wrt_canonicalAtlasSpace = DataManager.load_mesh_v2(brain_spe
 
 shell_polydata_um_wrt_canonicalAtlasSpace = rescale_polydata(shell_polydata_10um_wrt_canonicalAtlasSpace, 10.)
 
-shell_actor_um_wrt_canonicalAtlasSpace = actor_mesh(shell_polydata_um_wrt_canonicalAtlasSpace, (1,1,1), opacity=.15,
+shell_actor_um_wrt_canonicalAtlasSpace = actor_mesh(shell_polydata_um_wrt_canonicalAtlasSpace, (1,1,1), opacity=.1,
                               wireframe=False)
 
 marker_resolution = '10.0um'
@@ -131,7 +131,7 @@ for brain_name, experiment_info in experiments.iteritems():
 
     markers_rel2atlas_actors[brain_name] = [actor_sphere(position=(x,y,z), radius=20,
                                                         color=literal_eval(experiment_info['marker_color']),
-                                                        opacity=.7 )
+                                                        opacity=.6 )
                                for marker_id, (x,y,z) in aligned_markers_rel2atlas_um.iteritems()]
 
 
@@ -141,5 +141,9 @@ launch_vtk(
           + [shell_actor_um_wrt_canonicalAtlasSpace] \
           #+ [actor_sphere(position=(0,0,0), radius=5, color=(1,1,1), opacity=1.)]
            ,
-           init_angle='sagittal'
+         #init_angle='sagittal'
+          init_angle='horizontal_topDown'
+        #init_angle='coronal_posteriorToAnterior'
+
+
           )

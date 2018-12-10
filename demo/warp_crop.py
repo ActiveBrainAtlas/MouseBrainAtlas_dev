@@ -6,6 +6,7 @@ parser = argparse.ArgumentParser(
     description="""A versatile warp/crop script. 
 Usage 1: warp_crop.py --input_spec in.ini --op_id align1crop1
 This is the high-level usage. The operations are defined as ini files in the operation_configs/ folder.
+
 Usage 2: warp_crop.py --input_fp in.tif --output_fp out.tif --op warp 0.99,0,0,0,1.1,0 --op crop 100,100,20,10
 This is the low-level usage. Note that the user must ensure the warp parameters and crop coordinates are consistent with the resolution of the input image.
 """
@@ -28,11 +29,11 @@ import os
 import numpy as np
 
 sys.path.append(os.path.join(os.environ['REPO_DIR'], 'utilities'))
+print os.environ['REPO_DIR']
 from utilities2015 import *
 from data_manager import *
 from distributed_utilities import *
 from metadata import orientation_argparse_str_to_imagemagick_str
-
 
 def convert_operation_to_arr(op, resol, inverse=False, return_str=False, stack=None):
     """
@@ -91,8 +92,8 @@ def parse_operation_sequence(op_name, resol, return_str=False, stack=None):
     if inverse:
 	op_name = op_name[1:]
 
-    op = load_ini(os.path.join(DATA_ROOTDIR, 'CSHL_data_processed', stack, 'operation_configs', op_name + '.ini'))
-    #op = load_ini(os.path.join(DATA_ROOTDIR, 'operation_configs', op_name + '.ini'))
+    #op = load_ini(os.path.join(DATA_ROOTDIR, 'CSHL_data_processed', stack, 'operation_configs', op_name + '.ini'))
+    op = load_ini(os.path.join(DATA_ROOTDIR, 'operation_configs', op_name + '.ini'))
     if op is None:
 	raise Exception("Cannot load %s.ini" % op_name)
     if 'operation_sequence' in op: # composite operation
@@ -198,17 +199,18 @@ elif args.op is not None:
     assert args.input_fp is not None and args.output_fp is not None
     input_fp = args.input_fp
     output_fp = args.output_fp
-    print 'INPUT: '+input_fp
-    print 'OUTPUT: '+output_fp
 
     create_parent_dir_if_not_exists(output_fp)
 
-    execute_command("convert \"%(input_fp)s\"  +repage -virtual-pixel background -background %(bg_color)s %(op_str)s -flatten -compress lzw \"%(output_fp)s\"" % \
+    try:
+	execute_command("convert \"%(input_fp)s\"  +repage -virtual-pixel background -background %(bg_color)s %(op_str)s -flatten -compress lzw \"%(output_fp)s\"" % \
                 {
 'op_str': op_str,
      'input_fp': input_fp,
      'output_fp': output_fp,
      'bg_color': pad_color
-}
-)
+})
+    except Exception as e:
+	sys.stderr.write("ImageMagick convert failed for input_fp %s: %s\n" % (input_fp, e.message))
+
 
