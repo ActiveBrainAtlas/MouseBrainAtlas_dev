@@ -17,7 +17,7 @@
 - "extract features" requires `metadata_cache['image_shape']`, which reads from `atlas_data/CSHL_data_processed/MD585/operation_configs/from_padded_to_brainstem.ini`, so we need to create this file by copying from  `atlas_data/operation_configs/`. (TODO: certain operations should be local to each brain's folder, while some other fixed operations can be put in a global folder)
 - Create the section limit file `MD585_prep2_sectionLimits.ini`
 - Create the intensity volume by running `./construct_intensity_volume.py MD585 --tb_version gray --tb_resol thumbnail`
-- `./compute_simple_global_registration.py MD585 /media/yuncong/BstemAtlasData/atlas_data/CSHL_simple_global_registration/MD585_manual_anchor_points.ini`
+- `./compute_simple_global_registration.py MD585 /media/yuncong/BstemAtlasData/atlas_data/CSHL_simple_global_registration/MD585_manual_anchor_points.ini`. This script entails the following steps that originally need to run manually:
   - Pick the center of 12N and of 3N at sagittal midline. Input them into registration_v7_atlasV7_simpleGlobal.ipynb to compute the simple global transform.
   - Then run the # Identify 3-d bounding box of each simpleGlobal aligned structure part of from_images_to_score_volume.ipynb to generate structure ROIs.
 - Run `download_pretrained_classifiers.py`
