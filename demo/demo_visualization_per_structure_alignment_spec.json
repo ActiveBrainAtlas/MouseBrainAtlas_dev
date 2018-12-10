@@ -1,23 +1,23 @@
 {
 "3N_R": 
-    {
-    "stack_m": 
-        {
-        "name":"atlasV7", 
-        "vol_type": "score", 
-        "structure":["3N_R", "4N_R"],
-        "resolution":"10.0um"
-        },
-    "stack_f":
-        {
-                "name":"UCSD001",
+	{
+	"stack_m": 
+		{
+		"name":"atlasV7", 
+		"vol_type": "score", 
+		"structure":["3N_R", "4N_R"],
+		"resolution":"10.0um"
+		},
+	"stack_f":
+		{
+                "name":"DEMO998",
                 "vol_type": "score",
                 "structure":["3N_R", "4N_R"],
                 "resolution":"10.0um",
                 "detector_id":799
                 },
-    "warp_setting": 7
-    },
+	"warp_setting": 7
+	},
 "4N_R":
         {
         "stack_m":
@@ -29,7 +29,7 @@
                 },
         "stack_f":
                 {
-                "name":"UCSD001",
+                "name":"DEMO998",
                 "vol_type": "score", 
                 "structure":["3N_R", "4N_R"],
                 "resolution":"10.0um",
@@ -49,7 +49,7 @@
                 },
         "stack_f":
                 {
-                "name":"UCSD001",
+                "name":"DEMO998",
                 "vol_type": "score", 
                 "structure":["12N"],
                 "resolution":"10.0um",

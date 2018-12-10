@@ -1,0 +1,79 @@
+{
+"3N_R": 
+	{
+	"stack_m": 
+		{
+		"name":"atlasV7", 
+		"vol_type": "score", 
+		"structure":["3N_R", "4N_R"],
+		"resolution":"10.0um"
+		},
+	"stack_f":
+		{
+                "name":"UCSD001",
+                "vol_type": "score",
+                "structure":["3N_R", "4N_R"],
+                "resolution":"10.0um",
+                "detector_id":799
+                },
+	"warp_setting": 7
+	},
+"4N_R":
+        {
+        "stack_m":
+                {
+                "name":"atlasV7", 
+                "vol_type": "score", 
+                "structure":["3N_R", "4N_R"],
+                "resolution":"10.0um"
+                },
+        "stack_f":
+                {
+                "name":"UCSD001",
+                "vol_type": "score", 
+                "structure":["3N_R", "4N_R"],
+                "resolution":"10.0um",
+                "detector_id":799
+                },
+        "warp_setting": 7
+        },
+
+"12N":
+        {
+        "stack_m":
+                {
+                "name":"atlasV7",
+                "vol_type": "score",
+                "structure":["12N"],
+                "resolution":"10.0um"
+                },
+        "stack_f":
+                {
+                "name":"UCSD001",
+                "vol_type": "score", 
+                "structure":["12N"],
+                "resolution":"10.0um",
+                "detector_id":799
+                },
+        "warp_setting": 7
+        },
+"5N_L":
+        {
+        "stack_m":
+                {
+                "name":"atlasV7",
+                "vol_type": "score",
+                "structure":["5N_L"],
+                "resolution":"10.0um"
+                },
+        "stack_f":
+                {
+                "name":"UCSD001",
+                "vol_type": "score", 
+                "structure":["5N_L"],
+                "resolution":"10.0um",
+                "detector_id":799
+                },
+        "warp_setting": 7
+        }
+}
