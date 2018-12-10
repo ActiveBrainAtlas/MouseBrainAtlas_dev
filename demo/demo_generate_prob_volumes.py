@@ -141,7 +141,7 @@ for name_u in structure_list:
     	if lname in registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners:
             (xmin, ymin, secmin), (xmax, ymax, secmax) = registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners[lname]
 
-        for sec in range(max(secmin - section_margin, valid_secmin), min(secmax + 1 + section_margin, valid_secmax) + 1):
+            for sec in range(max(secmin - section_margin, valid_secmin), min(secmax + 1 + section_margin, valid_secmax) + 1):
 
                 if is_invalid(sec=sec, stack=stack):
                     continue

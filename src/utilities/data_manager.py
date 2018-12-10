@@ -582,6 +582,7 @@ def images_to_volume_v2(images, spacing_um, in_resol_um, out_resol_um, crop_to_m
     if isinstance(images, dict):
 
         shapes = np.array([im.shape[:2] for im in images.values()])
+        print images.values()
         assert len(np.unique(shapes[:,0])) == 1, 'Height of all images must be the same.'
         assert len(np.unique(shapes[:,1])) == 1, 'Width of all images must be the same.'
 
@@ -4393,6 +4394,8 @@ class DataManager(object):
         feature_fp = os.path.join(PATCH_FEATURES_ROOTDIR, model_name, stack,
                     stack + '_' + prep_str + '_' + normalization_scheme + '_' + win_str,
             fn + '_' + prep_str + '_' + normalization_scheme + '_' + win_str + '_' + model_name + '_' + what + ('_%s'%timestamp if timestamp is not None else '') + '.bp')
+        
+        print feature_fp
 
         return feature_fp
 
@@ -4409,16 +4412,16 @@ class DataManager(object):
 
         Note: `mean_img` is assumed to be the default provided by mxnet.
         """
-
+        
         features_fp = DataManager.get_dnn_features_filepath_v2(stack=stack, sec=sec, fn=fn, prep_id=prep_id, win_id=win_id,
                               normalization_scheme=normalization_scheme,
                                              model_name=model_name, what='features')
         # download_from_s3(features_fp, local_root=DATA_ROOTDIR)
         if not os.path.exists(features_fp):
             raise Exception("Features for %s, %s/%s does not exist." % (stack, sec, fn))
-
+            
         features = bp.unpack_ndarray_file(features_fp)
-
+        
         locations_fp = DataManager.get_dnn_features_filepath_v2(stack=stack, sec=sec, fn=fn, prep_id=prep_id, win_id=win_id,
                               normalization_scheme=normalization_scheme,
                                              model_name=model_name, what='locations')

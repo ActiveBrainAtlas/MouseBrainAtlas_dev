@@ -146,7 +146,7 @@ structure_list = per_structure_alignment_spec.keys()
 section_margin_um = 1000.
 section_margin = int(section_margin_um / SECTION_THICKNESS)
 
-stack = 'DEMO998'
+stack = 'UCSD001'
 # stack = brain_f_spec['name']
 # valid_secmin = np.min(metadata_cache['valid_sections'][stack])
 # valid_secmax = np.max(metadata_cache['valid_sections'][stack])

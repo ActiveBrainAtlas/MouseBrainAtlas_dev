@@ -17,11 +17,6 @@ from annotation_utilities import *
 from metadata import *
 from data_manager import *
 
-
-metadata_cache1 = generate_metadata_cache()
-print metadata_cache1['sections_to_filenames'].keys()
-print DataManager.load_anchor_filename('DEMO999')
-
 def get_structure_contours_from_structure_volumes_v3(volumes, stack, sections, 
                                                      resolution, level, sample_every=1,
                                                     use_unsided_name_as_key=False):
@@ -123,18 +118,30 @@ parser = argparse.ArgumentParser(
 # parser.add_argument("fixed_brain_spec", type=str, help="Fixed brain name")
 # parser.add_argument("moving_brain_spec", type=str, help="Moving brain name")
 # parser.add_argument("registration_setting", type=int, help="Registration setting")
-parser.add_argument("per_structure_alignment_spec", type=str, help="per_structure_alignment_spec, json")
-parser.add_argument("-g", "--global_alignment_spec", type=str, help="global_alignment_spec, json")
+parser.add_argument("stack", type=str, help="Stack name")
+
+#parser.add_argument("per_structure_alignment_spec", type=str, help="per_structure_alignment_spec, json")
+#parser.add_argument("-g", "--global_alignment_spec", type=str, help="global_alignment_spec, json")
+parser.add_argument("--per_structure_alignment_spec", type=str, help="per_structure_alignment_spec, json", default='demo_visualization_per_structure_alignment_spec.json')
+parser.add_argument("-g", "--global_alignment_spec", type=str, help="global_alignment_spec, json", default='demo_visualization_global_alignment_spec.json')
+
 # parser.add_argument("--structure_list", type=str, help="Json-encoded list of structures (unsided) (Default: all known structures)")
 args = parser.parse_args()
 
 # brain_f_spec = load_json(args.fixed_brain_spec)
 # brain_m_spec = load_json(args.moving_brain_spec)
 # registration_setting = args.registration_setting
+stack = args.stack
 per_structure_alignment_spec = load_json(args.per_structure_alignment_spec)
 simpleGlobal_alignment_spec = load_json(args.global_alignment_spec)
 
 structure_list = per_structure_alignment_spec.keys()
+
+
+metadata_cache1 = generate_metadata_cache()
+print 'Structures:'
+print per_structure_alignment_spec.keys()
+print 'Anchor: ',DataManager.load_anchor_filename( stack )
 
 # import json
 # if hasattr(args, 'structure_list'): 
@@ -146,15 +153,20 @@ structure_list = per_structure_alignment_spec.keys()
 section_margin_um = 1000.
 section_margin = int(section_margin_um / SECTION_THICKNESS)
 
-stack = 'DEMO999'
+# stack = 'DEMO999'
 # stack = brain_f_spec['name']
-# valid_secmin = np.min(metadata_cache['valid_sections'][stack])
-# valid_secmax = np.max(metadata_cache['valid_sections'][stack])
-valid_secmin = 1
-valid_secmax = 999
+valid_secmin = np.min(metadata_cache['valid_sections'][stack])
+valid_secmax = np.max(metadata_cache['valid_sections'][stack])
+#valid_secmin = 1
+#valid_secmax = 999
 
 auto_contours_all_sec_all_structures_all_levels = defaultdict(lambda: defaultdict(dict))
 simple_global_contours_all_sec_all_structures_all_levels = defaultdict(lambda: defaultdict(dict))
+
+print 'BUG TESTING'
+print defaultdict
+print defaultdict(dict)
+print defaultdict(lambda: defaultdict(dict))
 
 #######################
 
@@ -171,7 +183,7 @@ simple_global_contours_all_sec_all_structures_all_levels = defaultdict(lambda: d
 ########################
 
 for structure_m in structure_list:
-
+    print '___________ STRUCTURE ___________ : ',structure_m
     ####################################################
     
     local_alignment_spec = per_structure_alignment_spec[structure_m]
@@ -190,12 +202,13 @@ for structure_m in structure_list:
     range(max(secmin - section_margin, valid_secmin), min(secmax + 1 + section_margin, valid_secmax))
 
     levels = [0.1, 0.25, 0.5, 0.75, 0.99]
-
+    
     auto_contours_all_sections_one_structure_all_levels = \
     get_structure_contours_from_structure_volumes_v3(volumes={structure_m: vo}, stack=stack, 
                                                      sections=atlas_structures_wrt_wholebrainWithMargin_sections,
                                                     resolution='10.0um', level=levels, sample_every=5)
-
+    # CHECK
+    print auto_contours_all_sections_one_structure_all_levels
     for sec, contours_one_structure_all_levels in sorted(auto_contours_all_sections_one_structure_all_levels.items()):
         if not is_invalid(sec=sec, stack=stack):
             for name_s, cnt_all_levels in contours_one_structure_all_levels.items():
@@ -219,7 +232,7 @@ for structure_m in structure_list:
             for name_s, cnt_all_levels in contours_one_structure_all_levels.items():
                 for level, cnt in cnt_all_levels.iteritems():
                     simple_global_contours_all_sec_all_structures_all_levels[sec][name_s][level] = cnt.astype(np.int)
-
+print '################################'
     ####################################
 
 #         chat_vo = chat_structures[structure_m]
@@ -231,8 +244,10 @@ for structure_m in structure_list:
 
 #######################################
 
-for sec in sorted(auto_contours_all_sec_all_structures_all_levels.keys()):
+print sorted(auto_contours_all_sec_all_structures_all_levels.keys())
 
+for sec in sorted(auto_contours_all_sec_all_structures_all_levels.keys()):
+    
     if is_invalid(sec=sec, stack=stack):
         continue
 

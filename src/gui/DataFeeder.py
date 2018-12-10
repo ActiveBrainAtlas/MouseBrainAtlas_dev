@@ -39,10 +39,12 @@ def load_qimage(stack, sec, prep_id, resolution, img_version):
 
         if resolution != 'lossless' and resolution != 'raw':
             sys.stderr.write('Load raw and rescale...\n')
-            fp = DataManager.get_image_filepath_v2(stack=stack, section=sec, prep_id=prep_id, resol='lossless', version=img_version)
+            # For old brains, use lossless; for new brains, use raw.
+            # fp = DataManager.get_image_filepath_v2(stack=stack, section=sec, prep_id=prep_id, resol='lossless', version=img_version)
+            fp = DataManager.get_image_filepath_v2(stack=stack, section=sec, prep_id=prep_id, resol='raw', version=img_version)
             if not os.path.exists(fp):
                 sys.stderr.write('Image %s with resolution %s, prep %s does not exist.\n' % (fp, resolution, prep_id))
-                raise
+                raise Exception('Image %s with resolution %s, prep %s does not exist.\n' % (fp, resolution, prep_id))
 
             qimage = QImage(fp)
             raw_pixel_size_um = convert_resolution_string_to_voxel_size(resolution='lossless', stack=stack)
