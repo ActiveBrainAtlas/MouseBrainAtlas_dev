@@ -39,8 +39,6 @@ def load_qimage(stack, sec, prep_id, resolution, img_version):
 
         if resolution != 'lossless' and resolution != 'raw':
             sys.stderr.write('Load raw and rescale...\n')
-            # For old brains, use lossless; for new brains, use raw.
-            # fp = DataManager.get_image_filepath_v2(stack=stack, section=sec, prep_id=prep_id, resol='lossless', version=img_version)
             fp = DataManager.get_image_filepath_v2(stack=stack, section=sec, prep_id=prep_id, resol='raw', version=img_version)
             if not os.path.exists(fp):
                 sys.stderr.write('Image %s with resolution %s, prep %s does not exist.\n' % (fp, resolution, prep_id))
@@ -50,7 +48,7 @@ def load_qimage(stack, sec, prep_id, resolution, img_version):
             raw_pixel_size_um = convert_resolution_string_to_voxel_size(resolution='lossless', stack=stack)
             desired_pixel_size_um = convert_resolution_string_to_voxel_size(resolution=resolution, stack=stack)
             scaling = raw_pixel_size_um / float(desired_pixel_size_um)
-
+            
             if scaling != 1:
                 # Downsample the image for CryoJane data, which is too large and exceeds QPixmap size limit.
                 # sys.stderr.write('Raw qimage bytes = %d\n' % qimage.byteCount())
