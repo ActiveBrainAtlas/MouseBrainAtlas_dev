@@ -329,6 +329,15 @@ This can serve two purposes:
 	```
 	- Output:
 	```
+	CSHL_volumes/
+	└── STACK
+	    └── STACK_detector799_10.0um_scoreVolume
+		├── score_volume_gradients
+		│   ├── STACK_detector799_10.0um_scoreVolume_STR-RL_gradients.bp
+		│   └── STACK_detector799_10.0um_scoreVolume_STR-RL_origin_wrt_wholebrain.txt
+		└── score_volumes
+		    ├── STACK_detector799_10.0um_scoreVolume_STR-RL.bp
+		    └── STACK_detector799_10.0um_scoreVolume_STR-RL_origin_wrt_wholebrain.txt
 	```
 
 ## Registration
