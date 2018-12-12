@@ -15,6 +15,7 @@ The preprocessing stage of the code can be broken down into the following 7-8 st
 
 ### Processing
 
+0) [Generate intensity volume](#generate-intensity-volume)
 1) [Compute Patch Features](#compute-patch-features)
 2) [Generate Probability Volumes](#generate-probability-volumes)
 3) [Registration](#registration)
@@ -189,8 +190,11 @@ Draw initial snake contours.
 
 ### Brainstem crop
 - **(HUMAN)** Create `from_wholeslice_to_brainstem.ini`. Specify prep2 (alignedBrainstemCrop) cropping box, based on alignedWithMargin or alignedPadded thumbnails.
-	- Output:
+	- File contents:
 	```
+	[DEFAULT]
+	operation_sequence = -from_padded_to_wholeslice
+	from_padded_to_brainstem
 	```
 - Create `input_spec.ini` as (alignedWithMargin,NtbNormalizedAdaptiveInvertedGamma,raw). `python warp_crop.py --input_spec input_spec.ini --op_id from_wholeslice_to_brainstem`
 	- Output:
@@ -215,6 +219,19 @@ Draw initial snake contours.
 	└── CSHL_data_processed
 		└── STACK_prep2_raw_NtbNormalizedAdaptiveInvertedGammaJpeg
 		    └── SLICE_prep2_raw_NtbNormalizedAdaptiveInvertedGammaJpeg.jpg
+	```
+
+## Generate intensity volume
+- `python construct_intensity_volume.py DEMO998 --tb_version NtbNormalizedAdaptiveInvertedGamma`
+	- Output:
+	```
+	ROOT_DIR/
+	└── CSHL_volumes
+		└── STACK
+			└── STACK_wholebrainWithMargin_10.0um_intensityVolume
+				└── STACK_prep2_none_win7
+					├── STACK_wholebrainWithMargin_10.0um_intensityVolume.bp
+					└── STACK_wholebrainWithMargin_10.0um_intensityVolume_origin_wrt_wholebrain.txt
 	```
 
 ## (Optional) Obtain a simple global alignment
@@ -306,19 +323,6 @@ This can serve two purposes:
   - Output displays 1000 iterations of gradient descent
 
 The outputs include the transform parameters and transformed atlas structures.
-
-## Generate intensity volume
-- `python construct_intensity_volume.py DEMO998 --tb_version NtbNormalizedAdaptiveInvertedGamma`
-	- Output:
-	```
-	ROOT_DIR/
-	└── CSHL_volumes
-		└── STACK
-			└── STACK_wholebrainWithMargin_10.0um_intensityVolume
-				└── STACK_prep2_none_win7
-					├── STACK_wholebrainWithMargin_10.0um_intensityVolume.bp
-					└── STACK_wholebrainWithMargin_10.0um_intensityVolume_origin_wrt_wholebrain.txt
-	```
 
 ## Visualize registration results
 
