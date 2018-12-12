@@ -332,7 +332,7 @@ This can serve two purposes:
 	|			└── STACK_prep2_10.0um_detector799
 	|				└── STACK_SLICE_prep2_10.0um_detector799
 	|					└── STACK_SLICE_prep2_10.0um_detector799_STR_scoremap.bp
-	└── CSHL_scoremaps
+	└── CSHL_scoremap_Viz
 		└── 10.0um
 			└── STR
 				└── STACK
@@ -342,15 +342,16 @@ This can serve two purposes:
 	```
 	- Output:
 	```
-	CSHL_volumes/
-	└── STACK
-	    └── STACK_detector799_10.0um_scoreVolume
-		├── score_volume_gradients
-		│   ├── STACK_detector799_10.0um_scoreVolume_STR-RL_gradients.bp
-		│   └── STACK_detector799_10.0um_scoreVolume_STR-RL_origin_wrt_wholebrain.txt
-		└── score_volumes
-		    ├── STACK_detector799_10.0um_scoreVolume_STR-RL.bp
-		    └── STACK_detector799_10.0um_scoreVolume_STR-RL_origin_wrt_wholebrain.txt
+	ROOT_DIR/
+	└── CSHL_volumes/
+		└── STACK
+		    └── STACK_detector799_10.0um_scoreVolume
+			├── score_volume_gradients
+			│   ├── STACK_detector799_10.0um_scoreVolume_STR-RL_gradients.bp
+			│   └── STACK_detector799_10.0um_scoreVolume_STR-RL_origin_wrt_wholebrain.txt
+			└── score_volumes
+			    ├── STACK_detector799_10.0um_scoreVolume_STR-RL.bp
+			    └── STACK_detector799_10.0um_scoreVolume_STR-RL_origin_wrt_wholebrain.txt
 	```
 
 ## Registration
