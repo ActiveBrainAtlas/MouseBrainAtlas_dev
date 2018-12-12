@@ -21,7 +21,7 @@ The preprocessing stage of the code can be broken down into the following 7-8 st
 3) [Registration](#registration)
 4) [Visualize Registration Results](#visualize-registration-results)
 
-# abbreviations
+### Abbreviations
 
 Throughout this document there are a few shorthand representations for various elements.
 - List of abbreviations:
@@ -49,6 +49,7 @@ At each step, the work script generates **a subset** of the full outputs expecte
 A download script is then used to download from S3 the full set of outputs that are **pre-computed**. They are then used by the work script of the next step.
 
 ------------------------------------------------------
+
 
 ## Preprocess
 
