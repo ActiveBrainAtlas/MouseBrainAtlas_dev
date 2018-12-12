@@ -21,6 +21,18 @@ The preprocessing stage of the code can be broken down into the following 7-8 st
 3) [Registration](#registration)
 4) [Visualize Registration Results](#visualize-registration-results)
 
+# abbreviations
+
+Throughout this document there are a few shorthand representations for various elements.
+- List of abbreviations:
+	- `STACK`: The name of the stack you are running through the pipeline
+		- example: 'MD585'
+	- `SLICE`: The name of an individual slice in the stack
+		- example: 'slide074_2018_09_04-S3'
+	- `STR`: The name of any one of the 28 structures in the brainstem
+		- example: '5N'
+	- `STR-RL`: The name of any one of the 51 landmarks. Some structures are landmarks, structures that appear in the right and left hemispheres are considered two landmarks.
+		- example: '5N_R'
 
 # Scripts
 
