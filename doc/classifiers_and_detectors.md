@@ -14,7 +14,7 @@ These are the relevant fields:
 Known classifiers: One used for Ntb (899), one for Thionin. The Ntb classifier can be used on Thionin brains after intensity normalization, but will not work quite as well. The other classifier was trained on 3 thionin brains: MD585/MD589/MD594, but does not exist on any server (may have been deleted entirely).
 
 
-Detector/classifier settings are read in [metadata line 535](https://github.com/ActiveBrainAtlas/MouseBrainAtlas_dev/blob/master/src/utilities/metadata.py#L535)
+Detector/classifier settings are read in [metadata line 509](https://github.com/ActiveBrainAtlas/MouseBrainAtlas_dev/blob/master/src/utilities/metadata.py#L535)
 
 `window_id`: It defines a particular mapping between location and gridpoint index. For example, say windowing_id =7, then patch_size_um = 103.04 for 0.46um/pixel images correspond to patch size of 224 pixel. The grid point with index 0 will be at coordinate (112, 112), spacing is 30 um which translates to 65 pixels, so the grid point with index 1 will be at coordinate (112 + 65, 112) .... Each grid point is associated a square image patch and the point is the center of the patch. Each index maps to a feature vector, as a result of "feature extraction".
 
