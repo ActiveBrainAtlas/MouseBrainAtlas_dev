@@ -55,14 +55,14 @@ A download script is then used to download from S3 the full set of outputs that 
 
 ### Preprocess Setup
 - Run `download_demo_data_preprocessing.py` to download 4 JPEG2000 images of the demo brain.
-- **(HUMAN)** create `DEMO998.ini` and put it under `demo_data/brains_info/`
+- **(HUMAN)** create `STACK.ini` and put it under `demo_data/brains_info/`
 	- Example:
 	```
 	[DEFAULT]
 	planar_resolution_um = 0.46
 	section_thickness_um = 20
 	```
-- Create `DEMO998_input_spec.json`. `python jp2_to_tiff.py DEMO998 DEMO998_raw_input_spec.json`.
+- Create `STACK_input_spec.json`. `python jp2_to_tiff.py DEMO998 DEMO998_raw_input_spec.json`.
 - Create `input_spec.ini` as (None,None,raw). `python extract_channel.py input_spec.ini 2 Ntb`
 - Create `input_spec.ini` as (None,Ntb,raw). `python rescale.py input_spec.ini thumbnail -f 0.03125`
 
@@ -106,15 +106,15 @@ A download script is then used to download from S3 the full set of outputs that 
 		└── STACK_prep1_thumbnail_NtbNormalized
 		    └── SLICE_prep1_thumbnail_NtbNormalized.tif
 	```
-- **(HUMAN)** Inspect aligned images using preprocessGUI `preprocess_tool_v3.py`, correct pairwise transforms and check each image's order in stack. `python preprocess_tool_v3.py DEMO998 --tb_version NtbNormalized`
+- **(HUMAN)** Inspect aligned images using preprocessGUI `preprocess_tool_v3.py`, correct pairwise transforms and check each image's order in stack. `python preprocess_tool_v3.py STACK --tb_version NtbNormalized`
 
 ### Create masks
-- **(HUMAN)** On a machine with monitor, launch the maskingGUI. `DATA_ROOTDIR=/media/yuncong/brainstem/home/yuncong/MouseBrainAtlas/demo/demo_data python mask_editing_tool_v4.py DEMO998`.
+- **(HUMAN)** On a machine with monitor, launch the maskingGUI. `DATA_ROOTDIR=/media/yuncong/brainstem/home/yuncong/MouseBrainAtlas/demo/demo_data python mask_editing_tool_v4.py STACK`.
 Draw initial snake contours.
 	- Output:
 	```
 	```
-- Create `input_spec.ini` as (alignedPadded,NtbNormalized,thumbnail). `python masking.py input_spec.ini demo_data/CSHL_data_processed/DEMO998/DEMO998_prep1_thumbnail_initSnakeContours.pkl`
+- Create `input_spec.ini` as (alignedPadded,NtbNormalized,thumbnail). `python masking.py input_spec.ini demo_data/CSHL_data_processed/STACK/STACK_prep1_thumbnail_initSnakeContours.pkl`
 	- Output:
 	```
 	DATA_ROOTDIR/
