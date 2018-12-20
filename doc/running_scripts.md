@@ -62,7 +62,7 @@ A download script is then used to download from S3 the full set of outputs that 
 	planar_resolution_um = 0.46
 	section_thickness_um = 20
 	```
-- Create `STACK_input_spec.json`. `python jp2_to_tiff.py DEMO998 DEMO998_raw_input_spec.json`.
+- Create `STACK_input_spec.json`. `python jp2_to_tiff.py STACK STACK_raw_input_spec.json`.
 - Create `input_spec.ini` as (None,None,raw). `python extract_channel.py input_spec.ini 2 Ntb`
 - Create `input_spec.ini` as (None,Ntb,raw). `python rescale.py input_spec.ini thumbnail -f 0.03125`
 
