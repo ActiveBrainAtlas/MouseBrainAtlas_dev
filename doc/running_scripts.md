@@ -316,6 +316,7 @@ This can serve two purposes:
 					├── SLICE_prep2_none_win7_inception-bn-blue_features.bp
 					└── SLICE_prep2_none_win7_inception-bn-blue_locations.bp
 	```
+- ~ 5 minutes
 
 ## Generate probability volumes
 
