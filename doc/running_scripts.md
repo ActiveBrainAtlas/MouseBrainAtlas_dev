@@ -304,6 +304,7 @@ This can serve two purposes:
 - `src/learning/from_images_to_score_volume.ipynb` will NOT run unless `src/utilities/learning_utilities.py`, Line __844__, is correct for this particular stack. NEEDS TO BE CHANGED  
 
 ## Compute patch features
+- ~ 5 minutes
 - Create `input_spec.ini` as (alignedBrainstemCrop,NtbNormalizedAdaptiveInvertedGamma,raw). `python demo_compute_features_v2.py DEMO998_input_spec.ini`
 	-If using GPU, the demo for each section should finish in about 1 minute. If using CPU, this takes about 1 hour.
 	- Output:
@@ -316,10 +317,9 @@ This can serve two purposes:
 					├── SLICE_prep2_none_win7_inception-bn-blue_features.bp
 					└── SLICE_prep2_none_win7_inception-bn-blue_locations.bp
 	```
-- ~ 5 minutes
 
 ## Generate probability volumes
-
+- ~ 8 hours
 - Create `DEMO998_prep2_sectionLimits.ini`. In this file specify the indices of the first and last sections that include the brainstem.
 - Download detectors. `python download_demo_data_generate_prob_volumes.py`
 - `python demo_generate_prob_volumes.py DEMO998 799 NtbNormalizedAdaptiveInvertedGammaJpeg --structure_list "[\"3N\", \"4N\", \"12N\"]"`
@@ -355,7 +355,9 @@ This can serve two purposes:
 			    └── STACK_detector799_10.0um_scoreVolume_STR-RL_origin_wrt_wholebrain.txt
 	```
 
+
 ## Registration
+- ~ 12 hours
 
 ### Register 12N individually
 - `$ python register_brains_demo_12N.py --use_simple_global`
@@ -370,6 +372,7 @@ This can serve two purposes:
 The outputs include the transform parameters and transformed atlas structures.
 
 ## Visualize registration results
+- ~ 10 minutes
 
 To visualize the multi-probability level structures of the aligned atlas overlaid on original images:
 - `$ python visualize_registration_demo_3_structures.py`
