@@ -1718,7 +1718,7 @@ class DataManager(object):
             elif isinstance(structure, list):
                 basename += '_' + '_'.join(sorted(structure))
             else:
-                raise
+                raise ValueError('The following structure is not valid: ',structure)
 
         return basename
 
@@ -5591,3 +5591,49 @@ def resolve_actual_setting(setting, stack, fn=None, sec=None):
         setting_ = setting
 
     return setting_
+
+# Creates input_spec.ini file
+def create_input_spec_ini( name, image_name_list, stack, prep_id, version, resol  ):
+    f = open(name, "w")
+    
+    f.write('[DEFAULT]\n')
+    f.write('image_name_list = '+image_name_list[0]+'\n')
+    for i in range ( 1 , len(image_name_list) ):
+        f.write('    '+image_name_list[i]+'\n')
+    f.write('stack = '+stack+'\n')
+    f.write('prep_id = '+prep_id+'\n')
+    f.write('version = '+version+'\n')
+    f.write('resol = '+resol+'\n')
+    
+def create_input_spec_ini_all( name, stack, prep_id, version, resol  ):
+    f = open(name, "w")
+    
+    f.write('[DEFAULT]\n')
+    f.write('image_name_list = all\n')
+    f.write('stack = '+stack+'\n')
+    f.write('prep_id = '+prep_id+'\n')
+    f.write('version = '+version+'\n')
+    f.write('resol = '+resol+'\n')
+    
+def get_fn_list_from_sorted_filenames( stack='UCSD001' ):
+    '''
+        get_fn_list_from_sorted_filenames( stack ) returns a list of all the valid
+        filenames for the current stack.
+    '''
+    stack = 'UCSD001'
+    fp = os.environ['DATA_ROOTDIR']+'CSHL_data_processed/'+stack+'/'
+    fn = stack+'_sorted_filenames.txt'
+    
+    file0 = open( fp+fn, 'r')
+    section_names = []
+
+    for line in file0: 
+        if 'Placeholder' in line:
+            #print line
+            continue
+        else:
+            space_index = line.index(" ")
+            section_name = line[ 0 : space_index ]
+            section_number = line[ space_index+1 : ]
+            section_names.append( section_name )
+    return section_names

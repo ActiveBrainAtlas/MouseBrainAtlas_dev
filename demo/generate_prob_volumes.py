@@ -28,7 +28,10 @@ bg_img_version = args.bg_img_version
 
 import json
 if hasattr(args, 'structure_list') and args.structure_list is not None:
-    structure_list = json.loads(args.structure_list)
+    try:
+        structure_list = json.loads(args.structure_list)
+    except:
+        structure_list = args.structure_list
 else:
     structure_list = all_known_structures
     # structure_list = ['Amb', 'SNR', '7N', '5N', '7n', 'LRt', 'Sp5C', 'SNC', 'VLL', 'SC', 'IC']
@@ -275,6 +278,8 @@ for name_u in structure_list:
 
 #         for sec in metadata_cache['valid_sections'][stack]:
 
+        print name_s
+        #print registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners
 	if name_s not in registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners:
 	    sys.stderr.write("Score volume ROI derived from simple global alignment does not exist. Skip generating score volume.\n")
 	    continue

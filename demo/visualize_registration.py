@@ -145,6 +145,7 @@ section_margin_um = 1000.
 section_margin = int(section_margin_um / SECTION_THICKNESS)
 
 stacks = set([x['stack_f']['name'] for x in per_structure_alignment_spec.values()])
+print stacks
 assert len(stacks) == 1, "Only one fixed brain is allowed, but per_structure_alignment_spec json lists multiple fixed brains."
 stack = list(stacks)[0]
 

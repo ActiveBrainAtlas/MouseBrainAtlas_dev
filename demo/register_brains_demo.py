@@ -65,6 +65,7 @@ brain_m_spec0 = brain_m_spec.copy()
 brain_m_spec0.pop("structure")
 brain_f_spec0 = brain_f_spec.copy()
 brain_f_spec0.pop("structure")
+
 simpleGlobal_alignment_spec = dict(stack_m=brain_m_spec0, stack_f=brain_f_spec0, warp_setting=0)
 
 aligner_parameters = generate_aligner_parameters_v2(alignment_spec=alignment_spec, 
@@ -83,7 +84,7 @@ aligner.set_label_weights(label_weights=aligner_parameters['label_weights_m'])
 ################################
 
 if use_simple_global:
-    T_atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol = np.loadtxt(os.path.join(ROOT_DIR, 'CSHL_simple_global_registration', brain_f_spec['name'] + '_T_atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol.txt'))
+    T_atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol = np.loadtxt(os.path.join(DATA_ROOTDIR, 'CSHL_simple_global_registration', brain_f_spec['name'] + '_T_atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol.txt'))
     aligner.set_initial_transform(T_atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol)
     aligner.set_centroid(centroid_m='structure_centroid', centroid_f='centroid_m')
 else:

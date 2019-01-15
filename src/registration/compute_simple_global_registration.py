@@ -92,10 +92,16 @@ args = parser.parse_args()
 stack = args.stack
 manual_points = load_ini(args.manual_anchors)
 print("Manually selected anchor points", manual_points)
-x_12N = manual_points['x_12N']
-y_12N = manual_points['y_12N']
-x_3N = manual_points['x_3N']
-y_3N = manual_points['y_3N']
+try:
+    x_12N = manual_points['x_12N']
+    y_12N = manual_points['y_12N']
+    x_3N = manual_points['x_3N']
+    y_3N = manual_points['y_3N']
+except:
+    x_12N = manual_points['x_12n']
+    y_12N = manual_points['y_12n']
+    x_3N = manual_points['x_3n']
+    y_3N = manual_points['y_3n']
 mid_z_wrt_wholebrainWithMargin = manual_points['z_midline']
 
 atlas_spec = dict(name='atlasV7',
@@ -139,9 +145,6 @@ np.r_[wholebrainWithMargin_origin_wrt_wholebrain_dataResol_x,
 T_atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol = \
 align_anchors(atlas_anchor1_wrt_canonicalAtlasSpace_atlasResol, atlas_anchor2_wrt_canonicalAtlasSpace_atlasResol,
              subject_anchor1_wrt_wholebrain_atlasResol, subject_anchor2_wrt_wholebrain_atlasResol)
-
-print T_atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol
-
 
 #rand_vec = np.random.uniform(size=3)
 #rand_vec = rand_vec / np.linalg.norm(rand_vec)
@@ -199,7 +202,7 @@ converter = CoordinatesConverter(stack=stack)
 registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners_raw = {}
 
 for name_s, corners_xyz in registered_atlas_structures_xyzTwoCorners_wrt_wholebrain_atlasResol.iteritems():
-#     print name_s
+    #print name_s
     registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners_raw[name_s] = \
     converter.convert_frame_and_resolution(p=corners_xyz, 
                                        in_wrt=('wholebrain', 'sagittal'),

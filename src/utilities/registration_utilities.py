@@ -295,7 +295,7 @@ def generate_aligner_parameters_v2(alignment_spec,
     registration_settings = read_csv(REGISTRATION_SETTINGS_CSV, header=0, index_col=0)
     warp_properties = registration_settings.loc[warp_setting]
     print warp_properties
-
+    
     ################################################################
 
     upstream_warp_setting = warp_properties['upstream_warp_id']
@@ -317,14 +317,13 @@ def generate_aligner_parameters_v2(alignment_spec,
 
     positive_weight = 'size'
     # positive_weight = 'inverse'
-
+    
     ############################################################################
 
     if include_surround:
         structures_m = set(structures_m) | set([convert_to_surround_name(s, margin='200um') for s in structures_m])
 
     if upstream_warp_setting is None:
-
         if stack_m_spec['name'].startswith('atlas'):
             # in_bbox_wrt='atlasSpace'
             in_bbox_wrt='canonicalAtlasSpace'
@@ -361,7 +360,7 @@ def generate_aligner_parameters_v2(alignment_spec,
 #                                                                     in_bbox_wrt='wholebrain',
 #                                                                     out_bbox_wrt='wholebrain'
                                                                 )
-
+    
     if len(volume_moving) == 0:
         sys.stderr.write("No moving volumes.\n")
     else:
