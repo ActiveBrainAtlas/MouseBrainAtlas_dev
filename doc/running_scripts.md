@@ -328,11 +328,11 @@ This can serve two purposes:
 	```
 	ROOT_DIR/
 	├── CSHL_scoremaps
-	|	└── 10.0um
-	|		└── STACK
-	|			└── STACK_prep2_10.0um_detector799
-	|				└── STACK_SLICE_prep2_10.0um_detector799
-	|					└── STACK_SLICE_prep2_10.0um_detector799_STR_scoremap.bp
+	│	└── 10.0um
+	│		└── STACK
+	│			└── STACK_prep2_10.0um_detector799
+	│				└── STACK_SLICE_prep2_10.0um_detector799
+	│					└── STACK_SLICE_prep2_10.0um_detector799_STR_scoremap.bp
 	└── CSHL_scoremap_Viz
 		└── 10.0um
 			└── STR
