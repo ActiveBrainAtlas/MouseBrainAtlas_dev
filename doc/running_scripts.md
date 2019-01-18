@@ -358,6 +358,18 @@ This can serve two purposes:
 
 ## Registration
 - ~ 12 hours
+- Output:
+```
+ROOT_DIR/
+└── CSHL_volumes/
+	└── atlasV7
+		└── atlasV7_10.0um_scoreVolume_STR-RL_warp7_STACK_detector799_10.0um_scoreVolume_STR-RL_10.0um
+			└── score_volumes
+				├── atlasV7_10.0um_scoreVolume_STR-RL_warp7_STACK_detector799_10.0um_scoreVolume_STR-RL_10.0um_STR-RL.bp
+				├── atlasV7_10.0um_scoreVolume_STR-RL_warp7_STACK_detector799_10.0um_scoreVolume_STR-RL_10.0um_STR-RL_origin_wrt_fixedWholebrain.txt
+				├── atlasV7_10.0um_scoreVolume_STR-RL_warp7_STACK_detector799_10.0um_scoreVolume_STR-RL_10.0um_STR-RL_surround_200um.bp
+				└── atlasV7_10.0um_scoreVolume_STR-RL_warp7_STACK_detector799_10.0um_scoreVolume_STR-RL_10.0um_STR-RL_surround_200um_origin_wrt_fixedWholebrain.txt
+```
 
 ### Register 12N individually
 - `$ python register_brains_demo_12N.py --use_simple_global`
