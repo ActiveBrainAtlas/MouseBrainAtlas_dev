@@ -433,3 +433,4 @@ Input_Spec shorthand:
 - aligned: ?
 - padded: prep1
 - brainstem: prep2
+- wholeslice: prep5
