@@ -48,6 +48,7 @@ for img_name in image_name_list:
     img = imread(in_fp)
     print in_fp
     print img.dtype
+    print np.shape(img)
     
     img_tb = img[::int(1./args.rescale_factor), ::int(1./args.rescale_factor)]
     imsave(out_fp, img_tb)

@@ -23,8 +23,10 @@ from distributed_utilities import *
 out_version = args.out_version
 
 input_spec = load_ini(args.input_spec)
-image_name_list = input_spec['image_name_list']
 stack = input_spec['stack']
+image_name_list = input_spec['image_name_list']
+if image_name_list == 'all':
+    image_name_list = DataManager.load_sorted_filenames(stack=stack)[0].keys()
 prep_id = input_spec['prep_id']
 if prep_id == 'None':
     prep_id = None
@@ -34,7 +36,6 @@ if version == 'None':
     version = None
 
 for img_name in image_name_list:
-
     t = time.time()
 
     in_fp = DataManager.get_image_filepath_v2(stack=stack, prep_id=prep_id, resol=resol, version=version, fn=img_name)

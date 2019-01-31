@@ -89,10 +89,10 @@ def parse_operation_sequence(op_name, resol, return_str=False, stack=None):
 	op_name = op_name[1:]
 
 #    op = load_ini('demo_data/operation_configs/' + op_name + '.ini')
-    op_path = os.path.join( DATA_ROOTDIR, 'operation_configs', op_name + '.ini')
+    #op_path = os.path.join( DATA_ROOTDIR, 'operation_configs', op_name + '.ini')
+    op_path = os.path.join( DATA_ROOTDIR,'CSHL_data_processed',stack, 'operation_configs', op_name + '.ini')
     print 'LOADING: '+op_path
     op = load_ini( op_path )
-    print 'ALEXN MARK'
     if op is None:
 	raise Exception("Cannot load %s.ini" % op_name)
     if 'operation_sequence' in op: # composite operation
@@ -122,6 +122,8 @@ if args.op_id is not None:
     prep_id = input_spec['prep_id']
     version = input_spec['version']
     resol = input_spec['resol']
+    if image_name_list == 'all':
+        image_name_list = DataManager.load_sorted_filenames(stack=stack)[0].keys()
 
     op_seq = parse_operation_sequence(args.op_id, resol=resol, return_str=True, stack=stack)
 
