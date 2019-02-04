@@ -262,9 +262,8 @@ This can serve two purposes:
 	```
 	ROOT_DIR/
 	└── CSHL_simple_global_registration
-		└── STACK_registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners
-			├── STACK_T_atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol.txt
-			└── STACK_T_atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol.bp
+		├── STACK_T_atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol.txt
+		└── STACK_T_atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol.bp
 	```
 - Then run the `# Identify 3-d bounding box of each simpleGlobal aligned structure` part of `from_images_to_score_volume.ipynb` to generate structure ROIs.
 	- Output:
