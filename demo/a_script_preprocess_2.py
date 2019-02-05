@@ -89,7 +89,7 @@ command = ['python', 'align_compose.py', 'input_spec.ini', '--op', 'from_none_to
 completion_message = 'Finished preliminary alignment.'
 call_and_time( command, completion_message=completion_message)
 
-command = ['python', 'warp_crop.py','--input_spec', 'input_spec.ini', '--op_id', 'from_none_to_padded','--njobs','8','--pad_color','black']
+command = ['python', 'warp_crop_v3.py','--input_spec', 'input_spec.ini', '--op_id', 'from_none_to_padded','--njobs','8','--pad_color','black']
 completion_message = 'Finished transformation to padded (prep1).'
 call_and_time( command, completion_message=completion_message)
 

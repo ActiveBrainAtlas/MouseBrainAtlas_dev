@@ -56,7 +56,7 @@ call_and_time( command, completion_message=completion_message)
 create_input_spec_ini_all( name='input_spec.ini', stack=stack, \
             prep_id='alignedPadded', version='mask', resol='thumbnail')
 # Transforms generated masks to fit the original image orientations
-command = ['python', 'warp_crop_v3.py', '--input_spec', 'input_spec.ini', '--op_id', 'from_padded_to_none']
+command = ['python', 'warp_crop_v3.py', '--input_spec', 'input_spec.ini', '--op_id', 'from_padded_to_none','--pad_color','black']]
 completion_message = 'Transforming masks back into orientation of original raw images finished.'
 call_and_time( command, completion_message=completion_message)
 

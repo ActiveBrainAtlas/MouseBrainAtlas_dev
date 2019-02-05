@@ -43,11 +43,10 @@ command = [ 'python', 'compress_jpeg.py', 'input_spec.ini']
 completion_message = 'Finished compressing preprocessed images into jpegs.'
 call_and_time( command, completion_message=completion_message)
 
-create_input_spec_ini_all( name='input_spec.ini', \
-        stack='UCSD001', prep_id='alignedPadded', version='mask', resol='thumbnail')
-start = time.time()
+create_input_spec_ini_all( name='input_spec.ini', stack=stack, 
+            prep_id='alignedPadded', version='mask', resol='thumbnail')
 # Create prep2 thumbnail masks
-fp =  os.path.join(DATA_ROOTDIR, 'CSHL_data_processed',stack, 'operation_configs', 'from_padded_to_brainstem')
-command = [ 'python', 'warp_crop_v3.py', '--input_spec', 'input_spec.ini', ' --op_id', fp]
+fp =  os.path.join(DATA_ROOTDIR, 'CSHL_data_processed', stack, 'operation_configs', 'from_padded_to_brainstem')
+command = [ 'python', 'warp_crop_v3.py', '--input_spec', 'input_spec.ini', '--op_id', fp]
 completion_message = 'Finished creating prep2 thumbnail masks.'
 call_and_time( command, completion_message=completion_message)

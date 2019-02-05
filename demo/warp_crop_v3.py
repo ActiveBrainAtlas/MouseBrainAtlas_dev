@@ -75,12 +75,16 @@ def convert_operation_to_arr(op, resol, inverse=False, return_str=False, stack=N
 	    arr_xxyy = convert_cropbox_fmt(data=op, in_fmt='dict', out_fmt='arr_xxyy', in_resol=cropbox_resol, out_resol=resol, stack=stack)
 	    if inverse:
    	        arr_xxyy = np.array([-arr_xxyy[0], arr_xxyy[1], -arr_xxyy[2], arr_xxyy[3]])
-	    cropbox = convert_cropbox_fmt(data=arr_xxyy, in_fmt='arr_xxyy', out_fmt='str_xywh' if return_str else 'arr_xywh' , in_resol=cropbox_resol, out_resol=resol, stack=stack)
+	    cropbox = convert_cropbox_fmt(data=arr_xxyy, in_fmt='arr_xxyy', out_fmt='str_xywh' if return_str else 'arr_xywh', stack=stack)
 	    cropboxes = {img_name: cropbox for img_name in image_name_list}
 	
 	return cropboxes
+
+    elif op['type'] == 'rotate':
+	return {img_name: op['how'] for img_name in image_name_list}
+
     else:
-	raise Exception("Operation type must be either warp or crop.")
+	raise Exception("Operation type specified by ini must be either warp, crop or rotate.")
 
 
 def parse_operation_sequence(op_name, resol, return_str=False, stack=None):
@@ -88,16 +92,14 @@ def parse_operation_sequence(op_name, resol, return_str=False, stack=None):
     if inverse:
 	op_name = op_name[1:]
 
-#    op = load_ini('demo_data/operation_configs/' + op_name + '.ini')
-    #op_path = os.path.join( DATA_ROOTDIR, 'operation_configs', op_name + '.ini')
+    #op = load_ini(os.path.join(DATA_ROOTDIR, 'CSHL_data_processed', stack, 'operation_configs', op_name + '.ini'))
     op_path = os.path.join( DATA_ROOTDIR,'CSHL_data_processed',stack, 'operation_configs', op_name + '.ini')
-    print 'LOADING: '+op_path
-    op = load_ini( op_path )
+    op = load_ini(op_path)
     if op is None:
 	raise Exception("Cannot load %s.ini" % op_name)
     if 'operation_sequence' in op: # composite operation
 
-	assert not inverse
+	assert not inverse, "Inverse composite operation is not implemented."
 	op_seq = list(chain(*map(lambda o: parse_operation_sequence(o, resol=resol, return_str=return_str, stack=stack), op['operation_sequence'])))
 	assert all([op_seq[i][3] == op_seq[i+1][2] for i in range(0, len(op_seq)-1)]), "In and out domains are not consistent along the composite operation chain. %s" % [(o[2], o[3]) for o in op_seq]
 
@@ -117,11 +119,12 @@ pad_color = args.pad_color
 if args.op_id is not None:
     
     input_spec = load_ini(args.input_spec)
-    image_name_list = input_spec['image_name_list']
     stack = input_spec['stack']
     prep_id = input_spec['prep_id']
     version = input_spec['version']
     resol = input_spec['resol']
+
+    image_name_list = input_spec['image_name_list']
     if image_name_list == 'all':
         image_name_list = DataManager.load_sorted_filenames(stack=stack)[0].keys()
 
@@ -142,18 +145,23 @@ if args.op_id is not None:
 
 	    ops_str_all_images[img_name] += ' --op %s %s ' % (op_type, op_params_str)
 
-    run_distributed('python %(script)s --input_fp \"%%(input_fp)s\" --output_fp \"%%(output_fp)s\" %%(ops_str)s --pad_color %%(pad_color)s' % \
-		{'script':  os.path.join(os.getcwd(), 'warp_crop_v3.py'),
+
+    # sequantial_dispatcher argument cannot be too long, so we must limit the number of images processed each time
+    batch_size = 100
+    for batch_id in range(0, len(image_name_list), batch_size):
+
+        run_distributed('python %(script)s --input_fp \"%%(input_fp)s\" --output_fp \"%%(output_fp)s\" %%(ops_str)s --pad_color %%(pad_color)s' % \
+		{'script':  os.path.join(os.getcwd(), 'warp_crop.py'),
 		},
 		kwargs_list=[{'ops_str': ops_str_all_images[img_name],
 			    'input_fp': DataManager.get_image_filepath_v2(stack=stack, fn=img_name, prep_id=prep_id, version=version, resol=resol),
 			    'output_fp': DataManager.get_image_filepath_v2(stack=stack, fn=img_name, prep_id=out_prep_id, version=version, resol=resol),
 			    'pad_color': ('black' if img_name.split('-')[1][0] == 'F' else 'white') if pad_color == 'auto' else pad_color}
-			    for img_name in image_name_list],
+			    for img_name in image_name_list[batch_id:batch_id+batch_size]],
 		argument_type='single',
 	       jobs_per_node=args.njobs,
 	    local_only=True)
-  
+        
 elif args.op is not None:
 # Usage 1
    
@@ -182,6 +190,10 @@ elif args.op is not None:
      'w': str(w),
      'h': str(h),
      }
+
+	elif op_type == 'rotate':
+	    op_str += ' ' + orientation_argparse_str_to_imagemagick_str[op_params]
+
 	else:
 	    raise Exception("Op_id must be either warp or crop.")
 
@@ -190,19 +202,17 @@ elif args.op is not None:
     input_fp = args.input_fp
     output_fp = args.output_fp
 
-    if init_rotate == '':
-        init_rotate = ''
-    else:
-        init_rotate = orientation_argparse_str_to_imagemagick_str[init_rotate]
-
     create_parent_dir_if_not_exists(output_fp)
 
-    execute_command("convert \"%(input_fp)s\" %(init_rotate)s +repage -virtual-pixel background -background %(bg_color)s %(op_str)s -flatten -compress lzw \"%(output_fp)s\"" % \
-                {'init_rotate':init_rotate,
+    try:
+	execute_command("convert \"%(input_fp)s\"  +repage -virtual-pixel background -background %(bg_color)s %(op_str)s -flatten -compress lzw \"%(output_fp)s\"" % \
+                {
 'op_str': op_str,
      'input_fp': input_fp,
      'output_fp': output_fp,
      'bg_color': pad_color
-}
-)
+})
+    except Exception as e:
+	sys.stderr.write("ImageMagick convert failed for input_fp %s: %s\n" % (input_fp, e.message))
+
 

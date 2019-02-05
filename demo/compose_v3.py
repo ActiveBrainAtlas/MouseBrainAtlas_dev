@@ -38,7 +38,7 @@ if image_name_list == 'all':
     image_name_list = map(lambda x: x[0], sorted(DataManager.load_sorted_filenames(stack=input_spec['stack'])[0].items(), key=lambda x: x[1]))
 
 #op = load_ini(os.path.join(DATA_ROOTDIR, 'CSHL_data_processed', input_spec['stack'], 'operation_configs', args.op + '.ini'))
-op = load_ini(os.path.join(DATA_ROOTDIR, 'operation_configs', args.op + '.ini'))
+op = load_ini(os.path.join(DATA_ROOTDIR, 'CSHL_data_processed', input_spec['stack'], 'operation_configs', args.op + '.ini'))
 assert op['type'] == 'warp', "Op type  must be warp."
 assert op['base_prep_id'] == input_spec['prep_id'], "Op requires %s, but input has prep %s." % (op['base_prep_id'], input_spec['prep_id'])
 
