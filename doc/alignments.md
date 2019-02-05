@@ -30,5 +30,10 @@ All filepaths given begin at the root of the "mousebrainatlas-data" bucket in S3
 `CSHL_volumes/STACK/STACK_detector###_10.0um_scoreVolume/score_volumes/STACK_detector###_10.0um_scoreVolume_STR_origin_wrt_wholebrain.txt`
   - X,Y,Z offsets
 
-#### INC
-  - 
+#### Generating Probability Volumes
+  - `CSHL_volumes/STACK/STACK_detector799_10.0um_scoreVolume/score_volumes/STACK_detector799_10.0um_scoreVolume_STR-RL_origin_wrt_wholebrain.txt`
+  - X,Y,Z offsets
+
+#### Registration
+  - `CSHL_volumes/atlasV7/atlasV7_10.0um_scoreVolume_STR-RL_warp7_STACK_detector799_10.0um_scoreVolume_STR-RL_10.0um/score_volumes/atlasV7_10.0um_scoreVolume_STR-RL_warp7_STACK_detector799_10.0um_scoreVolume_STR-RL_10.0um_STR-RL_origin_wrt_fixedWholebrain.txt`
+  - X,Y,Z offsets
