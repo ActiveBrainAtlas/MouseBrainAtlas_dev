@@ -248,6 +248,12 @@ Draw initial snake contours.
 	```
 
 ## (Optional) Obtain a simple global alignment
+---
+Description: The user inputs the center of the `12N` and `3N_R` structures. These structures are fairly far apart and are located on the sagittal centerline. An affine transformation is made on the Atlas, aligned the `12N` and `3N_R` of the Atlas to the target brain. This gives a simple, fast alignment along the centerline and is used as a basis for the more rigorous global alignment in the registration step.
+
+Once this mid-sagittal, simple global alignment has finished, rough bounding boxes are computed for every structure. These bounding boxes give a generous rectangular field in which each structure can be located. The boxes are wide enough to never cut off any region where the structure might be, and reduce computational time for future steps.
+
+---
 
 This can serve two purposes:
 1. It allows us to estimate a probable region of the brain volume for each structure. We can compute features only on these regions to save computation. 
