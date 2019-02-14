@@ -25,13 +25,13 @@ The preprocessing stage of the code can be broken down into the following 7-8 st
 
 Throughout this document there are a few shorthand representations for various elements.
 - List of abbreviations:
-	- `STACK`: The name of the stack you are running through the pipeline
+	- `STACK`: The name of the stack you are running through the pipeline.
 		- example: 'MD585'
-	- `SLICE`: The name of an individual slice in the stack
+	- `SLICE`: The name of an individual slice in the stack. Varies 
 		- example: 'slide074_2018_09_04-S3'
-	- `STR`: The name of any one of the 28 structures in the brainstem
+	- `STR`: The name of any one of the 28 structures in the brainstem.
 		- example: '5N'
-	- `STR-RL`: The name of any one of the 51 landmarks. Some structures are landmarks, structures that appear in the right and left hemispheres are considered two landmarks.
+	- `STR-RL`: The name of any one of the 51 landmarks. Some centerline structures are landmarks, structures that appear in the right and left hemispheres are considered two landmarks and are appended with an 'R' or an 'L'.
 		- example: '5N_R'
 
 # Scripts
