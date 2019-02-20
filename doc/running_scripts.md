@@ -262,7 +262,7 @@ This can serve two purposes:
 - Pick the center of 12N and of 3N at sagittal midline.
 	- Command: `python src/gui/brain_labeling_gui_v28.py <STACK> --img_version NtbNormalizedAdaptiveInvertedGammaJpeg`
 	- Record X, Y, Z positions in midsaggital plane for 12N (ovalar on right) and 3N (circular on left)
-- Input the centers into `registration_v7_atlasV7_simpleGlobal.ipynb` to compute the simple global transform.
+- Input the centers into `ROOT_DIR/CSHL_simple_global_registration/STACK_manual_anchor_points.ini` and then run `src/registration/compute_simple_global_registration.py` to compute the simple global transform.
 	- Output:
 	```
 	ROOT_DIR/
@@ -270,7 +270,7 @@ This can serve two purposes:
 		├── STACK_T_atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol.txt
 		└── STACK_T_atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol.bp
 	```
-- Then run the `# Identify 3-d bounding box of each simpleGlobal aligned structure` part of `from_images_to_score_volume.ipynb` to generate structure ROIs.
+- The second part of this script will identify 3-d bounding boxes of each simpleGlobal aligned structure, to generating structure ROIs.
 	- Output:
 	```
 	ROOT_DIR/
@@ -291,8 +291,6 @@ This can serve two purposes:
 					└── STACK_detector799_10.0um_scoreVolume_STR_origin_wrt_wholebrain.txt
 	```
 
-- Known dependencies for `registration_v7_atlasV7_simpleGlobal.ipynb`:
-	- `/CSHL_volumes/STACK/STACK_wholebrainWithMargin_10.0um_intensityVolume/STACK_wholebrainWithMargin_10.0um_intensityVolume.bp`
 - Temporary notes on this part of the pipeline can be found [here](global_alignment_notes.md)
 - `src/learning/from_images_to_score_volume.ipynb` will NOT run unless `src/utilities/learning_utilities.py`, Line __844__, is correct for this particular stack. NEEDS TO BE CHANGED  
 
