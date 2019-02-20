@@ -1,12 +1,12 @@
 
 ## Definitions from `convert_frame_and_resolution`, data_manager.py line 440
 
-- wholebrain: formed by stacking all sections of prep1 (aligned + padded) images
-- wholebrainWithMargin: tightly wrap around brain tissue. The origin is the nearest corner of the bounding box of all images' prep1 masks.
-- wholebrainXYcropped: formed by stacking all sections of prep2 images
-- brainstemXYfull: formed by stacking sections of prep1 images that contain brainstem
-- brainstem: formed by stacking brainstem sections of prep2 images
-- brainstemXYFullNoMargin: formed by stacking brainstem sections of prep4 images
+- `wholebrain`: formed by stacking all sections of prep1 (aligned + padded) images
+- `wholebrainWithMargin`: tightly wrap around brain tissue. The origin is the nearest corner of the bounding box of all images' prep1 masks.
+- `wholebrainXYcropped`: formed by stacking all sections of prep2 images
+- `brainstemXYfull`: formed by stacking sections of prep1 images that contain brainstem
+- `brainstem`: formed by stacking brainstem sections of prep2 images
+- `brainstemXYFullNoMargin`: formed by stacking brainstem sections of prep4 images
 
 
 Build-in 2-D frames include:
