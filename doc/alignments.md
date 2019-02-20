@@ -10,7 +10,7 @@
 
 
 Build-in 2-D frames include:
-- {0: 'original', 1: 'alignedPadded', 2: 'alignedCroppedBrainstem', 3: 'alignedCroppedThalamus', 4: 'alignedNoMargin', 5: 'alignedWithMargin', 6: 'originalCropped'}
+- {0: `original`, 1: `alignedPadded`, 2: `alignedCroppedBrainstem`, 3: `alignedCroppedThalamus`, 4: `alignedNoMargin`, 5: `alignedWithMargin`, 6: `originalCropped`}
 
 
 ## Alignment file naming schema
