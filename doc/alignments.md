@@ -38,3 +38,17 @@ All filepaths given begin at the root of the "mousebrainatlas-data" bucket in S3
 #### Registration
   - `CSHL_volumes/atlasV7/atlasV7_10.0um_scoreVolume_STR-RL_warp7_STACK_detector799_10.0um_scoreVolume_STR-RL_10.0um/score_volumes/atlasV7_10.0um_scoreVolume_STR-RL_warp7_STACK_detector799_10.0um_scoreVolume_STR-RL_10.0um_STR-RL_origin_wrt_fixedWholebrain.txt`
   - X,Y,Z offsets
+
+
+# Definitions from `convert_frame_and_resolution`, data_manager.py line 440
+
+- wholebrain: formed by stacking all sections of prep1 (aligned + padded) images
+- wholebrainWithMargin: tightly wrap around brain tissue. The origin is the nearest corner of the bounding box of all images' prep1 masks.
+- wholebrainXYcropped: formed by stacking all sections of prep2 images
+- brainstemXYfull: formed by stacking sections of prep1 images that contain brainstem
+- brainstem: formed by stacking brainstem sections of prep2 images
+- brainstemXYFullNoMargin: formed by stacking brainstem sections of prep4 images
+
+
+Build-in 2-D frames include:
+- {0: 'original', 1: 'alignedPadded', 2: 'alignedCroppedBrainstem', 3: 'alignedCroppedThalamus', 4: 'alignedNoMargin', 5: 'alignedWithMargin', 6: 'originalCropped'}
