@@ -277,19 +277,6 @@ This can serve two purposes:
 	└── CSHL_simple_global_registration
 		└── STACK_registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners.json
 	```
-	- Output:
-	```
-	ROOT_DIR/
-	└── CSHL_volumes
-		└── STACK
-			└── STACK_detector799_10.0um_scoreVolume
-				├── score_volume_gradients
-				|	├── STACK_detector799_10.0um_scoreVolume_STR_gradients.bp
-				|	└── STACK_detector799_10.0um_scoreVolume_STR_origin_wrt_wholebrain.txt
-				└── score_volumes
-					├── STACK_detector799_10.0um_scoreVolume_STR.bp
-					└── STACK_detector799_10.0um_scoreVolume_STR_origin_wrt_wholebrain.txt
-	```
 
 - Temporary notes on this part of the pipeline can be found [here](global_alignment_notes.md)
 - `src/learning/from_images_to_score_volume.ipynb` will NOT run unless `src/utilities/learning_utilities.py`, Line __844__, is correct for this particular stack. NEEDS TO BE CHANGED  
