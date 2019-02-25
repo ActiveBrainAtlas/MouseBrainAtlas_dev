@@ -1,6 +1,6 @@
-## File Organization on S3
+# File Organization on S3
 
-### Buckets
+## Buckets
 
  Generated using AWS CLI command: `aws s3 ls` :
 * 2017-09-13 11:19:25 __mousebrainatlas-data__
@@ -17,7 +17,7 @@
   * ?
 * 2017-05-10 17:30:28 yoav-seed-backup
 
-##### Bucket mousebrainatlas-data
+### Bucket mousebrainatlas-data
 
 `aws ls s3://mousebrainatlas-data/`
  
@@ -59,7 +59,7 @@
 * training_examples/ 
     
     
-##### Bucket 2: mousebrainatlas-rawdata
+### Bucket 2: mousebrainatlas-rawdata
 
 All files stored in glacier.
 
