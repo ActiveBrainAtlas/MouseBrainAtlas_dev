@@ -1,23 +1,21 @@
 # File Organization on S3
 
-## Buckets
+## List of Buckets
 
  Generated using AWS CLI command: `aws s3 ls` :
-* 2017-09-13 11:19:25 __mousebrainatlas-data__
-* 2017-08-14 12:23:57 __mousebrainatlas-rawdata__
-* 2018-08-30 18:00:12 mousebrainatlas-data-backup
-* 2018-08-30 18:02:39 mousebrainatlas-data-yuncong
+* __mousebrainatlas-data__ 2017-09-13 11:19:25
+* __mousebrainatlas-rawdata__ 2017-08-14 12:23:57
+* mousebrainatlas-data-backup 2018-08-30 18:00:12
+* mousebrainatlas-data-yuncong 2018-08-30 18:02:39
+  * Not being used (move to glacier?)
+* mousebrainatlas-scripts 2017-05-16 15:59:36
   * Not being used
-* 2017-05-16 15:59:36 mousebrainatlas-scripts
-  * Not being used
-* 2018-07-10 20:10:09 mousebraindata-open
-* 2018-10-20 16:04:07 s3hub-6d85486c54762e193fb3036852449fbf630f419ddc5d341ce1fdf4b47
+* mousebraindata-open 2018-07-10 20:10:09
+* tmsn-data 2018-09-21 14:14:42
   * ?
-* 2018-09-21 14:14:42 tmsn-data
-  * ?
-* 2017-05-10 17:30:28 yoav-seed-backup
+* yoav-seed-backup 2017-05-10 17:30:28
 
-### Bucket mousebrainatlas-data
+## Bucket mousebrainatlas-data
 
 `aws ls s3://mousebrainatlas-data/`
  
@@ -59,7 +57,7 @@
 * training_examples/ 
     
     
-### Bucket 2: mousebrainatlas-rawdata
+## Bucket 2: mousebrainatlas-rawdata
 
 All files stored in glacier.
 
