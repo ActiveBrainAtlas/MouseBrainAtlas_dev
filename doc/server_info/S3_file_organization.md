@@ -67,9 +67,7 @@ Contains only raw, unprocessed files, labelled as *lossless. These files are in 
 * CSHL_scoremap_viz_grid/
 * CSHL_scoremaps/
 * CSHL_simple_global_registration/
-* __CSHL_volumes/__ 
-   * The location of the information about the shape of the structures.
-   * The directory Yoav used to create a 3D visualization of the atlas: CSHL_volumes/atlasV7/atlasV7_10.0um_scoreVolume/score_volumes/
+* __CSHL_volumes/__
 * Dropbox/
 * HRNTS2017/
 * LGN3Datlas/
