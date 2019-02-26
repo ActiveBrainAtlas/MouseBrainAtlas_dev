@@ -8,9 +8,9 @@ Can be generated using AWS CLI command: `aws s3 ls` :
 * mousebrainatlas-data
 * mousebrainatlas-data-backup
 * mousebrainatlas-data-yuncong
- - (Unused. Move to glacier?)
+   - (Unused. Move to glacier?)
 * mousebrainatlas-rawdata
- - Glacier Storage
+   - Glacier Storage
 * mousebrainatlas-rawdata-backup
 
 ### Used for Developing Online Annotation Software
