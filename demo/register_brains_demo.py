@@ -69,9 +69,9 @@ brain_f_spec0.pop("structure")
 simpleGlobal_alignment_spec = dict(stack_m=brain_m_spec0, stack_f=brain_f_spec0, warp_setting=0)
 
 aligner_parameters = generate_aligner_parameters_v2(alignment_spec=alignment_spec, 
-                                                    structures_m=structures_m,
+                                                   structures_m=structures_m,
                                                    fixed_structures_are_sided=True,
- fixed_surroundings_have_positive_value=fixed_surroundings_have_positive_value,
+                                                   fixed_surroundings_have_positive_value=fixed_surroundings_have_positive_value,
                                                    fixed_use_surround=fixed_use_surround)
 
 aligner = Aligner(aligner_parameters['volume_fixed'], 
@@ -94,7 +94,7 @@ else:
 
 ################################
 
-grid_search_T, _ = aligner.do_grid_search(grid_search_iteration_number=0, grid_search_sample_number=10, 
+grid_search_T, _ = aligner.do_grid_search( grid_search_iteration_number=0, grid_search_sample_number=10, 
                        std_tx=100, std_ty=100, std_tz=30, 
                        grid_search_eta=3.0, 
                        stop_radius_voxel=10, indices_m=None, parallel=True, 
@@ -129,8 +129,10 @@ sys.stderr.write("Optimize: %.2f seconds.\n" % (time.time() - t))
 
 tf_atlas_to_subj = compose_alignment_parameters([init_T, convert_transform_forms(aligner=aligner, out_form=(3,4))])
 
+print 'New Alignment Matrix:'
 print tf_atlas_to_subj
 
+# Saves all 'CSHL_registration_parameters/atlas_v7/...' files (4 per structure)
 DataManager.save_alignment_results_v3(transform_parameters=convert_transform_forms(transform=tf_atlas_to_subj, out_form='dict'),
                    score_traj=aligner.scores,
                    parameter_traj=aligner.Ts,
@@ -188,6 +190,7 @@ for structure_m in structures_m:
                             transform=init_T,
                             return_origin_instead_of_bbox=True)
 
+        # Saves .bp and .txt volume files to 'CSHL_volumes/...'
         DataManager.save_transformed_volume_v2(volume=aligned_structure_wrt_wholebrain_inputResol, 
                                                alignment_spec=simpleGlobal_alignment_spec,
                                               structure=s,

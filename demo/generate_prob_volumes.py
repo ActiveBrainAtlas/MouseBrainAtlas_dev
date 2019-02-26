@@ -107,7 +107,25 @@ valid_secmax = np.max(metadata_cache['valid_sections'][stack])
 fp = os.path.join(DATA_ROOTDIR, 'CSHL_simple_global_registration',
         stack + '_registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners.json')
 
-registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners = load_json(fp)
+# Try to load the XY cropping boxes for each structure, generated from Global Alignment
+try:
+    registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners = load_json(fp)
+# Make cropping box cover the entire image if Global Alignment was not run
+except:
+    print('Global Alginment files not found, not using a cropping box')
+    
+    registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners = {}
+    all_structures_total = structures_sided_sorted_by_size
+    
+    op_path = os.path.join( DATA_ROOTDIR,'CSHL_data_processed',stack, 'operation_configs', 'from_padded_to_brainstem.ini')
+    op = load_ini(op_path)
+    
+    img_x_len = 32*(op['caudal_limit'] - op['rostral_limit'])
+    img_y_len = 32*(op['ventral_limit'] - op['dorsal_limit'])
+    num_images = 1 + valid_secmax - valid_secmin
+    
+    for structure in all_structures_total:
+        registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners[structure] = [[0, 0, 0], [img_x_len, img_y_len, num_images]]
 
 ######## Identify ROI based on simple global alignment ########
 

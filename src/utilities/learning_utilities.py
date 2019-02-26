@@ -11,7 +11,9 @@ from itertools import groupby
 from collections import defaultdict
 try:
     import mxnet as mx
-except:
+except Exception as e:
+    print e
+    print 'Error, CANNOT PROCEED UNTIL THIS IS RESOLVED!'
     sys.stderr.write("Cannot import mxnet.\n")
 
 sys.path.append(os.environ['REPO_DIR'] + '/utilities')
@@ -3397,6 +3399,7 @@ def draw_scoremap(clfs, scheme, stack, win_id, prep_id=2,
                                                    fn=fn,
                                                    scoremap=scoremap,
                                                   in_scoremap_downscale=out_downscale,
+                                                   show_above=.01,
                                                   cmap_name= 'jet')
                 sys.stderr.write('Generate scoremap overlay image %s: %.2f seconds\n' % (name, time.time() - t))
 

@@ -146,6 +146,8 @@ T_atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol = \
 align_anchors(atlas_anchor1_wrt_canonicalAtlasSpace_atlasResol, atlas_anchor2_wrt_canonicalAtlasSpace_atlasResol,
              subject_anchor1_wrt_wholebrain_atlasResol, subject_anchor2_wrt_wholebrain_atlasResol)
 
+
+# Give random perturbation to the initial global alignment as a test to make sure following alignment steps are working properly
 #rand_vec = np.random.uniform(size=3)
 #rand_vec = rand_vec / np.linalg.norm(rand_vec)
 #rand_rot_amount = np.random.uniform(high=np.deg2rad(5))

@@ -33,7 +33,7 @@ def get_fn_list_from_sorted_filenames( stack ):
         get_fn_list_from_sorted_filenames( stack ) returns a list of all the valid
         filenames for the current stack.
     '''
-    fp = os.environ['DATA_ROOTDIR']+'CSHL_data_processed/'+stack+'/'
+    fp = os.path.join( os.environ['DATA_ROOTDIR'], 'CSHL_data_processed', stack+'/')
     fn = stack+'_sorted_filenames.txt'
     
     file0 = open( fp+fn, 'r')
@@ -62,7 +62,7 @@ def make_from_x_to_y_ini(stack,x,y,rostral_limit,caudal_limit,dorsal_limit,ventr
     elif y=='brainstem':
         dest_prep_id = 'alignedBrainstemCrop'
     
-    fn = os.environ['DATA_ROOTDIR']+'CSHL_data_processed/'+stack+'/operation_configs/from_'+x+'_to_'+y+'.ini'
+    fn = os.path.join( os.environ['DATA_ROOTDIR'], 'CSHL_data_processed', stack, 'operation_configs', 'from_'+x+'_to_'+y+'.ini' )
     f = open(fn, "w")
     f.write('[DEFAULT]\n')
     f.write('type = crop\n\n')
@@ -74,6 +74,18 @@ def make_from_x_to_y_ini(stack,x,y,rostral_limit,caudal_limit,dorsal_limit,ventr
     f.write('ventral_limit = '+str(ventral_limit)+'\n')
     f.write('resolution = thumbnail')
     f.close()
+    
+def make_manual_anchor_points( stack, x_12N, y_12N, x_3N, y_3N, z_midline):
+    fn = os.path.join( os.environ['DATA_ROOTDIR'], 'CSHL_simple_global_registration', stack+'_manual_anchor_points.ini' )
+    f = open(fn, "w")
+    f.write('[DEFAULT]\n)
+    f.write('x_12N = '+str(x_12N)+'\n')
+    f.write('y_12N = '+str(y_12N)+'\n')
+    f.write('x_3N = '+str(x_3N)+'\n')
+    f.write('y_3N = '+str(y_3N)+'\n')
+    f.write('z_midline = '+str(z_midline))
+    f.close()
+    
     
 def call_and_time( command_list, completion_message='' ):
     start_t = time.time()

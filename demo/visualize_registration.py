@@ -116,18 +116,12 @@ parser = argparse.ArgumentParser(
     formatter_class=argparse.RawDescriptionHelpFormatter,
     description='Generate images with aligned atlas structures overlaid.')
 
-# parser.add_argument("fixed_brain_spec", type=str, help="Fixed brain name")
-# parser.add_argument("moving_brain_spec", type=str, help="Moving brain name")
-# parser.add_argument("registration_setting", type=int, help="Registration setting")
 parser.add_argument("image_version", type=str, help="Image version")
 parser.add_argument("per_structure_alignment_spec", type=str, help="per_structure_alignment_spec, json")
 parser.add_argument("-g", "--global_alignment_spec", type=str, help="global_alignment_spec, json")
 # parser.add_argument("--structure_list", type=str, help="Json-encoded list of structures (unsided) (Default: all known structures)")
 args = parser.parse_args()
 
-# brain_f_spec = load_json(args.fixed_brain_spec)
-# brain_m_spec = load_json(args.moving_brain_spec)
-# registration_setting = args.registration_setting
 image_version = args.image_version
 per_structure_alignment_spec = load_json(args.per_structure_alignment_spec)
 simpleGlobal_alignment_spec = load_json(args.global_alignment_spec)
@@ -149,7 +143,6 @@ print stacks
 assert len(stacks) == 1, "Only one fixed brain is allowed, but per_structure_alignment_spec json lists multiple fixed brains."
 stack = list(stacks)[0]
 
-#stack = 'MD585'
 # stack = brain_f_spec['name']
 # valid_secmin = np.min(metadata_cache['valid_sections'][stack])
 # valid_secmax = np.max(metadata_cache['valid_sections'][stack])
@@ -179,21 +172,27 @@ for structure_m in structure_list:
     
     local_alignment_spec = per_structure_alignment_spec[structure_m]
     
-    vo = DataManager.load_transformed_volume_v2(alignment_spec=local_alignment_spec, 
-                                                return_origin_instead_of_bbox=True,
-                                               structure=structure_m)
+    
 
     # prep2 because at end of get_structure_contours_from_structure_volumes_v2 we used wholebrainXYcropped
     registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners = \
-    load_json(os.path.join(ROOT_DIR, 'CSHL_simple_global_registration', stack + '_registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners.json'))
+        load_json(os.path.join(ROOT_DIR, 'CSHL_simple_global_registration', stack + '_registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners.json'))
 
+    # Load cropping box for structure. Only need the valid min and max sections though
     (_, _, secmin), (_, _, secmax) = registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners[structure_m]
 
     atlas_structures_wrt_wholebrainWithMargin_sections = \
     range(max(secmin - section_margin, valid_secmin), min(secmax + 1 + section_margin, valid_secmax))
-
+    # The plotted probability contour levels
     levels = [0.1, 0.25, 0.5, 0.75, 0.99]
-
+    
+    #################################################### LOCALLY ALIGNED VOLUMES
+    
+    # Load LOCAL ALIGNED volume
+    vo = DataManager.load_transformed_volume_v2(alignment_spec=local_alignment_spec, 
+                                                return_origin_instead_of_bbox=True,
+                                               structure=structure_m)
+    # Convert LOCAL ALIGNED Probability volumes into contours
     auto_contours_all_sections_one_structure_all_levels = \
     get_structure_contours_from_structure_volumes_v3(volumes={structure_m: vo}, stack=stack, 
                                                      sections=atlas_structures_wrt_wholebrainWithMargin_sections,
@@ -205,13 +204,13 @@ for structure_m in structure_list:
                 for level, cnt in cnt_all_levels.iteritems():
                     auto_contours_all_sec_all_structures_all_levels[sec][name_s][level] = cnt.astype(np.int)
 
-    ####################################################
-
-
+    #################################################### GLOBALLY ALIGNED VOLUMES
+    
+    # Load GLOBAL ALIGNED volume
     simpleGlobal_vo = DataManager.load_transformed_volume_v2(alignment_spec=simpleGlobal_alignment_spec, 
                                                              return_origin_instead_of_bbox=True,
                                                             structure=structure_m)
-
+    # Convert GLOBAL ALIGNED Probability volumes into contours
     simpleGlobal_contours_all_sections_one_structure_all_levels = \
     get_structure_contours_from_structure_volumes_v3(volumes={structure_m: simpleGlobal_vo}, stack=stack, 
                                                      sections=atlas_structures_wrt_wholebrainWithMargin_sections,
@@ -223,7 +222,7 @@ for structure_m in structure_list:
                 for level, cnt in cnt_all_levels.iteritems():
                     simple_global_contours_all_sec_all_structures_all_levels[sec][name_s][level] = cnt.astype(np.int)
 
-    ####################################
+    #################################################### UNUSED CHAT VOLUMES
 
 #         chat_vo = chat_structures[structure_m]
 
