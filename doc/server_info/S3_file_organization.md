@@ -77,7 +77,7 @@ All files stored in glacier.
 Contains only raw, unprocessed files, labelled as *lossless. These files are in the folder named May be in either .jp2 or .tiff format, depends on the institution supplying the stacks.
 
 * __<Stack_Name>/__
- - *_lossless.jp2 
-   - raw stack
- - *_lossy.jp2    
-   - downsampled 32X
+  - *_lossless.jp2 
+    - raw stack
+  - *_lossy.jp2    
+    - downsampled 32X
