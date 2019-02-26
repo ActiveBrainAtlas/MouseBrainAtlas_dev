@@ -15,7 +15,7 @@
   * ?
 * yoav-seed-backup 2017-05-10 17:30:28
 
-## Bucket mousebrainatlas-data
+# Bucket `mousebrainatlas-data`
 
 `aws ls s3://mousebrainatlas-data/`
  
@@ -57,7 +57,7 @@
 * training_examples/ 
     
     
-## Bucket 2: mousebrainatlas-rawdata
+# Bucket:`mousebrainatlas-rawdata`
 
 All files stored in glacier.
 
