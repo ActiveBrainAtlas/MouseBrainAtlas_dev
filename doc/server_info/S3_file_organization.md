@@ -1,19 +1,32 @@
 # File Organization on S3
 
 ## List of Buckets
+Can be generated using AWS CLI command: `aws s3 ls` :
 
- Generated using AWS CLI command: `aws s3 ls` :
-* __mousebrainatlas-data__ 2017-09-13 11:19:25
-* __mousebrainatlas-rawdata__ 2017-08-14 12:23:57
-* mousebrainatlas-data-backup 2018-08-30 18:00:12
-* mousebrainatlas-data-yuncong 2018-08-30 18:02:39
-  * Not being used (move to glacier?)
-* mousebrainatlas-scripts 2017-05-16 15:59:36
-  * Not being used
-* mousebraindata-open 2018-07-10 20:10:09
-* tmsn-data 2018-09-21 14:14:42
-  * ?
-* yoav-seed-backup 2017-05-10 17:30:28
+### Used in Active Atlas Pipeline
+
+* mousebrainatlas-data
+* mousebrainatlas-data-backup
+* mousebrainatlas-data-yuncong
+ - (Unused. Move to glacier?)
+* mousebrainatlas-rawdata
+ - Glacier Storage
+* mousebrainatlas-rawdata-backup
+
+### Used for Developing Online Annotation Software
+ 
+* mousebrainatlas-datajoint
+* mousebrainatlas-datajoint-jp2k
+* test-bucket-sid
+
+### Miscellaneous
+
+* mousebrainatlas-scripts
+* mousebraindata-open
+* tmsn-data
+* yoav-seed-backup
+
+---
 
 # Bucket `mousebrainatlas-data`
 
