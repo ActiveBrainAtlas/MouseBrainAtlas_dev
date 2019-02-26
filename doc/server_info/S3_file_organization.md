@@ -28,6 +28,22 @@ Can be generated using AWS CLI command: `aws s3 ls` :
 
 ---
 
+
+# Bucket:`mousebrainatlas-rawdata`
+
+All files stored in glacier.
+
+Contains only raw, unprocessed files, labelled as *lossless. These files are in the folder named May be in either .jp2 or .tiff format, depends on the institution supplying the stacks.
+
+* __<Stack_Name>/__
+  - *_lossless.jp2 
+    - raw stack
+  - *_lossy.jp2    
+    - downsampled 32X
+
+
+---
+
 # Bucket `mousebrainatlas-data`
 
 `aws ls s3://mousebrainatlas-data/`
@@ -68,16 +84,3 @@ Can be generated using AWS CLI command: `aws s3 ls` :
 * raw_image_histograms_log_fullImage/
 * stacy_data/
 * training_examples/ 
-    
-    
-# Bucket:`mousebrainatlas-rawdata`
-
-All files stored in glacier.
-
-Contains only raw, unprocessed files, labelled as *lossless. These files are in the folder named May be in either .jp2 or .tiff format, depends on the institution supplying the stacks.
-
-* __<Stack_Name>/__
-  - *_lossless.jp2 
-    - raw stack
-  - *_lossy.jp2    
-    - downsampled 32X
