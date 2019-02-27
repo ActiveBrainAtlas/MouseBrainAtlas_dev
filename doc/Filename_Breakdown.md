@@ -63,3 +63,7 @@ Encodes information about the stain used to dye the brain, and what channels are
       - Converted "NtbNormalizedAdaptiveInvertedGamma" from .tif to .jpg
   - "userModifiedSubmasks"
       - Can be ignored
+
+---
+
+Raw "prep2" files in jpeg format are considered the final output of the program as the project focusses on the brainstem.
