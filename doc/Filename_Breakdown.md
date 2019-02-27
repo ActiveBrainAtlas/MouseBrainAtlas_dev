@@ -12,7 +12,8 @@ Files will always be stored in folders under the following naming scheme: `s3://
 Prep_id describes the alignment and cropping of the images.
 
 - Possible values:
-  - "": Image has not cropped or aligned
+  - ""
+      - Image has not cropped or aligned
   - "prep1"
       - Images have all been aligned to each other
   - "prep5"
