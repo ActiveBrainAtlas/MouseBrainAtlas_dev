@@ -66,4 +66,4 @@ Encodes information about the stain used to dye the brain, and what channels are
 
 ---
 
-Raw "prep2" files in jpeg format are considered the final output of the program as the project focusses on the brainstem.
+Raw "prep2" files in jpeg format are considered the final output of the image processing stage as the project focusses on the brainstem.
