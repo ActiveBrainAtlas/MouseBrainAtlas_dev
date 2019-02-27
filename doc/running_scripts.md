@@ -12,7 +12,7 @@ The preprocessing stage of the code can be broken down into the following 7-8 st
 7) [Brainstem Crop](#brainstem-crop)
 
 ### Processing (Local or Cloud)
-0) [(Optional) Simple Global Alignment](#optional-obtain-a-simple-global-alignment)
+0) [Simple Global Alignment](#optional-obtain-a-simple-global-alignment)
 1) [Generate intensity volume](#generate-intensity-volume)
 2) [Compute Patch Features](#compute-patch-features)
 3) [Generate Probability Volumes](#generate-probability-volumes)
