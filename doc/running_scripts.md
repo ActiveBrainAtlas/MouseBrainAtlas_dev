@@ -10,16 +10,14 @@ The preprocessing stage of the code can be broken down into the following 7-8 st
 5) [Local Adaptive Intensity Normalization](#local-adaptive-intensity-normalization)
 6) [While-Slice Brain Crop](#whole-slice-crop)
 7) [Brainstem Crop](#brainstem-crop)
-8) [(Optional) Simple Global Alignment](#optional-obtain-a-simple-global-alignment)
-
 
 ### Processing
-
-0) [Generate intensity volume](#generate-intensity-volume)
-1) [Compute Patch Features](#compute-patch-features)
-2) [Generate Probability Volumes](#generate-probability-volumes)
-3) [Registration](#registration)
-4) [Visualize Registration Results](#visualize-registration-results)
+0) [(Optional) Simple Global Alignment](#optional-obtain-a-simple-global-alignment)
+1) [Generate intensity volume](#generate-intensity-volume)
+2) [Compute Patch Features](#compute-patch-features)
+3) [Generate Probability Volumes](#generate-probability-volumes)
+4) [Registration](#registration)
+5) [Visualize Registration Results](#visualize-registration-results)
 
 ### Abbreviations
 
