@@ -42,7 +42,7 @@ Classifier 899 is not in it as classifier_settings.csv became documentation. The
 
 ### Classifier Training
 
-`src/learning/train_and_test_classifier_performance_v5.ipynb`, [Link[(http://132.239.73.85:8888/notebooks/src/learning/train_and_test_classifier_performance_v5.ipynb).
+`src/learning/train_and_test_classifier_performance_v5.ipynb`, [Link](http://132.239.73.85:8888/notebooks/src/learning/train_and_test_classifier_performance_v5.ipynb).
 
 The code is general but we only have the annotations for 3 brains to train from.
 
