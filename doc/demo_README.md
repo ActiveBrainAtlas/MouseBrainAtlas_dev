@@ -163,6 +163,17 @@ Note that the `input_spec.ini` files for most steps are different and must be ma
 │       │       └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep1_thumbnail_autoSubmaskDecisions.csv
 ```
 
-- 
+- Re-launch masking GUI to inspect, correct the automatically generated masks, then export as PNGs.
+
+```bash
+├── CSHL_data_processed
+│   └── DEMO998
+│       ├── DEMO998_prep1_thumbnail_mask
+│       │   ├── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_prep1_thumbnail_mask.png
+│       │   ├── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_prep1_thumbnail_mask.png
+│       │   └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep1_thumbnail_mask.png
+```
+
+
 
 
