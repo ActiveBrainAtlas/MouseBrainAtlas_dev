@@ -50,8 +50,76 @@ Note that the `input_spec.ini` files for most steps are different and must be ma
     ├── from_padded_to_none.ini
     └── from_wholeslice_to_brainstem.ini
 ```
-- Edit `DEMO998_raw_input_spec.json`. Set `data_dirs`, `filepath_to_imageName_mapping` and `imageName_to_filepath_mapping`. Run `python jp2_to_tiff.py DEMO998 DEMO998_raw_input_spec.json`.
-- 
+- **Convert raw images from JPEG2000 to tif**. Edit `DEMO998_raw_input_spec.json`. Set `data_dirs`, `filepath_to_imageName_mapping` and `imageName_to_filepath_mapping`. Run `python jp2_to_tiff.py DEMO998 DEMO998_raw_input_spec.json`.
+
+```bash
+├── CSHL_data_processed
+│   └── DEMO998
+│       ├── DEMO998_raw
+│       │   ├── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_raw.tif
+│       │   ├── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_raw.tif
+│       │   └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_raw.tif
+```
+
+- **Extract Neurotrace-blue channel**. Modify `input_spec.ini` as (None,None,raw). `python extract_channel.py input_spec.ini 2 Ntb`
+
+```bash
+├── CSHL_data_processed
+│   └── DEMO998
+│       └── DEMO998_raw_Ntb
+│           ├── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_raw_Ntb.tif
+│           ├── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_raw_Ntb.tif
+│           └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_raw_Ntb.tif
+```
+- **Rescale to thumbnail**. Modify `input_spec.ini` as (None,Ntb,raw). `python rescale.py input_spec.ini thumbnail -f 0.03125`
+
+```bash
+├── CSHL_data_processed
+│   └── DEMO998
+│       └── DEMO998_thumbnail_Ntb
+│           ├── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_thumbnail_Ntb.tif
+│           ├── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_thumbnail_Ntb.tif
+│           └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_thumbnail_Ntb.tif
+```
+
+- **Global intensity normalization**. Modify `input_spec.ini` as (None,Ntb,thumbnail). `python normalize_intensity.py input_spec.ini NtbNormalized`
+
+```bash
+├── CSHL_data_processed
+│   └── DEMO998
+│       └── DEMO998_thumbnail_NtbNormalized
+│           ├── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_thumbnail_NtbNormalized.tif
+│           ├── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_thumbnail_NtbNormalized.tif
+│           └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_thumbnail_NtbNormalized.tif
+```
+- Modify `operation_configs/from_none_to_aligned.ini`. Modify `input_spec.ini` as (None,NtbNormalized,thumbnail). `python align_compose.py input_spec.ini --op from_none_to_aligned`
+
+```bash
+├── CSHL_data_processed
+│   └── DEMO998
+│       └── DEMO998_transformsTo_MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250.csv
+│       ├── DEMO998_elastix_output
+│       │   ├── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_to_MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242
+│       │   │   ├── elastix.log
+│       │   │   ├── IterationInfo.0.R0.txt
+│       │   │   ├── IterationInfo.0.R1.txt
+│       │   │   ├── IterationInfo.0.R2.txt
+│       │   │   ├── IterationInfo.0.R3.txt
+│       │   │   ├── IterationInfo.0.R4.txt
+│       │   │   ├── IterationInfo.0.R5.txt
+│       │   │   ├── result.0.tif
+│       │   │   └── TransformParameters.0.txt
+│       │   └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_to_MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250
+│       │       ├── elastix.log
+│       │       ├── IterationInfo.0.R0.txt
+│       │       ├── IterationInfo.0.R1.txt
+│       │       ├── IterationInfo.0.R2.txt
+│       │       ├── IterationInfo.0.R3.txt
+│       │       ├── IterationInfo.0.R4.txt
+│       │       ├── IterationInfo.0.R5.txt
+│       │       ├── result.0.tif
+│       │       └── TransformParameters.0.txt
+```
 
 
 
