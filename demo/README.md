@@ -48,13 +48,14 @@ Note that the `input_spec.ini` files for most steps are different and must be ma
 
 - Run `download_demo_data_preprocessing.py` to download 4 JPEG2000 images of the demo brain.
 - **(HUMAN)** create `DEMO998.ini` and put it under `demo_data/brains_info/`
-- Create `DEMO998_input_spec.json`. `python jp2_to_tiff.py DEMO998 DEMO998_raw_input_spec.json`.
+- Create `DEMO998_raw_input_spec.json`. `python jp2_to_tiff.py DEMO998 DEMO998_raw_input_spec.json`.
 - Create `input_spec.ini` as (None,None,raw). `python extract_channel.py input_spec.ini 2 Ntb`
 - Create `input_spec.ini` as (None,Ntb,raw). `python rescale.py input_spec.ini thumbnail -f 0.03125`
 ### Global intensity normalization
 - Create `input_spec.ini` as (None,Ntb,thumbnail). `python normalize_intensity.py input_spec.ini NtbNormalized`
 ### Intra-stack align
 - **(HUMAN)** Browse thumbnails to verify orientations are all correct.
+- Create `CSHL_data_processed/DEMO998/DEMO998_sorted_files.txt`
 - **(HUMAN)** Create `from_none_to_aligned.ini` to describe intra-stack alignment operation.
 - Create `input_spec.ini` as (None,NtbNormalized,thumbnail). `python align_compose.py input_spec.ini --op from_none_to_aligned`
 - `python warp_crop.py --input_spec input_spec.ini --op_id from_none_to_padded --njobs 8`
