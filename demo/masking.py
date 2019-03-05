@@ -27,7 +27,6 @@ parser.add_argument("--shrink", type=float, help="shrink strength or lambda1 in 
 args = parser.parse_args()
 
 input_spec = load_ini(args.input_spec)
-image_name_list = input_spec['image_name_list']
 stack = input_spec['stack']
 prep_id = input_spec['prep_id']
 if prep_id == 'None':
@@ -36,6 +35,11 @@ resol = input_spec['resol']
 version = input_spec['version']
 if version == 'None':
     version = None
+
+image_name_list = input_spec['image_name_list']
+if image_name_list == 'all':
+    image_name_list = DataManager.load_sorted_filenames(stack=stack)[0].keys()
+
 
 min_size = args.min_size
 default_channel = args.default_channel

@@ -21,7 +21,7 @@ parser = argparse.ArgumentParser(
 parser.add_argument("brain_name", type=str, help="Brain name")
 parser.add_argument("detector_id", type=int, help="Detector id")
 parser.add_argument("bg_img_version", type=str, help="Version of scoremap visualization background image")
-parser.add_argument("--structure_list", type=str, help="Json-encoded list of structures (unsided) (Default: all known structures)")
+parser.add_argument("-s", "--structure_list", type=str, help="Json-encoded list of structures (unsided) (Default: all known structures)")
 args = parser.parse_args()
 
 stack = args.brain_name
@@ -29,11 +29,12 @@ detector_id = args.detector_id
 bg_img_version = args.bg_img_version
 
 import json
-if hasattr(args, 'structure_list'):
+if hasattr(args, 'structure_list') and args.structure_list is not None:
     structure_list = json.loads(args.structure_list)
 else:
-    # structure_list = all_known_structures
-    structure_list = ['Amb', 'SNR', '7N', '5N', '7n', 'LRt', 'Sp5C', 'SNC', 'VLL', 'SC', 'IC']
+    structure_list = all_known_structures
+    # structure_list = ['Amb', 'SNR', '7N', '5N', '7n', 'LRt', 'Sp5C', 'SNC', 'VLL', 'SC', 'IC']
+    print(structure_list)
 
 atlas_spec = dict(name='atlasV7',
                    vol_type='score'    ,
@@ -123,11 +124,7 @@ for name_u in structure_list:
 
         (xmin, ymin, secmin), (xmax, ymax, secmax) = registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners[name_u]
 
-<<<<<<< HEAD
-        for sec in range(max(secmin - section_margin, valid_secmin), min(secmax + 1 + section_margin, valid_secmax) + 1):
-=======
         for sec in range(max(secmin - section_margin, valid_secmin), min(secmax + 1 + section_margin, valid_secmax)+1):
->>>>>>> 0c04b98d07f6f6b694c8fc1d63afd7a014566087
 
             if is_invalid(sec=sec, stack=stack):
                 continue
@@ -145,11 +142,7 @@ for name_u in structure_list:
     	if lname in registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners:
             (xmin, ymin, secmin), (xmax, ymax, secmax) = registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners[lname]
 
-<<<<<<< HEAD
-        for sec in range(max(secmin - section_margin, valid_secmin), min(secmax + 1 + section_margin, valid_secmax) + 1):
-=======
-            for sec in range(max(secmin - section_margin, valid_secmin), min(secmax + 1 + section_margin, valid_secmax)+1):
->>>>>>> 0c04b98d07f6f6b694c8fc1d63afd7a014566087
+            for sec in range(max(secmin - section_margin, valid_secmin), min(secmax + 1 + section_margin, valid_secmax) + 1):
 
                 if is_invalid(sec=sec, stack=stack):
                     continue
@@ -164,11 +157,7 @@ for name_u in structure_list:
     	if rname in registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners:
             (xmin, ymin, secmin), (xmax, ymax, secmax) = registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners[rname]
 
-<<<<<<< HEAD
-        for sec in range(max(secmin - section_margin, valid_secmin), min(secmax + 1 + section_margin, valid_secmax) + 1):
-=======
-            for sec in range(max(secmin - section_margin, valid_secmin), min(secmax + 1 + section_margin, valid_secmax)+1):
->>>>>>> 0c04b98d07f6f6b694c8fc1d63afd7a014566087
+            for sec in range(max(secmin - section_margin, valid_secmin), min(secmax + 1 + section_margin, valid_secmax) + 1):
 
                 if is_invalid(sec=sec, stack=stack):
                     continue

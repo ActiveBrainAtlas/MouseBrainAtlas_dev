@@ -21,7 +21,6 @@ parser.add_argument("--input_fp", type=str, help="input filepath")
 parser.add_argument("--output_fp", type=str, help="output filepath")
 parser.add_argument("--pad_color", type=str, help="background color (black or white)", default='auto')
 parser.add_argument("--njobs", type=int, help="Number of parallel jobs", default=1)
-parser.add_argument("-r", "--init_rotate", type=str, help="escaped imagemagick convert option string for initial flipping and rotation", default='')
 
 args = parser.parse_args()
 
@@ -30,6 +29,7 @@ import os
 import numpy as np
 
 sys.path.append(os.path.join(os.environ['REPO_DIR'], 'utilities'))
+print os.environ['REPO_DIR']
 from utilities2015 import *
 from data_manager import *
 from distributed_utilities import *
@@ -79,8 +79,12 @@ def convert_operation_to_arr(op, resol, inverse=False, return_str=False, stack=N
 	    cropboxes = {img_name: cropbox for img_name in image_name_list}
 	
 	return cropboxes
+
+    elif op['type'] == 'rotate':
+	return {img_name: op['how'] for img_name in image_name_list}
+
     else:
-	raise Exception("Operation type must be either warp or crop.")
+	raise Exception("Operation type specified by ini must be either warp, crop or rotate.")
 
 
 def parse_operation_sequence(op_name, resol, return_str=False, stack=None):
@@ -88,6 +92,7 @@ def parse_operation_sequence(op_name, resol, return_str=False, stack=None):
     if inverse:
 	op_name = op_name[1:]
 
+    #op = load_ini(os.path.join(DATA_ROOTDIR, 'CSHL_data_processed', stack, 'operation_configs', op_name + '.ini'))
     op = load_ini(os.path.join(DATA_ROOTDIR, 'operation_configs', op_name + '.ini'))
     if op is None:
 	raise Exception("Cannot load %s.ini" % op_name)
@@ -106,7 +111,6 @@ def parse_operation_sequence(op_name, resol, return_str=False, stack=None):
     return op_seq
 
 
-init_rotate = args.init_rotate
 pad_color = args.pad_color
 
 
@@ -139,14 +143,19 @@ if args.op_id is not None:
 
 	    ops_str_all_images[img_name] += ' --op %s %s ' % (op_type, op_params_str)
 
-    run_distributed('python %(script)s --input_fp \"%%(input_fp)s\" --output_fp \"%%(output_fp)s\" %%(ops_str)s --pad_color %%(pad_color)s' % \
+
+    # sequantial_dispatcher argument cannot be too long, so we must limit the number of images processed each time
+    batch_size = 100
+    for batch_id in range(0, len(image_name_list), batch_size):
+
+        run_distributed('python %(script)s --input_fp \"%%(input_fp)s\" --output_fp \"%%(output_fp)s\" %%(ops_str)s --pad_color %%(pad_color)s' % \
 		{'script':  os.path.join(os.getcwd(), 'warp_crop.py'),
 		},
 		kwargs_list=[{'ops_str': ops_str_all_images[img_name],
 			    'input_fp': DataManager.get_image_filepath_v2(stack=stack, fn=img_name, prep_id=prep_id, version=version, resol=resol),
 			    'output_fp': DataManager.get_image_filepath_v2(stack=stack, fn=img_name, prep_id=out_prep_id, version=version, resol=resol),
 			    'pad_color': ('black' if img_name.split('-')[1][0] == 'F' else 'white') if pad_color == 'auto' else pad_color}
-			    for img_name in image_name_list],
+			    for img_name in image_name_list[batch_id:batch_id+batch_size]],
 		argument_type='single',
 	       jobs_per_node=args.njobs,
 	    local_only=True)
@@ -179,6 +188,10 @@ elif args.op is not None:
      'w': str(w),
      'h': str(h),
      }
+
+	elif op_type == 'rotate':
+	    op_str += ' ' + orientation_argparse_str_to_imagemagick_str[op_params]
+
 	else:
 	    raise Exception("Op_id must be either warp or crop.")
 
@@ -187,19 +200,17 @@ elif args.op is not None:
     input_fp = args.input_fp
     output_fp = args.output_fp
 
-    if init_rotate == '':
-        init_rotate = ''
-    else:
-        init_rotate = orientation_argparse_str_to_imagemagick_str[init_rotate]
-
     create_parent_dir_if_not_exists(output_fp)
 
-    execute_command("convert \"%(input_fp)s\" %(init_rotate)s +repage -virtual-pixel background -background %(bg_color)s %(op_str)s -flatten -compress lzw \"%(output_fp)s\"" % \
-                {'init_rotate':init_rotate,
+    try:
+	execute_command("convert \"%(input_fp)s\"  +repage -virtual-pixel background -background %(bg_color)s %(op_str)s -flatten -compress lzw \"%(output_fp)s\"" % \
+                {
 'op_str': op_str,
      'input_fp': input_fp,
      'output_fp': output_fp,
      'bg_color': pad_color
-}
-)
+})
+    except Exception as e:
+	sys.stderr.write("ImageMagick convert failed for input_fp %s: %s\n" % (input_fp, e.message))
+
 

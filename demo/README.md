@@ -22,7 +22,7 @@ All generated and downloaded data are stored in `demo/demo_data/`.
 
 ## Installation
 
-A configuration script is provided to create a [virtualenv](https://virtualenv.pypa.io/en/stable/) called **mousebrainatlas** and install necessary packages.
+A configuration script is provided to create a [virtualenv](https://virtualenv.pypa.io/en/stable/) called **mousebrainatlas_virtualenv** and install necessary packages.
 ```
 # Modify the first a few lines of config.sh according to your specific use case, then
 source setup/config.sh
@@ -58,20 +58,21 @@ Note that the `input_spec.ini` files for most steps are different and must be ma
 - **(HUMAN)** Create `from_none_to_aligned.ini` to describe intra-stack alignment operation.
 - Create `input_spec.ini` as (None,NtbNormalized,thumbnail). `python align_compose.py input_spec.ini --op from_none_to_aligned`
 - `python warp_crop.py --input_spec input_spec.ini --op_id from_none_to_padded --njobs 8`
-- **(HUMAN)** Inspect aligned images using preprocessGUI `preprocess_gui.py`, correct pairwise transforms and check each image's order in stack.
+- **(HUMAN)** Inspect aligned images using preprocessGUI `preprocess_tool_v3.py`, correct pairwise transforms and check each image's order in stack. `python preprocess_tool_v3.py DEMO998 --tb_version NtbNormalized`
+
 ### Create masks
 - **(HUMAN)** On a machine with monitor, launch the maskingGUI. `DATA_ROOTDIR=/media/yuncong/brainstem/home/yuncong/MouseBrainAtlas/demo/demo_data python mask_editing_tool_v4.py DEMO998`.
 Draw initial snake contours.
 - Create `input_spec.ini` as (alignedPadded,NtbNormalized,thumbnail). `python masking.py input_spec.ini demo_data/CSHL_data_processed/DEMO998/DEMO998_prep1_thumbnail_initSnakeContours.pkl`
 - **(HUMAN)** Return to masking GUI to inspect and correct the automatically generated masks.
-- **(HUMAN)** Create `DEMO998_original_image_crop.csv`. In this file each row is x,y,width,height in thumbnail resolution.
-- Create `input_spec.ini` as (alignedPadded,mask,thumbnail). `python warp_crop.py --input_spec input_spec.ini --op_id from_padded_to_none`.
+- Create `input_spec.ini` as (None,NtbNormalized,thumbnail). `python generate_original_image_crop_csv.py --inpout_spec input_spec.ini`. This creates `DEMO998_original_image_crop.csv` under data dir. In this file each row is x,y,width,height in thumbnail resolution.
+- Create `input_spec.ini` as (alignedPadded,mask,thumbnail). Copy template `from_padded_to_none.ini`. Copy and modify operation `crop_orig.ini`. `python warp_crop.py --input_spec input_spec.ini --op_id from_padded_to_none`.
  
 ### Local adaptive intensity normalization
 - Create `input_spec.ini` as (None,Ntb,raw). `python normalize_intensity_adaptive.py input_spec.ini NtbNormalizedAdaptiveInvertedGamma`
 
 ### Whole-slice crop
-- **(HUMAN)** Create `from_none_to_wholeslice.ini`. In this file specify the cropbox for the domain `alignedWithMargin ` based on `alignedPadded` images. This cropbox can also be automatically inferred as padding 20 thumbnail-resolution pixels surrounding the `alignedPadded` masks.
+- **(HUMAN)** Create `from_aligned_to_wholeslice.ini`. Copy `from_none_to_wholeslide.ini`. In this file specify the cropbox for the domain `alignedWithMargin ` based on `alignedPadded` images. This cropbox can also be automatically inferred as padding 20 thumbnail-resolution pixels surrounding the `alignedPadded` masks.
 - Create `input_spec.ini` as (None,NtbNormalizedAdaptiveInvertedGamma,raw). `python warp_crop.py --input_spec input_spec.ini --op_id from_none_to_wholeslice`
 - Create `input_spec.ini` as (alignedWithMargin,NtbNormalizedAdaptiveInvertedGamma,raw). `python rescale.py input_spec.ini thumbnail -f 0.03125`
 
@@ -116,6 +117,8 @@ If using GPU, the demo for each section should finish in about 1 minute. If usin
 
 The outputs include the transform parameters and transformed atlas structures.
 
+## Generate intensity volume
+- `python construct_intensity_volume.py DEMO998 --tb_version NtbNormalizedAdaptiveInvertedGamma`
 
 ## Visualize registration results
 

@@ -34,7 +34,7 @@ from skimage.measure import find_contours, regionprops
 
 from skimage.filters import gaussian
 
-from metadata import ENABLE_UPLOAD_S3, ENABLE_DOWNLOAD_S3, convert_resolution_string_to_um
+from metadata import ENABLE_UPLOAD_S3, ENABLE_DOWNLOAD_S3, convert_resolution_string_to_um, load_ini
 
 #######################################
 
@@ -206,30 +206,6 @@ def dict_to_csv(d, fp):
     df = pd.DataFrame.from_dict({k: np.array(v).flatten() for k, v in d.iteritems()}, orient='index')
     df.to_csv(fp, header=False)
 
-
-def load_ini(fp, split_newline=True, convert_none_str=True, section='DEFAULT'):
-    """
-    Value of string None will be converted to Python None.
-    """
-    import ConfigParser
-    config = ConfigParser.ConfigParser()
-    if not os.path.exists(fp):
-        raise Exception("ini file %s does not exist." % fp)
-    config.read(fp)
-    input_spec = dict(config.items(section))
-    input_spec = {k: v.split('\n') if '\n' in v else v for k, v in input_spec.iteritems()}
-    for k, v in input_spec.iteritems():
-	if not isinstance(v, list):
-	    if '.' not in v and v.isdigit():
-    	        input_spec[k] = int(v)
-	    elif v.replace('.','',1).isdigit():
-	        input_spec[k] = float(v)
-        elif v == 'None':
-	    if convert_none_str:
-    	        input_spec[k] = None
-    assert len(input_spec) > 0, "Failed to read data from ini file."
-    return input_spec
-
 def load_data(fp, polydata_instead_of_face_vertex_list=True, download_s3=True):
 
     from vis3d_utilities import load_mesh_stl
@@ -373,7 +349,8 @@ def plot_by_method_by_structure(data_all_stacks_all_structures, structures, stac
                                 stack_to_color=None, ylabel='', title='', ylim=[0,1],
                                 yspacing=.2, style='scatter',
                                figsize=(20, 6), spacing_btw_stacks=1,
-                               xticks_fontsize=20):
+                               xticks_fontsize=20, xlabel='Structures',
+                               legend_loc='best', legend_fontsize=None):
 
     if stack_to_color is None:
         stack_to_color = {stack: random_colors(1)[0] for stack in data_all_stacks_all_structures.keys()}
@@ -384,9 +361,9 @@ def plot_by_method_by_structure(data_all_stacks_all_structures, structures, stac
     plt.figure(figsize=figsize);
     for stack_i, stack in enumerate(stacks):
         data_all_structures = data_all_stacks_all_structures[stack]
-        data_mean = [np.mean(data_all_structures[s]) for s in structures]
-        data_std = [np.std(data_all_structures[s]) for s in structures]
-        plt.bar(stack_i + (n_stacks + spacing_btw_stacks) * np.arange(n_structures), data_mean, yerr=data_std, label=stack)
+        data_mean = [np.mean(data_all_structures[s]) if s in data_all_structures else 0 for s in structures]
+        data_std = [np.std(data_all_structures[s])  if s in data_all_structures else 0 for s in structures]
+        plt.bar(stack_i + (n_stacks + spacing_btw_stacks) * np.arange(n_structures), data_mean, yerr=data_std, label=stack, color=np.array(stack_to_color[stack])/255.)
 
         plt.gca().yaxis.grid(True, linestyle='-', which='major', color='grey', alpha=0.5)
         # Hide these grid behind plot objects
@@ -401,11 +378,11 @@ def plot_by_method_by_structure(data_all_stacks_all_structures, structures, stac
     plt.yticks(np.arange(ylim[0], ylim[1] + yspacing, yspacing),
                map(lambda x: '%.2f'%x, np.arange(ylim[0], ylim[1]+yspacing, yspacing)),
                fontsize=20);
-    plt.xlabel('Structures', fontsize=20);
+    plt.xlabel(xlabel, fontsize=20);
     plt.ylabel(ylabel, fontsize=20);
     plt.xlim([-1, len(structures) * (n_stacks + spacing_btw_stacks) + 1]);
     plt.ylim(ylim);
-    plt.legend();
+    plt.legend(loc=legend_loc, fontsize=legend_fontsize);
     plt.title(title, fontsize=20);
 
 
@@ -432,6 +409,33 @@ def plot_by_stack_by_structure(data_all_stacks_all_structures, structures,
             vals = [data_all_structures[s] if s in data_all_structures else None
                     for i, s in enumerate(structures)]
             ax.scatter(range(len(vals)), vals, marker='o', s=100, label=stack, c=np.array(stack_to_color[stack])/255.);
+            
+    elif style == 'boxplot2': # {stack: {structure: [v1,v2,v3...]}}
+        
+        boxes = []
+        
+        for stack in data_all_stacks_all_structures.keys():
+            
+            D = [data_all_stacks_all_structures[stack][struct]
+                 for struct in structures 
+                 if struct in data_all_stacks_all_structures[stack]]
+        
+            bplot = plt.boxplot(np.array(D).T, positions=range(0, len(structures)), patch_artist=True);
+            boxes.append(bplot['boxes'][0])
+            
+            for patch in bplot['boxes']:
+                patch.set_facecolor(np.array(stack_to_color[stack])/255.)
+            
+            for k in ['fliers', 'medians', 'means', 'whiskers', 'caps']:
+                for patch in bplot[k]:
+                    patch.set_color(np.array(stack_to_color[stack])/255.)
+                
+            ax.yaxis.grid(True, linestyle='-', which='major', color='grey', alpha=0.5)
+            # Hide these grid behind plot objects
+            ax.set_axisbelow(True)
+        
+        ax.legend(boxes, data_all_stacks_all_structures.keys(), loc='upper right')
+            
     elif style == 'boxplot':
 
         D = [[data_all_stacks_all_structures[stack][struct]

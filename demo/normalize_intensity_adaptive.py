@@ -4,7 +4,7 @@ import argparse
 
 parser = argparse.ArgumentParser(
     formatter_class=argparse.RawDescriptionHelpFormatter,
-    description='Linearly normalize intensity to between 0 and 255')
+    description='Perform local-window adaptive intensity normalization')
 
 parser.add_argument("input_spec", type=str, help="Input specification")
 parser.add_argument("out_version", type=str, help="Output image version")
@@ -21,7 +21,6 @@ from distributed_utilities import *
 from learning_utilities import *
 
 input_spec = load_ini(args.input_spec)
-image_name_list = input_spec['image_name_list']
 stack = input_spec['stack']
 prep_id = input_spec['prep_id']
 if prep_id == 'None':
@@ -30,6 +29,10 @@ resol = input_spec['resol']
 version = input_spec['version']
 if version == 'None':
     version = None
+
+image_name_list = input_spec['image_name_list']
+if image_name_list == 'all':
+    image_name_list = DataManager.load_sorted_filenames(stack=stack)[0].keys()
 
 
 from scipy.ndimage.interpolation import map_coordinates
@@ -50,8 +53,13 @@ for image_name in image_name_list:
     sys.stderr.write('Load image: %.2f seconds.\n' % (time.time() - t))
 
     t = time.time()
-    tb_mask = DataManager.load_thumbnail_mask_v3(stack=stack, prep_id=None, fn=image_name)
+    try:
+        tb_mask = DataManager.load_thumbnail_mask_v3(stack=stack, prep_id=None, fn=image_name)
 #     raw_mask = rescale_by_resampling(tb_mask, new_shape=(img.shape[1], img.shape[0]))
+    except Exception as e:
+	sys.stderr.write("Failed to load thumbnail mask for %s\n" % image_name)
+	continue
+
     raw_mask = resize(tb_mask, img.shape) > .5
     
     save_data(raw_mask, 

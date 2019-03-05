@@ -31,23 +31,22 @@ from metadata import *
 from preprocess_utilities import *
 from data_manager import DataManager
 
-op = load_ini(os.path.join(DATA_ROOTDIR, 'operation_configs', args.op + '.ini'))
-assert op['type'] == 'warp', "Op type  must be warp."
-
-elastix_output_dir = op['elastix_output_dir']
-custom_output_dir = op['custom_output_dir']
-toanchor_transforms_fp = op['transforms_csv']
-anchor_img_name = op['anchor_image_name']
-base_prep_id = op['base_prep_id']
-
 input_spec = load_ini(args.input_spec)
 image_name_list = input_spec['image_name_list']
 if image_name_list == 'all':
     #image_name_list = DataManager.load_sorted_filenames(stack=stack)[0].keys()
     image_name_list = map(lambda x: x[0], sorted(DataManager.load_sorted_filenames(stack=input_spec['stack'])[0].items(), key=lambda x: x[1]))
 
-
+#op = load_ini(os.path.join(DATA_ROOTDIR, 'CSHL_data_processed', input_spec['stack'], 'operation_configs', args.op + '.ini'))
+op = load_ini(os.path.join(DATA_ROOTDIR, 'operation_configs', args.op + '.ini'))
+assert op['type'] == 'warp', "Op type  must be warp."
 assert op['base_prep_id'] == input_spec['prep_id'], "Op requires %s, but input has prep %s." % (op['base_prep_id'], input_spec['prep_id'])
+
+elastix_output_dir = op['elastix_output_dir']
+custom_output_dir = op['custom_output_dir']
+toanchor_transforms_fp = op['transforms_csv']
+anchor_img_name = op['anchor_image_name']
+base_prep_id = op['base_prep_id']
 
 #################################################
 
@@ -84,4 +83,5 @@ for moving_idx in range(len(image_name_list)):
     print moving_idx, image_name_list[moving_idx], transformation_to_anchor_sec[image_name_list[moving_idx]]
 
 #################################################
+
 dict_to_csv(transformation_to_anchor_sec, toanchor_transforms_fp)

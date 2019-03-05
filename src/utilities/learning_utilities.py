@@ -351,7 +351,7 @@ def convert_image_patches_to_features_alternative(patches, method):
         pool = Pool(NUM_CORES-1)
         feats = np.array(pool.map(lambda img: compute_lbp_features(img, n_points, radius), patches))
         pool.close()
-        pool.join()
+        pool.join()        
 
     return feats
 
@@ -825,13 +825,16 @@ def extract_patches_given_locations(patch_size,
 
         if is_nissl is None:
             if sec is not None:
-                fn = metadata_cache['sections_to_filenames'][stack][sec]
-                if stack in all_nissl_stacks:
-                    is_nissl = True
-                else:
-                    is_nissl = fn.split('-')[1][0] == 'N'
+                fn = metadata_cache['sections_to_filenames'][stack][sec]                  
             else:
-                raise Exception("Must specify whether image is Nissl by providing is_nissl.")
+                assert fn is not None, fn
+                
+            if stack in all_nissl_stacks:
+                is_nissl = True
+            else:
+                is_nissl = fn.split('-')[1][0] == 'N'
+                
+                # raise Exception("Must specify whether image is Nissl by providing is_nissl.")
 
         if stack in ['CHATM2', 'CHATM3', 'MD661', 'MD662', 'MD658']:
             img = DataManager.load_image_v2(stack=stack, section=sec, fn=fn, prep_id=prep_id, version='NtbNormalizedAdaptiveInvertedGamma')
@@ -2885,16 +2888,43 @@ def convert_dict_to_list(data_dict, rank_dict):
             res.append(zip(r, v))
     return map(itemgetter(1), sorted(chain(*res), key=itemgetter(0)))
 
+
+
+def align_grid_specs(source_locations=None, target_locations=None, source_grid_spec=None, target_grid_spec=None, stack=None):
+    
+    from scipy.spatial import KDTree
+    
+    if source_locations is None:
+        source_locations = grid_parameters_to_sample_locations(grid_spec=win_id_to_gridspec(win_id=source_grid_spec, stack=stack))
+    
+    if target_locations is None:
+        target_locations = grid_parameters_to_sample_locations(grid_spec=win_id_to_gridspec(win_id=target_grid_spec, stack=stack))
+    
+    tree = KDTree(source_locations)
+    _, source_location_indices_closest_to_target_location_indices = tree.query(target_locations)
+    source_locations_closest_to_target_locations = np.array(source_locations)[source_location_indices_closest_to_target_location_indices]
+    return source_locations_closest_to_target_locations, source_location_indices_closest_to_target_location_indices
+
+
 def read_features(addresses, scheme, win_id, prep_id=2,
                       model=None, mean_img=None, model_name=None, batch_size=None, method='cnn',
-                  compute_new_addresses=True, version=None):
+                  compute_new_addresses=True, version=None,
+                 return_nan_for_nonexistent=False):
     """
     Args:
         addresses (list of tuples): each tuple is (stack, section, (patch center x, patch center y))
+        compute_new_addresses (bool): If true, compute features at addresses that do not have pre-computed features. If false, return None for such addresses.
     """
 
     addresses_grouped, rank_grouped = group_by_stack_and_section(addresses, return_full_address=False)
 
+    
+#     if method == 'concat_100um_200um':
+#         all_stacks = set([stk for stk, sec in addresses_grouped.keys()])
+        
+#         locations_200um_aligned_to_locations_100um_tuple_all_stacks = \
+#         {stk: align_grid_specs(source_locations=locations_200um, target_locations=locations_100um, stack=stk) for stk in all_stacks}
+    
     features = defaultdict(list)
     for (stack, section), locations in addresses_grouped.iteritems():
         print (stack, section)
@@ -2905,9 +2935,59 @@ def read_features(addresses, scheme, win_id, prep_id=2,
                                                                              prep_id=prep_id, win_id=win_id,
                                                                              normalization_scheme=scheme,
                                                                              model_name=model_name)
-            except:
+            except Exception as e:
                 features_pool = []
                 locations_pool = []
+                
+#         elif method == 'concat_100um_200um':
+#             try:
+
+#                 features_100um, locations_100um = DataManager.load_dnn_features_v2(stack=stack, sec=section,
+#                                                                        prep_id=prep_id, win_id=7,
+#                                                                        normalization_scheme=scheme,
+#                                                                        model_name=model_name)
+#                 features_200um, locations_200um = DataManager.load_dnn_features_v2(stack=stack, sec=section,
+#                                                                        prep_id=prep_id, win_id=8,
+#                                                                        normalization_scheme=scheme,
+#                                                                        model_name=model_name)
+
+#                 locations_200um_aligned_to_locations_100um, \
+#                 indices_200um_aligned_to_indices_100um = \
+#                 align_grid_specs(source_locations=locations_200um, target_locations=locations_100um, stack=stack)
+                
+#                 features_pool = np.concatenate([features_100um, features_200um[indices_200um_aligned_to_indices_100um]], axis=-1)
+#                 locations_pool = locations_100um
+                
+#             except Exception as e:
+#                 raise e
+#                 features_pool = []
+#                 locations_pool = []
+
+#         elif method == 'concat_100um_200um_50um':
+            
+#             try:
+
+#                 features_100um, locations_100um = DataManager.load_dnn_features_v2(stack=stack, sec=section,
+#                                                                        prep_id=prep_id, win_id=7,
+#                                                                        normalization_scheme=scheme,
+#                                                                        model_name=model_name)
+#                 features_200um, locations_200um = DataManager.load_dnn_features_v2(stack=stack, sec=section,
+#                                                                        prep_id=prep_id, win_id=8,
+#                                                                        normalization_scheme=scheme,
+#                                                                        model_name=model_name)
+#                 features_50um, locations_50um = DataManager.load_dnn_features_v2(stack=stack, sec=section,
+#                                                                        prep_id=prep_id, win_id=11,
+#                                                                        normalization_scheme=scheme,
+#                                                                        model_name=model_name)
+#                 print len(locations_100um), len(locations_200um), len(locations_50um)
+
+#                 features_pool = np.concatenate([features_100um, features_200um, features_50um])
+#                 locations_pool = locations_100um
+
+#             except Exception as e:
+#                 features_pool = []
+#                 locations_pool = []
+            
         else:
             features_pool = []
             locations_pool = []
@@ -2991,10 +3071,10 @@ def compute_and_save_features_one_section(scheme, win_id, stack=None, prep_id=2,
                                        return_locations=True)
         sys.stderr.write('locate patches: %.2f seconds\n' % (time.time() - t))
 
-    features_roi = np.zeros((len(locations_roi), 1024))
+    # features_roi = np.zeros((len(locations_roi), 1024))
 
     if recompute:
-        sys.stderr.write('Recompute features requested... computing from scratch.\n')
+        sys.stderr.write('Recompute features requested. Compute from scratch.\n')
         features = []
         locations = []
         locations_to_compute = locations_roi
@@ -3006,6 +3086,40 @@ def compute_and_save_features_one_section(scheme, win_id, stack=None, prep_id=2,
                                                                        prep_id=prep_id, win_id=win_id,
                                                                        normalization_scheme=scheme,
                                                                        model_name=model_name)
+#             elif method == 'concat_100um_200um':
+#                 print len(locations_100um), len(locations_200um)
+#                 return
+#                 features_100um, locations_100um = DataManager.load_dnn_features_v2(stack=stack, sec=sec, fn=fn,
+#                                                                        prep_id=prep_id, win_id=7,
+#                                                                        normalization_scheme=scheme,
+#                                                                        model_name=model_name)
+#                 features_200um, locations_200um = DataManager.load_dnn_features_v2(stack=stack, sec=sec, fn=fn,
+#                                                                        prep_id=prep_id, win_id=8,
+#                                                                        normalization_scheme=scheme,
+#                                                                        model_name=model_name)
+                
+                
+#                 features = np.concatenate([features_100um, features_200um])
+#                 locations = locations_100um
+                
+#             elif method == 'concat_100um_200um_50um':
+#                 features_100um, locations_100um = DataManager.load_dnn_features_v2(stack=stack, sec=sec, fn=fn,
+#                                                                        prep_id=prep_id, win_id=7,
+#                                                                        normalization_scheme=scheme,
+#                                                                        model_name=model_name)
+#                 features_200um, locations_200um = DataManager.load_dnn_features_v2(stack=stack, sec=sec, fn=fn,
+#                                                                        prep_id=prep_id, win_id=8,
+#                                                                        normalization_scheme=scheme,
+#                                                                        model_name=model_name)
+#                 features_50um, locations_50um = DataManager.load_dnn_features_v2(stack=stack, sec=sec, fn=fn,
+#                                                                        prep_id=prep_id, win_id=11,
+#                                                                        normalization_scheme=scheme,
+#                                                                        model_name=model_name)
+#                 print len(locations_100um), len(locations_200um), len(locations_50um)
+                
+#                 features = np.concatenate([features_100um, features_200um, features_50um])
+#                 locations = locations_100um
+                
             else:
                 features, locations = DataManager.load_dnn_features_v2(stack=stack, sec=sec, fn=fn,
                                                                        prep_id=prep_id, win_id=win_id,

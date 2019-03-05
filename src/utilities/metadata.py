@@ -5,6 +5,32 @@ import os, sys
 import numpy as np
 import subprocess
 
+def load_ini(fp, split_newline=True, convert_none_str=True, section='DEFAULT'):
+    """
+    Value of string None will be converted to Python None.
+    """
+    import ConfigParser
+    config = ConfigParser.RawConfigParser()
+    config.optionxform = str
+    if not os.path.exists(fp):
+        raise Exception("ini file %s does not exist." % fp)
+    config.read(fp)
+    input_spec = dict(config.items(section))
+#     input_spec = dict(config.defaults())
+    input_spec = {k: v.split('\n') if '\n' in v else v for k, v in input_spec.iteritems()}
+    for k, v in input_spec.iteritems():
+        if not isinstance(v, list):
+            if '.' not in v and v.isdigit():
+                input_spec[k] = int(v)
+            elif v.replace('.','',1).isdigit():
+                input_spec[k] = float(v)
+            elif v == 'None':
+                if convert_none_str:
+                    input_spec[k] = None
+    assert len(input_spec) > 0, "Failed to read data from ini file."
+    return input_spec
+
+
 ########### Data Directories #############
 
 hostname = subprocess.check_output("hostname", shell=True).strip()
@@ -547,7 +573,7 @@ motor_nuclei_sided_sorted_by_rostral_caudal_position = \
 ['3N_R', '3N_L', '4N_R', '4N_L', '5N_R', '5N_L', '6N_R', '6N_L', '7N_R', '7N_L', 'Amb_R', 'Amb_L', '12N', '10N_R', '10N_L']
 
 structures_sided_sorted_by_size = ['4N_L', '4N_R', '6N_L', '6N_R', 'Amb_L', 'Amb_R', 'PBG_L', 'PBG_R', '10N_L', '10N_R', 'AP', '3N_L', '3N_R', 'LC_L', 'LC_R', 'SNC_L', 'SNC_R', 'Tz_L', 'Tz_R', '7n_L', '7n_R', 'RMC_L', 'RMC_R', '5N_L', '5N_R', 'VCP_L', 'VCP_R', '12N', 'LRt_L', 'LRt_R', '7N_L', '7N_R', 'VCA_L', 'VCA_R', 'VLL_L', 'VLL_R', 'DC_L', 'DC_R', 'Sp5O_L', 'Sp5O_R', 'Sp5I_L', 'Sp5I_R', 'Pn_L', 'Pn_R', 'RtTg', 'SNR_L', 'SNR_R', 'Sp5C_L', 'Sp5C_R', 'IC', 'SC']
-structures_sided_sorted_by_rostral_caudal_position = ['SNC_R', 'SNC_L', 'SC', 'SNR_R', 'SNR_L', 'RMC_R', 'RMC_L', '3N_R', '3N_L', 'PBG_R', 'PBG_L', '4N_R', '4N_L', 'Pn_R', 'Pn_L', 'VLL_R', 'VLL_L', 'RtTg', '5N_R', '5N_L', 'LC_R', 'LC_L', 'Tz_R', 'Tz_L', 'VCA_R', 'VCA_L', '7n_R', '7n_L', '6N_R', '6N_L', 'DC_R', 'DC_L','VCP_R', 'VCP_L', '7N_R', '7N_L', 'Sp5O_R', 'Sp5O_L', 'Amb_R', 'Amb_L', 'Sp5I_R', 'Sp5I_L', 'AP', '12N', '10N_R', '10N_L', 'LRt_R', 'LRt_L', 'Sp5C_R', 'Sp5C_L']
+structures_sided_sorted_by_rostral_caudal_position = ['SNC_R', 'SNC_L', 'SC', 'IC', 'SNR_R', 'SNR_L', 'RMC_R', 'RMC_L', '3N_R', '3N_L', 'PBG_R', 'PBG_L', '4N_R', '4N_L', 'Pn_R', 'Pn_L', 'VLL_R', 'VLL_L', 'RtTg', '5N_R', '5N_L', 'LC_R', 'LC_L', 'Tz_R', 'Tz_L', 'VCA_R', 'VCA_L', '7n_R', '7n_L', '6N_R', '6N_L', 'DC_R', 'DC_L','VCP_R', 'VCP_L', '7N_R', '7N_L', 'Sp5O_R', 'Sp5O_L', 'Amb_R', 'Amb_L', 'Sp5I_R', 'Sp5I_L', 'AP', '12N', '10N_R', '10N_L', 'LRt_R', 'LRt_L', 'Sp5C_R', 'Sp5C_L']
 structures_unsided_sorted_by_rostral_caudal_position = ['SNC', 'SC', 'IC', 'SNR', 'RMC', '3N', 'PBG','4N', 'Pn','VLL','RtTg', '5N', 'LC', 'Tz', 'VCA', '7n', '6N', 'DC', 'VCP', '7N', 'Sp5O', 'Amb', 'Sp5I', 'AP', '12N', '10N', 'LRt', 'Sp5C']
 
 #linear_landmark_names_unsided = ['outerContour']
@@ -593,36 +619,14 @@ XY_PIXEL_DISTANCE_TB_AXIOSCAN = XY_PIXEL_DISTANCE_LOSSLESS_AXIOSCAN * 32
 #all_annotated_ntb_stacks = ['MD635']
 #all_annotated_stacks = all_annotated_nissl_stacks + all_annotated_ntb_stacks
 
-all_nissl_stacks = []
-all_ntb_stacks = ['DEMO998']
+all_nissl_stacks = ['MD585', 'MD594', 'MD589']
+# all_ntb_stacks = ['DEMO998']
+all_ntb_stacks = ['UCSD001']
 all_stacks = all_nissl_stacks + all_ntb_stacks
 
 BRAINS_INFO_DIR = os.path.join(DATA_ROOTDIR, 'brains_info')
 
 # from utilities2015 import load_ini
-
-def load_ini(fp, split_newline=True, convert_none_str=True, section='DEFAULT'):
-    """
-    Value of string None will be converted to Python None.
-    """
-    import ConfigParser
-    config = ConfigParser.ConfigParser()
-    if not os.path.exists(fp):
-        raise Exception("ini file %s does not exist." % fp)
-    config.read(fp)
-    input_spec = dict(config.items(section))
-    input_spec = {k: v.split('\n') if '\n' in v else v for k, v in input_spec.iteritems()}
-    for k, v in input_spec.iteritems():
-        if not isinstance(v, list):
-            if '.' not in v and v.isdigit():
-                input_spec[k] = int(v)
-            elif v.replace('.','',1).isdigit():
-                input_spec[k] = float(v)
-        elif v == 'None':
-            if convert_none_str:
-                input_spec[k] = None
-    assert len(input_spec) > 0, "Failed to read data from ini file."
-    return input_spec
 
 planar_resolution = {}
 if os.path.exists(BRAINS_INFO_DIR):
@@ -637,7 +641,7 @@ print planar_resolution
 ########################################
 
 # prep_id_to_str_2d = {0: 'raw', 1: 'alignedPadded', 2: 'alignedCroppedBrainstem', 3: 'alignedCroppedThalamus', 4: 'alignedNoMargin', 5: 'alignedWithMargin', 6: 'rawCropped'}
-prep_id_to_str_2d = {0: 'raw', 1: 'alignedPadded', 2: 'alignedBrainstemCrop', 3: 'alignedThalamusCrop', 4: 'alignedNoMargin', 5: 'alignedWithMargin', 6: 'rawCropped'}
+prep_id_to_str_2d = {0: 'raw', 1: 'alignedPadded', 2: 'alignedBrainstemCrop', 3: 'alignedThalamusCrop', 4: 'alignedNoMargin', 5: 'alignedWithMargin', 6: 'rawCropped', 7: 'rawBeforeRotation'}
 prep_str_to_id_2d = {s: i for i, s in prep_id_to_str_2d.iteritems()}
 
 #######################################
@@ -707,5 +711,6 @@ LEVEL_TO_COLOR_VERTEX2 = {0.1: (0,125,0), 0.25: (0,0,255), 0.5: (125,0,125), 0.7
 orientation_argparse_str_to_imagemagick_str = \
 {'transpose': '-transpose',
  'transverse': '-transverse',
- 'rotate90': '-rotate 90'
+ 'rotate90': '-rotate 90',
+ 'rotate270': '-rotate 270'
 }

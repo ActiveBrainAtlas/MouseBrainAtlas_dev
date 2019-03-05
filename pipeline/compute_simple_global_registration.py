@@ -1,0 +1,1 @@
+../src/registration/compute_simple_global_registration.py
