@@ -10,3 +10,4 @@ shapely==1.6.4
 randomcolor==0.4.4.5
 mxnet-cu90==1.0.0
 joblib==0.10.2
+qimage2ndarray==1.7

@@ -502,6 +502,7 @@ class PreprocessGUI(QMainWindow, Ui_PreprocessGui):
                     self.set_anchor(f.readline().strip())
             else:
                 imageNames_to_load = self.get_sorted_filenames(valid_only=self.show_valid_only)
+		print self.show_valid_only
                 shapes = \
                     [identify_shape(DataManager.get_image_filepath_v2(stack=self.stack, fn=fn, prep_id=None, version=self.tb_version, resol=self.tb_res))
                     for fn in imageNames_to_load]

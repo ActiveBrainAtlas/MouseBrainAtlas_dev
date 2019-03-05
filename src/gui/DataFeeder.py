@@ -257,7 +257,14 @@ class ImageDataFeeder_v2(object):
                 self.z_dim = arbitrary_img.height()
             sys.stderr.write("Dimension computed successfully.\n")
         else:
-            sys.stderr.write("Failed to compute dimension for datafeeder %s.\n" % self.name)
+            if not hasattr(self, 'resolution'):
+                sys.stderr.write("Failed to compute dimension for datafeeder %s because resolution is not set.\n" % self.name)
+            elif not hasattr(self, 'orientation'):
+                sys.stderr.write("Failed to compute dimension for datafeeder %s because orientation is not set.\n" % self.name)
+            elif self.resolution not in self.image_cache:
+                sys.stderr.write("Failed to compute dimension for datafeeder %s because resolution %s is not in image_cache.\n" % (self.name, self.resolution))
+            else:
+                raise
             # if not hasattr(self, 'resolution'):
             #     raise Exception("Cannot compute dimension because resolution of datafeeder is not set.")
             # elif not hasattr(self, 'orientation'):
