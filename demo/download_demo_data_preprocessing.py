@@ -12,15 +12,19 @@ parser = argparse.ArgumentParser(
     formatter_class=argparse.RawDescriptionHelpFormatter,
     description='This script downloads input data for demo.')
 
-parser.add_argument("-d", "--demo_data_dir", type=str, help="Directory to store demo input data", default='demo_data')
+parser.add_argument("-d", "--demo_data_dir", type=str, help="Directory to store demo input data")
 args = parser.parse_args()
+
+if args.demo_data_dir is None:
+    demo_data_dir = DATA_ROOTDIR
+else:
+    demo_data_dir = args.demo_data_dir
 
 def download_to_demo(fp):
     """
     Args:
 	fp (str): file path relative to data root.
     """
-    demo_data_dir = args.demo_data_dir
     create_if_not_exists(demo_data_dir)
     s3_http_prefix = 'https://s3-us-west-1.amazonaws.com/mousebrainatlas-data/'
     url = s3_http_prefix + fp
@@ -31,6 +35,7 @@ def download_to_demo(fp):
 
 # Download raw JPEG2000 images
 
+print("Download raw JPEG2000 images")
 for img_name in [
 'MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242',
 'MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250',
@@ -41,6 +46,8 @@ for img_name in [
 
 
 # Download mxnet model
+
+print("Download mxnet model")
 
 model_dir_name = 'inception-bn-blue'
 
@@ -54,6 +61,8 @@ fp = os.path.join(MXNET_MODEL_ROOTDIR, model_dir_name, 'mean_224.npy')
 download_to_demo(relative_to_local(fp, local_root=DATA_ROOTDIR))
 
 # Download warp/crop operation configs.
+
+print("Download warp/crop operation configs")
 
 for fn in [
 'crop_orig',
@@ -71,4 +80,5 @@ for fn in [
     download_to_demo(os.path.join('operation_configs', fn + '.ini'))
 
 # Download brain meta data
+print("Download brain DEMO998 meta data")
 download_to_demo(os.path.join('brains_info', 'DEMO998.ini'))

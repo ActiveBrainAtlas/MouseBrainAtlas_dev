@@ -25,6 +25,14 @@ export ROOT_DIR=/home/yuncong/demo_data
 export DATA_ROOTDIR=/home/yuncong/demo_data
 export THUMBNAIL_DATA_ROOTDIR=/home/yuncong/demo_data
 
+#export ROOT_DIR=/home/yuncong/brainstem/media/yuncong/BstemAtlasData/atlas_data
+#export DATA_ROOTDIR=/home/yuncong/brainstem/media/yuncong/BstemAtlasData/atlas_data
+#export THUMBNAIL_DATA_ROOTDIR=/home/yuncong/brainstem/media/yuncong/BstemAtlasData/atlas_data
+
+#export ROOT_DIR=/media/yuncong/YuncongPublic/atlas_data
+#export DATA_ROOTDIR=/media/yuncong/YuncongPublic/atlas_data
+#export THUMBNAIL_DATA_ROOTDIR=/media/yuncong/YuncongPublic/atlas_data
+
 if [ ! -d $virtualenv ]; then
         echo ""
         echo -e "${green}Creating a virtualenv environment${NC}"
