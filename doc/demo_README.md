@@ -92,7 +92,10 @@ Note that the `input_spec.ini` files for most steps are different and must be ma
 │           ├── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_thumbnail_NtbNormalized.tif
 │           └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_thumbnail_NtbNormalized.tif
 ```
-- Modify `operation_configs/from_none_to_aligned.ini`. Modify `input_spec.ini` as (None,NtbNormalized,thumbnail). `python align_compose.py input_spec.ini --op from_none_to_aligned`
+
+- Create `CSHL_data_processed/DEMO998/DEMO998_sorted_filenames.txt`.
+
+- **Align images in this stack**. Modify `operation_configs/from_none_to_aligned.ini`. Modify `input_spec.ini` as (None,NtbNormalized,thumbnail). `python align_compose.py input_spec.ini --op from_none_to_aligned`
 
 ```bash
 ├── CSHL_data_processed
@@ -121,5 +124,45 @@ Note that the `input_spec.ini` files for most steps are different and must be ma
 │       │       └── TransformParameters.0.txt
 ```
 
+- **Transform images**. `python warp_crop.py --input_spec input_spec.ini --op_id from_none_to_padded --njobs 8`
+
+```bash
+├── CSHL_data_processed
+│   └── DEMO998
+│       ├── DEMO998_prep1_thumbnail_NtbNormalized
+│       │   ├── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_prep1_thumbnail_NtbNormalized.tif
+│       │   ├── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_prep1_thumbnail_NtbNormalized.tif
+│       │   └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep1_thumbnail_NtbNormalized.tif
+```
+
+- Modify `all_stacks` in `src/utilities/metadata.py` to include `DEMO_998`.
+
+- On a machine with monitor, launch the maskingGUI. Run `DATA_ROOTDIR=/home/yuncong/brainstem/home/yuncong/demo_data ROOT_DIR=/home/yuncong/brainstem/home/yuncong/demo_data THUMBNAIL_DATA_ROOTDIR=/home/yuncong/brainstem/home/yuncong/demo_data python mask_editing_tool_v4.py DEMO998 NtbNormalized`. Generate initial masks.
+
+```bash
+├── CSHL_data_processed
+│   └── DEMO998
+│       ├── DEMO998_prep1_thumbnail_anchorInitSnakeContours.pkl
+│       ├── DEMO998_prep1_thumbnail_initSnakeContours.pkl
+```
+
+- Modify `input_spec.ini` as (alignedPadded,NtbNormalized,thumbnail). `python masking.py input_spec.ini /home/yuncong/demo_data/CSHL_data_processed/DEMO998/DEMO998_prep1_thumbnail_initSnakeContours.pkl`
+
+```bash
+├── CSHL_data_processed
+│   └── DEMO998
+│       ├── DEMO998_prep1_thumbnail_autoSubmasks
+│       │   ├── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242
+│       │   │   ├── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_prep1_thumbnail_autoSubmask_0.png
+│       │   │   └── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_prep1_thumbnail_autoSubmaskDecisions.csv
+│       │   ├── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250
+│       │   │   ├── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_prep1_thumbnail_autoSubmask_0.png
+│       │   │   └── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_prep1_thumbnail_autoSubmaskDecisions.csv
+│       │   └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257
+│       │       ├── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep1_thumbnail_autoSubmask_0.png
+│       │       └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep1_thumbnail_autoSubmaskDecisions.csv
+```
+
+- 
 
 
