@@ -12,13 +12,22 @@ cyan='\e[1;36m'
 NC='\033[0m' # No Color
 
 export REPO_DIR=$PROJECT_DIR/src
+
 #export ROOT_DIR=$PROJECT_DIR/demo/demo_data/
 #export DATA_ROOTDIR=$PROJECT_DIR/demo/demo_data/
 #export THUMBNAIL_DATA_ROOTDIR=$PROJECT_DIR/demo/demo_data/
-export ROOT_DIR=/media/yuncong/BstemAtlasData/atlas_data
-export DATA_ROOTDIR=/media/yuncong/BstemAtlasData/atlas_data
-export THUMBNAIL_DATA_ROOTDIR=/media/yuncong/BstemAtlasData/atlas_data
 
+#export ROOT_DIR=/media/yuncong/BstemAtlasData/atlas_data
+#export DATA_ROOTDIR=/media/yuncong/BstemAtlasData/atlas_data
+#export THUMBNAIL_DATA_ROOTDIR=/media/yuncong/BstemAtlasData/atlas_data
+
+#export ROOT_DIR=/home/yuncong/brainstem/media/yuncong/BstemAtlasData/atlas_data
+#export DATA_ROOTDIR=/home/yuncong/brainstem/media/yuncong/BstemAtlasData/atlas_data
+#export THUMBNAIL_DATA_ROOTDIR=/home/yuncong/brainstem/media/yuncong/BstemAtlasData/atlas_data
+
+export ROOT_DIR=/media/yuncong/YuncongPublic/atlas_data
+export DATA_ROOTDIR=/media/yuncong/YuncongPublic/atlas_data
+export THUMBNAIL_DATA_ROOTDIR=/media/yuncong/YuncongPublic/atlas_data
 
 if [ ! -d $virtualenv ]; then
         echo ""
