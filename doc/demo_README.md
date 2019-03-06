@@ -43,6 +43,11 @@ Note that the `input_spec.ini` files for most steps are different and must be ma
 
 - Run `download_demo_data_preprocessing.py` to download necessary data. 
 - Also download `CSHL_data_processed/DEMO998/DEMO998_sorted_filenames.txt`. 
+```bash
+MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242 225
+MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250 230
+MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257 235
+```
 Make sure the folder content looks like:
 
 ```bash
@@ -160,7 +165,7 @@ Make sure the folder content looks like:
 │       │   └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep1_thumbnail_NtbNormalized.tif
 ```
 
-- Modify `all_stacks` in `src/utilities/metadata.py` to include `DEMO_998`.
+- Modify `all_stacks` in `src/utilities/metadata.py` to include `DEMO998`.
 
 - On a machine with monitor, launch the maskingGUI. Run `DATA_ROOTDIR=/home/yuncong/brainstem/home/yuncong/demo_data ROOT_DIR=/home/yuncong/brainstem/home/yuncong/demo_data THUMBNAIL_DATA_ROOTDIR=/home/yuncong/brainstem/home/yuncong/demo_data python mask_editing_tool_v4.py DEMO998 NtbNormalized`. Generate initial masks.
 
@@ -303,5 +308,208 @@ Make sure the folder content looks like:
 │       │   ├── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_prep2_raw_NtbNormalizedAdaptiveInvertedGammaJpeg.jpg
 │       │   └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep2_raw_NtbNormalizedAdaptiveInvertedGammaJpeg.jpg
 ```
+ 
+- Create `DEMO998_prep2_sectionLimit.ini`.
 
-- **Compute patch features**. Modify `input_spec.ini` as (alignedBrainstemCrop,NtbNormalizedAdaptiveInvertedGamma,raw). `python demo_compute_features_v2.py DEMO998_input_spec.ini`
+```bash
+[DEFAULT]
+left_section_limit = 225
+right_section_limit = 235
+```
+
+- `cp ../../../operation_configs/from_padded_to_wholeslice.ini ~/demo_data/CSHL_data_processed/DEMO998/operation_configs/`
+- Create the intensity volume by running `./construct_intensity_volume.py DEMO998 --tb_version NtbNormalizedAdaptiveInvertedGamma --tb_resol thumbnail`
+
+```bash
+├── CSHL_volumes
+│   └── DEMO998
+│       └── DEMO998_wholebrainWithMargin_10.0um_intensityVolume
+│           ├── DEMO998_wholebrainWithMargin_10.0um_intensityVolume.bp
+│           └── DEMO998_wholebrainWithMargin_10.0um_intensityVolume_origin_wrt_wholebrain.txt
+```
+
+- Run `python src/gui/brain_labeling_gui_v28.py <STACK> --img_version NtbNormalizedAdaptiveInvertedGammaJpeg`
+
+- Must click on the high resolution panel.
+
+- Create `demo_data/CSHL_simple_global_registration/DEMO998_manual_anchor_points.ini`.
+
+```bash
+[DEFAULT]
+x_12N=561
+y_12N=204
+x_3N=372
+y_3N=167
+z_midline=6
+```
+
+- Run `python download_atlas.py`.
+
+```bash
+├── CSHL_volumes
+│   ├── atlasV7
+│   │   └── atlasV7_10.0um_scoreVolume
+│   │       └── score_volumes
+│   │           ├── atlasV7_10.0um_scoreVolume_12N.bp
+│   │           ├── atlasV7_10.0um_scoreVolume_12N_origin_wrt_canonicalAtlasSpace.txt
+│   │           ├── atlasV7_10.0um_scoreVolume_12N_surround_200um.bp
+│   │           ├── atlasV7_10.0um_scoreVolume_12N_surround_200um_origin_wrt_canonicalAtlasSpace.txt
+│   │           ├── atlasV7_10.0um_scoreVolume_3N_R.bp
+│   │           ├── atlasV7_10.0um_scoreVolume_3N_R_origin_wrt_canonicalAtlasSpace.txt
+│   │           ├── atlasV7_10.0um_scoreVolume_3N_R_surround_200um.bp
+│   │           ├── atlasV7_10.0um_scoreVolume_3N_R_surround_200um_origin_wrt_canonicalAtlasSpace.txt
+│   │           ├── atlasV7_10.0um_scoreVolume_4N_R.bp
+│   │           ├── atlasV7_10.0um_scoreVolume_4N_R_origin_wrt_canonicalAtlasSpace.txt
+│   │           ├── atlasV7_10.0um_scoreVolume_4N_R_surround_200um.bp
+│   │           └── atlasV7_10.0um_scoreVolume_4N_R_surround_200um_origin_wrt_canonicalAtlasSpace.txt
+```
+
+- `python ../src/registration/compute_simple_global_registration.py DEMO998 ~/demo_data/CSHL_simple_global_registration/DEMO998_manual_anchor_points.ini`.
+
+```bash
+├── CSHL_simple_global_registration
+│   ├── DEMO998_registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners.json
+│   └── DEMO998_T_atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol.txt
+```
+
+- Run `python download_pretrained_classifiers.py -s "[\"12N\", \"3N_R\", \"4N_R\"]"`.
+
+```bash
+├── CSHL_classifiers
+│   └── setting_899
+│       └── classifiers
+│           ├── 12N_clf_setting_899.dump
+│           ├── 3N_clf_setting_899.dump
+│           └── 4N_clf_setting_899.dump
+```
+
+- Run `python pipeline/generate_prob_volumes.py DEMO998 799 NtbNormalizedAdaptiveInvertedGamma NtbNormalizedAdaptiveInvertedGammaJpeg -s "[\"12N\", \"3N\", \"4N\"]"`.
+
+```bash
+├── CSHL_patch_features
+│   └── inception-bn-blue
+│       └── DEMO998
+│           └── DEMO998_prep2_none_win7
+│               ├── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_prep2_none_win7_inception-bn-blue_features.bp
+│               ├── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_prep2_none_win7_inception-bn-blue_locations.txt
+│               ├── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_prep2_none_win7_inception-bn-blue_features.bp
+│               ├── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_prep2_none_win7_inception-bn-blue_locations.txt
+│               ├── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep2_none_win7_inception-bn-blue_features.bp
+│               └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep2_none_win7_inception-bn-blue_locations.txt
+├── CSHL_scoremaps
+│   └── 10.0um
+│       └── DEMO998
+│           └── DEMO998_prep2_10.0um_detector799
+│               ├── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_prep2_10.0um_detector799
+│               │   ├── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_prep2_10.0um_detector799_12N_scoremap.bp
+│               │   ├── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_prep2_10.0um_detector799_3N_scoremap.bp
+│               │   └── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_prep2_10.0um_detector799_4N_scoremap.bp
+│               ├── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_prep2_10.0um_detector799
+│               │   ├── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_prep2_10.0um_detector799_12N_scoremap.bp
+│               │   ├── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_prep2_10.0um_detector799_3N_scoremap.bp
+│               │   └── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_prep2_10.0um_detector799_4N_scoremap.bp
+│               └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep2_10.0um_detector799
+│                   ├── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep2_10.0um_detector799_12N_scoremap.bp
+│                   ├── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep2_10.0um_detector799_3N_scoremap.bp
+│                   └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep2_10.0um_detector799_4N_scoremap.bp
+├── CSHL_scoremap_viz
+│   └── 10.0um
+│       ├── 12N
+│       │   └── DEMO998
+│       │       └── detector799
+│       │           └── prep2
+│       │               ├── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_prep2_10.0um_12N_detector799_scoremapViz.jpg
+│       │               ├── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_prep2_10.0um_12N_detector799_scoremapViz.jpg
+│       │               └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep2_10.0um_12N_detector799_scoremapViz.jpg
+│       ├── 3N
+│       │   └── DEMO998
+│       │       └── detector799
+│       │           └── prep2
+│       │               ├── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_prep2_10.0um_3N_detector799_scoremapViz.jpg
+│       │               ├── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_prep2_10.0um_3N_detector799_scoremapViz.jpg
+│       │               └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep2_10.0um_3N_detector799_scoremapViz.jpg
+│       └── 4N
+│           └── DEMO998
+│               └── detector799
+│                   └── prep2
+│                       ├── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_prep2_10.0um_4N_detector799_scoremapViz.jpg
+│                       ├── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_prep2_10.0um_4N_detector799_scoremapViz.jpg
+│                       └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep2_10.0um_4N_detector799_scoremapViz.jpg
+├── CSHL_volumes
+│   └── DEMO998
+│       ├── DEMO998_detector799_10.0um_scoreVolume
+│       │   ├── score_volume_gradients
+│       │   │   ├── DEMO998_detector799_10.0um_scoreVolume_12N_gradients.bp
+│       │   │   ├── DEMO998_detector799_10.0um_scoreVolume_12N_origin_wrt_wholebrain.txt
+│       │   │   ├── DEMO998_detector799_10.0um_scoreVolume_3N_R_gradients.bp
+│       │   │   ├── DEMO998_detector799_10.0um_scoreVolume_3N_R_origin_wrt_wholebrain.txt
+│       │   │   ├── DEMO998_detector799_10.0um_scoreVolume_4N_R_gradients.bp
+│       │   │   └── DEMO998_detector799_10.0um_scoreVolume_4N_R_origin_wrt_wholebrain.txt
+│       │   └── score_volumes
+│       │       ├── DEMO998_detector799_10.0um_scoreVolume_12N.bp
+│       │       ├── DEMO998_detector799_10.0um_scoreVolume_12N_origin_wrt_wholebrain.txt
+│       │       ├── DEMO998_detector799_10.0um_scoreVolume_3N_R.bp
+│       │       ├── DEMO998_detector799_10.0um_scoreVolume_3N_R_origin_wrt_wholebrain.txt
+│       │       ├── DEMO998_detector799_10.0um_scoreVolume_4N_R.bp
+│       │       └── DEMO998_detector799_10.0um_scoreVolume_4N_R_origin_wrt_wholebrain.txt
+```
+- Run `python pipeline/register_brains.py demo/demo_fixed_brain_spec_12N.json demo/demo_moving_brain_spec_12N.json -g`.
+- Run `python pipeline/register_brains.py demo/demo_fixed_brain_spec_3N_R_4N_R.json demo/demo_moving_brain_spec_3N_R_4N_R.json -g`
+
+```bash
+├── CSHL_registration_parameters
+│   └── atlasV7
+│       ├── atlasV7_10.0um_scoreVolume_12N_warp7_DEMO998_detector799_10.0um_scoreVolume_12N
+│       │   ├── atlasV7_10.0um_scoreVolume_12N_warp7_DEMO998_detector799_10.0um_scoreVolume_12N_parameters.json
+│       │   ├── atlasV7_10.0um_scoreVolume_12N_warp7_DEMO998_detector799_10.0um_scoreVolume_12N_scoreEvolution.png
+│       │   ├── atlasV7_10.0um_scoreVolume_12N_warp7_DEMO998_detector799_10.0um_scoreVolume_12N_scoreHistory.bp
+│       │   └── atlasV7_10.0um_scoreVolume_12N_warp7_DEMO998_detector799_10.0um_scoreVolume_12N_trajectory.bp
+│       └── atlasV7_10.0um_scoreVolume_3N_R_4N_R_warp7_DEMO998_detector799_10.0um_scoreVolume_3N_R_4N_R
+│           ├── atlasV7_10.0um_scoreVolume_3N_R_4N_R_warp7_DEMO998_detector799_10.0um_scoreVolume_3N_R_4N_R_parameters.json
+│           ├── atlasV7_10.0um_scoreVolume_3N_R_4N_R_warp7_DEMO998_detector799_10.0um_scoreVolume_3N_R_4N_R_scoreEvolution.png
+│           ├── atlasV7_10.0um_scoreVolume_3N_R_4N_R_warp7_DEMO998_detector799_10.0um_scoreVolume_3N_R_4N_R_scoreHistory.bp
+│           └── atlasV7_10.0um_scoreVolume_3N_R_4N_R_warp7_DEMO998_detector799_10.0um_scoreVolume_3N_R_4N_R_trajectory.bp
+├── CSHL_volumes
+│   ├── atlasV7
+│   │   ├── atlasV7_10.0um_scoreVolume_12N_warp7_DEMO998_detector799_10.0um_scoreVolume_12N_10.0um
+│   │   │   └── score_volumes
+│   │   │       ├── atlasV7_10.0um_scoreVolume_12N_warp7_DEMO998_detector799_10.0um_scoreVolume_12N_10.0um_12N.bp
+│   │   │       ├── atlasV7_10.0um_scoreVolume_12N_warp7_DEMO998_detector799_10.0um_scoreVolume_12N_10.0um_12N_origin_wrt_fixedWholebrain.txt
+│   │   │       ├── atlasV7_10.0um_scoreVolume_12N_warp7_DEMO998_detector799_10.0um_scoreVolume_12N_10.0um_12N_surround_200um.bp
+│   │   │       └── atlasV7_10.0um_scoreVolume_12N_warp7_DEMO998_detector799_10.0um_scoreVolume_12N_10.0um_12N_surround_200um_origin_wrt_fixedWholebrain.txt
+│   │   ├── atlasV7_10.0um_scoreVolume_3N_R_4N_R_warp7_DEMO998_detector799_10.0um_scoreVolume_3N_R_4N_R_10.0um
+│   │   │   └── score_volumes
+│   │   │       ├── atlasV7_10.0um_scoreVolume_3N_R_4N_R_warp7_DEMO998_detector799_10.0um_scoreVolume_3N_R_4N_R_10.0um_3N_R.bp
+│   │   │       ├── atlasV7_10.0um_scoreVolume_3N_R_4N_R_warp7_DEMO998_detector799_10.0um_scoreVolume_3N_R_4N_R_10.0um_3N_R_origin_wrt_fixedWholebrain.txt
+│   │   │       ├── atlasV7_10.0um_scoreVolume_3N_R_4N_R_warp7_DEMO998_detector799_10.0um_scoreVolume_3N_R_4N_R_10.0um_3N_R_surround_200um.bp
+│   │   │       ├── atlasV7_10.0um_scoreVolume_3N_R_4N_R_warp7_DEMO998_detector799_10.0um_scoreVolume_3N_R_4N_R_10.0um_3N_R_surround_200um_origin_wrt_fixedWholebrain.txt
+│   │   │       ├── atlasV7_10.0um_scoreVolume_3N_R_4N_R_warp7_DEMO998_detector799_10.0um_scoreVolume_3N_R_4N_R_10.0um_4N_R.bp
+│   │   │       ├── atlasV7_10.0um_scoreVolume_3N_R_4N_R_warp7_DEMO998_detector799_10.0um_scoreVolume_3N_R_4N_R_10.0um_4N_R_origin_wrt_fixedWholebrain.txt
+│   │   │       ├── atlasV7_10.0um_scoreVolume_3N_R_4N_R_warp7_DEMO998_detector799_10.0um_scoreVolume_3N_R_4N_R_10.0um_4N_R_surround_200um.bp
+│   │   │       └── atlasV7_10.0um_scoreVolume_3N_R_4N_R_warp7_DEMO998_detector799_10.0um_scoreVolume_3N_R_4N_R_10.0um_4N_R_surround_200um_origin_wrt_fixedWholebrain.txt
+│   │   └── atlasV7_10.0um_scoreVolume_warp0_DEMO998_detector799_10.0um_scoreVolume_10.0um
+│   │       └── score_volumes
+│   │           ├── atlasV7_10.0um_scoreVolume_warp0_DEMO998_detector799_10.0um_scoreVolume_10.0um_12N.bp
+│   │           ├── atlasV7_10.0um_scoreVolume_warp0_DEMO998_detector799_10.0um_scoreVolume_10.0um_12N_origin_wrt_fixedWholebrain.txt
+│   │           ├── atlasV7_10.0um_scoreVolume_warp0_DEMO998_detector799_10.0um_scoreVolume_10.0um_12N_surround_200um.bp
+│   │           ├── atlasV7_10.0um_scoreVolume_warp0_DEMO998_detector799_10.0um_scoreVolume_10.0um_12N_surround_200um_origin_wrt_fixedWholebrain.txt
+│   │           ├── atlasV7_10.0um_scoreVolume_warp0_DEMO998_detector799_10.0um_scoreVolume_10.0um_3N_R.bp
+│   │           ├── atlasV7_10.0um_scoreVolume_warp0_DEMO998_detector799_10.0um_scoreVolume_10.0um_3N_R_origin_wrt_fixedWholebrain.txt
+│   │           ├── atlasV7_10.0um_scoreVolume_warp0_DEMO998_detector799_10.0um_scoreVolume_10.0um_3N_R_surround_200um.bp
+│   │           ├── atlasV7_10.0um_scoreVolume_warp0_DEMO998_detector799_10.0um_scoreVolume_10.0um_3N_R_surround_200um_origin_wrt_fixedWholebrain.txt
+│   │           ├── atlasV7_10.0um_scoreVolume_warp0_DEMO998_detector799_10.0um_scoreVolume_10.0um_4N_R.bp
+│   │           ├── atlasV7_10.0um_scoreVolume_warp0_DEMO998_detector799_10.0um_scoreVolume_10.0um_4N_R_origin_wrt_fixedWholebrain.txt
+│   │           ├── atlasV7_10.0um_scoreVolume_warp0_DEMO998_detector799_10.0um_scoreVolume_10.0um_4N_R_surround_200um.bp
+│   │           └── atlasV7_10.0um_scoreVolume_warp0_DEMO998_detector799_10.0um_scoreVolume_10.0um_4N_R_surround_200um_origin_wrt_fixedWholebrain.txt
+```
+
+- Run `python pipeline/visualize_registration.py NtbNormalizedAdaptiveInvertedGamma demo/demo_visualization_per_structure_alignment_spec.json -g demo/demo_visualization_global_alignment_spec.json`
+
+```bash
+├── CSHL_registration_visualization
+│   └── DEMO998_atlas_aligned_multilevel_down16_all_structures
+│       └── NtbNormalizedAdaptiveInvertedGammaJpeg
+│           ├── DEMO998_NtbNormalizedAdaptiveInvertedGammaJpeg_225.jpg
+│           ├── DEMO998_NtbNormalizedAdaptiveInvertedGammaJpeg_230.jpg
+│           └── DEMO998_NtbNormalizedAdaptiveInvertedGammaJpeg_235.jpg
+```
