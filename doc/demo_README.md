@@ -43,6 +43,11 @@ Note that the `input_spec.ini` files for most steps are different and must be ma
 
 - Run `download_demo_data_preprocessing.py` to download necessary data. 
 - Also download `CSHL_data_processed/DEMO998/DEMO998_sorted_filenames.txt`. 
+```bash
+MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242 225
+MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250 230
+MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257 235
+```
 Make sure the folder content looks like:
 
 ```bash
@@ -403,4 +408,45 @@ z_midline=6
 │           └── VLL_clf_setting_899.dump
 ```
 
-- **Compute patch features**. Modify `input_spec.ini` as (alignedBrainstemCrop,NtbNormalizedAdaptiveInvertedGamma,raw). `python demo_compute_features_v2.py DEMO998_input_spec.ini`
+- Run `python pipeline/generate_prob_volumes.py DEMO998 799 NtbNormalizedAdaptiveInvertedGamma NtbNormalizedAdaptiveInvertedGammaJpeg -s "[\"12N\"]"`.
+
+```bash
+├── CSHL_patch_features
+│   └── inception-bn-blue
+│       └── DEMO998
+│           └── DEMO998_prep2_none_win7
+│               ├── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_prep2_none_win7_inception-bn-blue_features.bp
+│               ├── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_prep2_none_win7_inception-bn-blue_locations.bp
+│               ├── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_prep2_none_win7_inception-bn-blue_features.bp
+│               ├── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_prep2_none_win7_inception-bn-blue_locations.bp
+│               ├── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep2_none_win7_inception-bn-blue_features.bp
+│               └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep2_none_win7_inception-bn-blue_locations.bp
+├── CSHL_scoremaps
+│   └── 10.0um
+│       └── DEMO998
+│           └── DEMO998_prep2_10.0um_detector799
+│               ├── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_prep2_10.0um_detector799
+│               │   └── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_prep2_10.0um_detector799_12N_scoremap.bp
+│               ├── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_prep2_10.0um_detector799
+│               │   └── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_prep2_10.0um_detector799_12N_scoremap.bp
+│               └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep2_10.0um_detector799
+│                   └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep2_10.0um_detector799_12N_scoremap.bp
+├── CSHL_scoremap_viz
+│   └── 10.0um
+│       └── 12N
+│           └── DEMO998
+│               └── detector799
+│                   └── prep2
+│                       ├── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_prep2_10.0um_12N_detector799_scoremapViz.jpg
+│                       ├── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_prep2_10.0um_12N_detector799_scoremapViz.jpg
+│                       └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep2_10.0um_12N_detector799_scoremapViz.jpg
+├── CSHL_volumes
+│   └── DEMO998
+│       ├── DEMO998_detector799_10.0um_scoreVolume
+│       │   ├── score_volume_gradients
+│       │   │   ├── DEMO998_detector799_10.0um_scoreVolume_12N_gradients.bp
+│       │   │   └── DEMO998_detector799_10.0um_scoreVolume_12N_origin_wrt_wholebrain.txt
+│       │   └── score_volumes
+│       │       ├── DEMO998_detector799_10.0um_scoreVolume_12N.bp
+│       │       └── DEMO998_detector799_10.0um_scoreVolume_12N_origin_wrt_wholebrain.txt
+```
