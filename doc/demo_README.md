@@ -378,34 +378,9 @@ z_midline=6
 ├── CSHL_classifiers
 │   └── setting_899
 │       └── classifiers
-│           ├── 10N_clf_setting_899.dump
 │           ├── 12N_clf_setting_899.dump
 │           ├── 3N_clf_setting_899.dump
-│           ├── 4N_clf_setting_899.dump
-│           ├── 5N_clf_setting_899.dump
-│           ├── 6N_clf_setting_899.dump
-│           ├── 7n_clf_setting_899.dump
-│           ├── 7N_clf_setting_899.dump
-│           ├── Amb_clf_setting_899.dump
-│           ├── AP_clf_setting_899.dump
-│           ├── DC_clf_setting_899.dump
-│           ├── IC_clf_setting_899.dump
-│           ├── LC_clf_setting_899.dump
-│           ├── LRt_clf_setting_899.dump
-│           ├── PBG_clf_setting_899.dump
-│           ├── Pn_clf_setting_899.dump
-│           ├── RMC_clf_setting_899.dump
-│           ├── RtTg_clf_setting_899.dump
-│           ├── SC_clf_setting_899.dump
-│           ├── SNC_clf_setting_899.dump
-│           ├── SNR_clf_setting_899.dump
-│           ├── Sp5C_clf_setting_899.dump
-│           ├── Sp5I_clf_setting_899.dump
-│           ├── Sp5O_clf_setting_899.dump
-│           ├── Tz_clf_setting_899.dump
-│           ├── VCA_clf_setting_899.dump
-│           ├── VCP_clf_setting_899.dump
-│           └── VLL_clf_setting_899.dump
+│           └── 4N_clf_setting_899.dump
 ```
 
 - Run `python pipeline/generate_prob_volumes.py DEMO998 799 NtbNormalizedAdaptiveInvertedGamma NtbNormalizedAdaptiveInvertedGammaJpeg -s "[\"12N\", \"3N\", \"4N\"]"`.
