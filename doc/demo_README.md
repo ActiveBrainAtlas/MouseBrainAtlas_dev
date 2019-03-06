@@ -160,7 +160,7 @@ Make sure the folder content looks like:
 │       │   └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep1_thumbnail_NtbNormalized.tif
 ```
 
-- Modify `all_stacks` in `src/utilities/metadata.py` to include `DEMO_998`.
+- Modify `all_stacks` in `src/utilities/metadata.py` to include `DEMO998`.
 
 - On a machine with monitor, launch the maskingGUI. Run `DATA_ROOTDIR=/home/yuncong/brainstem/home/yuncong/demo_data ROOT_DIR=/home/yuncong/brainstem/home/yuncong/demo_data THUMBNAIL_DATA_ROOTDIR=/home/yuncong/brainstem/home/yuncong/demo_data python mask_editing_tool_v4.py DEMO998 NtbNormalized`. Generate initial masks.
 
@@ -302,6 +302,105 @@ Make sure the folder content looks like:
 │       │   ├── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_prep2_raw_NtbNormalizedAdaptiveInvertedGammaJpeg.jpg
 │       │   ├── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_prep2_raw_NtbNormalizedAdaptiveInvertedGammaJpeg.jpg
 │       │   └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep2_raw_NtbNormalizedAdaptiveInvertedGammaJpeg.jpg
+```
+ 
+- Create `DEMO998_prep2_sectionLimit.ini`.
+
+```bash
+[DEFAULT]
+left_section_limit = 225
+right_section_limit = 235
+```
+
+- `cp ../../../operation_configs/from_padded_to_wholeslice.ini ~/demo_data/CSHL_data_processed/DEMO998/operation_configs/`
+- Create the intensity volume by running `./construct_intensity_volume.py DEMO998 --tb_version NtbNormalizedAdaptiveInvertedGamma --tb_resol thumbnail`
+
+```bash
+├── CSHL_volumes
+│   └── DEMO998
+│       └── DEMO998_wholebrainWithMargin_10.0um_intensityVolume
+│           ├── DEMO998_wholebrainWithMargin_10.0um_intensityVolume.bp
+│           └── DEMO998_wholebrainWithMargin_10.0um_intensityVolume_origin_wrt_wholebrain.txt
+```
+
+- Run `python src/gui/brain_labeling_gui_v28.py <STACK> --img_version NtbNormalizedAdaptiveInvertedGammaJpeg`
+
+- Must click on the high resolution panel.
+
+- Create `demo_data/CSHL_simple_global_registration/DEMO998_manual_anchor_points.ini`.
+
+```bash
+[DEFAULT]
+x_12N=561
+y_12N=204
+x_3N=372
+y_3N=167
+z_midline=6
+```
+
+- Run `python download_atlas.py`.
+
+```bash
+├── CSHL_volumes
+│   ├── atlasV7
+│   │   └── atlasV7_10.0um_scoreVolume
+│   │       └── score_volumes
+│   │           ├── atlasV7_10.0um_scoreVolume_12N.bp
+│   │           ├── atlasV7_10.0um_scoreVolume_12N_origin_wrt_canonicalAtlasSpace.txt
+│   │           ├── atlasV7_10.0um_scoreVolume_12N_surround_200um.bp
+│   │           ├── atlasV7_10.0um_scoreVolume_12N_surround_200um_origin_wrt_canonicalAtlasSpace.txt
+│   │           ├── atlasV7_10.0um_scoreVolume_3N_R.bp
+│   │           ├── atlasV7_10.0um_scoreVolume_3N_R_origin_wrt_canonicalAtlasSpace.txt
+│   │           ├── atlasV7_10.0um_scoreVolume_3N_R_surround_200um.bp
+│   │           ├── atlasV7_10.0um_scoreVolume_3N_R_surround_200um_origin_wrt_canonicalAtlasSpace.txt
+│   │           ├── atlasV7_10.0um_scoreVolume_4N_R.bp
+│   │           ├── atlasV7_10.0um_scoreVolume_4N_R_origin_wrt_canonicalAtlasSpace.txt
+│   │           ├── atlasV7_10.0um_scoreVolume_4N_R_surround_200um.bp
+│   │           └── atlasV7_10.0um_scoreVolume_4N_R_surround_200um_origin_wrt_canonicalAtlasSpace.txt
+```
+
+- `python ../src/registration/compute_simple_global_registration.py DEMO998 ~/demo_data/CSHL_simple_global_registration/DEMO998_manual_anchor_points.ini`.
+
+```bash
+├── CSHL_simple_global_registration
+│   ├── DEMO998_registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners.json
+│   └── DEMO998_T_atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol.txt
+```
+
+- Run `python download_pretrained_classifiers.py`.
+
+```bash
+├── CSHL_classifiers
+│   └── setting_899
+│       └── classifiers
+│           ├── 10N_clf_setting_899.dump
+│           ├── 12N_clf_setting_899.dump
+│           ├── 3N_clf_setting_899.dump
+│           ├── 4N_clf_setting_899.dump
+│           ├── 5N_clf_setting_899.dump
+│           ├── 6N_clf_setting_899.dump
+│           ├── 7n_clf_setting_899.dump
+│           ├── 7N_clf_setting_899.dump
+│           ├── Amb_clf_setting_899.dump
+│           ├── AP_clf_setting_899.dump
+│           ├── DC_clf_setting_899.dump
+│           ├── IC_clf_setting_899.dump
+│           ├── LC_clf_setting_899.dump
+│           ├── LRt_clf_setting_899.dump
+│           ├── PBG_clf_setting_899.dump
+│           ├── Pn_clf_setting_899.dump
+│           ├── RMC_clf_setting_899.dump
+│           ├── RtTg_clf_setting_899.dump
+│           ├── SC_clf_setting_899.dump
+│           ├── SNC_clf_setting_899.dump
+│           ├── SNR_clf_setting_899.dump
+│           ├── Sp5C_clf_setting_899.dump
+│           ├── Sp5I_clf_setting_899.dump
+│           ├── Sp5O_clf_setting_899.dump
+│           ├── Tz_clf_setting_899.dump
+│           ├── VCA_clf_setting_899.dump
+│           ├── VCP_clf_setting_899.dump
+│           └── VLL_clf_setting_899.dump
 ```
 
 - **Compute patch features**. Modify `input_spec.ini` as (alignedBrainstemCrop,NtbNormalizedAdaptiveInvertedGamma,raw). `python demo_compute_features_v2.py DEMO998_input_spec.ini`
