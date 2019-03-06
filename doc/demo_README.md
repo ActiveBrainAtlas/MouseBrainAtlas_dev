@@ -4,6 +4,25 @@ This toolkit is written in Python 2.7.2 and have been tested on a machine with I
 
 A configuration script is provided to create a [virtualenv](https://virtualenv.pypa.io/en/stable/) called **mousebrainatlas-virtualenv** and install necessary packages.
 
+- **Install CUDA**. 
+Refer to [this page](https://mxnet.apache.org/versions/master/install/ubuntu_setup.html#cuda-dependencies)
+
+```bash
+wget https://developer.nvidia.com/compute/cuda/9.0/Prod/local_installers/cuda_9.0.176_384.81_linux-run`
+sudo chmod +x cuda_9.0.176_384.81_linux-run
+sudo ./cuda_9.0.176_384.81_linux-run
+```
+- Select "no" to “Install NVIDIA Accelerated Graphics Driver for Linux-x86_64 384.81?”.
+- Then download cuDNN (latest version for CUDA 9.0)
+
+```bash
+tar xvzf cudnn-9.2-linux-x64-v7.1
+sudo cp -P cuda/include/cudnn.h /usr/local/cuda/include
+sudo cp -P cuda/lib64/libcudnn* /usr/local/cuda/lib64
+sudo chmod a+r /usr/local/cuda/include/cudnn.h /usr/local/cuda/lib64/libcudnn*
+sudo ldconfig
+```
+
 - Change `REPO_DIR`, `ROOT_DIR`, `DATA_ROOTDIR`, `THUMBNAIL_DATA_ROOTDIR` in `setup/config.sh`
 - The default `requirements.txt` assumes CUDA version of 9.0. If your CUDA version (check using `nvcc -V` or `cat /usr/local/cuda/version.txt`) is 9.1, replace `mxnet-cu90` with `mxnet-cu91` in `requirements.txt`. If your machine does not have a GPU, replace `mxnet-cu90` with `mxnet`. Refer to [official mxnet page](https://mxnet.incubator.apache.org/install/index.html?platform=Linux&language=Python&processor=CPU) for available pips.
 - `source setup/config.sh`. Make sure we are now working under the mousebrainatlas python virtual environment.
@@ -22,7 +41,9 @@ A configuration script is provided to create a [virtualenv](https://virtualenv.p
 
 Note that the `input_spec.ini` files for most steps are different and must be manually created according to the actual input. In the following instructions, "create `input_spec.ini` as (prep_id, version, resolution)" means using the same set of image names as `image_name_list` but set the `prep_id`, `version` and `resolution` accordingly.
 
-- Run `download_demo_data_preprocessing.py` to download necessary data. Make sure the folder content looks like:
+- Run `download_demo_data_preprocessing.py` to download necessary data. 
+- Also download `CSHL_data_processed/DEMO998/DEMO998_sorted_filenames.txt`. 
+Make sure the folder content looks like:
 
 ```bash
 ├── brains_info
@@ -37,6 +58,9 @@ Note that the `input_spec.ini` files for most steps are different and must be ma
 │       ├── inception-bn-blue-0000.params
 │       ├── inception-bn-blue-symbol.json
 │       └── mean_224.npy
+└── CSHL_data_processed
+│   └── DEMO998
+│       └── DEMO998_sorted_filenames.txt
 └── operation_configs
     ├── crop_orig.ini
     ├── from_aligned_to_none.ini
@@ -50,6 +74,7 @@ Note that the `input_spec.ini` files for most steps are different and must be ma
     ├── from_padded_to_none.ini
     └── from_wholeslice_to_brainstem.ini
 ```
+
 - **Convert raw images from JPEG2000 to tif**. Edit `DEMO998_raw_input_spec.json`. Set `data_dirs`, `filepath_to_imageName_mapping` and `imageName_to_filepath_mapping`. Run `python jp2_to_tiff.py DEMO998 DEMO998_raw_input_spec.json`.
 
 ```bash
@@ -278,3 +303,5 @@ Note that the `input_spec.ini` files for most steps are different and must be ma
 │       │   ├── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_prep2_raw_NtbNormalizedAdaptiveInvertedGammaJpeg.jpg
 │       │   └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep2_raw_NtbNormalizedAdaptiveInvertedGammaJpeg.jpg
 ```
+
+- **Compute patch features**. Modify `input_spec.ini` as (alignedBrainstemCrop,NtbNormalizedAdaptiveInvertedGamma,raw). `python demo_compute_features_v2.py DEMO998_input_spec.ini`
