@@ -1,3 +1,3 @@
 [
-	{"version": null, "resolution": "raw", "data_dirs": "/home/yuncong/MouseBrainAtlas/demo/demo_data/jp2_files/DEMO998/", "filepath_to_imageName_mapping": "/home/yuncong/MouseBrainAtlas/demo/demo_data/jp2_files/DEMO998/(.*)?_lossless.jp2", "imageName_to_filepath_mapping": "/home/yuncong/MouseBrainAtlas/demo/demo_data/jp2_files/DEMO998/%s_lossless.jp2"}
+	{"version": null, "resolution": "raw", "data_dirs": "/home/yuncong/demo_data/jp2_files/DEMO998/", "filepath_to_imageName_mapping": "/home/yuncong/demo_data/jp2_files/DEMO998/(.*)?_lossless.jp2", "imageName_to_filepath_mapping": "/home/yuncong/demo_data/jp2_files/DEMO998/%s_lossless.jp2"}
 ]
