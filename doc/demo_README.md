@@ -455,5 +455,41 @@ z_midline=6
 ```
 - Run `python pipeline/register_brains.py demo/demo_fixed_brain_spec_12N.json demo/demo_moving_brain_spec_12N.json -g`.
 - Run `python pipeline/register_brains.py demo/demo_fixed_brain_spec_3N_R_4N_R.json demo/demo_moving_brain_spec_3N_R_4N_R.json -g`
+
+```bash
+├── CSHL_volumes
+│   ├── atlasV7
+│   │   ├── atlasV7_10.0um_scoreVolume_12N_warp7_DEMO998_detector799_10.0um_scoreVolume_12N_10.0um
+│   │   │   └── score_volumes
+│   │   │       ├── atlasV7_10.0um_scoreVolume_12N_warp7_DEMO998_detector799_10.0um_scoreVolume_12N_10.0um_12N.bp
+│   │   │       ├── atlasV7_10.0um_scoreVolume_12N_warp7_DEMO998_detector799_10.0um_scoreVolume_12N_10.0um_12N_origin_wrt_fixedWholebrain.txt
+│   │   │       ├── atlasV7_10.0um_scoreVolume_12N_warp7_DEMO998_detector799_10.0um_scoreVolume_12N_10.0um_12N_surround_200um.bp
+│   │   │       └── atlasV7_10.0um_scoreVolume_12N_warp7_DEMO998_detector799_10.0um_scoreVolume_12N_10.0um_12N_surround_200um_origin_wrt_fixedWholebrain.txt
+│   │   ├── atlasV7_10.0um_scoreVolume_3N_R_4N_R_warp7_DEMO998_detector799_10.0um_scoreVolume_3N_R_4N_R_10.0um
+│   │   │   └── score_volumes
+│   │   │       ├── atlasV7_10.0um_scoreVolume_3N_R_4N_R_warp7_DEMO998_detector799_10.0um_scoreVolume_3N_R_4N_R_10.0um_3N_R.bp
+│   │   │       ├── atlasV7_10.0um_scoreVolume_3N_R_4N_R_warp7_DEMO998_detector799_10.0um_scoreVolume_3N_R_4N_R_10.0um_3N_R_origin_wrt_fixedWholebrain.txt
+│   │   │       ├── atlasV7_10.0um_scoreVolume_3N_R_4N_R_warp7_DEMO998_detector799_10.0um_scoreVolume_3N_R_4N_R_10.0um_3N_R_surround_200um.bp
+│   │   │       ├── atlasV7_10.0um_scoreVolume_3N_R_4N_R_warp7_DEMO998_detector799_10.0um_scoreVolume_3N_R_4N_R_10.0um_3N_R_surround_200um_origin_wrt_fixedWholebrain.txt
+│   │   │       ├── atlasV7_10.0um_scoreVolume_3N_R_4N_R_warp7_DEMO998_detector799_10.0um_scoreVolume_3N_R_4N_R_10.0um_4N_R.bp
+│   │   │       ├── atlasV7_10.0um_scoreVolume_3N_R_4N_R_warp7_DEMO998_detector799_10.0um_scoreVolume_3N_R_4N_R_10.0um_4N_R_origin_wrt_fixedWholebrain.txt
+│   │   │       ├── atlasV7_10.0um_scoreVolume_3N_R_4N_R_warp7_DEMO998_detector799_10.0um_scoreVolume_3N_R_4N_R_10.0um_4N_R_surround_200um.bp
+│   │   │       └── atlasV7_10.0um_scoreVolume_3N_R_4N_R_warp7_DEMO998_detector799_10.0um_scoreVolume_3N_R_4N_R_10.0um_4N_R_surround_200um_origin_wrt_fixedWholebrain.txt
+│   │   └── atlasV7_10.0um_scoreVolume_warp0_DEMO998_detector799_10.0um_scoreVolume_10.0um
+│   │       └── score_volumes
+│   │           ├── atlasV7_10.0um_scoreVolume_warp0_DEMO998_detector799_10.0um_scoreVolume_10.0um_12N.bp
+│   │           ├── atlasV7_10.0um_scoreVolume_warp0_DEMO998_detector799_10.0um_scoreVolume_10.0um_12N_origin_wrt_fixedWholebrain.txt
+│   │           ├── atlasV7_10.0um_scoreVolume_warp0_DEMO998_detector799_10.0um_scoreVolume_10.0um_12N_surround_200um.bp
+│   │           ├── atlasV7_10.0um_scoreVolume_warp0_DEMO998_detector799_10.0um_scoreVolume_10.0um_12N_surround_200um_origin_wrt_fixedWholebrain.txt
+│   │           ├── atlasV7_10.0um_scoreVolume_warp0_DEMO998_detector799_10.0um_scoreVolume_10.0um_3N_R.bp
+│   │           ├── atlasV7_10.0um_scoreVolume_warp0_DEMO998_detector799_10.0um_scoreVolume_10.0um_3N_R_origin_wrt_fixedWholebrain.txt
+│   │           ├── atlasV7_10.0um_scoreVolume_warp0_DEMO998_detector799_10.0um_scoreVolume_10.0um_3N_R_surround_200um.bp
+│   │           ├── atlasV7_10.0um_scoreVolume_warp0_DEMO998_detector799_10.0um_scoreVolume_10.0um_3N_R_surround_200um_origin_wrt_fixedWholebrain.txt
+│   │           ├── atlasV7_10.0um_scoreVolume_warp0_DEMO998_detector799_10.0um_scoreVolume_10.0um_4N_R.bp
+│   │           ├── atlasV7_10.0um_scoreVolume_warp0_DEMO998_detector799_10.0um_scoreVolume_10.0um_4N_R_origin_wrt_fixedWholebrain.txt
+│   │           ├── atlasV7_10.0um_scoreVolume_warp0_DEMO998_detector799_10.0um_scoreVolume_10.0um_4N_R_surround_200um.bp
+│   │           └── atlasV7_10.0um_scoreVolume_warp0_DEMO998_detector799_10.0um_scoreVolume_10.0um_4N_R_surround_200um_origin_wrt_fixedWholebrain.txt
+```
+
 - Run `python pipeline/visualize_registration.py demo/demo_visualization_per_structure_alignment_spec.json -g demo/demo_visualization_global_alignment_spec.json`
 
