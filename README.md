@@ -5,7 +5,6 @@ This toolkit is written in Python 2.7.2 and have been tested on a machine with I
 A configuration script is provided to create a [virtualenv](https://virtualenv.pypa.io/en/stable/) called **mousebrainatlas-virtualenv** and install necessary packages.
 
 #### Install CUDA 
-Refer to [this page](https://mxnet.apache.org/versions/master/install/ubuntu_setup.html#cuda-dependencies)
 
 ```bash
 wget https://developer.nvidia.com/compute/cuda/9.0/Prod/local_installers/cuda_9.0.176_384.81_linux-run`
@@ -22,6 +21,9 @@ sudo cp -P cuda/lib64/libcudnn* /usr/local/cuda/lib64
 sudo chmod a+r /usr/local/cuda/include/cudnn.h /usr/local/cuda/lib64/libcudnn*
 sudo ldconfig
 ```
+
+These steps are taken from [this page](https://mxnet.apache.org/versions/master/install/ubuntu_setup.html#cuda-dependencies).
+
 
 #### Install other non-python packages
 
