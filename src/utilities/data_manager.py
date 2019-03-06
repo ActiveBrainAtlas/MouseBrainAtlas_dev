@@ -4439,9 +4439,16 @@ class DataManager(object):
         prep_str = 'prep%(prep)d' % {'prep':prep_id}
         win_str = 'win%(win)d' % {'win':win_id}
 
+	if what == 'features':
+	    ext = '.bp'
+	elif what == 'locations':
+	    ext = '.txt'
+	else:
+	    raise Exception("Argument `what` must be either features or locations")
+
         feature_fp = os.path.join(PATCH_FEATURES_ROOTDIR, model_name, stack,
                     stack + '_' + prep_str + '_' + normalization_scheme + '_' + win_str,
-            fn + '_' + prep_str + '_' + normalization_scheme + '_' + win_str + '_' + model_name + '_' + what + ('_%s'%timestamp if timestamp is not None else '') + '.bp')
+            fn + '_' + prep_str + '_' + normalization_scheme + '_' + win_str + '_' + model_name + '_' + what + ('_%s'%timestamp if timestamp is not None else '') + ext)
 
         return feature_fp
 
