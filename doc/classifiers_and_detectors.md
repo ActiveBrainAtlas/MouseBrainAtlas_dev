@@ -1,5 +1,3 @@
-We used detector 799 and classifier 899
-
 ## Detector
 
 Detector settings are encoded in a number according to [Detector_settings.csv](https://github.com/ActiveBrainAtlas/MouseBrainAtlas_dev/blob/master/src/learning/detector_settings.csv)
@@ -11,8 +9,10 @@ These are the relevant fields:
 - feature_network
 - feature_classifier_id
 
-Known classifiers: One used for Ntb (899), one for Thionin. The Ntb classifier can be used on Thionin brains after intensity normalization, but will not work quite as well. The other classifier was trained on 3 thionin brains: MD585/MD589/MD594, but does not exist on any server (may have been deleted entirely).
-
+There are separate classifiers for Ntb and Thionin brains. The Ntb classifier can be used on Thionin brains after intensity normalization, but will not work quite as well.
+  - Detector 799, used for Ntb, uses classifier 899
+  - Detector 19, used for Thionin, uses classifier 73
+    - Trained on brains MD585/MD589/MD594
 
 Detector/classifier settings are read in [metadata line 509](https://github.com/ActiveBrainAtlas/MouseBrainAtlas_dev/blob/master/src/utilities/metadata.py#L535)
 
