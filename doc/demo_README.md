@@ -457,6 +457,18 @@ z_midline=6
 - Run `python pipeline/register_brains.py demo/demo_fixed_brain_spec_3N_R_4N_R.json demo/demo_moving_brain_spec_3N_R_4N_R.json -g`
 
 ```bash
+├── CSHL_registration_parameters
+│   └── atlasV7
+│       ├── atlasV7_10.0um_scoreVolume_12N_warp7_DEMO998_detector799_10.0um_scoreVolume_12N
+│       │   ├── atlasV7_10.0um_scoreVolume_12N_warp7_DEMO998_detector799_10.0um_scoreVolume_12N_parameters.json
+│       │   ├── atlasV7_10.0um_scoreVolume_12N_warp7_DEMO998_detector799_10.0um_scoreVolume_12N_scoreEvolution.png
+│       │   ├── atlasV7_10.0um_scoreVolume_12N_warp7_DEMO998_detector799_10.0um_scoreVolume_12N_scoreHistory.bp
+│       │   └── atlasV7_10.0um_scoreVolume_12N_warp7_DEMO998_detector799_10.0um_scoreVolume_12N_trajectory.bp
+│       └── atlasV7_10.0um_scoreVolume_3N_R_4N_R_warp7_DEMO998_detector799_10.0um_scoreVolume_3N_R_4N_R
+│           ├── atlasV7_10.0um_scoreVolume_3N_R_4N_R_warp7_DEMO998_detector799_10.0um_scoreVolume_3N_R_4N_R_parameters.json
+│           ├── atlasV7_10.0um_scoreVolume_3N_R_4N_R_warp7_DEMO998_detector799_10.0um_scoreVolume_3N_R_4N_R_scoreEvolution.png
+│           ├── atlasV7_10.0um_scoreVolume_3N_R_4N_R_warp7_DEMO998_detector799_10.0um_scoreVolume_3N_R_4N_R_scoreHistory.bp
+│           └── atlasV7_10.0um_scoreVolume_3N_R_4N_R_warp7_DEMO998_detector799_10.0um_scoreVolume_3N_R_4N_R_trajectory.bp
 ├── CSHL_volumes
 │   ├── atlasV7
 │   │   ├── atlasV7_10.0um_scoreVolume_12N_warp7_DEMO998_detector799_10.0um_scoreVolume_12N_10.0um
@@ -493,3 +505,11 @@ z_midline=6
 
 - Run `python pipeline/visualize_registration.py NtbNormalizedAdaptiveInvertedGamma demo/demo_visualization_per_structure_alignment_spec.json -g demo/demo_visualization_global_alignment_spec.json`
 
+```bash
+├── CSHL_registration_visualization
+│   └── DEMO998_atlas_aligned_multilevel_down16_all_structures
+│       └── NtbNormalizedAdaptiveInvertedGammaJpeg
+│           ├── DEMO998_NtbNormalizedAdaptiveInvertedGammaJpeg_225.jpg
+│           ├── DEMO998_NtbNormalizedAdaptiveInvertedGammaJpeg_230.jpg
+│           └── DEMO998_NtbNormalizedAdaptiveInvertedGammaJpeg_235.jpg
+```
