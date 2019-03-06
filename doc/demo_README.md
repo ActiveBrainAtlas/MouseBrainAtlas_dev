@@ -453,3 +453,7 @@ z_midline=6
 │       │       ├── DEMO998_detector799_10.0um_scoreVolume_4N_R.bp
 │       │       └── DEMO998_detector799_10.0um_scoreVolume_4N_R_origin_wrt_wholebrain.txt
 ```
+- Run `python pipeline/register_brains.py demo_fixed_brain_spec_12N.json demo_moving_brain_spec_12N.json -g`.
+- Run `python pipeline/register_brains.py demo_fixed_brain_spec_3N_R_4N_R.json demo_moving_brain_spec_3N_R_4N_R.json -g`
+- Run `python pipeline/visualize_registration.py demo_visualization_per_structure_alignment_spec.json -g demo_visualization_global_alignment_spec.json`
+
