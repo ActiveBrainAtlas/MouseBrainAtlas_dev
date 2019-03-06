@@ -16,7 +16,7 @@ sudo ./cuda_9.0.176_384.81_linux-run
 - Then download cuDNN (latest version for CUDA 9.0)
 
 ```bash
-tar xvzf cudnn-9.2-linux-x64-v7.1
+tar xvzf cudnn-9.0-linux-x64-v7.4.2.24.tgz
 sudo cp -P cuda/include/cudnn.h /usr/local/cuda/include
 sudo cp -P cuda/lib64/libcudnn* /usr/local/cuda/lib64
 sudo chmod a+r /usr/local/cuda/include/cudnn.h /usr/local/cuda/lib64/libcudnn*
