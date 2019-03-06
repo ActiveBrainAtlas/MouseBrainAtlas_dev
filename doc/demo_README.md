@@ -491,5 +491,5 @@ z_midline=6
 │   │           └── atlasV7_10.0um_scoreVolume_warp0_DEMO998_detector799_10.0um_scoreVolume_10.0um_4N_R_surround_200um_origin_wrt_fixedWholebrain.txt
 ```
 
-- Run `python pipeline/visualize_registration.py demo/demo_visualization_per_structure_alignment_spec.json -g demo/demo_visualization_global_alignment_spec.json`
+- Run `python pipeline/visualize_registration.py NtbNormalizedAdaptiveInvertedGamma demo/demo_visualization_per_structure_alignment_spec.json -g demo/demo_visualization_global_alignment_spec.json`
 
