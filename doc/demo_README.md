@@ -372,7 +372,7 @@ z_midline=6
 │   └── DEMO998_T_atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol.txt
 ```
 
-- Run `python download_pretrained_classifiers.py`.
+- Run `python download_pretrained_classifiers.py -s "[\"12N\", \"3N_R\", \"4N_R\"]"`.
 
 ```bash
 ├── CSHL_classifiers
@@ -408,7 +408,7 @@ z_midline=6
 │           └── VLL_clf_setting_899.dump
 ```
 
-- Run `python pipeline/generate_prob_volumes.py DEMO998 799 NtbNormalizedAdaptiveInvertedGamma NtbNormalizedAdaptiveInvertedGammaJpeg -s "[\"12N\"]"`.
+- Run `python pipeline/generate_prob_volumes.py DEMO998 799 NtbNormalizedAdaptiveInvertedGamma NtbNormalizedAdaptiveInvertedGammaJpeg -s "[\"12N\", \"3N\", \"4N\"]"`.
 
 ```bash
 ├── CSHL_patch_features
@@ -426,27 +426,55 @@ z_midline=6
 │       └── DEMO998
 │           └── DEMO998_prep2_10.0um_detector799
 │               ├── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_prep2_10.0um_detector799
-│               │   └── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_prep2_10.0um_detector799_12N_scoremap.bp
+│               │   ├── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_prep2_10.0um_detector799_12N_scoremap.bp
+│               │   ├── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_prep2_10.0um_detector799_3N_scoremap.bp
+│               │   └── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_prep2_10.0um_detector799_4N_scoremap.bp
 │               ├── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_prep2_10.0um_detector799
-│               │   └── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_prep2_10.0um_detector799_12N_scoremap.bp
+│               │   ├── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_prep2_10.0um_detector799_12N_scoremap.bp
+│               │   ├── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_prep2_10.0um_detector799_3N_scoremap.bp
+│               │   └── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_prep2_10.0um_detector799_4N_scoremap.bp
 │               └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep2_10.0um_detector799
-│                   └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep2_10.0um_detector799_12N_scoremap.bp
+│                   ├── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep2_10.0um_detector799_12N_scoremap.bp
+│                   ├── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep2_10.0um_detector799_3N_scoremap.bp
+│                   └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep2_10.0um_detector799_4N_scoremap.bp
 ├── CSHL_scoremap_viz
 │   └── 10.0um
-│       └── 12N
+│       ├── 12N
+│       │   └── DEMO998
+│       │       └── detector799
+│       │           └── prep2
+│       │               ├── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_prep2_10.0um_12N_detector799_scoremapViz.jpg
+│       │               ├── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_prep2_10.0um_12N_detector799_scoremapViz.jpg
+│       │               └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep2_10.0um_12N_detector799_scoremapViz.jpg
+│       ├── 3N
+│       │   └── DEMO998
+│       │       └── detector799
+│       │           └── prep2
+│       │               ├── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_prep2_10.0um_3N_detector799_scoremapViz.jpg
+│       │               ├── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_prep2_10.0um_3N_detector799_scoremapViz.jpg
+│       │               └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep2_10.0um_3N_detector799_scoremapViz.jpg
+│       └── 4N
 │           └── DEMO998
 │               └── detector799
 │                   └── prep2
-│                       ├── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_prep2_10.0um_12N_detector799_scoremapViz.jpg
-│                       ├── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_prep2_10.0um_12N_detector799_scoremapViz.jpg
-│                       └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep2_10.0um_12N_detector799_scoremapViz.jpg
+│                       ├── MD662&661-F81-2017.06.06-12.44.40_MD661_2_0242_prep2_10.0um_4N_detector799_scoremapViz.jpg
+│                       ├── MD662&661-F84-2017.06.06-14.03.51_MD661_1_0250_prep2_10.0um_4N_detector799_scoremapViz.jpg
+│                       └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep2_10.0um_4N_detector799_scoremapViz.jpg
 ├── CSHL_volumes
 │   └── DEMO998
 │       ├── DEMO998_detector799_10.0um_scoreVolume
 │       │   ├── score_volume_gradients
 │       │   │   ├── DEMO998_detector799_10.0um_scoreVolume_12N_gradients.bp
-│       │   │   └── DEMO998_detector799_10.0um_scoreVolume_12N_origin_wrt_wholebrain.txt
+│       │   │   ├── DEMO998_detector799_10.0um_scoreVolume_12N_origin_wrt_wholebrain.txt
+│       │   │   ├── DEMO998_detector799_10.0um_scoreVolume_3N_R_gradients.bp
+│       │   │   ├── DEMO998_detector799_10.0um_scoreVolume_3N_R_origin_wrt_wholebrain.txt
+│       │   │   ├── DEMO998_detector799_10.0um_scoreVolume_4N_R_gradients.bp
+│       │   │   └── DEMO998_detector799_10.0um_scoreVolume_4N_R_origin_wrt_wholebrain.txt
 │       │   └── score_volumes
 │       │       ├── DEMO998_detector799_10.0um_scoreVolume_12N.bp
-│       │       └── DEMO998_detector799_10.0um_scoreVolume_12N_origin_wrt_wholebrain.txt
+│       │       ├── DEMO998_detector799_10.0um_scoreVolume_12N_origin_wrt_wholebrain.txt
+│       │       ├── DEMO998_detector799_10.0um_scoreVolume_3N_R.bp
+│       │       ├── DEMO998_detector799_10.0um_scoreVolume_3N_R_origin_wrt_wholebrain.txt
+│       │       ├── DEMO998_detector799_10.0um_scoreVolume_4N_R.bp
+│       │       └── DEMO998_detector799_10.0um_scoreVolume_4N_R_origin_wrt_wholebrain.txt
 ```
