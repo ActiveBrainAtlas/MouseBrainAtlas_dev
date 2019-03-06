@@ -12,8 +12,13 @@ parser = argparse.ArgumentParser(
     formatter_class=argparse.RawDescriptionHelpFormatter,
     description='This script downloads input data for demo.')
 
-parser.add_argument("-d", "--demo_data_dir", type=str, help="Directory to store demo input data", default='demo_data')
+parser.add_argument("-d", "--demo_data_dir", type=str, help="Directory to store demo input data")
 args = parser.parse_args()
+
+if args.demo_data_dir is None:
+    demo_data_dir = DATA_ROOTDIR
+else:
+    demo_data_dir = args.demo_data_dir
 
 def download_to_demo(fp):
     """
