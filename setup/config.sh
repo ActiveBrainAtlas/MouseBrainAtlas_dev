@@ -23,9 +23,9 @@ export DATA_ROOTDIR=/media/alexn/BstemAtlasDataBackup/ucsd_brain/
 export THUMBNAIL_DATA_ROOTDIR=/media/alexn/BstemAtlasDataBackup/ucsd_brain/
 
 # FOR Script testing
-# export ROOT_DIR=/media/alexn/BstemAtlasDataBackup/script_test/
-# export DATA_ROOTDIR=/media/alexn/BstemAtlasDataBackup/script_test/
-# export THUMBNAIL_DATA_ROOTDIR=/media/alexn/BstemAtlasDataBackup/script_test/
+#export ROOT_DIR=/media/alexn/BstemAtlasDataBackup/pipeline_test/
+#export DATA_ROOTDIR=/media/alexn/BstemAtlasDataBackup/pipeline_test/
+#export THUMBNAIL_DATA_ROOTDIR=/media/alexn/BstemAtlasDataBackup/pipeline_test/
 
 
 if [ ! -d $virtualenv ]; then

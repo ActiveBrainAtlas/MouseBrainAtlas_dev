@@ -5,6 +5,8 @@ import os, sys
 import numpy as np
 import subprocess
 
+import json
+
 ########### Data Directories #############
 
 hostname = subprocess.check_output("hostname", shell=True).strip()
@@ -593,10 +595,30 @@ XY_PIXEL_DISTANCE_TB_AXIOSCAN = XY_PIXEL_DISTANCE_LOSSLESS_AXIOSCAN * 32
 #all_annotated_ntb_stacks = ['MD635']
 #all_annotated_stacks = all_annotated_nissl_stacks + all_annotated_ntb_stacks
 
-all_nissl_stacks = ['MD585', 'MD594', 'MD589']
-all_nissl_stacks = ['MD585']
-all_ntb_stacks = ['UCSD001','DK1-2']
-all_stacks = all_nissl_stacks + all_ntb_stacks
+#all_nissl_stacks = ['MD585', 'MD594', 'MD589']
+#all_nissl_stacks = ['MD585']
+#all_ntb_stacks = ['UCSD001','DK1-2']
+#all_stacks = all_nissl_stacks + all_ntb_stacks
+
+with open(os.environ['REPO_DIR']+'utilities/registered_brains.json', 'r') as json_file:
+    contents = json.load( json_file )
+
+# Load Nissl and Ntb stacks
+all_nissl_stacks = contents['all_nissl_stacks']
+all_ntb_stacks = contents['all_ntb_stacks']
+#all_stacks = all_nissl_stacks + all_ntb_stacks
+
+# Load annotated stacks
+all_annotated_ntb_stacks = contents['all_annotated_ntb_stacks']
+all_annotated_nissl_stacks = contents['all_annotated_nissl_stacks']
+all_annotated_stacks = all_annotated_nissl_stacks + all_annotated_ntb_stacks
+
+all_dk_ntb_stacks = contents['all_dk_ntb_stacks']
+all_alt_nissl_ntb_stacks = contents['all_alt_nissl_ntb_stacks']
+all_alt_nissl_tracing_stacks = contents['all_alt_nissl_tracing_stacks']
+all_stacks = all_nissl_stacks + all_ntb_stacks + all_alt_nissl_ntb_stacks + all_alt_nissl_tracing_stacks + all_dk_ntb_stacks
+#all_stacks = ['MD603','MD635','MD585']
+
 
 BRAINS_INFO_DIR = os.path.join(DATA_ROOTDIR, 'brains_info')
 

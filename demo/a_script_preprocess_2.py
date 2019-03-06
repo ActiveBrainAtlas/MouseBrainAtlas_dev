@@ -4,11 +4,13 @@ import argparse
 
 parser = argparse.ArgumentParser(
     formatter_class=argparse.RawDescriptionHelpFormatter,
-    description='INSERT DESCRIPTION')
+    description='')
 
 parser.add_argument("stack", type=str, help="The name of the stack")
+parser.add_argument("stain", type=str, help="Either \'NTB\' or \'Thionin\'.")
 args = parser.parse_args()
 stack = args.stack
+stain = args.stain
 
 # Import other modules and packages
 import os
@@ -82,16 +84,29 @@ def create_anchor_file( anchor_fn='auto' ):
 anchor_fn = create_anchor_file()
 create_from_none_to_aligned_file()
 
+if stain == 'NTB':
 
-create_input_spec_ini_all( name='input_spec.ini', \
-        stack=stack, prep_id='None', version='NtbNormalized', resol='thumbnail')
-command = ['python', 'align_compose.py', 'input_spec.ini', '--op', 'from_none_to_aligned']
-completion_message = 'Finished preliminary alignment.'
-call_and_time( command, completion_message=completion_message)
+    create_input_spec_ini_all( name='input_spec.ini', \
+            stack=stack, prep_id='None', version='NtbNormalized', resol='thumbnail')
+    command = ['python', 'align_compose.py', 'input_spec.ini', '--op', 'from_none_to_aligned']
+    completion_message = 'Finished preliminary alignment.'
+    call_and_time( command, completion_message=completion_message)
 
-command = ['python', 'warp_crop_v3.py','--input_spec', 'input_spec.ini', '--op_id', 'from_none_to_padded','--njobs','8','--pad_color','black']
-completion_message = 'Finished transformation to padded (prep1).'
-call_and_time( command, completion_message=completion_message)
+    command = ['python', 'warp_crop_v3.py','--input_spec', 'input_spec.ini', '--op_id', 'from_none_to_padded','--njobs','8','--pad_color','black']
+    completion_message = 'Finished transformation to padded (prep1).'
+    call_and_time( command, completion_message=completion_message)
+    
+if stain == 'Thionin':
+    
+    create_input_spec_ini_all( name='input_spec.ini', \
+            stack=stack, prep_id='None', version='None', resol='thumbnail')
+    command = ['python', 'align_compose.py', 'input_spec.ini', '--op', 'from_none_to_aligned']
+    completion_message = 'Finished preliminary alignment.'
+    call_and_time( command, completion_message=completion_message)
 
+    command = ['python', 'warp_crop_v3.py','--input_spec', 'input_spec.ini', '--op_id', 'from_none_to_padded','--njobs','8','--pad_color','white']
+    completion_message = 'Finished transformation to padded (prep1).'
+    call_and_time( command, completion_message=completion_message)
+    
 print('\nNow manually fix any incorrect alignments. Custom GUI available with the following command:\n')
 print('`python ../src/gui/preprocess_tool_v3.py UCSD001 --tb_version NtbNormalized/gray`')

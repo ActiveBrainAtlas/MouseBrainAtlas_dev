@@ -13,8 +13,12 @@ try:
     import mxnet as mx
 except Exception as e:
     print e
+    print '********************************************************************************************************************************'
     print 'Error, CANNOT PROCEED UNTIL THIS IS RESOLVED!'
+    print 'UNABLE TO LOAD MXNET'
+    print '/src/utilities/learning_utilities.py'
     sys.stderr.write("Cannot import mxnet.\n")
+    print '********************************************************************************************************************************'
 
 sys.path.append(os.environ['REPO_DIR'] + '/utilities')
 from utilities2015 import *

@@ -78,7 +78,7 @@ def make_from_x_to_y_ini(stack,x,y,rostral_limit,caudal_limit,dorsal_limit,ventr
 def make_manual_anchor_points( stack, x_12N, y_12N, x_3N, y_3N, z_midline):
     fn = os.path.join( os.environ['DATA_ROOTDIR'], 'CSHL_simple_global_registration', stack+'_manual_anchor_points.ini' )
     f = open(fn, "w")
-    f.write('[DEFAULT]\n)
+    f.write('[DEFAULT]\n')
     f.write('x_12N = '+str(x_12N)+'\n')
     f.write('y_12N = '+str(y_12N)+'\n')
     f.write('x_3N = '+str(x_3N)+'\n')

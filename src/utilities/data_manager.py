@@ -5615,12 +5615,11 @@ def create_input_spec_ini_all( name, stack, prep_id, version, resol  ):
     f.write('version = '+version+'\n')
     f.write('resol = '+resol+'\n')
     
-def get_fn_list_from_sorted_filenames( stack='UCSD001' ):
+def get_fn_list_from_sorted_filenames( stack):
     '''
         get_fn_list_from_sorted_filenames( stack ) returns a list of all the valid
         filenames for the current stack.
     '''
-    stack = 'UCSD001'
     fp = os.environ['DATA_ROOTDIR']+'CSHL_data_processed/'+stack+'/'
     fn = stack+'_sorted_filenames.txt'
     
