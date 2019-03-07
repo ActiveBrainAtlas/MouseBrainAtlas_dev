@@ -8,3 +8,4 @@ mousebrainatlas_virtualenv/
 setup/vtk*
 
 *.pyc
+**ipynb_checkpoints
