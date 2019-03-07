@@ -96,7 +96,7 @@ if hostname == 'yuncong-MacbookPro':
     CLASSIFIER_SETTINGS_CSV = os.path.join(REPO_DIR, 'learning', 'classifier_settings.csv')
     DATASET_SETTINGS_CSV = os.path.join(REPO_DIR, 'learning', 'dataset_settings.csv')
     REGISTRATION_SETTINGS_CSV = os.path.join(REPO_DIR, 'registration', 'registration_settings.csv')
-    PREPROCESS_SETTINGS_CSV = os.path.join(REPO_DIR, 'preprocess', 'preprocess_settings.csv')
+    #PREPROCESS_SETTINGS_CSV = os.path.join(REPO_DIR, 'preprocess', 'preprocess_settings.csv')
     DETECTOR_SETTINGS_CSV = os.path.join(REPO_DIR, 'learning', 'detector_settings.csv')
 
     SPARSE_SCORES_ROOTDIR = os.path.join(ROOT_DIR, 'CSHL_patch_scores')
@@ -166,7 +166,7 @@ elif hostname == 'yuncong-Precision-WorkStation-T7500' and username == 'yuncong'
     CLASSIFIER_SETTINGS_CSV = os.path.join(REPO_DIR, 'learning', 'classifier_settings.csv')
     DATASET_SETTINGS_CSV = os.path.join(REPO_DIR, 'learning', 'dataset_settings.csv')
     REGISTRATION_SETTINGS_CSV = os.path.join(REPO_DIR, 'registration', 'registration_settings.csv')
-    PREPROCESS_SETTINGS_CSV = os.path.join(REPO_DIR, 'preprocess', 'preprocess_settings.csv')
+    #PREPROCESS_SETTINGS_CSV = os.path.join(REPO_DIR, 'preprocess', 'preprocess_settings.csv')
     DETECTOR_SETTINGS_CSV = os.path.join(REPO_DIR, 'learning', 'detector_settings.csv')
 
     MXNET_MODEL_ROOTDIR = os.path.join(ROOT_DIR, 'mxnet_models')
@@ -228,7 +228,7 @@ elif hostname == 'yuncong-Precision-WorkStation-T7500' and username == 'alexn':
     CLASSIFIER_SETTINGS_CSV = os.path.join(REPO_DIR, 'learning', 'classifier_settings.csv')
     DATASET_SETTINGS_CSV = os.path.join(REPO_DIR, 'learning', 'dataset_settings.csv')
     REGISTRATION_SETTINGS_CSV = os.path.join(REPO_DIR, 'registration', 'registration_settings.csv')
-    PREPROCESS_SETTINGS_CSV = os.path.join(REPO_DIR, 'preprocess', 'preprocess_settings.csv')
+    #PREPROCESS_SETTINGS_CSV = os.path.join(REPO_DIR, 'preprocess', 'preprocess_settings.csv')
     DETECTOR_SETTINGS_CSV = os.path.join(REPO_DIR, 'learning', 'detector_settings.csv')
 
     MXNET_MODEL_ROOTDIR = os.path.join(ROOT_DIR, 'mxnet_models')
@@ -303,7 +303,7 @@ elif hostname.startswith('ip'):
     CLASSIFIER_SETTINGS_CSV = os.path.join(REPO_DIR, 'learning', 'classifier_settings.csv')
     DATASET_SETTINGS_CSV = os.path.join(REPO_DIR, 'learning', 'dataset_settings.csv')
     REGISTRATION_SETTINGS_CSV = os.path.join(REPO_DIR, 'registration', 'registration_settings.csv')
-    PREPROCESS_SETTINGS_CSV = os.path.join(REPO_DIR, 'preprocess', 'preprocess_settings.csv')
+    #PREPROCESS_SETTINGS_CSV = os.path.join(REPO_DIR, 'preprocess', 'preprocess_settings.csv')
     DETECTOR_SETTINGS_CSV = os.path.join(REPO_DIR, 'learning', 'detector_settings.csv')
 
     MXNET_MODEL_ROOTDIR = os.path.join(ROOT_DIR, 'mxnet_models')
@@ -365,7 +365,7 @@ else:
     CLASSIFIER_SETTINGS_CSV = os.path.join(REPO_DIR, 'learning', 'classifier_settings.csv')
     DATASET_SETTINGS_CSV = os.path.join(REPO_DIR, 'learning', 'dataset_settings.csv')
     REGISTRATION_SETTINGS_CSV = os.path.join(REPO_DIR, 'registration', 'registration_settings.csv')
-    PREPROCESS_SETTINGS_CSV = os.path.join(REPO_DIR, 'preprocess', 'preprocess_settings.csv')
+    #PREPROCESS_SETTINGS_CSV = os.path.join(REPO_DIR, 'preprocess', 'preprocess_settings.csv')
     DETECTOR_SETTINGS_CSV = os.path.join(REPO_DIR, 'learning', 'detector_settings.csv')
 
     MXNET_MODEL_ROOTDIR = os.path.join(ROOT_DIR, 'mxnet_models')
@@ -530,7 +530,7 @@ from pandas import read_csv
 dataset_settings = read_csv(DATASET_SETTINGS_CSV, header=0, index_col=0)
 classifier_settings = read_csv(CLASSIFIER_SETTINGS_CSV, header=0, index_col=0)
 registration_settings = read_csv(REGISTRATION_SETTINGS_CSV, header=0, index_col=0)
-preprocess_settings = read_csv(PREPROCESS_SETTINGS_CSV, header=0, index_col=0)
+#preprocess_settings = read_csv(PREPROCESS_SETTINGS_CSV, header=0, index_col=0)
 detector_settings = read_csv(DETECTOR_SETTINGS_CSV, header=0, index_col=0)
 windowing_settings = {1: {"patch_size": 224, "spacing": 56},
                       2: {'patch_size':224, 'spacing':56, 'comment':'larger margin'},

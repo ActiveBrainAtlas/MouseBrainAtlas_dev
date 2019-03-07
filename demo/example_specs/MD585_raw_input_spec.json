@@ -1,0 +1,3 @@
+[
+	{"version": null, "resolution": "raw", "data_dirs": "/nfs/birdstore-brainbucket1/Active_Atlas_Data/CSHL_NanoZoomer/MD585_01Aug2015/", "filepath_to_imageName_mapping": "/nfs/birdstore-brainbucket1/Active_Atlas_Data/CSHL_NanoZoomer/MD585_01Aug2015/(.*?)_lossless.jp2", "imageName_to_filepath_mapping": "/nfs/birdstore-brainbucket1/Active_Atlas_Data/CSHL_NanoZoomer/MD585_01Aug2015/%s_lossless.jp2"}
+]
