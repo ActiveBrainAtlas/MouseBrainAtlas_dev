@@ -1,12 +1,14 @@
 ## Classifier Training
 
+Training the NN classifiers requires having all prep2 (preprocessed and brainstem cropped) images downloaded for all testing and training stacks. Classifiers are typically trained on and for specific stains, the two most used being NTB and Thionin stains. In addition to the images themselves, files containing segmented regions of interest (for training) must be supplied.
+
 `src/learning/train_and_test_classifier_performance_v5.ipynb`, [Link](http://132.239.73.85:8888/notebooks/src/learning/train_and_test_classifier_performance_v5.ipynb).
 
 The code is general but we only have the annotations for 3 brains to train from.
 
 Run the first two cells. The next cell loads the pre-trained inception network
 
-Requires human annotation files, got from `/ROOT_DIR/CSHL_labelings_v3/MD585/`. Only need the latest .hdf file ("The contours one").
+Requires human annotation files, got from `/ROOT_DIR/CSHL_labelings_v3/MD585/`. Only need the latest .hdf file (contains "contours" string).
 
 Now we generate another necessary file:
 Go to `src/learning/identify_patch_class_based_on_labeling_v3.ipynb`, [Link](http://132.239.73.85:8888/notebooks/src/learning/identify_patch_class_based_on_labeling_v3.ipynb).
