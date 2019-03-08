@@ -51,6 +51,9 @@ def get_fn_list_from_sorted_filenames( stack ):
     return section_names
 
 def make_from_x_to_y_ini(stack,x,y,rostral_limit,caudal_limit,dorsal_limit,ventral_limit):
+    '''
+    Creates operation configuration files that specify the cropping boxes for either the whole brain, or the brainstem.
+    '''
     base_prep_id=''
     dest_prep_id=''
     if x=='aligned':
@@ -86,6 +89,84 @@ def make_manual_anchor_points( stack, x_12N, y_12N, x_3N, y_3N, z_midline):
     f.write('z_midline = '+str(z_midline))
     f.close()
     
+def make_structure_fixed_and_moving_brain_specs( stack, id_detector, structure):
+    '''
+    Creates the input specification file for the registration script.
+    '''
+    fixed_brain_spec_data = {"name":stack,
+                            "vol_type": "score", 
+                            "resolution":"10.0um",
+                            "detector_id":id_detector,
+                            "structure":[structure]
+                            }
+
+    moving_brain_spec_data = {"name":"atlasV7",
+                            "vol_type": "score", 
+                            "resolution":"10.0um",
+                            "structure":[structure]
+                            }
+
+    fn_fixed = stack+'_fixed_brain_spec.json'
+    fn_moving = stack+'_moving_brain_spec.json'
+    
+    fp = os.path.join( os.environ['REPO_DIR'], '..', 'demo/')
+
+    with open(fp+fn_fixed, 'w') as outfile:
+        json.dump(fixed_brain_spec_data, outfile)
+    with open(fp+fn_moving, 'w') as outfile:
+        json.dump(moving_brain_spec_data, outfile)
+        
+    return fp+fn_fixed, fp+fn_moving
+
+def make_registration_visualization_input_specs( stack, id_detector, structure):
+    '''
+    Creates the input specification file for the registration visualization script.
+    '''
+    fp = os.path.join( os.environ['REPO_DIR'], '..', 'demo/')
+    
+    fn_global = stack+'_visualization_global_alignment_spec.json'
+    data = {}
+    data["stack_m"] ={
+            "name":"atlasV7",
+            "vol_type": "score",
+            "resolution":"10.0um"
+            }
+    data["stack_f"] ={
+        "name":stack, 
+        "vol_type": "score", 
+        "resolution":"10.0um",
+        "detector_id":id_detector
+        }
+    data["warp_setting"] = 0
+
+    with open(fp+fn, 'w') as outfile:
+        json.dump(data, outfile)
+        
+    fn_structures = stack+'_visualization_per_structure_alignment_spec.json'
+    data = {}        
+    data[structure] ={
+        "stack_m": 
+            {
+            "name":"atlasV7", 
+            "vol_type": "score", 
+            "structure": [structure],
+            "resolution":"10.0um"
+            },
+        "stack_f":
+            {
+                    "name":stack,
+                    "vol_type": "score",
+                    "structure":[structure],
+                    "resolution":"10.0um",
+                    "detector_id":id_detector
+                    },
+        "warp_setting": 7
+        }
+    with open(fp+fn_structures, 'w') as outfile:
+        json.dump(data, outfile)
+        
+    return fn_structures, fn_global
+
     
 def call_and_time( command_list, completion_message='' ):
     start_t = time.time()

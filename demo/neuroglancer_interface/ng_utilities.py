@@ -1,3 +1,15 @@
+import os
+import sys
+sys.path.append(os.path.join(os.environ['REPO_DIR'], 'utilities'))
+from utilities2015 import *
+from registration_utilities import *
+from annotation_utilities import *
+from metadata import *
+from data_manager import *
+
+import json
+
+
 # Load all structures
 paired_structures = ['5N', '6N', '7N', '7n', 'Amb', 'LC', 'LRt', 'Pn', 'Tz', 'VLL', 'RMC', \
                      'SNC', 'SNR', '3N', '4N', 'Sp5I', 'Sp5O', 'Sp5C', 'PBG', '10N', 'VCA', 'VCP', 'DC']
@@ -16,8 +28,8 @@ for structure in paired_structures:
 #print all_structures_total
 
 
-def create_alignment_specs( stack, detector_id):
-    fn = stack+'_visualization_global_alignment_spec.json'
+def create_alignment_specs( stack, detector_id ):
+    fn_global = stack+'_visualization_global_alignment_spec.json'
     data = {}
 
     data["stack_m"] ={
@@ -29,12 +41,43 @@ def create_alignment_specs( stack, detector_id):
         "name":stack, 
         "vol_type": "score", 
         "resolution":"10.0um",
-        "detector_id":19
+        "detector_id":detector_id
         }
     data["warp_setting"] = 0
 
-    with open(fn, 'w') as outfile:
+    with open(fn_global, 'w') as outfile:
         json.dump(data, outfile)
+        
+    
+    data = {}
+    json_structure_list = []
+    for structure in all_structures_total:
+
+        data[structure] ={
+            "stack_m": 
+                {
+                "name":"atlasV7", 
+                "vol_type": "score", 
+                "structure": [structure],
+                "resolution":"10.0um"
+                },
+            "stack_f":
+                {
+                        "name":stack,
+                        "vol_type": "score",
+                        "structure":[structure],
+                        "resolution":"10.0um",
+                        "detector_id":detector_id
+                        },
+            "warp_setting": 7
+            }
+
+    fn_structure = stack+'_visualization_per_structure_alignment_spec.json'
+
+    with open(fn_structure, 'w') as outfile:
+        json.dump(data, outfile)
+        
+    return fn_global, fn_structure
 
 # Load volumes, convert to proper coordinates, export as contours
 def get_structure_contours_from_structure_volumes_v3(volumes, stack, sections, 
