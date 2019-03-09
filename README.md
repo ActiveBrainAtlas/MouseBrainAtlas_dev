@@ -68,15 +68,13 @@ Make sure the folder content looks like:
 │   └── DEMO998
 │       └── DEMO998_sorted_filenames.txt
 └── operation_configs
-    ├── crop_orig.ini
+    ├── crop_orig_template.ini
     ├── from_aligned_to_none.ini
     ├── from_aligned_to_padded.ini
-    ├── from_aligned_to_wholeslice.ini
-    ├── from_none_to_aligned.ini
-    ├── from_none_to_brainstem.ini
+    ├── from_none_to_aligned_template.ini
     ├── from_none_to_padded.ini
     ├── from_none_to_wholeslice.ini
-    ├── from_padded_to_brainstem.ini
+    ├── from_padded_to_brainstem_template.ini
     ├── from_padded_to_none.ini
     └── from_wholeslice_to_brainstem.ini
 ```
