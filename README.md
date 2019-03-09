@@ -74,8 +74,9 @@ Make sure the folder content looks like:
     ├── from_none_to_aligned_template.ini
     ├── from_none_to_padded.ini
     ├── from_none_to_wholeslice.ini
-    ├── from_padded_to_brainstem_template.ini
     ├── from_padded_to_none.ini
+    ├── from_padded_to_brainstem_template.ini
+    ├── from_padded_to_wholeslice_template.ini
     └── from_wholeslice_to_brainstem.ini
 ```
 
