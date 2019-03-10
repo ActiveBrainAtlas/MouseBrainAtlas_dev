@@ -21,7 +21,6 @@ else:
     demo_data_dir = args.demo_data_dir
 
 def download_to_demo(fp):
-    demo_data_dir = args.demo_data_dir
     s3_http_prefix = 'https://s3-us-west-1.amazonaws.com/mousebrainatlas-data/'     
     url = s3_http_prefix + fp    
     demo_fp = os.path.join(demo_data_dir, fp)

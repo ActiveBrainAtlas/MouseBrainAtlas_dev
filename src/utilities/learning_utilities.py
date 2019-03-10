@@ -3227,6 +3227,7 @@ def draw_scoremap(clfs, scheme, stack, win_id, prep_id=2,
         feature (str): cnn or mean
         model_name (str): model name. For forming filename of saved features.
         return_wholeimage (bool): return the entire image, meaningful if `bbox` is given.
+	version (str): extract features on images of this version
 
     Returns:
         (2d-array of uint8): scoremap overlayed on image.
