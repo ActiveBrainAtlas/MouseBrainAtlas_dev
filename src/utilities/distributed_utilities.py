@@ -316,7 +316,7 @@ def run_distributed5(command, argument_type='single', kwargs_list=None, jobs_per
                 # It is important to wrap command_templates and kwargs_list_str in apostrphes.
                 # That lets bash treat them as single strings.
                 # Reference: http://stackoverflow.com/questions/15783701/which-characters-need-to-be-escaped-in-bash-how-do-we-know-it
-                line = "%(generic_launcher_path)s %(command_template)s %(kwargs_list_str)s" % \
+                line = "python %(generic_launcher_path)s %(command_template)s %(kwargs_list_str)s" % \
                 {'generic_launcher_path': os.path.join(os.environ['REPO_DIR'], 'utilities', 'sequential_dispatcher.py'),
                 'command_template': shell_escape(command),
                 'kwargs_list_str': shell_escape(json.dumps(kwargs_list_as_list[fj:lj+1]))
