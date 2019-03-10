@@ -99,7 +99,7 @@ if stain == 'NTB':
 if stain == 'Thionin':
     
     create_input_spec_ini_all( name='input_spec.ini', \
-            stack=stack, prep_id='None', version='None', resol='thumbnail')
+            stack=stack, prep_id='None', version='gray', resol='thumbnail')
     command = ['python', 'align_compose.py', 'input_spec.ini', '--op', 'from_none_to_aligned']
     completion_message = 'Finished preliminary alignment.'
     call_and_time( command, completion_message=completion_message)

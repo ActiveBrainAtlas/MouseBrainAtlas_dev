@@ -36,7 +36,7 @@ if stain == 'NTB':
 
 if stain == 'Thionin':
     create_input_spec_ini_all( name='input_spec.ini', stack=stack, \
-                prep_id='alignedPadded', version='None', resol='thumbnail')
+                prep_id='alignedPadded', version='gray', resol='thumbnail')
     fp = os.path.join(os.environ['DATA_ROOTDIR'],'CSHL_data_processed',stack,\
                       stack+'_prep1_thumbnail_initSnakeContours.pkl')
     command = [ 'python', 'masking.py', 'input_spec.ini', fp]

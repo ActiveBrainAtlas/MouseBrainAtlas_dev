@@ -56,20 +56,20 @@ if stain == 'NTB':
 
 if stain == 'Thionin':
     create_input_spec_ini_all( name='input_spec.ini', stack=stack, \
-                prep_id='alignedWithMargin', version='None', resol='raw')
+                prep_id='alignedWithMargin', version='gray', resol='raw')
     fp =  os.path.join(DATA_ROOTDIR, 'CSHL_data_processed',stack, 'operation_configs', 'from_wholeslice_to_brainstem')
     command = [ 'python', 'warp_crop_v3.py', '--input_spec', 'input_spec.ini', '--op_id', fp]
     completion_message = 'Finished creating brainstem crop of preprocessed image.'
     call_and_time( command, completion_message=completion_message)
 
     create_input_spec_ini_all( name='input_spec.ini', stack=stack, \
-                prep_id='alignedBrainstemCrop', version='None', resol='raw')
+                prep_id='alignedBrainstemCrop', version='gray', resol='raw')
     command = [ 'python', 'rescale.py', 'input_spec.ini', 'thumbnail', '-f', '0.03125']
     completion_message = 'Finished generating thumbnails for final preprocessed images.'
     call_and_time( command, completion_message=completion_message)
 
     create_input_spec_ini_all( name='input_spec.ini', stack=stack, \
-                prep_id='alignedBrainstemCrop', version='None', resol='raw')
+                prep_id='alignedBrainstemCrop', version='gray', resol='raw')
     command = [ 'python', 'compress_jpeg.py', 'input_spec.ini']
     completion_message = 'Finished compressing preprocessed images into jpegs.'
     call_and_time( command, completion_message=completion_message)
@@ -82,23 +82,3 @@ if stain == 'Thionin':
     completion_message = 'Finished creating prep2 thumbnail masks.'
     call_and_time( command, completion_message=completion_message)
     
-    # The next 3 function calls create the 'gray' image versions. Then rescales and creates thumbnails. Then compresses raw-gray into jpeg.
-    
-    # Extract the BLUE channel, Creates the "Gray" version for Thionin brains
-    create_input_spec_ini_all( name='input_spec.ini', stack=stack, \
-                              prep_id='alignedBrainstemCrop', version='None', resol='raw')
-    command = ["python", "extract_channel.py", "input_spec.ini", "2", "gray"]
-    completion_message = 'Extracted BLUE channel. Created prep2 gray images.'
-    call_and_time( command, completion_message=completion_message)
-    
-    create_input_spec_ini_all( name='input_spec.ini', stack=stack, \
-                prep_id='alignedBrainstemCrop', version='gray', resol='raw')
-    command = [ 'python', 'rescale.py', 'input_spec.ini', 'thumbnail', '-f', '0.03125']
-    completion_message = 'Finished generating thumbnails for prep2 gray images.'
-    call_and_time( command, completion_message=completion_message)
-
-    create_input_spec_ini_all( name='input_spec.ini', stack=stack, \
-                prep_id='alignedBrainstemCrop', version='gray', resol='raw')
-    command = [ 'python', 'compress_jpeg.py', 'input_spec.ini']
-    completion_message = 'Finished compressing prep2 gray images into jpegs.'
-    call_and_time( command, completion_message=completion_message)

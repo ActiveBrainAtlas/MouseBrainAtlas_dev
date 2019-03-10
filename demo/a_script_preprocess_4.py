@@ -73,7 +73,7 @@ if stain == 'NTB':
     
 if stain == 'Thionin':
     create_input_spec_ini_all( name='input_spec.ini', stack=stack, \
-                prep_id='None', version='None', resol='thumbnail')
+                prep_id='None', version='gray', resol='thumbnail')
     # Creates STACK_original_image_crop.csv in data directory. x,y,width,height
     #  In this file each row is x,y,width,height in thumbnail resolution.
     command = ['python', 'generate_original_image_crop_csv.py', 'input_spec.ini']

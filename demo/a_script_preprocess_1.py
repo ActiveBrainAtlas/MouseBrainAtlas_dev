@@ -40,7 +40,7 @@ if stain == 'NTB':
     completion_message = 'Extracted BLUE channel.'
     call_and_time( command, completion_message=completion_message)
 
-    # Create Thumbnails of eachraw image
+    # Create Thumbnails of each raw image
     create_input_spec_ini_all( name='input_spec.ini', stack=stack, prep_id='None', version='Ntb', resol='raw')
     command = ["python", "rescale.py", "input_spec.ini", "thumbnail", "-f", "0.03125"]
     completion_message = 'Generated thumbnails.'
@@ -56,6 +56,18 @@ if stain == 'NTB':
 if stain == 'Thionin':
     # Create Thumbnails of eachraw image
     create_input_spec_ini_all( name='input_spec.ini', stack=stack, prep_id='None', version='None', resol='raw')
+    command = ["python", "rescale.py", "input_spec.ini", "thumbnail", "-f", "0.03125"]
+    completion_message = 'Generated thumbnails.'
+    call_and_time( command, completion_message=completion_message)
+    
+    # Extract the BLUE channel, for Thionin brains
+    create_input_spec_ini_all( name='input_spec.ini', stack=stack, prep_id='None', version='None', resol='raw')
+    command = ["python", "extract_channel.py", "input_spec.ini", "2", "gray"]
+    completion_message = 'Extracted BLUE channel.'
+    call_and_time( command, completion_message=completion_message)
+    
+    # Create Thumbnails of each gray image
+    create_input_spec_ini_all( name='input_spec.ini', stack=stack, prep_id='None', version='gray', resol='raw')
     command = ["python", "rescale.py", "input_spec.ini", "thumbnail", "-f", "0.03125"]
     completion_message = 'Generated thumbnails.'
     call_and_time( command, completion_message=completion_message)

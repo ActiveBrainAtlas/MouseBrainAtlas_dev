@@ -57,7 +57,7 @@ call_and_time( command, completion_message=completion_message)
 for structure in structures_sided_sorted_by_size:
     # Make input specifications for the registration script, saved into json files
     fn_fixed, fn_moving = make_structure_fixed_and_moving_brain_specs( stack, id_detector, structure)
-    command = [ 'python', 'register_brains_demo.py', fn_fixed, fn_moving, tb_version, '-g']
+    command = [ 'python', 'register_brains_demo.py', fn_fixed, fn_moving, '-g']
     completion_message = 'Finished registration.'
     call_and_time( command, completion_message=completion_message)
 

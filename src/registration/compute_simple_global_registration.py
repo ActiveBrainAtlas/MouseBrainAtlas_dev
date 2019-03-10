@@ -115,6 +115,8 @@ DataManager.load_original_volume_all_known_structures_v3(atlas_spec, in_bbox_wrt
 
 atlas_structure_centroids_wrt_canonicalAtlasSpace_atlasResol = get_structure_centroids(vol_origin_dict=atlas_structures_wrt_canonicalAtlasSpace_atlasResol)
 
+print atlas_structure_centroids_wrt_canonicalAtlasSpace_atlasResol.keys()
+
 atlas_anchor1_wrt_canonicalAtlasSpace_atlasResol = \
 np.r_[atlas_structure_centroids_wrt_canonicalAtlasSpace_atlasResol['12N'][:2], 0]
 atlas_anchor2_wrt_canonicalAtlasSpace_atlasResol = \

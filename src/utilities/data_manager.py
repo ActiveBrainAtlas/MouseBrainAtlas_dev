@@ -9,10 +9,10 @@ import re
 sys.path.append(os.path.join(os.environ['REPO_DIR'], 'utilities'))
 from utilities2015 import *
 from metadata import *
-# try:
-#     from vis3d_utilities import *
-# except:
-#     sys.stderr.write("No vtk")
+try:
+    from vis3d_utilities import *
+except:
+    sys.stderr.write("No vtk")
 from distributed_utilities import *
 
 use_image_cache = False
@@ -5499,6 +5499,8 @@ def generate_metadata_cache():
     metadata_cache['valid_sections_all'] = {}
     metadata_cache['valid_filenames_all'] = {}
     for stack in all_stacks:
+        if not stack=='MD603':
+            continue
 
         try:
             metadata_cache['anchor_fn'][stack] = DataManager.load_anchor_filename(stack)
@@ -5518,11 +5520,12 @@ def generate_metadata_cache():
             if 'Nonexisting' in metadata_cache['filenames_to_sections'][stack]:
                 metadata_cache['filenames_to_sections'][stack].pop('Nonexisting')
             if 'Rescan' in metadata_cache['filenames_to_sections'][stack]:
-                    metadata_cache['filenames_to_sections'][stack].pop('Rescan')
+                metadata_cache['filenames_to_sections'][stack].pop('Rescan')
         except Exception as e:
             sys.stderr.write("Failed to cache %s filenames_to_sections: %s\n" % (stack, e.message))
-
+                    
         try:
+            print 'SECTION LIMITS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
             metadata_cache['section_limits'][stack] = DataManager.load_section_limits_v2(stack, prep_id=2)
         except Exception as e:
             sys.stderr.write("Failed to cache %s section_limits: %s\n" % (stack, e.message))
@@ -5534,6 +5537,7 @@ def generate_metadata_cache():
             sys.stderr.write("Failed to cache %s cropbox: %s\n" % (stack, e.message))
 
         try:
+            print 'VALID SECTIONS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
             first_sec, last_sec = metadata_cache['section_limits'][stack]
             metadata_cache['valid_sections'][stack] = [sec for sec in range(first_sec, last_sec+1) \
                                 if sec in metadata_cache['sections_to_filenames'][stack] and \

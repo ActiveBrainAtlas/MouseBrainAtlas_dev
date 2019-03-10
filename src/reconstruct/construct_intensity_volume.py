@@ -38,6 +38,10 @@ tb_resol = args.tb_resol
 
 images = {}
 
+print metadata_cache
+print ''
+print metadata_cache['valid_sections']
+
 #     for sec in metadata_cache['valid_sections_all'][stack]:
 for sec in metadata_cache['valid_sections'][stack]:
 

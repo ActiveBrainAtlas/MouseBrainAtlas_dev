@@ -43,7 +43,7 @@ if stain == 'NTB':
 
 if stain == 'Thionin':
     create_input_spec_ini_all( name='input_spec.ini', stack=stack, \
-                prep_id='None', version='None', resol='raw')
+                prep_id='None', version='gray', resol='raw')
     fp = os.path.join(DATA_ROOTDIR, 'CSHL_data_processed',stack, 'operation_configs', 'from_none_to_wholeslice')
     command = [ 'python', 'warp_crop_v3.py', '--input_spec', 'input_spec.ini', '--op_id', fp]
     completion_message = 'Finished transformed images into wholeslice format (prep5).'
@@ -51,7 +51,7 @@ if stain == 'Thionin':
 
 
     create_input_spec_ini_all( name='input_spec.ini', stack=stack, \
-                prep_id='alignedWithMargin', version='None', resol='raw')
+                prep_id='alignedWithMargin', version='gray', resol='raw')
     command = [ 'python', 'rescale.py', 'input_spec.ini', 'thumbnail', '-f', '0.03125']
     completion_message = 'Finished rescaling prep5 images into thumbnail format.'
     call_and_time( command, completion_message=completion_message)

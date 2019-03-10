@@ -4,7 +4,7 @@ import os
 import sys
 import subprocess
 import time
-
+import json
 
 def create_input_spec_ini( name, image_name_list, stack, prep_id, version, resol  ):
     f = open(name, "w")
@@ -79,6 +79,9 @@ def make_from_x_to_y_ini(stack,x,y,rostral_limit,caudal_limit,dorsal_limit,ventr
     f.close()
     
 def make_manual_anchor_points( stack, x_12N, y_12N, x_3N, y_3N, z_midline):
+    if not os.path.exists( os.path.join( os.environ['DATA_ROOTDIR'], 'CSHL_simple_global_registration') ):
+        os.mkdir( os.path.join( os.environ['DATA_ROOTDIR'], 'CSHL_simple_global_registration') )
+    
     fn = os.path.join( os.environ['DATA_ROOTDIR'], 'CSHL_simple_global_registration', stack+'_manual_anchor_points.ini' )
     f = open(fn, "w")
     f.write('[DEFAULT]\n')
@@ -167,6 +170,13 @@ def make_registration_visualization_input_specs( stack, id_detector, structure):
         
     return fn_structures, fn_global
 
+def create_prep2_section_limits( stack, lower_lim, upper_lim):
+    fn = os.path.join( os.environ['DATA_ROOTDIR'], 'CSHL_data_processed', stack, stack+'_prep2_sectionLimits.ini' )
+    f = open(fn, "w")
+    f.write('[DEFAULT]\n')
+    f.write('left_section_limit = '+str(lower_lim)+'\n')
+    f.write('right_section_limit = '+str(upper_lim)+'\n')
+    f.close()
     
 def call_and_time( command_list, completion_message='' ):
     start_t = time.time()
