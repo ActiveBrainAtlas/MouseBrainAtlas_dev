@@ -125,7 +125,7 @@ Make sure the folder content looks like:
 
 - Create `CSHL_data_processed/DEMO998/DEMO998_sorted_filenames.txt`.
 
-- **Align images in this stack**. Modify `operation_configs/from_none_to_aligned.ini`. Modify `input_spec.ini` as (None,NtbNormalized,thumbnail). `python align_compose.py input_spec.ini --op from_none_to_aligned`
+- **Align images in this stack**. Copy operation config template `cp operation_configs/from_none_to_aligned_template.ini CSHL_data_processed/DEMO998/DEMO998_operation_configs/from_none_to_aligned.ini`. Modify `from_none_to_aligned.ini`. Modify `input_spec.ini` as (None,NtbNormalized,thumbnail). `python align_compose.py input_spec.ini --op from_none_to_aligned`
 
 ```bash
 ├── CSHL_data_processed
@@ -167,7 +167,7 @@ Make sure the folder content looks like:
 
 - Modify `all_stacks` in `src/utilities/metadata.py` to include `DEMO998`.
 
-- On a machine with monitor, launch the maskingGUI. Run `DATA_ROOTDIR=/home/yuncong/brainstem/home/yuncong/demo_data ROOT_DIR=/home/yuncong/brainstem/home/yuncong/demo_data THUMBNAIL_DATA_ROOTDIR=/home/yuncong/brainstem/home/yuncong/demo_data python mask_editing_tool_v4.py DEMO998 NtbNormalized`. Generate initial masks.
+- On a machine with monitor, launch the maskingGUI. Run `DATA_ROOTDIR=/home/yuncong/brainstem/home/yuncong/demo_data ROOT_DIR=/home/yuncong/brainstem/home/yuncong/demo_data THUMBNAIL_DATA_ROOTDIR=/home/yuncong/brainstem/home/yuncong/demo_data python src/gui/mask_editing_tool_v4.py DEMO998 NtbNormalized`. Generate initial masks.
 
 ```bash
 ├── CSHL_data_processed
@@ -204,14 +204,14 @@ Make sure the folder content looks like:
 │       │   └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep1_thumbnail_mask.png
 ```
 
-- Modify `input_spec.ini` as (None,NtbNormalized,thumbnail). Run `generate_original_image_crop_csv.py`. 
+- Modify `input_spec.ini` as (None,NtbNormalized,thumbnail). Run `generate_original_image_crop_csv.py input_spec.ini`. 
 
 ```bash
 ├── CSHL_data_processed
 │   └── DEMO998
 │       ├── DEMO998_original_image_crop.csv
 ```
-- Modify `operation_configs/crop_orig.ini`. Modify `input_spec.ini` as (alignedPadded,mask,thumbnail). Run `python warp_crop.py --input_spec input_spec.ini --op_id from_padded_to_none`.
+- Copy operation config template `cp operation_configs/crop_orig_template.ini CSHL_data_processed/DEMO998/DEMO998_operation_configs/crop_orig.ini`. Modify `crop_orig.ini`.  Modify `input_spec.ini` as (alignedPadded,mask,thumbnail). Run `python warp_crop.py --input_spec input_spec.ini --op_id from_padded_to_none`.
 
 ```bash
 ├── CSHL_data_processed
@@ -254,7 +254,7 @@ Make sure the folder content looks like:
 │       │       └── DEMO998_MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_raw_stdMap.bp
 ```
 
-- **Whole-slice crop**. Modify `operation_configs/from_padded_to_wholeslice.ini`. In this file specify the cropbox for the domain `alignedWithMargin ` based on `alignedPadded` images. Modify `input_spec.ini` as (None,NtbNormalizedAdaptiveInvertedGamma,raw). `python warp_crop.py --input_spec input_spec.ini --op_id from_none_to_wholeslice`
+- **Whole-slice crop**.  Copy operation config template `cp operation_configs/from_padded_to_wholeslice_template.ini CSHL_data_processed/DEMO998/DEMO998_operation_configs/from_padded_to_wholeslice.ini`. Modify `from_padded_to_wholeslice.ini`. In this file specify the cropbox for the domain `alignedWithMargin` based on `alignedPadded` images. Modify `input_spec.ini` as (None,NtbNormalizedAdaptiveInvertedGamma,raw). `python warp_crop.py --input_spec input_spec.ini --op_id from_none_to_wholeslice`
 
 ```bash
 ├── CSHL_data_processed
@@ -276,7 +276,7 @@ Make sure the folder content looks like:
 │       │   └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep5_thumbnail_NtbNormalizedAdaptiveInvertedGamma.tif
 ```
 
-- **Brainstem crop**. Modify `operation_configs/from_padded_to_brainstem.ini`. Modify `input_spec.ini` as (alignedWithMargin,NtbNormalizedAdaptiveInvertedGamma,raw). `python warp_crop.py --input_spec input_spec.ini --op_id from_wholeslice_to_brainstem`
+- **Brainstem crop**. Copy operation config template `cp operation_configs/from_padded_to_brainstem_template.ini CSHL_data_processed/DEMO998/DEMO998_operation_configs/from_padded_to_brainstem.ini`. Modify `from_padded_to_brainstem.ini`. Modify `input_spec.ini` as (alignedWithMargin,NtbNormalizedAdaptiveInvertedGamma,raw). `python warp_crop.py --input_spec input_spec.ini --op_id from_wholeslice_to_brainstem`
 
 ```bash
 ├── CSHL_data_processed
