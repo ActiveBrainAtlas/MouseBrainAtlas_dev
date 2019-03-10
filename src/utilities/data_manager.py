@@ -5210,6 +5210,9 @@ class DataManager(object):
         """
         Get directory path of thumbnail mask.
         """
+        if isinstance(prep_id, str):
+            prep_id = prep_str_to_id_2d[prep_id]
+
         return os.path.join(THUMBNAIL_DATA_DIR, stack, stack + ('_prep%d_' % prep_id if prep_id is not None else '_') + 'thumbnail_mask')
 
     @staticmethod
