@@ -106,6 +106,8 @@ if hostname == 'yuncong-MacbookPro':
 
     LABELED_NEURONS_ROOTDIR = os.path.join(ROOT_DIR, 'CSHL_labeled_neurons')
 
+    MXNET_MODEL_ROOTDIR = os.path.join(ROOT_DIR, 'mxnet_models')
+
     ELASTIX_BIN = 'elastix'
 
 

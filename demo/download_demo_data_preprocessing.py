@@ -83,4 +83,4 @@ print("Download brain DEMO998 meta data")
 download_to_demo(os.path.join('brains_info', 'DEMO998.ini'))
 
 download_to_demo(os.path.join('CSHL_data_processed', 'DEMO998', 'DEMO998_sorted_filenames.txt'))
-download_to_demo(os.path.join('CSHL_data_processed', 'DEMO998', 'DEMO998_prep2_sectionLimit.txt'))
+download_to_demo(os.path.join('CSHL_data_processed', 'DEMO998', 'DEMO998_prep2_sectionLimits.txt')
