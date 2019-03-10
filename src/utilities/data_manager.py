@@ -1463,9 +1463,9 @@ class DataManager(object):
     def get_operation_config_filename(op, stack=None):
 
 	generic_op_fp = os.path.join(DATA_ROOTDIR, 'operation_configs', op + '.ini')
-	stack_op_fp = os.path.join(DATA_ROOTDIR, 'CSHL_data_processed', stack, 'operation_configs', op + '.ini')
+	stack_op_fp = os.path.join(DATA_ROOTDIR, 'CSHL_data_processed', stack, stack + '_operation_configs', op + '.ini')
 	if stack is None or not os.path.exists(stack_op_fp):
-	    print("Using template operation config.")
+	    print("Using generic operation config.")
 	    return generic_op_fp
 	else:
 	    print("Using stack specific operation config.")
