@@ -298,7 +298,7 @@ Make sure the folder content looks like:
 │       │   └── MD662&661-F86-2017.06.06-14.56.48_MD661_2_0257_prep2_thumbnail_NtbNormalizedAdaptiveInvertedGamma.tif
 ```
 
-- Use the same `input_spec.ini` as previous step. `python compress_jpeg.py input_spec.ini`
+- **Compress JPEG**. Use the same `input_spec.ini` as previous step. `python compress_jpeg.py input_spec.ini`
 
 ```bash
 ├── CSHL_data_processed
@@ -317,7 +317,6 @@ left_section_limit = 225
 right_section_limit = 235
 ```
 
-- `cp ../../../operation_configs/from_padded_to_wholeslice.ini ~/demo_data/CSHL_data_processed/DEMO998/operation_configs/`
 - Create the intensity volume by running `./construct_intensity_volume.py DEMO998 --tb_version NtbNormalizedAdaptiveInvertedGamma --tb_resol thumbnail`
 
 ```bash
@@ -328,9 +327,7 @@ right_section_limit = 235
 │           └── DEMO998_wholebrainWithMargin_10.0um_intensityVolume_origin_wrt_wholebrain.txt
 ```
 
-- Run `python src/gui/brain_labeling_gui_v28.py <STACK> --img_version NtbNormalizedAdaptiveInvertedGammaJpeg`
-
-- Must click on the high resolution panel.
+- Run `DATA_ROOTDIR=/home/yuncong/brainstem/home/yuncong/demo_data ROOT_DIR=/home/yuncong/brainstem/home/yuncong/demo_data THUMBNAIL_DATA_ROOTDIR=/home/yuncong/brainstem/home/yuncong/demo_data python src/gui/brain_labeling_gui_v28.py DEMO998 --img_version NtbNormalizedAdaptiveInvertedGammaJpeg`. Note: must click on the high resolution panel.
 
 - Create `demo_data/CSHL_simple_global_registration/DEMO998_manual_anchor_points.ini`.
 
@@ -364,7 +361,7 @@ z_midline=6
 │   │           └── atlasV7_10.0um_scoreVolume_4N_R_surround_200um_origin_wrt_canonicalAtlasSpace.txt
 ```
 
-- `python ../src/registration/compute_simple_global_registration.py DEMO998 ~/demo_data/CSHL_simple_global_registration/DEMO998_manual_anchor_points.ini`.
+- `python compute_simple_global_registration.py DEMO998 ~/demo_data/CSHL_simple_global_registration/DEMO998_manual_anchor_points.ini`.
 
 ```bash
 ├── CSHL_simple_global_registration
@@ -372,7 +369,7 @@ z_midline=6
 │   └── DEMO998_T_atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol.txt
 ```
 
-- Run `python download_pretrained_classifiers.py -s "[\"12N\", \"3N_R\", \"4N_R\"]"`.
+- **Download pre-trained classifiers**. Run `python download_pretrained_classifiers.py -s "[\"12N\", \"3N\", \"4N\"]"`.
 
 ```bash
 ├── CSHL_classifiers
@@ -383,7 +380,7 @@ z_midline=6
 │           └── 4N_clf_setting_899.dump
 ```
 
-- Run `python pipeline/generate_prob_volumes.py DEMO998 799 NtbNormalizedAdaptiveInvertedGamma NtbNormalizedAdaptiveInvertedGammaJpeg -s "[\"12N\", \"3N\", \"4N\"]"`.
+- **Generate 3-D probability maps**. Run `python generate_prob_volumes.py DEMO998 799 NtbNormalizedAdaptiveInvertedGamma NtbNormalizedAdaptiveInvertedGammaJpeg -s "[\"12N\", \"3N\", \"4N\"]"`.
 
 ```bash
 ├── CSHL_patch_features
@@ -453,8 +450,8 @@ z_midline=6
 │       │       ├── DEMO998_detector799_10.0um_scoreVolume_4N_R.bp
 │       │       └── DEMO998_detector799_10.0um_scoreVolume_4N_R_origin_wrt_wholebrain.txt
 ```
-- Run `python pipeline/register_brains.py demo/demo_fixed_brain_spec_12N.json demo/demo_moving_brain_spec_12N.json -g`.
-- Run `python pipeline/register_brains.py demo/demo_fixed_brain_spec_3N_R_4N_R.json demo/demo_moving_brain_spec_3N_R_4N_R.json -g`
+- **Register 12N (hypoglossal nucleus)**. Run `python register_brains.py demo_fixed_brain_spec_12N.json demo_moving_brain_spec_12N.json -g`.
+- **Register 3N(oculomotor nucleus)/4N(trochlear nucleus) complex**. Run `python register_brains.py demo_fixed_brain_spec_3N_R_4N_R.json demo_moving_brain_spec_3N_R_4N_R.json -g`
 
 ```bash
 ├── CSHL_registration_parameters
@@ -503,7 +500,7 @@ z_midline=6
 │   │           └── atlasV7_10.0um_scoreVolume_warp0_DEMO998_detector799_10.0um_scoreVolume_10.0um_4N_R_surround_200um_origin_wrt_fixedWholebrain.txt
 ```
 
-- Run `python pipeline/visualize_registration.py NtbNormalizedAdaptiveInvertedGamma demo/demo_visualization_per_structure_alignment_spec.json -g demo/demo_visualization_global_alignment_spec.json`
+- **Visualize registration**. Run `python visualize_registration.py NtbNormalizedAdaptiveInvertedGamma demo_visualization_per_structure_alignment_spec.json -g demo_visualization_global_alignment_spec.json`
 
 ```bash
 ├── CSHL_registration_visualization
