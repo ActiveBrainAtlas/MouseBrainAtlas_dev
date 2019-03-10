@@ -26,7 +26,7 @@ def download_to_demo(fp):
 	fp (str): file path relative to data root.
     """
     create_if_not_exists(demo_data_dir)
-    s3_http_prefix = 'https://s3-us-west-1.amazonaws.com/mousebrainatlas-data/'
+    s3_http_prefix = 'https://s3-us-west-1.amazonaws.com/v0.2-required-data/'
     url = s3_http_prefix + fp
     demo_fp = os.path.join(demo_data_dir, fp)
     execute_command('wget -N -P \"%s\" \"%s\"' % (os.path.dirname(demo_fp), url))
@@ -65,16 +65,15 @@ download_to_demo(relative_to_local(fp, local_root=DATA_ROOTDIR))
 print("Download warp/crop operation configs")
 
 for fn in [
-'crop_orig',
+'crop_orig_template',
 'from_aligned_to_none',
 'from_aligned_to_padded',
-'from_aligned_to_wholeslice',
-'from_none_to_aligned',
-'from_none_to_brainstem',
+'from_none_to_aligned_template',
 'from_none_to_padded',
 'from_none_to_wholeslice',
-'from_padded_to_brainstem',
 'from_padded_to_none',
+'from_padded_to_brainstem_template',
+'from_padded_to_wholeslice_template',
 'from_wholeslice_to_brainstem'
 ]:
     download_to_demo(os.path.join('operation_configs', fn + '.ini'))

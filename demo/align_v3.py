@@ -46,7 +46,8 @@ if image_name_list == 'all':
     #image_name_list = DataManager.load_sorted_filenames(stack=stack)[0].keys()
 
 if args.op is not None:
-    op = load_ini(os.path.join(DATA_ROOTDIR, 'operation_configs', args.op + '.ini'))
+    #op = load_ini(os.path.join(DATA_ROOTDIR, 'operation_configs', args.op + '.ini'))
+    op = load_ini(DataManager.get_operation_config_filename(op=args.op, stack=stack))
     assert op['type'] == 'warp', "Op must be a warp"
     elastix_output_dir = op['elastix_output_dir']
     params_fp = op['elastix_parameter_fp']

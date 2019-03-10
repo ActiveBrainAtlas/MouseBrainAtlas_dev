@@ -93,7 +93,8 @@ def parse_operation_sequence(op_name, resol, return_str=False, stack=None):
 	op_name = op_name[1:]
 
     #op = load_ini(os.path.join(DATA_ROOTDIR, 'CSHL_data_processed', stack, 'operation_configs', op_name + '.ini'))
-    op = load_ini(os.path.join(DATA_ROOTDIR, 'operation_configs', op_name + '.ini'))
+    #op = load_ini(os.path.join(DATA_ROOTDIR, 'operation_configs', op_name + '.ini'))
+    op = load_ini(DataManager.get_operation_config_filename(op=op_name, stack=stack))
     if op is None:
 	raise Exception("Cannot load %s.ini" % op_name)
     if 'operation_sequence' in op: # composite operation

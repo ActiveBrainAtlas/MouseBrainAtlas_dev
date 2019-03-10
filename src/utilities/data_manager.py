@@ -1110,14 +1110,13 @@ class DataManager(object):
 
     @staticmethod
     def get_anchor_filename_filename_v2(stack):
-        fp = os.path.join(DATA_ROOTDIR, 'CSHL_data_processed', stack, 'operation_configs', 'from_none_to_aligned.ini')
-        return fp
+	return DataManager.get_operation_config_filename(op='from_none_to_aligned', stack=stack)
 
     @staticmethod
     def load_anchor_filename(stack):
         fp = DataManager.get_anchor_filename_filename(stack)
         if not os.path.exists(fp):
-            sys.stderr.write("No anchor.txt is found. Seems we are using the operation ini to provide anchor. Try to load operation ini.\n")
+            sys.stderr.write("No anchor.txt is found. Seems you are using the operation ini to provide anchor. Try to load operation ini.\n")
             fp = DataManager.get_anchor_filename_filename_v2(stack) # ini
             anchor_image_name = load_ini(fp)['anchor_image_name']
         else:
@@ -1156,6 +1155,7 @@ class DataManager(object):
             fp = os.path.join(DATA_DIR, stack, stack + '_prep' + str(prep_id) + '_sectionLimits.ini')
 
         return fp
+
 
     @staticmethod
     def get_cropbox_filename_v2(stack, anchor_fn=None, prep_id=2):
@@ -1315,9 +1315,9 @@ class DataManager(object):
         if not os.path.exists(fp):
             sys.stderr.write("Seems you are using operation INIs to provide cropbox.\n")
             if prep_id == 2 or prep_id == 'alignedBrainstemCrop':
-                fp = os.path.join(DATA_ROOTDIR, 'CSHL_data_processed', stack, 'operation_configs', 'from_padded_to_brainstem.ini')
+		fp = DataManager.get_operation_config_filename(op='from_padded_to_brainstem', stack=stack)
             elif prep_id == 5 or prep_id == 'alignedWithMargin':
-                fp = os.path.join(DATA_ROOTDIR, 'CSHL_data_processed', stack, 'operation_configs', 'from_padded_to_wholeslice.ini')
+		fp = DataManager.get_operation_config_filename(op='from_padded_to_wholeslice', stack=stack)
             else:
                 raise Exception("Not implemented")
         else:
@@ -1459,6 +1459,19 @@ class DataManager(object):
     #         cropbox = np.loadtxt(fp).astype(np.int)
     #     return cropbox
 
+    @staticmethod
+    def get_operation_config_filename(op, stack=None):
+
+	generic_op_fp = os.path.join(DATA_ROOTDIR, 'operation_configs', op + '.ini')
+	stack_op_fp = os.path.join(DATA_ROOTDIR, 'CSHL_data_processed', stack, 'operation_configs', op + '.ini')
+	if stack is None or not os.path.exists(stack_op_fp):
+	    print("Using template operation config.")
+	    return generic_op_fp
+	else:
+	    print("Using stack specific operation config.")
+	    return stack_op_fp
+
+	
     @staticmethod
     def get_sorted_filenames_filename(stack):
         fn = os.path.join(THUMBNAIL_DATA_DIR, stack, stack + '_sorted_filenames.txt')
