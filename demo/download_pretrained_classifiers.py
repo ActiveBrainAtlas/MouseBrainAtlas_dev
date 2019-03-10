@@ -11,6 +11,16 @@ import argparse
 parser = argparse.ArgumentParser(
     formatter_class=argparse.RawDescriptionHelpFormatter,
     description='This script downloads input data for demo.')
+parser.add_argument("-s", "--structure_list", type=str, help="Json-encoded list of structures (sided) (Default: all known structures)")
+args = parser.parse_args()
+
+import json
+if hasattr(args, 'structure_list') and args.structure_list is not None:
+    structure_list = json.loads(args.structure_list)
+else:
+    structure_list = all_known_structures
+    print(structure_list)
+
 
 #parser.add_argument("-d", "--demo_data_dir", type=str, help="Directory to store demo input data", default='demo_data')
 #args = parser.parse_args()
@@ -46,7 +56,8 @@ def download_to_demo(fp):
 # Download pre-trained logistic regression classifiers.
 classifier_id = 899
 #for name_u in ['3N', '4N', '12N']:
-for name_u in all_known_structures:
+#for name_u in all_known_structures:
+for name_u in structure_list:
     fp = DataManager.get_classifier_filepath(structure=name_u, classifier_id=classifier_id)
     rel_fp = relative_to_local(fp, local_root=DATA_ROOTDIR)	
     download_to_demo(rel_fp)

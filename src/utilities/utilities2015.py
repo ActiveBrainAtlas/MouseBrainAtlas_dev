@@ -102,7 +102,7 @@ def compute_gradient_v2(volume, smooth_first=False, dtype=np.float16):
 
         if smooth_first:
             # t = time.time()
-            cropped_v = gaussian(cropped_v, 3)
+            cropped_v = gaussian(cropped_v.astype(np.float32), 3)
             # sys.stderr.write("Smooth: %.2f seconds.\n" % (time.time()-t))
 
         # t = time.time()

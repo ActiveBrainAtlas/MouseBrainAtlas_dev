@@ -20,6 +20,7 @@ parser = argparse.ArgumentParser(
 
 parser.add_argument("brain_name", type=str, help="Brain name")
 parser.add_argument("detector_id", type=int, help="Detector id")
+parser.add_argument("version", type=str, help="Image version to extract features on")
 parser.add_argument("bg_img_version", type=str, help="Version of scoremap visualization background image")
 parser.add_argument("-s", "--structure_list", type=str, help="Json-encoded list of structures (unsided) (Default: all known structures)")
 args = parser.parse_args()
@@ -27,6 +28,10 @@ args = parser.parse_args()
 stack = args.brain_name
 detector_id = args.detector_id
 bg_img_version = args.bg_img_version
+
+version = args.version
+if version == 'None':
+    version = None
 
 import json
 if hasattr(args, 'structure_list') and args.structure_list is not None:
@@ -207,7 +212,8 @@ for name_u in structure_list:
                        out_resolution_um=out_resolution_um,
 			bg_img_version=bg_img_version,
                     image_shape=metadata_cache['image_shape'][stack],
-                                  return_wholeimage=True)
+                                  return_wholeimage=True,
+			version=version)
 
             sm = scoremap_all_landmarks[name_u]
             viz = viz_all_landmarks[name_u]
