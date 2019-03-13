@@ -21,15 +21,11 @@ Run the "# Based on contour annotation" part. Change stack to only MD585 and unc
 
 Need to add brain in metadata.py, add brain info (change resolutiion to 0.46)
 
-Create a symbolic link in CSHL_Data_processed called MD585 and point it to Yuncong's HDD. Following command works:
-`ln -s /media/yuncong/BstemAtlasData/atlas_data/CSHL_data_processed/MD585 <your_path>/CSHL_data_processed/MD585`
-
-
-Once the cell finishes running, inspect grid_index_class_lookup. `grid_index_class_lookup['10N'][179]`, uses pandas, need to know how to index into DataFrame. Code should save it as an hdf.
+Once the cell finishes running, inspect grid_index_class_lookup. `grid_index_class_lookup['10N'][179]`, using pandas. Code should save it as an hdf.
 
 Go back to `src/learning/train_and_test_classifier_performance_v5.ipynb`. You will need to make the following changes to train and test from the same brain:
-- train_stacks = ['MD585]
-- test_stacks  = ['MD585]
+- train_stacks = ['MD585']
+- test_stacks  = ['MD585']
 - win_id must be the same as before
 
 Inspecting the result:
