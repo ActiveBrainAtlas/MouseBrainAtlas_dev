@@ -4,7 +4,7 @@ Training the NN classifiers requires having all prep2 (preprocessed and brainste
 
 Required scripts:
   - `/src/learning/identify_patch_class_based_on_labeling_v3_human_annotations.py`
-  - `/src/learning/identify_patch_class_based_on_labeling_v3_human_annotations.py`
+  - `/src/learning/a_train_and_test_classifier_performance_v5.py`
 
 Needed files are as follows:
   - `/ROOT/CSHL_data_processed/<STACK>/<STACK>_prep2_raw_*/`
