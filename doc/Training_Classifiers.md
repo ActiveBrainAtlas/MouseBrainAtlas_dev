@@ -2,6 +2,10 @@
 
 Training the NN classifiers requires having all prep2 (preprocessed and brainstem cropped) images downloaded for all testing and training stacks. Classifiers are typically trained on and for specific stains, the two most used being NTB and Thionin stains. In addition to the images themselves, files containing segmented regions of interest must be supplied. Square patches are extracted from these regions and are used to train the classifier. Finally a "windowing_id" must be supplied, which dictates the size of the square patches as well as their seperations.
 
+Required scripts:
+  - `/src/learning/identify_patch_class_based_on_labeling_v3_human_annotations.py`
+  - `/src/learning/identify_patch_class_based_on_labeling_v3_human_annotations.py`
+
 Needed files are as follows:
   - `/ROOT/CSHL_data_processed/<STACK>/<STACK>_prep2_raw_*/`
   - `/ROOT_DIR/CSHL_labelings_v3/<STACK>/`
