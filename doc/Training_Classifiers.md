@@ -5,16 +5,13 @@ Training the NN classifiers requires having all prep2 (preprocessed and brainste
 Required scripts:
   - `/src/learning/identify_patch_class_based_on_labeling_v3_human_annotations.py`
     - Loads human annotation contours, and image files
-      - Required Files: `ROOT_DIR/CSHL_data_processed/<STACK>/<STACK>_prep2_thumbnail_mask/*_prep2_thumbnail_mask.png`
-      - Required Files: `ROOT_DIR/CSHL_data_processed/<STACK>/<STACK>_prep2_raw_gray/*_prep2_raw_gray.tif`
-      - Required Files: `ROOT_DIR/CSHL_labelings_v3/<STACK>/<STACK>_annotation_contours_<TIMESTAMP>.hdf`
+      - Required: `ROOT_DIR/CSHL_data_processed/<STACK>/<STACK>_prep2_thumbnail_mask/*_prep2_thumbnail_mask.png`
+      - Required: `ROOT_DIR/CSHL_data_processed/<STACK>/<STACK>_prep2_raw_gray/*_prep2_raw_gray.tif`
+      - Required: `ROOT_DIR/CSHL_labelings_v3/<STACK>/<STACK>_annotation_contours_<TIMESTAMP>.hdf`
     - Outputs grid indices lookup table
-      - `ROOT_DIR/CSHL_labelings_v3/<STACK>/<STACK>_annotation_win<WIN_ID>_<TIMESTAMP>_grid_indices_lookup.hdf`
+      - Output: `ROOT_DIR/CSHL_labelings_v3/<STACK>/<STACK>_annotation_win<WIN_ID>_<TIMESTAMP>_grid_indices_lookup.hdf`
   - `/src/learning/a_train_and_test_classifier_performance_v5.py`
 
-Needed files are as follows:
-  - `/ROOT/CSHL_data_processed/<STACK>/<STACK>_prep2_raw_*/`
-  - `/ROOT_DIR/CSHL_labelings_v3/<STACK>/`
 
 `src/learning/train_and_test_classifier_performance_v5.ipynb`, [Link](http://132.239.73.85:8888/notebooks/src/learning/train_and_test_classifier_performance_v5.ipynb).
 
