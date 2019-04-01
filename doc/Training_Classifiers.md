@@ -2,21 +2,25 @@
 
 Training the NN classifiers requires having all prep2 (preprocessed and brainstem cropped) images downloaded for all testing and training stacks. Classifiers are typically trained on and for specific stains, the two most used being NTB and Thionin stains. In addition to the images themselves, files containing segmented regions of interest must be supplied. Square patches are extracted from these regions and are used to train the classifier. Finally a "windowing_id" must be supplied, which dictates the size of the square patches as well as their seperations.
 
-Required scripts:
-  - `/src/learning/identify_patch_class_based_on_labeling_v3_human_annotations.py`
-    - Loads human annotation contours, and image files
-      - Required: `ROOT_DIR/CSHL_data_processed/<STACK>/<STACK>_prep2_thumbnail_mask/*_prep2_thumbnail_mask.png`
-      - Required: `ROOT_DIR/CSHL_data_processed/<STACK>/<STACK>_prep2_raw_gray/*_prep2_raw_gray.tif`
-      - Required: `ROOT_DIR/CSHL_labelings_v3/<STACK>/<STACK>_annotation_contours_<TIMESTAMP>.hdf`
-    - Outputs grid indices lookup table
-      - Output: `ROOT_DIR/CSHL_labelings_v3/<STACK>/<STACK>_annotation_win<WIN_ID>_<TIMESTAMP>_grid_indices_lookup.hdf`
-  - `/src/learning/a_train_and_test_classifier_performance_v5.py`
-
 ### identify_patch_class_based_on_labeling_v3_human_annotations
+Script Location: `/src/learning/identify_patch_class_based_on_labeling_v3_human_annotations.py`
+
+Required Files:
+- `ROOT_DIR/CSHL_data_processed/<STACK>/<STACK>_prep2_thumbnail_mask/*_prep2_thumbnail_mask.png`
+- `ROOT_DIR/CSHL_data_processed/<STACK>/<STACK>_prep2_raw_gray/*_prep2_raw_gray.tif`
+- `ROOT_DIR/CSHL_labelings_v3/<STACK>/<STACK>_annotation_contours_<TIMESTAMP>.hdf`
+Outputs
+- Output: `ROOT_DIR/CSHL_labelings_v3/<STACK>/<STACK>_annotation_win<WIN_ID>_<TIMESTAMP>_grid_indices_lookup.hdf`
 
 This script will create a table that takes in a structure and a slice, and returns a list of grid indices. The grid indices each correspond to a patch image foubnd on a slice. Prep2 masks are loaded in for the stack to only use grid indices that are located on the brain and not the background. These grid indices now let you easily load patches for each structure to be used by the CNN for training and testing.
 
 ### train_and_test_classifier_performance_v5
+Script Location: `/src/learning/a_train_and_test_classifier_performance_v5.py`
+
+Required Files:
+- `/media/alexn/BstemAtlasDataBackup/ucsd_brain/CSHL_patch_features/inception-bn-blue/MD589/MD589_prep2_none_win8/MD589-IHC16-2015.07.30-22.20.07_MD589_2_0047_prep2_none_win8_inception-bn-blue_features.bp`
+- `/media/alexn/BstemAtlasDataBackup/ucsd_brain/CSHL_patch_features/inception-bn-blue/MD589/MD589_prep2_none_win8/MD589-IHC16-2015.07.30-22.20.07_MD589_2_0047_prep2_none_win8_inception-bn-blue_features.bp`
+
 
 Loads the pre-trained inception network.
 
