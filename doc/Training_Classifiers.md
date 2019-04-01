@@ -9,6 +9,7 @@ Required Files:
 - `ROOT_DIR/CSHL_data_processed/<STACK>/<STACK>_prep2_thumbnail_mask/*_prep2_thumbnail_mask.png`
 - `ROOT_DIR/CSHL_data_processed/<STACK>/<STACK>_prep2_raw_gray/*_prep2_raw_gray.tif`
 - `ROOT_DIR/CSHL_labelings_v3/<STACK>/<STACK>_annotation_contours_<TIMESTAMP>.hdf`
+  - Contains professional annotation indices which are converted to grid points
 Outputs
 - Output: `ROOT_DIR/CSHL_labelings_v3/<STACK>/<STACK>_annotation_win<WIN_ID>_<TIMESTAMP>_grid_indices_lookup.hdf`
 
@@ -18,8 +19,8 @@ This script will create a table that takes in a structure and a slice, and retur
 Script Location: `/src/learning/a_train_and_test_classifier_performance_v5.py`
 
 Required Files:
-- `/media/alexn/BstemAtlasDataBackup/ucsd_brain/CSHL_patch_features/inception-bn-blue/MD589/MD589_prep2_none_win8/MD589-IHC16-2015.07.30-22.20.07_MD589_2_0047_prep2_none_win8_inception-bn-blue_features.bp`
-- `/media/alexn/BstemAtlasDataBackup/ucsd_brain/CSHL_patch_features/inception-bn-blue/MD589/MD589_prep2_none_win8/MD589-IHC16-2015.07.30-22.20.07_MD589_2_0047_prep2_none_win8_inception-bn-blue_features.bp`
+- `ROOT_DIR/CSHL_patch_features/inception-bn-blue/<STACK>/<STACK>_prep2_none_win8/*_prep2_none_win8_inception-bn-blue_features.bp`
+- `ROOT_DIR/CSHL_patch_features/inception-bn-blue/<STACK>/<STACK>_prep2_none_win8/*_prep2_none_win8_inception-bn-blue_locations.bp`
 
 
 Loads the pre-trained inception network.
