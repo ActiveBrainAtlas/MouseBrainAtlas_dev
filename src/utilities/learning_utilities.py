@@ -1826,13 +1826,22 @@ def generate_annotation_to_grid_indices_lookup(stack, by_human, win_id,
                     patch_indices_allSections_allStructures[sec] = patch_indices_thisSection_allStructures
 
         else:
-            warped_volumes = DataManager.load_transformed_volume_all_known_structures(stack_m=stack_m,
-                                                                              stack_f=stack,
-                                                                                detector_id_f=detector_id_f,
-                                                                              prep_id_f=prep_id,
-                                                                                warp_setting=warp_setting,
-                                                                              sided=True,
-                                                                                 structures=structures)
+            alignment_spec = {'stack_m':stack_m,
+                             'stack_f':stack,
+                             'detector_id_f':detector_id_f,
+                             'prep_id_f':prep_id,
+                             'warp_setting':warp_setting}
+            #warped_volumes = DataManager.load_transformed_volume_all_known_structures(stack_m=stack_m,
+            #                                                                  stack_f=stack,
+            #                                                                    detector_id_f=detector_id_f,
+            #                                                                  prep_id_f=prep_id,
+            #                                                                    warp_setting=warp_setting,
+            #                                                                  sided=True,
+            #                                                                     structures=structures)
+            warped_volumes = DataManager.load_transformed_volume_all_known_structures_v3(alignment_spec,
+                                                                                     resolution='down32',
+                                                                                     sided=True,
+                                                                                     structures=structures)
 
 
             if isinstance(positive_level, float):

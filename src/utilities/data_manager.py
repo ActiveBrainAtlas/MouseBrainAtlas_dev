@@ -4417,6 +4417,7 @@ class DataManager(object):
                               normalization_scheme=normalization_scheme,
                                              model_name=model_name, what='features')
         # download_from_s3(features_fp, local_root=DATA_ROOTDIR)
+        print(features_fp)
         if not os.path.exists(features_fp):
             raise Exception("Features for %s, %s/%s does not exist." % (stack, sec, fn))
             
@@ -4425,7 +4426,10 @@ class DataManager(object):
         locations_fp = DataManager.get_dnn_features_filepath_v2(stack=stack, sec=sec, fn=fn, prep_id=prep_id, win_id=win_id,
                               normalization_scheme=normalization_scheme,
                                              model_name=model_name, what='locations')
-        # print locations_fp
+        print 'FEATURES: *****************************'
+        print features_fp
+        print 'LOCATIONS: *****************************'
+        print locations_fp
         # download_from_s3(locations_fp)
         locations = np.loadtxt(locations_fp).astype(np.int)
 
@@ -5499,8 +5503,6 @@ def generate_metadata_cache():
     metadata_cache['valid_sections_all'] = {}
     metadata_cache['valid_filenames_all'] = {}
     for stack in all_stacks:
-        if not stack=='MD603':
-            continue
 
         try:
             metadata_cache['anchor_fn'][stack] = DataManager.load_anchor_filename(stack)
@@ -5525,7 +5527,6 @@ def generate_metadata_cache():
             sys.stderr.write("Failed to cache %s filenames_to_sections: %s\n" % (stack, e.message))
                     
         try:
-            print 'SECTION LIMITS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
             metadata_cache['section_limits'][stack] = DataManager.load_section_limits_v2(stack, prep_id=2)
         except Exception as e:
             sys.stderr.write("Failed to cache %s section_limits: %s\n" % (stack, e.message))
@@ -5537,7 +5538,6 @@ def generate_metadata_cache():
             sys.stderr.write("Failed to cache %s cropbox: %s\n" % (stack, e.message))
 
         try:
-            print 'VALID SECTIONS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
             first_sec, last_sec = metadata_cache['section_limits'][stack]
             metadata_cache['valid_sections'][stack] = [sec for sec in range(first_sec, last_sec+1) \
                                 if sec in metadata_cache['sections_to_filenames'][stack] and \

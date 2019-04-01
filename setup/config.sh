@@ -18,14 +18,14 @@ export REPO_DIR=$PROJECT_DIR/src/
 # export THUMBNAIL_DATA_ROOTDIR=/media/alexn/BstemAtlasDataBackup/demo_preprocess/
 
 # FOR UCSD BRAIN
-# export ROOT_DIR=/media/alexn/BstemAtlasDataBackup/ucsd_brain/
-# export DATA_ROOTDIR=/media/alexn/BstemAtlasDataBackup/ucsd_brain/
-# export THUMBNAIL_DATA_ROOTDIR=/media/alexn/BstemAtlasDataBackup/ucsd_brain/
+export ROOT_DIR=/media/alexn/BstemAtlasDataBackup/ucsd_brain/
+export DATA_ROOTDIR=/media/alexn/BstemAtlasDataBackup/ucsd_brain/
+export THUMBNAIL_DATA_ROOTDIR=/media/alexn/BstemAtlasDataBackup/ucsd_brain/
 
 # FOR Script testing
-export ROOT_DIR=/media/alexn/BstemAtlasDataBackup/pipeline_test/
-export DATA_ROOTDIR=/media/alexn/BstemAtlasDataBackup/pipeline_test/
-export THUMBNAIL_DATA_ROOTDIR=/media/alexn/BstemAtlasDataBackup/pipeline_test/
+# export ROOT_DIR=/media/alexn/BstemAtlasDataBackup/pipeline_test/
+# export DATA_ROOTDIR=/media/alexn/BstemAtlasDataBackup/pipeline_test/
+# export THUMBNAIL_DATA_ROOTDIR=/media/alexn/BstemAtlasDataBackup/pipeline_test/
 
 
 if [ ! -d $virtualenv ]; then
