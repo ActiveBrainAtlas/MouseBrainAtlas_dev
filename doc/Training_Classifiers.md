@@ -12,6 +12,14 @@ Required scripts:
       - Output: `ROOT_DIR/CSHL_labelings_v3/<STACK>/<STACK>_annotation_win<WIN_ID>_<TIMESTAMP>_grid_indices_lookup.hdf`
   - `/src/learning/a_train_and_test_classifier_performance_v5.py`
 
+### identify_patch_class_based_on_labeling_v3_human_annotations
+
+### train_and_test_classifier_performance_v5
+
+GPU accelerated feature extraction, GPU not necessarily required but increases speed by about 100x.
+
+
+### OLD
 
 `src/learning/train_and_test_classifier_performance_v5.ipynb`, [Link](http://132.239.73.85:8888/notebooks/src/learning/train_and_test_classifier_performance_v5.ipynb).
 
