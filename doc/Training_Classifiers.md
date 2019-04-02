@@ -15,13 +15,15 @@ Outputs
 
 This script will create a table that takes in a structure and a slice, and returns a list of grid indices. The grid indices each correspond to a patch image foubnd on a slice. Prep2 masks are loaded in for the stack to only use grid indices that are located on the brain and not the background. These grid indices now let you easily load patches for each structure to be used by the CNN for training and testing.
 
-### train_and_test_classifier_performance_v5
-Script Location: `/src/learning/a_train_and_test_classifier_performance_v5.py`
+### a_train_and_test_classifier_performance_v4
+Script Location: `/src/learning/a_train_and_test_classifier_performance_v4.py`
+
+Note: this is intended to be replaced with the newer and more robust "v5", however this will take some time.
 
 Required Files:
+- Same dependencies as previous scripts, with some additional dependencies
 - `ROOT_DIR/CSHL_patch_features/inception-bn-blue/<STACK>/<STACK>_prep2_none_win8/*_prep2_none_win8_inception-bn-blue_features.bp`
 - `ROOT_DIR/CSHL_patch_features/inception-bn-blue/<STACK>/<STACK>_prep2_none_win8/*_prep2_none_win8_inception-bn-blue_locations.bp`
-
 
 Loads the pre-trained inception network.
 
