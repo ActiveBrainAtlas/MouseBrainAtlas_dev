@@ -4426,10 +4426,10 @@ class DataManager(object):
         locations_fp = DataManager.get_dnn_features_filepath_v2(stack=stack, sec=sec, fn=fn, prep_id=prep_id, win_id=win_id,
                               normalization_scheme=normalization_scheme,
                                              model_name=model_name, what='locations')
-        print 'FEATURES: *****************************'
-        print features_fp
-        print 'LOCATIONS: *****************************'
-        print locations_fp
+        #print 'FEATURES: *****************************'
+        #print features_fp
+        #print 'LOCATIONS: *****************************'
+        #print locations_fp
         # download_from_s3(locations_fp)
         locations = np.loadtxt(locations_fp).astype(np.int)
 

@@ -20,8 +20,8 @@
 "MD594": {
     "prep2_section_min": 92,
     "prep2_section_max": 364,
-    "local_offset_x": -100,
-    "local_offset_y": -10,
+    "local_offset_x": -101,
+    "local_offset_y": -20,
     "local_offset_slices": -8,
     "image_width_um": 37426,
     "image_height_um": 24139

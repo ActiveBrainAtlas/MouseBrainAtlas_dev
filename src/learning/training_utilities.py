@@ -1,4 +1,21 @@
+import sys
+import os
+import time
+
+sys.path.append(os.environ['REPO_DIR'] + '/utilities')
+from utilities2015 import *
+from metadata import *
+from data_manager import *
+from learning_utilities import *
+
+grid_indices_lookup_allStacks = {}
+grid_indices_lookup_allStacks['MD589'] = DataManager.load_annotation_to_grid_indices_lookup(stack='MD589',win_id=7, by_human=True, timestamp='latest', return_locations=True)
+#grid_indices_lookup_allStacks['MD585'] = DataManager.load_annotation_to_grid_indices_lookup(stack='MD585',win_id=7, by_human=True, timestamp='latest', return_locations=True)
+
 def sample_addresses(stacks, structure):
+    from itertools import chain
+    all_labels = sorted(list(set(chain.from_iterable(set(grid_indices_lookup_allStacks[st].columns.tolist()) 
+                                                 for st in stacks))))
 
     positive_labels = [structure]
     negative_labels = get_negative_labels(structure, 'neg_has_all_surround',

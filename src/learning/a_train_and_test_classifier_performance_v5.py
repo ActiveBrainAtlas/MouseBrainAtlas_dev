@@ -42,6 +42,7 @@ stack_stain = {'MD589': 'N'}
 
 
 
+# Load pre-trained inception network
 batch_size = 256
 model_dir_name = 'inception-bn-blue'
 model_name = 'inception-bn-blue'
@@ -114,7 +115,10 @@ for stack in test_stacks:
     for sec in metadata_cache['valid_sections'][stack]:
 
         print stack, sec
-
+        # Loads ROOT_DIR/CSHL_patch_features/inception-bn-blue/<STACK>/<STACK>_prep2_none_win<WIN_ID>/\
+        #    <SECTION>_prep2_none_win8_inception-bn-blue_features.bp
+        # locations_100um contains set of coordinates of each patches origin
+        # features_100um contains the 1024 length feature vector for each patch
         features_100um, locations_100um = DataManager.load_dnn_features_v2(stack=stack, sec=sec,
                                                                            prep_id=prep_id, win_id=7,
                                                                            normalization_scheme='none',

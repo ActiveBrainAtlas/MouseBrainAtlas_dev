@@ -22,6 +22,7 @@ from learning_utilities import *
 
 
 for stack in [stack]:
+    # Loads human-annotation files, generates grid indices lookup table
     grid_index_class_lookup, latest_timestamp = \
     generate_annotation_to_grid_indices_lookup_v2(stack, win_id=win_id, \
                                                   by_human=True, 

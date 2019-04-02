@@ -282,6 +282,7 @@ def add_structure_to_neuroglancer( viewer, str_contour, structure, stack, first_
             str_new_voxels_zyx = np.shape(structure_volume)
             large_sparse_str_voxels_zyx = np.shape(big_sparse_structure_volume)
             print(e) # Maybe can remove this whole block after new changes
+            print('Cutting out some slices on the edge of the structure')
             big_sparse_structure_volume[-str_new_voxels_zyx[0]:,-str_new_voxels_zyx[1]:,-str_new_voxels_zyx[2]:] = \
             structure_volume[-large_sparse_str_voxels_zyx[0]:,:,:]
                 
