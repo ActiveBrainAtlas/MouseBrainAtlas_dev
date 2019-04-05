@@ -281,10 +281,16 @@ def add_structure_to_neuroglancer( viewer, str_contour, structure, stack, first_
         except Exception as e:
             str_new_voxels_zyx = np.shape(structure_volume)
             large_sparse_str_voxels_zyx = np.shape(big_sparse_structure_volume)
+            low_end_z_len = np.min([large_sparse_str_voxels_zyx[0], str_new_voxels_zyx[0]])
+            low_end_y_len = np.min([large_sparse_str_voxels_zyx[1], str_new_voxels_zyx[1]])
+            low_end_x_len = np.min([large_sparse_str_voxels_zyx[2], str_new_voxels_zyx[2]])
             print(e) # Maybe can remove this whole block after new changes
             print('Cutting out some slices on the edge of the structure')
-            big_sparse_structure_volume[-str_new_voxels_zyx[0]:,-str_new_voxels_zyx[1]:,-str_new_voxels_zyx[2]:] = \
-            structure_volume[-large_sparse_str_voxels_zyx[0]:,:,:]
+            print('New shape: ',low_end_z_len, low_end_y_len, low_end_x_len )
+            big_sparse_structure_volume[-low_end_z_len:,-low_end_y_len:,-low_end_x_len:] = \
+                structure_volume[-low_end_z_len:,-low_end_y_len:,-low_end_x_len:]
+            #big_sparse_structure_volume[-str_new_voxels_zyx[0]:,-str_new_voxels_zyx[1]:,-str_new_voxels_zyx[2]:] = \
+            #    structure_volume[-large_sparse_str_voxels_zyx[0]:,-large_sparse_str_voxels_zyx[1]:,-large_sparse_str_voxels_zyx[2]:]
                 
         #del structure_volume
         structure_volume = big_sparse_structure_volume.copy()
