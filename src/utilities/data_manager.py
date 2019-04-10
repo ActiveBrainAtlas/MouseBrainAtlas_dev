@@ -5503,6 +5503,25 @@ def generate_metadata_cache():
     metadata_cache['valid_sections_all'] = {}
     metadata_cache['valid_filenames_all'] = {}
     for stack in all_stacks:
+        
+        # Don't print out long error messages if base folder not found
+        if not os.path.exists(os.environ['ROOT_DIR']+'CSHL_data_processed/'+stack+'/'):
+            sys.stderr.write("Folder for stack %s not found, skipping.\n" % (stack))
+            continue
+        # Try to load metadata_cache file before doing anything else
+        try:
+            with open(os.environ['ROOT_DIR']+'CSHL_data_processed/'+stack+'/'+stack+'_metadata_cache.json') as json_file:  
+                saved_metadata = json.load(json_file)
+            for key in saved_metadata.keys():
+                if key=='stack':
+                    continue
+                else:
+                    metadata_cache[key][stack] = saved_metadata[key]
+            print( 'Loaded data from saved metadata_cache for '+stack )
+            continue
+        except:
+            pass
+        
 
         try:
             metadata_cache['anchor_fn'][stack] = DataManager.load_anchor_filename(stack)
