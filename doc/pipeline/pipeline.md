@@ -17,9 +17,9 @@ The single setup script and seven preprocessing scripts are spaced with user int
 
 ### Setup Script
 ---
-__Command__: `python a_script_preprocess_setup.py $stack`
+__Command__: `python a_script_preprocess_setup.py $stack $stain`
 
-__Description__: 
+__Description__: Downloads the following files from S3: operation configs, mxnet files, atlas version 7 volume, classifier settings.
 
 
 ### Script 1
@@ -65,27 +65,29 @@ __User step__: User specifies a cropping box for the entire brain (called prep5 
 
 ### Script 5
 ---
-__Command__: `python a_script_preprocessing_5.py $stack $stain -l $rostral_limit, $caudal_limit, $dorsal_limit, $ventral_limit`
+__Command__: `python a_script_preprocessing_5.py $stack $stain -l $rostral_limit $caudal_limit $dorsal_limit $ventral_limit`
 
 __Description__: Using the user specified whole brain cropbox, cropped images are generated and saved as raw "prep5" images. Thumbnails are then generated.
 
-__User step__: Similar to the last user step, the user specifies a cropping box for the brainstem region (called prep2 crop). Using the prep5 thumbnail images, the user should open one of the larger slices near the middle of the stack (where the brainstem region's size would be maximized) and must find the vertices of a rectangle that encloses the brainstem region. Record this cropping box in the following fomat: (rostral_limit, caudal_limit, dorsal_limit, ventral_limit). For convenience this is equivalent to: (x_min, x_max, y_min, y_max).
+__User step__: Similar to the last user step, the user specifies a cropping box for the brainstem region (called prep2 crop). Using the prep5 thumbnail images, the user should open one of the larger slices near the middle of the stack (where the brainstem region's size would be maximized) and must find the vertices of a rectangle that encloses the brainstem region. Record this cropping box in the following fomat: (rostral_limit, caudal_limit, dorsal_limit, ventral_limit). For convenience this is equivalent to: (x_min, x_max, y_min, y_max). "_2" is appended to the limits when referenced in Script 6 to differentiate from the previous limits.
+
+__User step 2__: Record (prep2_section_min, prep2_section_max). These are the slice numbers in which the brainstem region is enclosed. Typical values might be (90, 370).
 
 
 ### Script 6
 ---
-__Command__: `python a_script_preprocessing_6.py $stack $stain`
+__Command__: `python a_script_preprocessing_6.py $stack $stain -l $rostral_limit_2 $caudal_limit_2 $dorsal_limit_2 $ventral_limit_2 $prep2_section_min $prep2_section_max`
 
-__Description__: 
+__Description__: Using the user specified brainstem cropbox, cropped images are generated and saved as raw "prep2" images. Thumbnails are then generated. Raw prep2 images are compressed into jpeg format. Finally the masks are cropped to match the prep2 images. These raw prep2 images are finished being processed, they are the images that will be used throughout the rest of the pipeline.
 
-__User step__: Record X/Y/Z coordinates for midpoint of 12N, 3N_R on midplane.
+__User step__: Record X/Y/Z coordinates for midpoint of 12N, 3N_R on midplane, the following gui can be used to assist: `$REPO_DIR/gui/brain_labeling_gui_v28.py $stack --img_version $img_version_2`. If resolution of the images is NOT _0.46um_: set --resolution flag to 'thumbnail' or '1um' as follows: `--resolution 1um`.
 
 
 ### Script 7
 ---
-__Command__: `python a_script_preprocessing_7.py $stack $stain`
+__Command__: `python a_script_preprocessing_7.py $stack $stain -l $x_12N $y_12N $x_3N $y_3N $z_midline`
 
-__Description__: 
+__Description__: Generates intensity volume, then obtains simple global alignment of the atlas using manually inputted 12N and 3N_R center coordinates.
 
 
 # Structure Registration Scripts
