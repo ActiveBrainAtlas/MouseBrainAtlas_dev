@@ -55,18 +55,21 @@ __User step__: Manually correct the generated masks with the following command, 
 ---
 __Command__: `python a_script_preprocessing_4.py $stack $stain`
 
-__Description__: Creates "original_image_crop.csv" file which contains the dimensions of every thumbnail (32x downsampled) image. Applies reverse prep1 transforms on all masks and saves these unaligned masks in the original orientation of the images. Applies a local adaptive intensity normalization on NTB images.
+__Description__: Creates "original_image_crop.csv" file which contains the dimensions of every thumbnail (32x downsampled) image. Applies reverse prep1 transforms on all masks and saves these unaligned masks in the original orientation of the images. Applies a local adaptive intensity normalization algorithm on NTB images.
 
-__User step__: User specifies prep5 cropping box.
+- __Algorithm descriptions [inc]__
+    - local adaptive intensity normalization algorithm: [inc]
 
+__User step__: User specifies a cropping box for the entire brain (called prep5 crop). Using the prep1 thumbnail images, the user must open one of the larger slices near the middle of the stack (where the slice's size would be maximized) and must find the vertices of a rectangle that encloses the brain tissue, such that all the brain tissue on every image is enclosed in this space. Record this cropping box in the following fomat: (rostral_limit, caudal_limit, dorsal_limit, ventral_limit). For convenience this is equivalent to: (x_min, x_max, y_min, y_max).
+ 
 
 ### Script 5
 ---
-__Command__: `python a_script_preprocessing_5.py $stack $stain`
+__Command__: `python a_script_preprocessing_5.py $stack $stain -l $rostral_limit, $caudal_limit, $dorsal_limit, $ventral_limit`
 
-__Description__: 
+__Description__: Using the user specified whole brain cropbox, cropped images are generated and saved as raw "prep5" images. Thumbnails are then generated.
 
-__User step__: User specifies prep2 cropping box.
+__User step__: Similar to the last user step, the user specifies a cropping box for the brainstem region (called prep2 crop). Using the prep5 thumbnail images, the user should open one of the larger slices near the middle of the stack (where the brainstem region's size would be maximized) and must find the vertices of a rectangle that encloses the brainstem region. Record this cropping box in the following fomat: (rostral_limit, caudal_limit, dorsal_limit, ventral_limit). For convenience this is equivalent to: (x_min, x_max, y_min, y_max).
 
 
 ### Script 6
