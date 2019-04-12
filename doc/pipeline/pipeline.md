@@ -9,72 +9,72 @@ The single setup script and seven preprocessing scripts are spaced with user int
 
 ### Setup Script
 ---
-Command: `python a_script_preprocess_setup.py $stack`
+__Command__: `python a_script_preprocess_setup.py $stack`
 
-Description: 
+__Description__: 
 
 
 ### Script 1
 ---
-Command: `python a_script_preprocessing_1.py $stack $stain`
+__Command__: `python a_script_preprocessing_1.py $stack $stain`
 
-Description: Converts images from .jp2 format to .tiff format. Extracts the blue channel for slides stained with T or NTB. NTB slides are intensity normalized. 32x downsampled thumbnails are generated for every image.
+__Description__: Converts images from .jp2 format to .tiff format. Extracts the blue channel for slides stained with T or NTB. NTB slides are intensity normalized. 32x downsampled thumbnails are generated for every image.
 
-User step: Check slice orientations. All slices must be cut sagittally, roughly oriented with the rostral side on the left, and slices must begin on the left hemisphere of the brain.
+__User step__: Check slice orientations. All slices must be cut sagittally, roughly oriented with the rostral side on the left, and slices must begin on the left hemisphere of the brain.
 
 
 ### Script 2
 ---
-Command: `python a_script_preprocessing_2.py $stack $stain`
+__Command__: `python a_script_preprocessing_2.py $stack $stain`
 
-Description: 
+__Description__: 
 
-User step:
+__User step__:
 
 
 ### Script 3
 ---
-Command: `python a_script_preprocessing_3.py $stack $stain`
+__Command__: `python a_script_preprocessing_3.py $stack $stain`
 
-Description:  
+__Description__:  
 
-User step:
+__User step__:
 
 
 ### Script 4
 ---
-Command: `python a_script_preprocessing_4.py $stack $stain`
+__Command__: `python a_script_preprocessing_4.py $stack $stain`
 
-Description:  
+__Description__:  
 
-User step:
+__User step__:
 
 
 ### Script 5
 ---
-Command: `python a_script_preprocessing_5.py $stack $stain`
+__Command__: `python a_script_preprocessing_5.py $stack $stain`
 
-Description:  
+__Description__:  
 
-User step:
+__User step__:
 
 
 ### Script 6
 ---
-Command: `python a_script_preprocessing_6.py $stack $stain`
+__Command__: `python a_script_preprocessing_6.py $stack $stain`
 
-Description:  
+__Description__:  
 
-User step:
+__User step__:
 
 
 ### Script 7
 ---
-Command: `python a_script_preprocessing_7.py $stack $stain`
+__Command__: `python a_script_preprocessing_7.py $stack $stain`
 
-Description:  
+__Description__:  
 
-User step:
+__User step__:
 
 
 # Structure Registration Scripts
