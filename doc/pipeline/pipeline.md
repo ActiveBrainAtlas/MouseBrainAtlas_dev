@@ -101,4 +101,18 @@ __Description__: Generates intensity volume, then obtains simple global alignmen
     - Simple global alignment algorithm:
         - Affine transformations are applied to the atlas so that the midpoints of 3N_R and 12N coincide with the midpoints of the current stack as entered by the user. These two structures were chosen as they both lay on the midline and are relatively far apart from one another. Mapping the atlas this way gives a good starting transformation which is improved in future scripts.
 
+
 # Structure Registration Scripts
+
+---------------------------
+## Processing Script
+---------------------------
+- __Description__: This processing script calls four other scripts that compose the processing pipeline. These are listed below.
+    - Compute Patch Features
+    - Generate Probability Volumes
+    - Structure Registration
+    - Generate visualizations of registered structures and patch features
+
+__Command__: `python a_script_processing.py $stack $stain $id_detector`
+
+__Algorithms__: 
