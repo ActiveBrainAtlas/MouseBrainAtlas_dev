@@ -240,7 +240,7 @@ Draw initial snake contours.
 	└── CSHL_volumes
 		└── STACK
 			└── STACK_wholebrainWithMargin_10.0um_intensityVolume
-				└── STACK_prep2_none_win7
+				└── STACK_prep2_none_win7 # Possibly incorrect, may not exist
 					├── STACK_wholebrainWithMargin_10.0um_intensityVolume.bp
 					└── STACK_wholebrainWithMargin_10.0um_intensityVolume_origin_wrt_wholebrain.txt
 	```
