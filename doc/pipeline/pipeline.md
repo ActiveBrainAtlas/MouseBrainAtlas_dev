@@ -97,7 +97,8 @@ __Command__: `python a_script_preprocessing_7.py $stack $stain -l $x_12N $y_12N 
 __Description__: Generates intensity volume, then obtains simple global alignment of the atlas using manually inputted 12N and 3N_R center coordinates.
 
 - __Algorithm descriptions [inc]__
-    - Intensity volume generation algorithm: [inc]
+    - Intensity volume generation algorithm:
+        - Creates a 3D voxel-based representation of the brain at a resolution of 10um x 10um x 20um by default. Placeholder slices are filled with copies of the previous slice. The end product is a every image downsampled and stitched together with the area outside of each mask being set to 0. This allows for a quick analysis of the shape, orientation, and varied intensity of this brain relative to others. 
     - Simple global alignment algorithm:
         - Affine transformations are applied to the atlas so that the midpoints of 3N_R and 12N coincide with the midpoints of the current stack as entered by the user. These two structures were chosen as they both lay on the midline and are relatively far apart from one another. Mapping the atlas this way gives a good starting transformation which is improved in future scripts.
 
