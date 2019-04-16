@@ -4,7 +4,7 @@ import argparse
 
 parser = argparse.ArgumentParser(
     formatter_class=argparse.RawDescriptionHelpFormatter,
-    description='')
+    description='Creates "original_image_crop.csv" file which contains the dimensions of every thumbnail (32x downsampled) image. Applies reverse prep1 transforms on all masks and saves these unaligned masks in the original orientation of the images. Applies a local adaptive intensity normalization algorithm on NTB images.')
 
 parser.add_argument("stack", type=str, help="The name of the stack")
 parser.add_argument("stain", type=str, help="Either \'NTB\' or \'Thionin\'.")

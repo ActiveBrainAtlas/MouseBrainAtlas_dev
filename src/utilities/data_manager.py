@@ -5508,13 +5508,16 @@ def generate_metadata_cache():
         if not os.path.exists(os.environ['ROOT_DIR']+'CSHL_data_processed/'+stack+'/'):
             sys.stderr.write("Folder for stack %s not found, skipping.\n" % (stack))
             continue
-        # Try to load metadata_cache file before doing anything else
+        # Try to load metadata_cache.json file before doing anything else
         try:
             with open(os.environ['ROOT_DIR']+'CSHL_data_processed/'+stack+'/'+stack+'_metadata_cache.json') as json_file:  
                 saved_metadata = json.load(json_file)
             for key in saved_metadata.keys():
+                # The metadata_cache json file has extraneous keys. (currently only "stack")
                 if key=='stack':
                     continue
+                if key=='sections_to_filenames':
+                    metadata_cache[key][stack] = {int(k):v for k,v in saved_metadata[key].items()}
                 else:
                     metadata_cache[key][stack] = saved_metadata[key]
             print( 'Loaded data from saved metadata_cache for '+stack )

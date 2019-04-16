@@ -4,13 +4,15 @@ import argparse
 
 parser = argparse.ArgumentParser(
     formatter_class=argparse.RawDescriptionHelpFormatter,
-    description='')
+    description='Generates image translation and rotation alignment parameters, one "anchor" file is chosen which all other images are aligned to. User can choose to pass an images filename in to be the anchor image, otherwise the anchor image will be chosen automatically. Image alignment parameters are applied and the new aligned image stack is saved as so called "prep1" images. The background is padded white for T stain and black for NTB stain.')
 
 parser.add_argument("stack", type=str, help="The name of the stack")
 parser.add_argument("stain", type=str, help="Either \'NTB\' or \'Thionin\'.")
+parser.add_argument('--anchor_fn', default="auto", type=str)
 args = parser.parse_args()
 stack = args.stack
 stain = args.stain
+anchor_fn = args.anchor_fn
 
 # Import other modules and packages
 import os
@@ -77,11 +79,11 @@ def create_anchor_file( anchor_fn='auto' ):
     f = open( anchor_text_fp , "w")
     f.write( anchor_fn ) 
     f.close()
-    
+    # Returns the chosen anchor filename just in case it is being suto-selected
     return anchor_fn
     
 # Create 2 files necessary for running the following 2 scripts
-anchor_fn = create_anchor_file()
+anchor_fn = create_anchor_file( anchor_fn=anchor_fn )
 create_from_none_to_aligned_file()
 
 if stain == 'NTB':

@@ -4,7 +4,7 @@ import argparse
 
 parser = argparse.ArgumentParser(
     formatter_class=argparse.RawDescriptionHelpFormatter,
-    description='Runs the entirety of the processing pipeline. Assumes prep2 images have been generated and all necessary files are downloaded from S3.')
+    description='')
 
 parser.add_argument("stack", type=str, help="The name of the stack")
 parser.add_argument("stain", type=str, help="Either \'NTB\' or \'Thionin\'.")
@@ -30,12 +30,6 @@ from data_manager import DataManager
 from a_driver_utilities import *
 
 id_classifier = detector_settings.loc[id_detector]['feature_classifier_id']
-
-
-if stain == 'NTB':
-    img_version = 'NtbNormalizedAdaptiveInvertedGamma'
-if stain == 'Thionin':
-    img_version = 'gray'
     
 # Download mxnet files
 s3_fp = 's3://mousebrainatlas-data/mxnet_models/inception-bn-blue/'

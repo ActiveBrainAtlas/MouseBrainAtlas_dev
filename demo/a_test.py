@@ -1,3 +1,19 @@
+#!/usr/bin/env python
+
+import argparse
+
+parser = argparse.ArgumentParser(
+    formatter_class=argparse.RawDescriptionHelpFormatter,
+    description='')
+
+parser.add_argument("stack", type=str, help="The name of the stack")
+parser.add_argument('-l','--list', nargs='+', help='<Required> Set flag', required=True)
+args = parser.parse_args()
+list = args.list
+
+print list
+
+
 import sys
 import os
 sys.path.append(os.path.join(os.environ['REPO_DIR'], 'utilities'))

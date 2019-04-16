@@ -4,7 +4,7 @@ import argparse
 
 parser = argparse.ArgumentParser(
     formatter_class=argparse.RawDescriptionHelpFormatter,
-    description='')
+    description='Generates binary masks for every image to segment the pixels containing the brain.')
 
 parser.add_argument("stack", type=str, help="The name of the stack")
 parser.add_argument("stain", type=str, help="Either \'NTB\' or \'Thionin\'.")

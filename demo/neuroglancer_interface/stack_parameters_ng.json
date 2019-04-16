@@ -2,8 +2,8 @@
 "MD585": {
     "prep2_section_min": 83,
     "prep2_section_max": 352,
-    "local_offset_x": -43,
-    "local_offset_y": 19,
+    "local_offset_x": -41,
+    "local_offset_y": 14,
     "local_offset_slices": 0,
     "image_width_um": 35617,
     "image_height_um": 26086
