@@ -120,4 +120,4 @@ __Command__: `python a_script_processing.py $stack $stain $id_detector`
     - Computing patch features requires a CNN model (uses mxnet model inception-bn-blue), a windowing id (which dictates the spacing and x-y dimensions of the patches used, default=7), and a normalization scheme (default is None). First the patches and locations need to be generated. Using the specified windowing id patch origin locations will be generated for every image, these patches will span the mask of the prep2 image. The patches are individually fed into the inception-bn-blue pre-trained neural network and the output layer, of length 1024, is returned and assigned to that patch. Each patch location will have this associated 1024-length patch feature.
 
 - __Probability Volumes Algorithm__: 
-    - 
+    - Generating probability volumes involves loading in the current atlas (v7 as of the April 2019 paper) and
