@@ -38,10 +38,11 @@ else:
     print(structure_list)
 
 atlas_spec = dict(name='atlasV7',
-                   vol_type='score'    ,
-                    resolution='10.0um'
+                   vol_type='score',
+                   resolution='10.0um'
                    )
-
+# volume = atlas_structures_wrt_canonicalAtlasSpace_atlasResol[structure][0]
+# offset = atlas_structures_wrt_canonicalAtlasSpace_atlasResol[structure][1]
 atlas_structures_wrt_canonicalAtlasSpace_atlasResol = \
 DataManager.load_original_volume_all_known_structures_v3(atlas_spec, in_bbox_wrt='canonicalAtlasSpace',
                                                         out_bbox_wrt='canonicalAtlasSpace')
@@ -85,7 +86,7 @@ DataManager.load_original_volume_all_known_structures_v3(atlas_spec, in_bbox_wrt
 #           '/home/yuncong/' + stack + '_registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners.json')
 
 
-# Compute score maps.
+# For computing score maps.
 
 batch_size = 256
 model_dir_name = 'inception-bn-blue'
@@ -112,7 +113,7 @@ try:
     registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners = load_json(fp)
 # Make cropping box cover the entire image if Global Alignment was not run
 except:
-    print('Global Alginment files not found, not using a cropping box')
+    print('Global Alignment files not found, not using a cropping box')
     
     registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners = {}
     all_structures_total = structures_sided_sorted_by_size
@@ -137,6 +138,7 @@ section_margin = int(section_margin_um / SECTION_THICKNESS)
 image_margin_um = 2000.
 image_margin = int(np.round(image_margin_um / convert_resolution_string_to_um('raw', stack)))
 
+# This for loop populates `registered_atlas_structures_wrt_wholebrainXYcropped_bboxes_perSection`
 for name_u in structure_list:
 
     if name_u in singular_structures:
@@ -153,6 +155,7 @@ for name_u in structure_list:
              xmax + image_margin,
              max(ymin - image_margin, 0),
              ymax + image_margin)
+    # Structure present on left (_L) and right (_R) hemispheres
     else:
 
         a = defaultdict(list)
@@ -298,9 +301,9 @@ for name_u in structure_list:
 
         print name_s
         #print registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners
-	if name_s not in registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners:
-	    sys.stderr.write("Score volume ROI derived from simple global alignment does not exist. Skip generating score volume.\n")
-	    continue
+        if name_s not in registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners:
+            sys.stderr.write("Score volume ROI derived from simple global alignment does not exist. Skip generating score volume.\n")
+            continue
 
         (xmin, ymin, s1), (xmax, ymax, s2) = registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners[name_s]
 

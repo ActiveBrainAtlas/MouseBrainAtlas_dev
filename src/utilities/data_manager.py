@@ -4161,6 +4161,7 @@ class DataManager(object):
         # download_from_s3(scoremap_bp_filepath)
 
         if not os.path.exists(scoremap_bp_filepath):
+            print( scoremap_bp_filepath+'    does NOT exist' )
             raise Exception('No scoremap for image %s (section %d) for label %s\n' % \
             (metadata_cache['sections_to_filenames'][stack][section], section, structure))
 

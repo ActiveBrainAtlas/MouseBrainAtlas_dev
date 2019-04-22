@@ -3043,13 +3043,13 @@ def read_features(addresses, scheme, win_id, prep_id=2,
 
 def compute_and_save_features_one_section(scheme, win_id, stack=None, prep_id=2,
                               locations_roi=None,
-                  bbox=None,
-                  sec=None, fn=None,
-                  method='cnn',
-                  model=None, mean_img=None, model_name=None,
-                  batch_size=None,
-                                          attach_timestamp=False,
-                                         version=None, recompute=False):
+                              bbox=None,
+                              sec=None, fn=None,
+                              method='cnn',
+                              model=None, mean_img=None, model_name=None,
+                              batch_size=None,
+                              attach_timestamp=False,
+                              version=None, recompute=False):
     """
     Compute features for one section.
     First try loading the saved list, then only compute the difference and save augmented list.
@@ -3086,6 +3086,7 @@ def compute_and_save_features_one_section(scheme, win_id, stack=None, prep_id=2,
         t = time.time()
         mask_tb = DataManager.load_thumbnail_mask_v3(stack=stack, prep_id=prep_id, fn=fn)
         grid_spec = win_id_to_gridspec(win_id=win_id, stack=stack)
+        # Generate the patch locations
         locations_roi = locate_patches_v2(grid_spec=grid_spec, mask_tb=mask_tb,
                                         bbox_lossless=(roi_xmin, roi_ymin, roi_w, roi_h),
                                        return_locations=True)
