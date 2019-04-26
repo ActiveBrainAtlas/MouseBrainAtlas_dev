@@ -9,10 +9,10 @@ import re
 sys.path.append(os.path.join(os.environ['REPO_DIR'], 'utilities'))
 from utilities2015 import *
 from metadata import *
-# try:
-#     from vis3d_utilities import *
-# except:
-#     sys.stderr.write("No vtk")
+try:
+    from vis3d_utilities import *
+except:
+    sys.stderr.write("No vtk")
 from distributed_utilities import *
 
 use_image_cache = False
@@ -582,6 +582,7 @@ def images_to_volume_v2(images, spacing_um, in_resol_um, out_resol_um, crop_to_m
     if isinstance(images, dict):
 
         shapes = np.array([im.shape[:2] for im in images.values()])
+        print images.values()
         assert len(np.unique(shapes[:,0])) == 1, 'Height of all images must be the same.'
         assert len(np.unique(shapes[:,1])) == 1, 'Width of all images must be the same.'
 
@@ -1091,8 +1092,6 @@ class DataManager(object):
         if not os.path.exists(fp):
             sys.stderr.write("No anchor.txt is found. Seems we are using the operation ini to provide anchor. Try to load operation ini.\n")
             fp = DataManager.get_anchor_filename_filename_v2(stack) # ini
-            print fp
-            print '****************************************************************'
             anchor_image_name = load_ini(fp)['anchor_image_name']
         else:
             # download_from_s3(fp, local_root=THUMBNAIL_DATA_ROOTDIR)
@@ -1283,6 +1282,8 @@ class DataManager(object):
             fp = DataManager.get_cropbox_filename_v2(stack=stack, anchor_fn=anchor_fn, prep_id=prep_id)
         else:
             raise Exception("prep_id %s must be either str or int" % prep_id)
+
+        print fp
         if not os.path.exists(fp):
             sys.stderr.write("Seems you are using operation INIs to provide cropbox.\n")
             if prep_id == 2 or prep_id == 'alignedBrainstemCrop':
@@ -1292,7 +1293,8 @@ class DataManager(object):
             else:
                 raise Exception("Not implemented")
         else:
-            raise Exception("Cannot find any cropbox specification.")
+            print 'TESTING'
+            #raise Exception("Cannot find any cropbox specification.")
 
             # download_from_s3(fp, local_root=THUMBNAIL_DATA_ROOTDIR)
 
@@ -1716,7 +1718,7 @@ class DataManager(object):
             elif isinstance(structure, list):
                 basename += '_' + '_'.join(sorted(structure))
             else:
-                raise
+                raise ValueError('The following structure is not valid: ',structure)
 
         return basename
 
@@ -2280,6 +2282,7 @@ class DataManager(object):
                          '%(basename)s_%(struct)s.stl') % \
     {'stack':brain_spec['name'], 'basename':basename, 'struct':structure}
             else:
+                print level
                 mesh_fp = os.path.join(MESH_ROOTDIR, '%(stack)s',
                           '%(basename)s',
                          '%(basename)s_%(struct)s_l%(level).1f.stl') % \
@@ -2324,29 +2327,29 @@ class DataManager(object):
         if isinstance(levels, float) or levels is None:
             meshes = {}
             for structure in structures:
-                try:
+                #try:
                     meshes[structure] = DataManager.load_mesh_v2(brain_spec=brain_spec,
                                                                  structure=structure,
                                                                  resolution=resolution,
                                                                  return_polydata_only=return_polydata_only,
                                                                 level=levels)
-                except Exception as e:
-                    sys.stderr.write('Error loading mesh for %s: %s\n' % (structure, e))
+                #except Exception as e:
+                    #sys.stderr.write('Error loading mesh for %s: %s\n' % (structure, e))
             return meshes
 
         else:
             meshes_all_levels_all_structures = defaultdict(dict)
             for structure in structures:
                 for level in levels:
-                    try:
+                    #try:
                         meshes[structure][level] = DataManager.load_mesh_v2(brain_spec=brain_spec,
                                                                      structure=structure,
                                                                      resolution=resolution,
                                                                      return_polydata_only=return_polydata_only,
                                                                     level=level)
-                    except Exception as e:
-                        raise e
-                        sys.stderr.write('Error loading mesh for %s: %s\n' % (structure, e))
+                    #except Exception as e:
+                        #raise e
+                        #sys.stderr.write('Error loading mesh for %s: %s\n' % (structure, e))
             meshes_all_levels_all_structures.default_factory = None
 
             return meshes_all_levels_all_structures
@@ -4391,6 +4394,8 @@ class DataManager(object):
         feature_fp = os.path.join(PATCH_FEATURES_ROOTDIR, model_name, stack,
                     stack + '_' + prep_str + '_' + normalization_scheme + '_' + win_str,
             fn + '_' + prep_str + '_' + normalization_scheme + '_' + win_str + '_' + model_name + '_' + what + ('_%s'%timestamp if timestamp is not None else '') + '.bp')
+        
+        print feature_fp
 
         return feature_fp
 
@@ -4407,20 +4412,24 @@ class DataManager(object):
 
         Note: `mean_img` is assumed to be the default provided by mxnet.
         """
-
+        
         features_fp = DataManager.get_dnn_features_filepath_v2(stack=stack, sec=sec, fn=fn, prep_id=prep_id, win_id=win_id,
                               normalization_scheme=normalization_scheme,
                                              model_name=model_name, what='features')
         # download_from_s3(features_fp, local_root=DATA_ROOTDIR)
+        print(features_fp)
         if not os.path.exists(features_fp):
             raise Exception("Features for %s, %s/%s does not exist." % (stack, sec, fn))
-
+            
         features = bp.unpack_ndarray_file(features_fp)
-
+        
         locations_fp = DataManager.get_dnn_features_filepath_v2(stack=stack, sec=sec, fn=fn, prep_id=prep_id, win_id=win_id,
                               normalization_scheme=normalization_scheme,
                                              model_name=model_name, what='locations')
-        # print locations_fp
+        #print 'FEATURES: *****************************'
+        #print features_fp
+        #print 'LOCATIONS: *****************************'
+        #print locations_fp
         # download_from_s3(locations_fp)
         locations = np.loadtxt(locations_fp).astype(np.int)
 
@@ -4642,8 +4651,8 @@ class DataManager(object):
     #     return image_dir
 
     @staticmethod
-    def load_image_v2(stack, prep_id, resol='raw', version=None, section=None, fn=None, data_dir=DATA_DIR, ext=None, thumbnail_data_dir=THUMBNAIL_DATA_DIR, convert_from_alternative=True):
-
+    def load_image_v2(stack, prep_id, resol='lossless', version=None, section=None, fn=None, data_dir=DATA_DIR, ext=None, thumbnail_data_dir=THUMBNAIL_DATA_DIR, convert_from_alternative=True):
+        
         img_fp = DataManager.get_image_filepath_v2(stack=stack, prep_id=prep_id, resol=resol, version=version,
                                                        section=section, fn=fn, data_dir=data_dir, ext=ext,
                                                       thumbnail_data_dir=thumbnail_data_dir)
@@ -5495,6 +5504,30 @@ def generate_metadata_cache():
     metadata_cache['valid_filenames_all'] = {}
     for stack in all_stacks:
 
+        # Don't print out long error messages if base folder not found
+        if not os.path.exists(os.environ['ROOT_DIR'] + 'CSHL_data_processed/' + stack + '/'):
+            sys.stderr.write("Folder for stack %s not found, skipping.\n" % (stack))
+            continue
+        # Try to load metadata_cache.json file before doing anything else
+        try:
+            with open(os.environ[
+                          'ROOT_DIR'] + 'CSHL_data_processed/' + stack + '/' + stack + '_metadata_cache.json') as json_file:
+                saved_metadata = json.load(json_file)
+            for key in saved_metadata.keys():
+                # The metadata_cache json file has extraneous keys. (currently only "stack")
+                if key == 'stack':
+                    continue
+                if key == 'sections_to_filenames':
+                    metadata_cache[key][stack] = {int(k): v for k, v in saved_metadata[key].items()}
+                else:
+                    metadata_cache[key][stack] = saved_metadata[key]
+            print('Loaded data from saved metadata_cache for ' + stack)
+            continue
+        except:
+            pass
+
+
+
         try:
             metadata_cache['anchor_fn'][stack] = DataManager.load_anchor_filename(stack)
         except Exception as e:
@@ -5513,10 +5546,10 @@ def generate_metadata_cache():
             if 'Nonexisting' in metadata_cache['filenames_to_sections'][stack]:
                 metadata_cache['filenames_to_sections'][stack].pop('Nonexisting')
             if 'Rescan' in metadata_cache['filenames_to_sections'][stack]:
-                    metadata_cache['filenames_to_sections'][stack].pop('Rescan')
+                metadata_cache['filenames_to_sections'][stack].pop('Rescan')
         except Exception as e:
             sys.stderr.write("Failed to cache %s filenames_to_sections: %s\n" % (stack, e.message))
-
+                    
         try:
             metadata_cache['section_limits'][stack] = DataManager.load_section_limits_v2(stack, prep_id=2)
         except Exception as e:
@@ -5586,3 +5619,48 @@ def resolve_actual_setting(setting, stack, fn=None, sec=None):
         setting_ = setting
 
     return setting_
+
+# Creates input_spec.ini file
+def create_input_spec_ini( name, image_name_list, stack, prep_id, version, resol  ):
+    f = open(name, "w")
+    
+    f.write('[DEFAULT]\n')
+    f.write('image_name_list = '+image_name_list[0]+'\n')
+    for i in range ( 1 , len(image_name_list) ):
+        f.write('    '+image_name_list[i]+'\n')
+    f.write('stack = '+stack+'\n')
+    f.write('prep_id = '+prep_id+'\n')
+    f.write('version = '+version+'\n')
+    f.write('resol = '+resol+'\n')
+    
+def create_input_spec_ini_all( name, stack, prep_id, version, resol  ):
+    f = open(name, "w")
+    
+    f.write('[DEFAULT]\n')
+    f.write('image_name_list = all\n')
+    f.write('stack = '+stack+'\n')
+    f.write('prep_id = '+prep_id+'\n')
+    f.write('version = '+version+'\n')
+    f.write('resol = '+resol+'\n')
+    
+def get_fn_list_from_sorted_filenames( stack):
+    '''
+        get_fn_list_from_sorted_filenames( stack ) returns a list of all the valid
+        filenames for the current stack.
+    '''
+    fp = os.environ['DATA_ROOTDIR']+'CSHL_data_processed/'+stack+'/'
+    fn = stack+'_sorted_filenames.txt'
+    
+    file0 = open( fp+fn, 'r')
+    section_names = []
+
+    for line in file0: 
+        if 'Placeholder' in line:
+            #print line
+            continue
+        else:
+            space_index = line.index(" ")
+            section_name = line[ 0 : space_index ]
+            section_number = line[ space_index+1 : ]
+            section_names.append( section_name )
+    return section_names

@@ -242,6 +242,9 @@ def wait_num_nodes(desired_nodes, timeout=300):
 
 def get_node_list():
     s = check_output("qhost | awk 'NR >= 4 { print $1 }'", shell=True).strip()
+    print "qhost | awk 'NR >= 4 { print $1 }'"
+    print check_output("qhosst | awk 'NR >= 4 { print $1 }'", shell=True)
+    print s
     if len(s) == 0:
         return []
     else:
@@ -282,6 +285,7 @@ def run_distributed5(command, argument_type='single', kwargs_list=None, jobs_per
         n_hosts = len(node_list)
         sys.stderr.write('%d nodes available.\n' % (n_hosts))
         if n_hosts == 0:
+            print 'NODE LIST LENGTH IS 0. NO HOSTS AVAILABLE'
             return
 
     if kwargs_list is None:
@@ -344,6 +348,9 @@ def run_distributed5(command, argument_type='single', kwargs_list=None, jobs_per
             stderr_f = open(stderr_template % node_i, "w")
             call(temp_script, shell=True, stdout=stdout_f, stderr=stderr_f)
         else:
+            print 'qsub -V -q all.q@%(node)s -o %(stdout_log)s -e %(stderr_log)s %(script)s' % \
+dict(node=node_list[node_i], script=temp_script, stdout_log=stdout_template % node_i, stderr_log=stderr_template % node_i)
+
             call('qsub -V -q all.q@%(node)s -o %(stdout_log)s -e %(stderr_log)s %(script)s' % \
              dict(node=node_list[node_i], script=temp_script,
                   stdout_log=stdout_template % node_i, stderr_log=stderr_template % node_i),

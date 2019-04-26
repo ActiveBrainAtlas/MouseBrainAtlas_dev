@@ -5,6 +5,8 @@ import os, sys
 import numpy as np
 import subprocess
 
+import json
+
 ########### Data Directories #############
 
 hostname = subprocess.check_output("hostname", shell=True).strip()
@@ -169,8 +171,8 @@ elif hostname == 'yuncong-Precision-WorkStation-T7500' and username == 'alexn':
     RAW_DATA_DIR = os.path.join(DATA_ROOTDIR, 'CSHL_data')
 
     ON_AWS = False
-    S3_DATA_BUCKET = 'mousebrainatlas-data-alexn'
-    S3_RAWDATA_BUCKET = 'mousebrainatlas-rawdata-alexn'
+    S3_DATA_BUCKET = 'mousebrainatlas-data'
+    S3_RAWDATA_BUCKET = 'mousebrainatlas-rawdata'
 
     REPO_DIR = os.environ['REPO_DIR']
 
@@ -583,7 +585,7 @@ XY_PIXEL_DISTANCE_TB_AXIOSCAN = XY_PIXEL_DISTANCE_LOSSLESS_AXIOSCAN * 32
 
 #all_nissl_stacks = ['MD585', 'MD589', 'MD590', 'MD591', 'MD592', 'MD593', 'MD594', 'MD595', 'MD598', 'MD599', 'MD602', 'MD603']
 #all_ntb_stacks = ['MD635']
-#all_dk_ntb_stacks = ['CHATM2', 'CHATM3']
+#all_dk_ntb_stacks = ['CHATM2', 'CHATM3', 'UCSD001']
 #all_alt_nissl_ntb_stacks = ['MD653', 'MD652', 'MD642']
 #all_alt_nissl_tracing_stacks = ['MD657', 'MD658', 'MD661', 'MD662']
 # all_stacks = all_nissl_stacks + all_ntb_stacks
@@ -593,10 +595,30 @@ XY_PIXEL_DISTANCE_TB_AXIOSCAN = XY_PIXEL_DISTANCE_LOSSLESS_AXIOSCAN * 32
 #all_annotated_ntb_stacks = ['MD635']
 #all_annotated_stacks = all_annotated_nissl_stacks + all_annotated_ntb_stacks
 
-all_nissl_stacks = ['MD585', 'MD594', 'MD589']
-all_nissl_stacks = []
-all_ntb_stacks = ['DEMO998']
-all_stacks = all_nissl_stacks + all_ntb_stacks
+#all_nissl_stacks = ['MD585', 'MD594', 'MD589']
+#all_nissl_stacks = ['MD585']
+#all_ntb_stacks = ['UCSD001','DK1-2']
+#all_stacks = all_nissl_stacks + all_ntb_stacks
+
+with open(os.environ['REPO_DIR']+'utilities/registered_brains.json', 'r') as json_file:
+    contents = json.load( json_file )
+
+# Load Nissl and Ntb stacks
+all_nissl_stacks = contents['all_nissl_stacks']
+all_ntb_stacks = contents['all_ntb_stacks']
+#all_stacks = all_nissl_stacks + all_ntb_stacks
+
+# Load annotated stacks
+all_annotated_ntb_stacks = contents['all_annotated_ntb_stacks']
+all_annotated_nissl_stacks = contents['all_annotated_nissl_stacks']
+all_annotated_stacks = all_annotated_nissl_stacks + all_annotated_ntb_stacks
+
+all_dk_ntb_stacks = contents['all_dk_ntb_stacks']
+all_alt_nissl_ntb_stacks = contents['all_alt_nissl_ntb_stacks']
+all_alt_nissl_tracing_stacks = contents['all_alt_nissl_tracing_stacks']
+all_stacks = all_nissl_stacks + all_ntb_stacks + all_alt_nissl_ntb_stacks + all_alt_nissl_tracing_stacks + all_dk_ntb_stacks
+#all_stacks = ['MD603','MD635','MD585']
+
 
 BRAINS_INFO_DIR = os.path.join(DATA_ROOTDIR, 'brains_info')
 

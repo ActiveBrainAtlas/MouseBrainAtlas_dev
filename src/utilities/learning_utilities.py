@@ -11,8 +11,14 @@ from itertools import groupby
 from collections import defaultdict
 try:
     import mxnet as mx
-except:
+except Exception as e:
+    print e
+    print '********************************************************************************************************************************'
+    print 'Error, CANNOT PROCEED UNTIL THIS IS RESOLVED!'
+    print 'UNABLE TO LOAD MXNET'
+    print '/src/utilities/learning_utilities.py'
     sys.stderr.write("Cannot import mxnet.\n")
+    print '********************************************************************************************************************************'
 
 sys.path.append(os.environ['REPO_DIR'] + '/utilities')
 from utilities2015 import *
@@ -835,8 +841,13 @@ def extract_patches_given_locations(patch_size,
                 is_nissl = fn.split('-')[1][0] == 'N'
                 
                 # raise Exception("Must specify whether image is Nissl by providing is_nissl.")
+                
+        try:
+            img = DataManager.load_image_v2(stack=stack, section=sec, fn=fn, prep_id=prep_id, version='NtbNormalizedAdaptiveInvertedGamma')
+        except:
+            print('')
 
-        if stack in ['CHATM2', 'CHATM3', 'MD661', 'MD662', 'MD658']:
+        if stack in ['CHATM2', 'CHATM3', 'MD661', 'MD662', 'MD658'] or 'UCSD' in stack:
             img = DataManager.load_image_v2(stack=stack, section=sec, fn=fn, prep_id=prep_id, version='NtbNormalizedAdaptiveInvertedGamma')
         elif stack in all_nissl_stacks:
             # img = img_as_ubyte(rgb2gray(DataManager.load_image_v2(stack=stack, section=sec, fn=fn, prep_id=prep_id, version=version)))
@@ -1815,13 +1826,22 @@ def generate_annotation_to_grid_indices_lookup(stack, by_human, win_id,
                     patch_indices_allSections_allStructures[sec] = patch_indices_thisSection_allStructures
 
         else:
-            warped_volumes = DataManager.load_transformed_volume_all_known_structures(stack_m=stack_m,
-                                                                              stack_f=stack,
-                                                                                detector_id_f=detector_id_f,
-                                                                              prep_id_f=prep_id,
-                                                                                warp_setting=warp_setting,
-                                                                              sided=True,
-                                                                                 structures=structures)
+            alignment_spec = {'stack_m':stack_m,
+                             'stack_f':stack,
+                             'detector_id_f':detector_id_f,
+                             'prep_id_f':prep_id,
+                             'warp_setting':warp_setting}
+            #warped_volumes = DataManager.load_transformed_volume_all_known_structures(stack_m=stack_m,
+            #                                                                  stack_f=stack,
+            #                                                                    detector_id_f=detector_id_f,
+            #                                                                  prep_id_f=prep_id,
+            #                                                                    warp_setting=warp_setting,
+            #                                                                  sided=True,
+            #                                                                     structures=structures)
+            warped_volumes = DataManager.load_transformed_volume_all_known_structures_v3(alignment_spec,
+                                                                                     resolution='down32',
+                                                                                     sided=True,
+                                                                                     structures=structures)
 
 
             if isinstance(positive_level, float):
@@ -3232,7 +3252,7 @@ def draw_scoremap(clfs, scheme, stack, win_id, prep_id=2,
         (2d-array of uint8): scoremap overlayed on image.
         (2d-array of float): scoremap array, optional
     """
-
+    
     # structures = [convert_to_original_name(structure)]
 
     if bbox is None:
@@ -3262,11 +3282,14 @@ def draw_scoremap(clfs, scheme, stack, win_id, prep_id=2,
     sample_locations_roi = grid_parameters_to_sample_locations(grid_spec=grid_spec)[indices_roi]
     if len(sample_locations_roi) == 0:
         raise Exception('No samples are within the given ROI.')
+    
 
     try:
         t = time.time()
 
         assert feature == 'cnn'
+        print [stack, sec, fn,prep_id, win_id, scheme, model_name]
+                        
         features, locations = DataManager.load_dnn_features_v2(stack=stack, sec=sec, fn=fn,
                                                     prep_id=prep_id,
                                                     win_id=win_id,
@@ -3276,19 +3299,24 @@ def draw_scoremap(clfs, scheme, stack, win_id, prep_id=2,
         location_to_index = {tuple(loc): idx for idx, loc in enumerate(locations)}
         sample_locations_roi_set = set(map(tuple, sample_locations_roi))
         locations_set = set(map(tuple, locations))
+        
+        
         print len(sample_locations_roi_set), 'ROI sampled locations'
         print len(locations_set), 'pre-computed locations'
         assert len(sample_locations_roi_set - locations_set) == 0, '%d in ROI sampled locations but not in pre-computed locations' % len(sample_locations_roi_set - locations_set)
+                
         indices_roi = [location_to_index[tuple(loc)] for loc in sample_locations_roi]
         features = features[indices_roi]
 
         sys.stderr.write('Load pre-computed features: %.2f seconds\n' % (time.time() - t))
+        
 
     except Exception as e:
 
         sys.stderr.write('No pre-computed features found. Computing from scratch. Error: %s\n' % str(e))
 
         t = time.time()
+        
 
         test_patches = extract_patches_given_locations(stack=stack, sec=sec, fn=fn,
                                                        prep_id=prep_id,
@@ -3306,6 +3334,7 @@ def draw_scoremap(clfs, scheme, stack, win_id, prep_id=2,
 
         sys.stderr.write('Extract patches: %.2f seconds\n' % (time.time() - t))
     #     display_images_in_grids(test_patches[::1000], nc=5, cmap=plt.cm.gray)
+    
 
         t = time.time()
         if feature == 'mean':
@@ -3317,6 +3346,7 @@ def draw_scoremap(clfs, scheme, stack, win_id, prep_id=2,
         else:
             raise
         sys.stderr.write('Compute features: %.2f seconds\n' % (time.time() - t))
+        
 
         t = time.time()
         DataManager.save_dnn_features_v2(features=features, locations=sample_locations_roi,
@@ -3324,7 +3354,6 @@ def draw_scoremap(clfs, scheme, stack, win_id, prep_id=2,
                                          win_id=win_id, normalization_scheme=scheme,
                                          model_name=model_name)
         sys.stderr.write('Save features: %.2f seconds\n' % (time.time() - t))
-
 
     if in_resolution_um is None:
         in_resolution_um = planar_resolution[stack]
@@ -3383,6 +3412,7 @@ def draw_scoremap(clfs, scheme, stack, win_id, prep_id=2,
                                                    fn=fn,
                                                    scoremap=scoremap,
                                                   in_scoremap_downscale=out_downscale,
+                                                   show_above=.01,
                                                   cmap_name= 'jet')
                 sys.stderr.write('Generate scoremap overlay image %s: %.2f seconds\n' % (name, time.time() - t))
 
@@ -3416,6 +3446,8 @@ def draw_scoremap(clfs, scheme, stack, win_id, prep_id=2,
                 sys.stderr.write('Generate scoremap overlay image %s: %.2f seconds\n' % (name, time.time() - t))
 
                 scoremap_viz_all_clfs[name] = scoremap_viz_localRegion
+                
+                print 'draw_scoremap finished  (src/utilities/learning_utilities.py line 3200)'
 
                 if return_what == 'both':
                     return scoremap_viz_all_clfs, scoremap_local_region_all_clfs
