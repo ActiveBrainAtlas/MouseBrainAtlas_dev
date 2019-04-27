@@ -124,4 +124,4 @@ __Command__: `python a_script_processing.py $stack $stain $id_detector`
 
 - __Registration Algorithm__: 
     - Inputs: The final step in the pipeline involves properly aligning the current atlas to a given brain, assisted by the simple global registration parameters and scoremaps generated earlier. This script takes in a "fixed_brain_spec" and a "moving_brain_spec", which are specifications of the two brain volumes (the moving brain will be transformed to overlay the fixed brain), as well as a registration_setting, the encodings of which can be found in `src/registration/registration_settings.csv`.
-    - 
+    - An "Aligner" object is created that is initially set to the simple global transformation.
