@@ -15,6 +15,7 @@ tmp.jpg
 
 # Exclude virtualenv
 mousebrainatlas_virtualenv/
+shapeology/shapeology_venv/
 demo_data/
 share/doc/
 # Byte-compiled / optimized / DLL files
