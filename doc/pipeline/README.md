@@ -1,6 +1,6 @@
-## User Guide - Aligning atlas to a new brain stack
+# User Guide - Aligning atlas to a new brain stack
 
-### Setup
+## Setup
 
 This guide in its current form assumes the computer being worked on has the necessary dependant software already installed and configured (CUDA, Python, ImageMagick, PyQt). 
 
@@ -29,7 +29,7 @@ Run the following commands:
 
 #### Set up new brain raw images
 
-### Running the pipeline
+## Running the pipeline
 
 The pipeline is organized as a set of python scripts that are called iteratively, between each set of python scripts will be a manual step the user is required to perform. These user-intervention steps are necessary checks for some automatic processes throughout the pipeline.
 
