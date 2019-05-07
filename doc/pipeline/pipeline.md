@@ -25,7 +25,7 @@ __Description__: Downloads the following files from S3: operation configs, mxnet
 ---------------------------
 ### Script 1
 ---------------------------
-__Command__: `python a_script_preprocessing_1.py $stack $stain`
+__Command__: `python a_script_preprocess_1.py $stack $stain`
 
 __Description__: Converts images from .jp2 format to .tiff format. Extracts the blue channel for slides stained with T or NTB. NTB slides are intensity normalized. 32x downsampled thumbnails are generated for every image.
 
@@ -35,7 +35,7 @@ __User step__: Check slice orientations with GIMP/ImageJ/Photoshop/etc.. All sli
 ---------------------------
 ### Script 2
 ---------------------------
-__Command__: `python a_script_preprocessing_2.py $stack $stain --anchor_fn $anchor_image_filename`
+__Command__: `python a_script_preprocess_2.py $stack $stain --anchor_fn $anchor_image_filename`
 
 __Description__: Generates image translation and rotation alignment parameters, one "anchor" file is chosen which all other images are aligned to. User can choose to pass an images filename in to be the anchor image, otherwise the anchor image will be chosen automatically. Image alignment parameters are applied and the new aligned image stack is saved as so called "prep1" images. The background is padded white for T stain and black for NTB stain.
 
@@ -47,7 +47,7 @@ __User step 2__: Create initial segmentation outlines of the brain for every sli
 ---------------------------
 ### Script 3
 ---------------------------
-__Command__: `python a_script_preprocessing_3.py $stack $stain`
+__Command__: `python a_script_preprocess_3.py $stack $stain`
 
 __Description__: Generates binary masks for every image to segment the pixels containing the brain using the user's initial segmentation outline for assistance.
 
@@ -57,7 +57,7 @@ __User step__: Manually correct the generated masks with the following command, 
 ---------------------------
 ### Script 4
 ---------------------------
-__Command__: `python a_script_preprocessing_4.py $stack $stain`
+__Command__: `python a_script_preprocess_4.py $stack $stain`
 
 __Description__: Creates "original_image_crop.csv" file which contains the dimensions of every thumbnail (32x downsampled) image. Applies reverse prep1 transforms on all masks and saves these unaligned masks in the original orientation of the images. Applies a local adaptive intensity normalization algorithm on NTB images.
 
@@ -70,7 +70,7 @@ __User step__: User specifies a cropping box for the entire brain (called prep5 
 ---------------------------
 ### Script 5
 ---------------------------
-__Command__: `python a_script_preprocessing_5.py $stack $stain -l $rostral_limit $caudal_limit $dorsal_limit $ventral_limit`
+__Command__: `python a_script_preprocess_5.py $stack $stain -l $rostral_limit $caudal_limit $dorsal_limit $ventral_limit`
 
 __Description__: Using the user specified whole brain cropbox, cropped images are generated and saved as raw "prep5" images. Thumbnails are then generated.
 
@@ -82,7 +82,7 @@ __User step 2__: Record (prep2_section_min, prep2_section_max). These are the sl
 ---------------------------
 ### Script 6
 ---------------------------
-__Command__: `python a_script_preprocessing_6.py $stack $stain -l $rostral_limit_2 $caudal_limit_2 $dorsal_limit_2 $ventral_limit_2 $prep2_section_min $prep2_section_max`
+__Command__: `python a_script_preprocess_6.py $stack $stain -l $rostral_limit_2 $caudal_limit_2 $dorsal_limit_2 $ventral_limit_2 $prep2_section_min $prep2_section_max`
 
 __Description__: Using the user specified brainstem cropbox, cropped images are generated and saved as raw "prep2" images. Thumbnails are then generated. Raw prep2 images are compressed into jpeg format. Finally the masks are cropped to match the prep2 images. These raw prep2 images are finished being processed, they are the images that will be used throughout the rest of the pipeline.
 
@@ -92,7 +92,7 @@ __User step__: Record X/Y/Z coordinates for midpoint of 12N, 3N_R on midplane, t
 ---------------------------
 ### Script 7
 ---------------------------
-__Command__: `python a_script_preprocessing_7.py $stack $stain -l $x_12N $y_12N $x_3N $y_3N $z_midline`
+__Command__: `python a_script_preprocess_7.py $stack $stain -l $x_12N $y_12N $x_3N $y_3N $z_midline`
 
 __Description__: Generates intensity volume, then obtains simple global alignment of the atlas using manually inputted 12N and 3N_R center coordinates.
 
