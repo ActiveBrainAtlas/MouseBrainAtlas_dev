@@ -1,6 +1,6 @@
-# User Guide - Aligning atlas to a new brain stack
+## User Guide - Aligning atlas to a new brain stack
 
-## Setup
+### Setup
 
 This guide in its current form assumes the computer being worked on has the necessary dependant software already installed and configured (CUDA, Python, ImageMagick, PyQt). 
 
@@ -16,9 +16,20 @@ A configuration script is provided to create a [virtualenv](https://virtualenv.p
 
 #### Input new brain metadata
 
+Now we enter in the metadata for the new brain. You will need to know the name of the brain stack, the cutting plane, the planar resolution of the images, the slice thickness, the stain used, and the alternating stain number two if applicable.
+
+Run the following commands:
+- `cd demo`
+    - Move into the "demo/" directory, which contains all of the necessary scripts.
+- `python input_new_brain_metadata.py`
+    - This will ask a series of questions about the new brain that you must answer. Once finished the script will save your answers into several files that will be automatically read throughout the rest of the pipeline.
+- `source ../setup/set_<STACK>_metadata.ini`, where "<STACK>" should be replaced with the name of the brain stack. 
+    - This will set the variables `stack`, `stain`, and `detector_id` in your terminal for convenice. Run `echo $stack` to verify that the variables were saved properly.
+
+
 #### Set up new brain raw images
 
-## Running the pipeline
+### Running the pipeline
 
 The pipeline is organized as a set of python scripts that are called iteratively, between each set of python scripts will be a manual step the user is required to perform. These user-intervention steps are necessary checks for some automatic processes throughout the pipeline.
 
