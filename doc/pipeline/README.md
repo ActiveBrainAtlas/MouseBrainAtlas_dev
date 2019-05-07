@@ -30,7 +30,7 @@ Run the following commands:
 #### Set up new brain raw images
 
 Run the following command:
-- `python setup_new_brain_files.py $stain`
+- `python setup_new_brain_files.py $stack`
     - This script will prompt you to first select the location of your `<STACK>_sorted_filenames.txt` and will automatically copy it to the porper location. Next the script will prompt you for the location of one of the raw jp2 files, and those will be copied to the proper location as well. (No files will be deleted at any point automatically)
 
 ## Running the pipeline
