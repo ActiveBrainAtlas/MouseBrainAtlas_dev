@@ -4,7 +4,7 @@
 
 This guide in its current form assumes the computer being worked on has the necessary dependant software already installed and configured (CUDA, Python, ImageMagick, PyQt). 
 
-#### Set up virtual environment
+#### Initialize the virtual environment
 
 A configuration script is provided to create a [virtualenv](https://virtualenv.pypa.io/en/stable/) called **mousebrainatlas-virtualenv** and install necessary packages.
 
