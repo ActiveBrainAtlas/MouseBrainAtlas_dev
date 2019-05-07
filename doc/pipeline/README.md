@@ -27,7 +27,8 @@ Run the following commands:
     - This will set the variables `stack`, `stain`, and `detector_id` in your terminal for convenice. Run `echo $stack` to verify that the variables were saved properly.
 
 
-#### Set up new brain raw images
+#### Copy files into proper input location
+The mouse brain atlas pipeline relies on a strict filepath managemant system such that files must be located in the correct locations or it will not work. This script will ask the user for the locations of two sets of input data (the sorted filenames text file, and the raw jp2 images) and automatically copy them into the proper locations.
 
 Run the following command:
 - `python setup_new_brain_files.py $stack`
