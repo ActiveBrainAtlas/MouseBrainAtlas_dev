@@ -25,7 +25,7 @@ Run the following commands:
     - Move into the "demo/" directory, which contains all of the necessary scripts.
 - `python input_new_brain_metadata.py`
     - This will ask a series of questions about the new brain that you must answer. Once finished the script will save your answers into several files that will be automatically read throughout the rest of the pipeline.
-- `source ../setup/set_<STACK>_metadata.ini`, where "<STACK>" should be replaced with the name of the brain stack. 
+- `source ../setup/set_<STACK>_metadata.sh`, where "`<STACK>`" should be replaced with the name of the brain stack. 
     - This will set the variables `stack`, `stain`, and `detector_id` in your terminal for convenice. Run `echo $stack` to verify that the variables were saved properly.
 
 
