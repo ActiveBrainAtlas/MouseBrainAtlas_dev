@@ -10,9 +10,9 @@ A configuration script is provided to create a [virtualenv](https://virtualenv.p
 
 Firstly, you need to know the directory in which you installed this "MouseBrainAtlas_dev" repository. This is considered the "REPO_DIR", or repository directory, of the project. Whenever a filepath is given, such as "setup/config.sh", it assumes you are starting from the repository directory.
 
-- Open the file "setup/config.sh" in your favorite text editor. Change "PROJECT)DIR" and "ROOT_DIR" in "setup/config.sh" as described in the following bullet points.
-    - `REPO_DIR` is simply the directory in which this Github repo is located on your computer.
-    - It is strongly recommended that the remaining path variables are set to the same path to reduce complexity. This will ensure that all data is stored in the same root location for convenience. 
+- Open the file "setup/config.sh" in your favorite text editor. Notice "PROJECT_DIR" and "ROOT_DIR" are set equal to certain filepaths at the beginning of the file. Change these filepaths as described in the following bullet points.
+    - Set `PROJECT_DIR` to the directory in which this Github repo is located on your computer.
+    - Set `ROOT_DIR` to a folder that will be the root of all data loaded and generated throughout the pipeline. Expect about 1TB of space to be taken up by every brain stack as it runs through the pipeline.
 - `cd` into this repository's directory and run the command `source setup/config.sh`. Check we are now working under the `mousebrainatlas_virtualenv` virtual environment. The command prompt should now have `mousebrainatlas_virtualenv` in parentheses prepended on the left side.
 - `cd demo`.
 
