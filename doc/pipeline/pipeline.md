@@ -36,6 +36,7 @@ __User step__: Check slice orientations with GIMP/ImageJ/Photoshop/etc.. All sli
 ### Script 2
 ---------------------------
 __Command__: `python a_script_preprocess_2.py $stack $stain`
+
 __Command (optional alternative)__: `python a_script_preprocess_2.py $stack $stain --anchor_fn $anchor_image_filename`
 
 __Description__: Generates image translation and rotation alignment parameters, one "anchor" file is chosen which all other images are aligned to. User can choose to pass an images filename in to be the anchor image, otherwise the anchor image will be chosen automatically. Image alignment parameters are applied and the new aligned image stack is saved as so called "prep1" images. The background is padded white for T stain and black for NTB stain.
