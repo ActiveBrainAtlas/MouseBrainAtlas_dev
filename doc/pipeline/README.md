@@ -39,7 +39,7 @@ Run the following command:
     - This script will prompt you to first select the location of your `<STACK>_sorted_filenames.txt` and will automatically copy it to the porper location. Next the script will prompt you for the location of one of the raw jp2 files, and those will be copied to the proper location as well. (No files will be deleted at any point automatically)
     
     
-## Setup New Brain Metainformation
+## Setup for Continuing to Run a Brain (initial setup already run)
 
 ---
 
