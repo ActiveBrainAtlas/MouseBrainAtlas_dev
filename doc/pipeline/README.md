@@ -1,6 +1,8 @@
 # User Guide - Aligning atlas to a new brain stack
 
-## Setup
+## Setup New Brain Metainformation
+
+---
 
 This guide in its current form assumes the computer being worked on has the necessary dependant software already installed and configured (CUDA, Python, ImageMagick, PyQt). 
 
@@ -35,6 +37,18 @@ The mouse brain atlas pipeline relies on a strict filepath managemant system suc
 Run the following command:
 - `python setup_new_brain_files.py $stack`
     - This script will prompt you to first select the location of your `<STACK>_sorted_filenames.txt` and will automatically copy it to the porper location. Next the script will prompt you for the location of one of the raw jp2 files, and those will be copied to the proper location as well. (No files will be deleted at any point automatically)
+    
+    
+## Setup New Brain Metainformation
+
+---
+
+Assumes you have already inputted the metadata for the chosen stack. 
+
+- `source ../setup/set_<STACK>_metadata.sh`, where "`<STACK>`" should be replaced with the name of the brain stack. 
+    - This will set the variables `stack`, `stain`, and `detector_id` in your terminal for convenice. Run `echo $stack` to verify that the variables were saved properly.
+    - Example: `source ../setup/set_MD635_metadata.sh`
+
 
 ## Running the pipeline
 
