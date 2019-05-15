@@ -1,17 +1,9 @@
 {
-  "all_nissl_stacks" : ["MD585", "MD589", "MD590", "MD591", "MD592", "MD593", "MD594", "MD595", "MD598", "MD599", "MD602", "MD603"]
-,
-  "all_ntb_stacks" : ["MD635"]
-  
-,
-  "all_dk_ntb_stacks" : ["CHATM2", "CHATM3", "UCSD001"]
-,
-  "all_alt_nissl_ntb_stacks" : ["MD653", "MD652", "MD642"]
-,
-  "all_alt_nissl_tracing_stacks" : ["MD657", "MD658", "MD661", "MD662"]
-,
-
-  "all_annotated_nissl_stacks" : ["MD585", "MD589", "MD594"]
-,
+  "all_thionin_stacks" : ["MD585", "MD589", "MD590", "MD591", "MD592", "MD593", "MD594", "MD595", "MD598", "MD599", "MD602", "MD603"],
+  "all_ntb_stacks" : ["MD635"],
+  "all_dk_ntb_stacks" : ["CHATM2", "CHATM3", "UCSD001"],
+  "all_alt_thionin_ntb_stacks" : ["MD653", "MD652", "MD642"],
+  "all_alt_thionin_tracing_stacks" : ["MD657", "MD658", "MD661", "MD662"],
+  "all_annotated_thionin_stacks" : ["MD585", "MD589", "MD594"],
   "all_annotated_ntb_stacks" : ["MD635"]
 }

@@ -36,7 +36,18 @@ def get_fn_list_from_sorted_filenames( stack ):
     fp = os.path.join( os.environ['DATA_ROOTDIR'], 'CSHL_data_processed', stack+'/')
     fn = stack+'_sorted_filenames.txt'
     
-    file0 = open( fp+fn, 'r')
+    try:
+        file0 = open( fp+fn, 'r')
+    except:
+        print('_________________________________________________________________________________')
+        print('_________________________________________________________________________________')
+        print('\"'+fp+fn+'\" not found!')
+        print('')
+        print('This file must be present for the pipeline to continue. Add the file and rerun the script.')
+        print('_________________________________________________________________________________')
+        print('_________________________________________________________________________________')
+        sys.exit()
+        
     section_names = []
 
     for line in file0: 
@@ -96,18 +107,30 @@ def make_structure_fixed_and_moving_brain_specs( stack, id_detector, structure):
     '''
     Creates the input specification file for the registration script.
     '''
-    fixed_brain_spec_data = {"name":stack,
+    if type(structure)==list:
+        fixed_brain_spec_data = {"name":stack,
                             "vol_type": "score", 
                             "resolution":"10.0um",
                             "detector_id":id_detector,
-                            "structure":[structure]
+                            "structure":structure
                             }
-
-    moving_brain_spec_data = {"name":"atlasV7",
+        moving_brain_spec_data = {"name":"atlasV7",
                             "vol_type": "score", 
                             "resolution":"10.0um",
-                            "structure":[structure]
+                            "structure":structure
                             }
+    elif type(structure)==str:
+        fixed_brain_spec_data = {"name":stack,
+                                "vol_type": "score", 
+                                "resolution":"10.0um",
+                                "detector_id":id_detector,
+                                "structure":[structure]
+                                }
+        moving_brain_spec_data = {"name":"atlasV7",
+                                "vol_type": "score", 
+                                "resolution":"10.0um",
+                                "structure":[structure]
+                                }
 
     fn_fixed = stack+'_fixed_brain_spec.json'
     fn_moving = stack+'_moving_brain_spec.json'

@@ -1137,9 +1137,12 @@ class BrainLabelingGUI(QMainWindow, Ui_BrainLabelingGui):
             return
 
         sagittal_contours_df = load_hdf_v2(sagittal_contours_df_fp)
-        sagittal_contours_df_cropped = convert_annotation_v3_original_to_aligned_cropped_v2(sagittal_contours_df, stack=self.stack,\
-                                        out_resolution=self.gscenes['main_sagittal'].data_feeder.resolution,
-                                        prep_id=self.prep_id)
+        if not 'prep2' in sagittal_contours_df_fp:
+            sagittal_contours_df_cropped = convert_annotation_v3_original_to_aligned_cropped_v2(sagittal_contours_df, stack=self.stack,\
+                                            out_resolution=self.gscenes['main_sagittal'].data_feeder.resolution,
+                                            prep_id=self.prep_id)
+        elif 'prep2' in sagittal_contours_df_fp:
+            sagittal_contours_df_cropped = sagittal_contours_df
         sagittal_contours_df_cropped_sagittal = sagittal_contours_df_cropped[(sagittal_contours_df_cropped['orientation'] == 'sagittal')]
         self.gscenes['main_sagittal'].load_drawings(sagittal_contours_df_cropped_sagittal, append=False, vertex_color='b')
 

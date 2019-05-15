@@ -69,7 +69,6 @@ def compute_gradient_v2(volume, smooth_first=False, dtype=np.float16):
         volume
         smooth_first (bool): If true, smooth each volume before computing gradients.
         This is useful if volume is binary and gradients are only nonzero at structure borders.
-
     Note:
         # 3.3 second - re-computing is much faster than loading
         # .astype(np.float32) is important;
@@ -120,22 +119,22 @@ def compute_gradient_v2(volume, smooth_first=False, dtype=np.float16):
 def convert_2d_transform_forms(transform, out_form):
 
     if isinstance(transform, str):
-	if out_form == (2,3):
-	    return np.reshape(map(np.float, transform.split(',')), (2,3))
-	elif out_form == (3,3):
+        if out_form == (2,3):
+            return np.reshape(map(np.float, transform.split(',')), (2,3))
+        elif out_form == (3,3):
             return np.vstack([np.reshape(map(np.float, transform.split(',')), (2,3)), [0,0,1]])
     else:
         transform = np.array(transform)
         if transform.shape == (2,3):
-    	    if out_form == (3,3):
-    	        transform = np.vstack([transform, [0,0,1]])
-	    elif out_form == 'str':
-	        transform = ','.join(map(str, transform[:2].flatten()))
+            if out_form == (3,3):
+                transform = np.vstack([transform, [0,0,1]])
+            elif out_form == 'str':
+                transform = ','.join(map(str, transform[:2].flatten()))
         elif transform.shape == (3,3):
-    	    if out_form == (2,3):
-	        transform = transform[:2]
-	    elif out_form == 'str':
-	        transform = ','.join(map(str, transform[:2].flatten()))
+            if out_form == (2,3):
+                transform = transform[:2]
+            elif out_form == 'str':
+                transform = ','.join(map(str, transform[:2].flatten()))
 
     return transform
 
@@ -150,9 +149,9 @@ def convert_cropbox_from_arr_xywh_1um(data, out_fmt, out_resol, stack=None):
     elif out_fmt == 'arr_xywh':
         return data
     elif out_fmt == 'arr_xxyy':
-	return np.array([data[0], data[0]+data[2]-1, data[1], data[1]+data[3]-1])
+        return np.array([data[0], data[0]+data[2]-1, data[1], data[1]+data[3]-1])
     else:
-	raise
+        raise
 
 def convert_cropbox_to_arr_xywh_1um(data, in_fmt, in_resol, stack=None):
 
@@ -173,7 +172,7 @@ def convert_cropbox_to_arr_xywh_1um(data, in_fmt, in_resol, stack=None):
         elif in_fmt == 'arr_xxyy':
             arr_xywh = np.array([data[0], data[2], data[1] - data[0] + 1, data[3] - data[2] + 1])
         else:
-	    print in_fmt, data
+            print in_fmt, data
             raise
 
     arr_xywh_1um = arr_xywh * convert_resolution_string_to_um(stack=stack, resolution=in_resol)
@@ -181,8 +180,8 @@ def convert_cropbox_to_arr_xywh_1um(data, in_fmt, in_resol, stack=None):
 
 def convert_cropbox_fmt(out_fmt, data, in_fmt=None, in_resol='1um', out_resol='1um', stack=None):
     if in_resol == out_resol: # in this case, stack is not required/ Arbitrarily set both to 1um
-	in_resol = '1um'
-	out_resol = '1um'
+        in_resol = '1um'
+        out_resol = '1um'
     arr_xywh_1um = convert_cropbox_to_arr_xywh_1um(data=data, in_fmt=in_fmt, in_resol=in_resol, stack=stack)
     data_out = convert_cropbox_from_arr_xywh_1um(data=arr_xywh_1um, out_fmt=out_fmt, out_resol=out_resol, stack=stack)
     return data_out
@@ -219,14 +218,14 @@ def load_ini(fp, split_newline=True, convert_none_str=True, section='DEFAULT'):
     input_spec = dict(config.items(section))
     input_spec = {k: v.split('\n') if '\n' in v else v for k, v in input_spec.iteritems()}
     for k, v in input_spec.iteritems():
-	if not isinstance(v, list):
-	    if '.' not in v and v.isdigit():
-    	        input_spec[k] = int(v)
-	    elif v.replace('.','',1).isdigit():
-	        input_spec[k] = float(v)
+        if not isinstance(v, list):
+            if '.' not in v and v.isdigit():
+                input_spec[k] = int(v)
+            elif v.replace('.','',1).isdigit():
+                input_spec[k] = float(v)
         elif v == 'None':
-	    if convert_none_str:
-    	        input_spec[k] = None
+            if convert_none_str:
+                input_spec[k] = None
     assert len(input_spec) > 0, "Failed to read data from ini file."
     return input_spec
 
@@ -298,15 +297,12 @@ def save_data(data, fp, upload_s3=True):
 def mirror_volume_v2(volume, new_centroid, centroid_wrt_origin=None):
     """
     Use to get the mirror image of the volume.
-
     `Volume` argument is the volume in right hemisphere.
     Note: This assumes the mirror plane is vertical; Consider adding a mirror plane as argument
-
     Args:
         volume: any representation
         new_centroid: the centroid of the resulting mirrored volume.
         centroid_wrt_origin: if not specified, this uses the center of mass.
-
     Returns:
         (volume, origin): new origin is wrt the same coordinate frame as `new_centroid`.
     """
@@ -417,7 +413,6 @@ def plot_by_stack_by_structure(data_all_stacks_all_structures, structures,
                               ):
     """
     Plot the input data, with structures as x-axis. Different stacks are represented using different colors.
-
     Args:
         style (str): scatter or boxplot.
     """
@@ -604,7 +599,6 @@ def get_structure_centroids(vol_bbox_dict=None, vol_origin_dict=None, vol_dict=N
 def get_centroid_3d(v):
     """
     Compute the centroids of volumes.
-
     Args:
         v: volumes as 3d array, or dict of volumes, or dict of (volume, origin))
     """
@@ -631,10 +625,8 @@ def get_centroid_3d(v):
 def compute_midpoints(structure_centroids):
     """
     Compute the mid-points of each structure.
-
     Args:
         structure_centroids (dict of dict): {sided name: (centroid x,y,z)}
-
     Returns:
         dict of (3,)-array: {unsided name: mid-point}
     """
@@ -682,7 +674,6 @@ def rotationMatrixToEulerAngles(R) :
     Calculates rotation matrix to euler angles
     The result is the same as MATLAB except the order
     of the euler angles ( x and z are swapped ).
-
     Ref: https://www.learnopencv.com/rotation-matrix-to-euler-angles/
     """
     sy = np.sqrt(R[0,0] * R[0,0] +  R[1,0] * R[1,0])
@@ -718,7 +709,6 @@ def plot_centroid_means_and_covars_3d(instance_centroids,
     """
     Plot the means and covariance matrices in 3D.
     All coordinates are relative to cropped MD589.
-
     Args:
         instance_centroids (dict {str: list of (3,)-arrays}): centroid coordinate of each instance relative to the canonical centroid
         nominal_locations (dict {str: (3,)-arrays}): the average centroid for all instance centroid of every structure relative to canonical centroid
@@ -819,7 +809,6 @@ def compute_ellipsoid_from_covar(covar_mat):
     """
     Compute the ellipsoid (three radii and three axes) of each structure from covariance matrices.
     Radii are the square root of the singular values (or 1 sigma).
-
     Returns:
         dict {str: (3,)-ndarray}: radius of each axis
         dict {str: (3,3)-ndarray}: Of each matrix, each row is a eigenvector of the corresponding covariance matrix
@@ -837,10 +826,8 @@ def compute_ellipsoid_from_covar(covar_mat):
 def compute_covar_from_instance_centroids(instance_centroids):
     """
     Compute the covariance matrices based on instance centroids.
-
     Args:
         instance_centroids: dict {str: list of (3,)-arrays}
-
     Returns:
         dict {str: (3,3)-ndarray}: covariance_matrices
         dict {str: (3,)-ndarray}: radius of each axis
@@ -865,12 +852,10 @@ def compute_covar_from_instance_centroids(instance_centroids):
 def find_contour_points_3d(labeled_volume, along_direction, positions=None, sample_every=10):
     """
     Find the cross-section contours given a (binary?) volume.
-
     Args:
         labeled_volume (3D ndarray of int): integer-labeled volume.
         along_direction (str): x/coronal, y/horizontal or z/sagittal.
         positions (None or list of int): if None, find contours at all positions of input volume, from 0 to the depth of volume.
-
     Returns:
         dict {int: (n,2)-ndarray}: contours. {voxel position: contour vertices (second dim, first dim)}.
         For example, If `along_direction=y`, returns (z,x); if direction=x, returns (z,y).
@@ -946,7 +931,6 @@ def find_contour_points_3d(labeled_volume, along_direction, positions=None, samp
 def find_contour_points(labelmap, sample_every=10, min_length=0):
     """
     Find contour coordinates.
-
     Args:
         labelmap (2d array of int): integer-labeled 2D image
         sample_every (int): can be interpreted as distance between points.
@@ -1074,11 +1058,9 @@ def draw_alignment(warped_atlas, fixed_volumes, level_spacing=10, zs=None, ncols
 def get_grid_mesh_coordinates(bbox, spacings=(1,1,1), dot_spacing=1, include_borderline=True):
     """
     Get the coordinates of grid lines.
-
     Args:
         spacings (3-tuple): spacing between grid lines in x,y and z.
         dot_spacing (int): the spacing between dots if broken lines are desired.
-
     Returns:
         (n,3)-array
     """
@@ -1129,10 +1111,8 @@ def get_grid_mesh_coordinates(bbox, spacings=(1,1,1), dot_spacing=1, include_bor
 def get_grid_mesh_volume(xs, ys, zs, vol_shape, s=1, include_borderline=True):
     """
     Get a boolean volume with grid lines set to True.
-
     Args:
         s (int): the spacing between dots if broken lines are desired.
-
     Returns:
         3D array of boolean
     """
@@ -1206,12 +1186,10 @@ def return_gridline_points(xs, ys, z, w, h):
 def consolidate(params, centroid_m=(0,0,0), centroid_f=(0,0,0)):
     """
     Convert the set (parameter, centroid m, centroid f) to a single matrix.
-
     Args:
         params ((12,)-array):
         centroid_m ((3,)-array):
         centroid_f ((3,)-array):
-
     Returns:
         ((4,4)-array)
     """
@@ -1272,7 +1250,6 @@ def crop_and_pad_volumes(out_bbox=None, vol_bbox_dict=None, vol_bbox_tuples=None
         out_bbox ((6,)-array): the output bounding box, must use the same reference system as the vol_bbox input.
         vol_bbox_dict (dict {key: (vol, bbox)})
         vol_bbox_tuples (list of (vol, bbox) tuples)
-
     Returns:
         list of 3d arrays or dict {structure name: 3d array}
     """
@@ -1298,11 +1275,9 @@ def convert_vol_bbox_dict_to_overall_vol(vol_bbox_dict=None, vol_bbox_tuples=Non
     """
     Must provide exactly one of the three choices of arguments.
     `bbox` or `origin` can be provided as float, but will be casted as integer before cropping and padding.
-
     Args:
         vol_bbox_dict (dict {key: 3d-array of float32, 6-tuple of float}): represents {name_s: (vol, bbox)}
         vol_origin_dict (dict {key: 3d-array of float32, 3-tuple of float}): represents {name_s: (vol, origin)}
-
     Returns:
         (list or dict of 3d arrays, (6,)-ndarray of int): (volumes in overall coordinate system, the common overall bounding box)
     """
@@ -1322,15 +1297,12 @@ def convert_vol_bbox_dict_to_overall_vol(vol_bbox_dict=None, vol_bbox_tuples=Non
 def crop_and_pad_volume(in_vol, in_bbox=None, in_origin=(0,0,0), out_bbox=None):
     """
     Crop and pad an volume.
-
     in_vol and in_bbox together define the input volume in a underlying space.
     out_bbox then defines how to crop the underlying space, which generates the output volume.
-
     Args:
         in_bbox ((6,) array): the bounding box that the input volume is defined on. If None, assume origin is at (0,0,0) of the input volume.
         in_origin ((3,) array): the input volume origin coordinate in the space. Used only if in_bbox is not specified. Default is (0,0,0), meaning the input volume is located at the origin of the underlying space.
         out_bbox ((6,) array): the bounding box that the output volume is defined on. If not given, each dimension is from 0 to the max reach of any structure.
-
     Returns:
         3d-array: cropped/padded volume
     """
@@ -1408,7 +1380,6 @@ def crop_large_image(fp, bbox):
     Args:
         fp (str): image file path
         bbox (4-tuple of int): xmin,xmax,ymin,ymax
-
     Returns:
         region_img (2d-array)
     """
@@ -1424,7 +1395,6 @@ def crop_large_image(fp, bbox):
 def rescale_intensity_v2(im, low, high):
     """
     Linearly map `low` to 0 and `high` to 255.
-
     Args:
         im (2d array of float): input image.
     """
@@ -1442,7 +1412,6 @@ def visualize_blob_contour(binary_img, bg_img):
     Args:
         binary_img: the binary image
         rgb_img: the background image
-
     Returns:
         Contoured image.
     """
@@ -1616,7 +1585,6 @@ def save_hdf_v2(data, fn, key='data', mode='w'):
     Save data as a hdf file.
     If data is dict of dict, convert to DataFrame before saving as hdf.
     If data is dict of elementary items, convert to pandas.Series before saving as hdf.
-
     Args:
         data (pandas.DataFrame, dict or dict of dict)
         mode (str): if 'w', overwrite original content. If 'a', append.
@@ -1953,7 +1921,6 @@ def display_volume_sections_checkerboard(vol_f, vol_mTof, every=5, ncols=5, dire
 def display_volume_sections(vol, every=5, ncols=5, direction='z', start_level=None, **kwargs):
     """
     Show the sections of a volume in a grid display.
-
     Args:
         direction (str): x,y or z
     """
@@ -1990,7 +1957,6 @@ def display_images_in_grids(vizs, nc, titles=None, export_fn=None, maintain_shap
                             title_fontsize=10, **kwargs):
     """
     Display a list of images in a grid.
-
     Args:
         vizs (list of images):
         nc (int): number of images in each row
@@ -2130,9 +2096,7 @@ def js(u,v):
 def chi2(u,v):
     """
     Compute Chi^2 distance between two distributions.
-
     Empty bins are ignored.
-
     """
 
     u[u==0] = 1e-6
@@ -2324,4 +2288,4 @@ def read_dict_from_txt(fn, converter=np.float, key_converter=np.int):
 def write_dict_to_txt(d, fn, fmt='%f'):
     with open(fn, 'w') as f:
         for k, vals in d.iteritems():
-            f.write(k + ' ' +  (' '.join([fmt]*len(vals))) % tuple(vals) + '\n')
+            f.write(k + ' ' + (' '.join([fmt]*len(vals))) % tuple(vals) + '\n')

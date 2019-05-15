@@ -28,9 +28,19 @@ from a_driver_utilities import *
 # Make sure ROOT_DIR/CSHL_data_processed/STACK/STACK_raw/SLICE_raw.tif files all exist, otherwise can't continue
 sorted_fns = get_fn_list_from_sorted_filenames( stack )
 for fn in sorted_fns:
-    fp_tif = ROOT_DIR+'/CSHL_data_processed/'+stack+'/'+stack+'_raw/'+fn+'_raw.tif'
+    fp_tif = os.path.join( ROOT_DIR, 'CSHL_data_processed', stack, stack+'_raw', fn+'_raw.tif' )
+    fp_tif_generic = os.path.join( ROOT_DIR, 'CSHL_data_processed', stack, stack+'_raw', '<FILENAME>_raw.tif' )
+    #fp_tif = ROOT_DIR+'CSHL_data_processed/'+stack+'/'+stack+'_raw/'+fn+'_raw.tif'
     if not os.path.isfile(fp_tif):
-        print 'Raw files not located. Need to be stored as `ROOT_DIR/CSHL_data_processed/STACK/STACK_raw/SLICE_raw.tif`'
+        print('')
+        print('_________________________________________________________________________________')
+        print('_________________________________________________________________________________')
+        print('Raw files either not located at proper location or not named properly.')
+        print('Files must be located at this filepath: '+fp_tif_generic)
+        print('Files must be named using the convention: <FILENAME>_raw.tif')
+        print('_________________________________________________________________________________')
+        print('_________________________________________________________________________________')
+        sys.exit()
 
         
 if stain == 'NTB':

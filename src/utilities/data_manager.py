@@ -1283,7 +1283,6 @@ class DataManager(object):
         else:
             raise Exception("prep_id %s must be either str or int" % prep_id)
 
-        print fp
         if not os.path.exists(fp):
             sys.stderr.write("Seems you are using operation INIs to provide cropbox.\n")
             if prep_id == 2 or prep_id == 'alignedBrainstemCrop':

@@ -604,18 +604,18 @@ with open(os.environ['REPO_DIR']+'utilities/registered_brains.json', 'r') as jso
     contents = json.load( json_file )
 
 # Load Nissl and Ntb stacks
-all_nissl_stacks = contents['all_nissl_stacks']
+all_nissl_stacks = contents['all_thionin_stacks']
 all_ntb_stacks = contents['all_ntb_stacks']
 #all_stacks = all_nissl_stacks + all_ntb_stacks
 
 # Load annotated stacks
 all_annotated_ntb_stacks = contents['all_annotated_ntb_stacks']
-all_annotated_nissl_stacks = contents['all_annotated_nissl_stacks']
+all_annotated_nissl_stacks = contents['all_annotated_thionin_stacks']
 all_annotated_stacks = all_annotated_nissl_stacks + all_annotated_ntb_stacks
 
 all_dk_ntb_stacks = contents['all_dk_ntb_stacks']
-all_alt_nissl_ntb_stacks = contents['all_alt_nissl_ntb_stacks']
-all_alt_nissl_tracing_stacks = contents['all_alt_nissl_tracing_stacks']
+all_alt_nissl_ntb_stacks = contents['all_alt_thionin_ntb_stacks']
+all_alt_nissl_tracing_stacks = contents['all_alt_thionin_tracing_stacks']
 all_stacks = all_nissl_stacks + all_ntb_stacks + all_alt_nissl_ntb_stacks + all_alt_nissl_tracing_stacks + all_dk_ntb_stacks
 #all_stacks = ['MD603','MD635','MD585']
 

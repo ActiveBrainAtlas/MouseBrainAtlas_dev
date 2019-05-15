@@ -973,6 +973,7 @@ def convert_annotation_v3_original_to_aligned_cropped_v2(contour_df, stack, out_
     # xmin_down32, _, ymin_down32, _, _, _ = DataManager.load_cropbox(stack, prep_id=prep_id)
     xmin_down32, _, ymin_down32, _ = DataManager.load_cropbox_v2(stack, prep_id=prep_id, only_2d=True)
 
+    # Ts_rawResol is a dictionary[filename] containing a 3x3 transformation matrix for each file
     Ts_rawResol = DataManager.load_transforms(stack=stack, resolution='raw', use_inverse=True)
 
     for cnt_id, cnt in contour_df.iterrows():
@@ -983,7 +984,8 @@ def convert_annotation_v3_original_to_aligned_cropped_v2(contour_df, stack, out_
         contour_df.loc[cnt_id, 'section'] = sec
 
         Tinv_rawResol = Ts_rawResol[fn]
-
+        
+        # Apply Tinv_rawResol 3x3 transformation matrix to the vertices 
         vertices_wrt_alignedCropped_rawResol = np.dot(Tinv_rawResol, np.c_[cnt['vertices'], np.ones((len(cnt['vertices']),))].T).T[:, :2] - (xmin_down32 * 32., ymin_down32 * 32.)
         vertices_wrt_alignedCropped_outResol = vertices_wrt_alignedCropped_rawResol * convert_resolution_string_to_voxel_size(stack=stack, resolution='raw') / convert_resolution_string_to_voxel_size(stack=stack, resolution=out_resolution)
         contour_df.set_value(cnt_id, 'vertices', vertices_wrt_alignedCropped_outResol)

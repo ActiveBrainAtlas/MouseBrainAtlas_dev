@@ -1,7 +1,10 @@
 #!/bin/bash
 
 # User can modify this part
-PROJECT_DIR=/home/alexn/brainDev
+export PROJECT_DIR=/home/alexn/brainDev
+export ROOT_DIR=/media/alexn/Data_2/Atlas_Root_Dirs/Beta_Testing/
+# export ROOT_DIR=/media/alexn/BstemAtlasDataBackup/ucsd_brain/
+
 virtualenv="mousebrainatlas_virtualenv"
 ##################################################
 
@@ -12,20 +15,8 @@ cyan='\e[1;36m'
 NC='\033[0m' # No Color
 
 export REPO_DIR=$PROJECT_DIR/src/
-
-# export ROOT_DIR=/media/alexn/BstemAtlasDataBackup/demo_preprocess/
-# export DATA_ROOTDIR=/media/alexn/BstemAtlasDataBackup/demo_preprocess/
-# export THUMBNAIL_DATA_ROOTDIR=/media/alexn/BstemAtlasDataBackup/demo_preprocess/
-
-# FOR UCSD BRAIN
-# export ROOT_DIR=/media/alexn/BstemAtlasDataBackup/ucsd_brain/
-# export DATA_ROOTDIR=/media/alexn/BstemAtlasDataBackup/ucsd_brain/
-# export THUMBNAIL_DATA_ROOTDIR=/media/alexn/BstemAtlasDataBackup/ucsd_brain/
-
-# FOR Script testing
-export ROOT_DIR=/media/alexn/Data_2/Duke_Brains/
-export DATA_ROOTDIR=/media/alexn/Data_2/Duke_Brains/
-export THUMBNAIL_DATA_ROOTDIR=/media/alexn/Data_2/Duke_Brains/
+export DATA_ROOTDIR=$ROOT_DIR
+export THUMBNAIL_DATA_ROOTDIR=$ROOT_DIR
 
 
 if [ ! -d $virtualenv ]; then

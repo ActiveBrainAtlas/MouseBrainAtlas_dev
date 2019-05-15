@@ -148,7 +148,7 @@ for structure_m in structures_m:
         stack_m_spec = dict(name='atlasV7',
                    vol_type='score',
                    structure=s,
-                    resolution='10.0um'
+                   resolution='10.0um'
                    )
 
     #     stack_f_spec = dict(name=stack,
@@ -169,13 +169,13 @@ for structure_m in structures_m:
 
         # tf_atlas_to_subj = DataManager.load_alignment_results_v3(local_alignment_spec, what='parameters', out_form=(4,4))
 
+        # Load the Atlas volume
         atlas_structure_wrt_canonicalAtlasSpace_atlasResol = \
         DataManager.load_original_volume_v2(stack_spec=stack_m_spec, bbox_wrt='canonicalAtlasSpace', structure=s)
 
         aligned_structure_wrt_wholebrain_inputResol = \
-        transform_volume_v4(volume=atlas_structure_wrt_canonicalAtlasSpace_atlasResol,
-                            transform=tf_atlas_to_subj,
-                            return_origin_instead_of_bbox=True)
+            transform_volume_v4(volume=atlas_structure_wrt_canonicalAtlasSpace_atlasResol,
+                            transform=tf_atlas_to_subj, return_origin_instead_of_bbox=True)
 
         DataManager.save_transformed_volume_v2(volume=aligned_structure_wrt_wholebrain_inputResol, 
                                                alignment_spec=alignment_spec,

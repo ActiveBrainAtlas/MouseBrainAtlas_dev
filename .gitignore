@@ -17,6 +17,9 @@ tmp.jpg
 mousebrainatlas_virtualenv/
 demo_data/
 
+# Exclude certain output files
+setup/set*metadata.sh
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
