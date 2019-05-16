@@ -2,21 +2,27 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="92be7677-5db2-4ed0-9bea-3070d9d103cb" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/setup/config_mac.sh" beforeDir="false" afterPath="$PROJECT_DIR$/setup/config_mac.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/shapeology/configure.sh" beforeDir="false" afterPath="$PROJECT_DIR$/shapeology/configure.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/shapeology/notebooks/CreateSequenceVQ-to-python.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/shapeology/notebooks/CreateSequenceVQ-to-python.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/shapeology/notebooks/Process_Extracted_Patches.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/shapeology/notebooks/Process_Extracted_Patches.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/shapeology/notebooks/old/Finding cell in window.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/shapeology/notebooks/old/Finding cell in window.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/shapeology/notebooks/old/permute.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/shapeology/notebooks/old/permute.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/shapeology/notebooks/segmentation/Threshold and Extract.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/shapeology/notebooks/segmentation/Threshold and Extract.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/shapeology/notebooks/segmentation/threshold-based segmentation.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/shapeology/notebooks/segmentation/threshold-based segmentation.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/shapeology/notebooks/view segmentation.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/shapeology/notebooks/view segmentation.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/shapeology/scripts/Cell_Extraction_Code" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shapeology/scripts/extractPatches.py" beforeDir="false" afterPath="$PROJECT_DIR$/shapeology/scripts/extractPatches.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/shapeology/scripts/patch_normalizer.py" beforeDir="false" afterPath="$PROJECT_DIR$/shapeology/scripts/patch_normalizer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/shapeology/scripts/shape_params.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/shapeology/scripts/shape_params.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/shapeology/shape_params.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/shapeology/shape_params.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/shapeology" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/shapeology_code/configure.sh" beforeDir="false" afterPath="$PROJECT_DIR$/shapeology_code/configure.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/shapeology_code/notebooks/CreateSequenceVQ-to-python.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/shapeology_code/notebooks/CreateSequenceVQ-to-python.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/shapeology_code/notebooks/Process_Extracted_Patches.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/shapeology_code/notebooks/Process_Extracted_Patches.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/shapeology_code/notebooks/old/Finding cell in window.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/shapeology_code/notebooks/old/Finding cell in window.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/shapeology_code/notebooks/old/permute.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/shapeology_code/notebooks/old/permute.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/shapeology_code/notebooks/segmentation/Threshold and Extract.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/shapeology_code/notebooks/segmentation/Threshold and Extract.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/shapeology_code/notebooks/segmentation/threshold-based segmentation.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/shapeology_code/notebooks/segmentation/threshold-based segmentation.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/shapeology_code/notebooks/view segmentation.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/shapeology_code/notebooks/view segmentation.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/shapeology_code/scripts/Cell_Extraction_Code" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/shapeology_code/scripts/extractPatches.py" beforeDir="false" afterPath="$PROJECT_DIR$/shapeology_code/scripts/extractPatches.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/shapeology_code/scripts/label_patch.py" beforeDir="false" afterPath="$PROJECT_DIR$/shapeology_code/scripts/label_patch.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/shapeology_code/scripts/patch_normalizer.py" beforeDir="false" afterPath="$PROJECT_DIR$/shapeology_code/scripts/patch_normalizer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/shapeology_code/scripts/shape_params-aws.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/shapeology_code/scripts/shape_params-aws.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/shapeology_code/scripts/shape_params.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/shapeology_code/scripts/shape_params.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/shapeology_code/shape_params.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/shapeology_code/shape_params.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/learning/Patches_extract.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/src/learning/Patches_extract.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/learning/identify_patch_class_based_on_labeling_v3_human_annotations.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/learning/identify_patch_class_based_on_labeling_v3_human_annotations.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utilities/learning_utilities.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/utilities/learning_utilities.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -26,82 +32,23 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/shapeology/scripts/extractPatches.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="105">
-              <caret line="7" column="50" lean-forward="true" selection-end-line="7" selection-end-column="50" />
-              <folding>
-                <element signature="e#0#10#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/shapeology/scripts/extractCells.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="120">
-              <caret line="8" selection-start-line="8" selection-end-line="8" />
-              <folding>
-                <element signature="e#0#10#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/shapeology/scripts/shape_params.yaml">
+        <entry file="file://$PROJECT_DIR$/src/learning/identify_patch_class_based_on_labeling_v3_human_annotations.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="300">
-              <caret line="20" column="25" selection-start-line="20" selection-start-column="25" selection-end-line="20" selection-end-column="25" />
+            <state relative-caret-position="99">
+              <caret line="22" lean-forward="true" selection-start-line="22" selection-end-line="22" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/shapeology/scripts/patch_normalizer.py">
+        <entry file="file://$PROJECT_DIR$/src/utilities/learning_utilities.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2430">
-              <caret line="166" column="57" selection-start-line="166" selection-start-column="57" selection-end-line="166" selection-end-column="57" />
+            <state relative-caret-position="75">
+              <caret line="1358" column="76" selection-start-line="1358" selection-start-column="50" selection-end-line="1358" selection-end-column="76" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/shapeology/notebooks/CreateSequenceVQ-to-python.ipynb">
-          <provider selected="true" editor-type-id="jupyter-editor" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/shapeology/scripts/lib/utils.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="107">
-              <caret line="19" column="22" selection-start-line="19" selection-start-column="22" selection-end-line="19" selection-end-column="22" />
-              <folding>
-                <element signature="e#0#13#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/shapeology/configure.sh">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="135">
-              <caret line="9" column="23" selection-start-line="9" selection-start-column="23" selection-end-line="9" selection-end-column="23" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/shapeology/shape_params.yaml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="345">
-              <caret line="23" column="23" selection-start-line="23" selection-start-column="23" selection-end-line="23" selection-end-column="23" />
             </state>
           </provider>
         </entry>
@@ -119,10 +66,14 @@
   <component name="FindInProjectRecents">
     <findStrings>
       <find>tile</find>
+      <find>load_annotation_v4</find>
+      <find>diffusion</find>
+      <find>generate_annotation_to_grid_indices_lookup_v2</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/shapeology" />
+    <option name="ROOT_SYNC" value="DONT_SYNC" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
@@ -130,11 +81,17 @@
         <option value="$PROJECT_DIR$/shapeology/notebooks/Cell_generator.ipynb" />
         <option value="$PROJECT_DIR$/setup/config_mac.sh" />
         <option value="$PROJECT_DIR$/shapeology/configure.sh" />
+        <option value="$PROJECT_DIR$/shapeology/scripts/extractCells.py" />
         <option value="$PROJECT_DIR$/shapeology/shape_params.yaml" />
         <option value="$PROJECT_DIR$/shapeology/scripts/shape_params.yaml" />
-        <option value="$PROJECT_DIR$/shapeology/scripts/extractPatches.py" />
+        <option value="$PROJECT_DIR$/shapeology/scripts/shape_params-aws.yaml" />
         <option value="$PROJECT_DIR$/shapeology/scripts/patch_normalizer.py" />
-        <option value="$PROJECT_DIR$/shapeology/scripts/extractCells.py" />
+        <option value="$PROJECT_DIR$/shapeology/notebooks/Cell_generator.py" />
+        <option value="$PROJECT_DIR$/shapeology/scripts/Cell_generator.py" />
+        <option value="$PROJECT_DIR$/shapeology/scripts/label_patch.py" />
+        <option value="$PROJECT_DIR$/shapeology/scripts/extractPatches.py" />
+        <option value="$PROJECT_DIR$/src/utilities/learning_utilities.py" />
+        <option value="$PROJECT_DIR$/src/learning/identify_patch_class_based_on_labeling_v3_human_annotations.py" />
       </list>
     </option>
   </component>
@@ -150,6 +107,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -171,16 +129,16 @@
               <item name="MouseBrainAtlas_dev" type="b2602c69:ProjectViewProjectNode" />
               <item name="MouseBrainAtlas_dev" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="learning" type="462c0819:PsiDirectoryNode" />
+              <item name="utilities" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.eslint" value="true" />
@@ -189,6 +147,11 @@
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/shapeology/scripts" />
+    </key>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -216,18 +179,19 @@
       <workItem from="1556839382486" duration="2756000" />
       <workItem from="1556843498809" duration="1198000" />
       <workItem from="1556849295274" duration="15023000" />
-      <workItem from="1556881711958" duration="1711000" />
+      <workItem from="1556881711958" duration="27193000" />
+      <workItem from="1557959984599" duration="690000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="20975000" />
+    <option name="totallyTimeSpent" value="47147000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="16" y="45" width="1400" height="774" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.26435935" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.26804122" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -261,90 +225,56 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/shapeology/notebooks/Cell_generator.ipynb">
+    <entry file="file://$PROJECT_DIR$/shapeology/notebooks/Cell_generator.ipynb" />
+    <entry file="file://$PROJECT_DIR$/shapeology/scripts/Controller.py" />
+    <entry file="file://$PROJECT_DIR$/shapeology/scripts/CreateVQs.py" />
+    <entry file="file://$PROJECT_DIR$/shapeology/scripts/post-processing.py" />
+    <entry file="file://$PROJECT_DIR$/shapeology/notebooks/CreateSequenceVQ-to-python.ipynb" />
+    <entry file="file://$PROJECT_DIR$/shapeology/scripts/lib/utils.py" />
+    <entry file="file://$PROJECT_DIR$/shapeology/scripts/extractCells.py" />
+    <entry file="file://$PROJECT_DIR$/src/learning/a_learning_driver.ipynb">
       <provider selected="true" editor-type-id="jupyter-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/shapeology/scripts/shape_params-aws.yaml">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/shapeology/scripts/Controller.py">
+    <entry file="file://$PROJECT_DIR$/src/utilities/metadata.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-339" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/shapeology/scripts/CreateVQs.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1360">
-          <folding>
-            <element signature="e#0#19#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="175">
+          <caret line="315" column="4" selection-start-line="315" selection-start-column="4" selection-end-line="315" selection-end-column="4" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/shapeology/scripts/post-processing.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/shapeology/scripts/patch_normalizer.py">
+    <entry file="file://$PROJECT_DIR$/shapeology/scripts/shape_params.yaml" />
+    <entry file="file://$PROJECT_DIR$/shapeology/configure.sh" />
+    <entry file="file://$PROJECT_DIR$/shapeology/setup.sh" />
+    <entry file="file://$PROJECT_DIR$/shapeology/shape_params.yaml" />
+    <entry file="file://$PROJECT_DIR$/shapeology/scripts/patch_normalizer.py" />
+    <entry file="file://$PROJECT_DIR$/shapeology/scripts/shape_params-aws.yaml" />
+    <entry file="file://$PROJECT_DIR$/src/utilities/data_manager.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2430">
-          <caret line="166" column="57" selection-start-line="166" selection-start-column="57" selection-end-line="166" selection-end-column="57" />
+        <state relative-caret-position="10174">
+          <caret line="876" column="61" selection-start-line="876" selection-start-column="61" selection-end-line="876" selection-end-column="61" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/shapeology/notebooks/CreateSequenceVQ-to-python.ipynb">
-      <provider selected="true" editor-type-id="jupyter-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/shapeology/configure.sh">
+    <entry file="file://$PROJECT_DIR$/shapeology/scripts/Cell_generator.py" />
+    <entry file="file://$PROJECT_DIR$/shapeology/scripts/label_patch.py" />
+    <entry file="file://$PROJECT_DIR$/shapeology/scripts/extractPatches.py" />
+    <entry file="file://$PROJECT_DIR$/src/utilities/learning_utilities.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="9" column="23" selection-start-line="9" selection-start-column="23" selection-end-line="9" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/shapeology/shape_params.yaml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="23" column="23" selection-start-line="23" selection-start-column="23" selection-end-line="23" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/shapeology/scripts/extractPatches.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="7" column="50" lean-forward="true" selection-end-line="7" selection-end-column="50" />
+        <state relative-caret-position="75">
+          <caret line="1358" column="76" selection-start-line="1358" selection-start-column="50" selection-end-line="1358" selection-end-column="76" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/shapeology/scripts/lib/utils.py">
+    <entry file="file://$PROJECT_DIR$/src/learning/identify_patch_class_based_on_labeling_v3_human_annotations.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="107">
-          <caret line="19" column="22" selection-start-line="19" selection-start-column="22" selection-end-line="19" selection-end-column="22" />
-          <folding>
-            <element signature="e#0#13#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/shapeology/scripts/extractCells.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" selection-start-line="8" selection-end-line="8" />
-          <folding>
-            <element signature="e#0#10#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/shapeology/scripts/shape_params.yaml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="20" column="25" selection-start-line="20" selection-start-column="25" selection-end-line="20" selection-end-column="25" />
+        <state relative-caret-position="99">
+          <caret line="22" lean-forward="true" selection-start-line="22" selection-end-line="22" />
         </state>
       </provider>
     </entry>

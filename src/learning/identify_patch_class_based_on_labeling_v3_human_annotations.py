@@ -30,7 +30,8 @@ for stack in [stack]:
                                                   suffix='contours', \
                                                   timestamp='latest',
                                                   surround_margins=[200, 500],
-                                                  return_timestamp=True)
+                                                  return_timestamp=True,
+                                                  change_to_prep2_frame=False)
     # Everything past here just saved results
     grid_index_class_lookup_fp = \
     DataManager.get_annotation_to_grid_indices_lookup_filepath(stack=stack, win_id=win_id, 

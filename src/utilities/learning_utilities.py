@@ -1355,7 +1355,8 @@ def generate_annotation_to_grid_indices_lookup_v2(stack, by_human, win_id,
                                               surround_margins=None, suffix='contours', timestamp='latest', prep_id=2,
                                                 positive_level=0.8, negative_level=0.2,
                                               return_timestamp=False,
-                                              structures=None):
+                                              structures=None,
+                                                  change_to_prep2_frame=True):
     """
     Load the structure annotation.
     Use the default grid spec.
@@ -1406,7 +1407,10 @@ def generate_annotation_to_grid_indices_lookup_v2(stack, by_human, win_id,
         contours = contours.drop_duplicates(subset=['section', 'name', 'side', 'filename', 'resolution', 'creator'])
 
         # contours_df = convert_annotation_v3_original_to_aligned_cropped(contours, stack=stack)
-        contours_df = convert_annotation_v3_original_to_aligned_cropped_v2(contours, stack=stack, out_resolution='raw', prep_id=prep_id)
+        if change_to_prep2_frame:
+            contours_df = convert_annotation_v3_original_to_aligned_cropped_v2(contours, stack=stack, out_resolution='raw', prep_id=prep_id)
+        else:
+            contours_df = contours
 
         download_from_s3(DataManager.get_thumbnail_mask_dir_v3(stack=stack, prep_id=prep_id), is_dir=True)
 
