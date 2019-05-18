@@ -119,6 +119,13 @@ elif answer=='no':
         #raw_tiff_sample_fn = fn[max(loc for loc, val in enumerate(fn) if val == '/')+1:len(fn)]
         raw_tiff_input_fp = fn[0:max(loc for loc, val in enumerate(fn) if val == '/')]
         raw_tiff_input_fns = os.listdir( raw_tiff_input_fp )
+        
+        try:
+            raw_fp = DataManager.get_image_filepath_v2(stack, None, version=None, resol="raw", fn="$")
+            os.makedirs( raw_fp[:raw_fp.index('$')] )
+        except Exception as e:
+            print(e)
+            pass
 
         filenames_list = DataManager.load_sorted_filenames(stack)[0].keys()
         # Rename and copy over all tiff files in the selected folder

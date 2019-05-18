@@ -2,7 +2,8 @@
 
 # User can modify this part
 export PROJECT_DIR=/home/alexn/brainDev
-export ROOT_DIR=/media/alexn/Data_2/Atlas_Root_Dirs/Beta_Testing/
+# export ROOT_DIR=/media/alexn/Data_2/Atlas_Root_Dirs/Beta_Testing/
+export ROOT_DIR=/media/alexn/Data_2/Atlas_Root_Dirs/Duke_Brains/
 # export ROOT_DIR=/media/alexn/BstemAtlasDataBackup/ucsd_brain/
 
 virtualenv="mousebrainatlas_virtualenv"
