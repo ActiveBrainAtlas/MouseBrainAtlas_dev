@@ -41,9 +41,9 @@ __Command (optional alternative)__: `python a_script_preprocess_2.py $stack $sta
 
 __Description__: Generates image translation and rotation alignment parameters, one "anchor" file is chosen which all other images are aligned to. User can choose to pass an images filename in to be the anchor image, otherwise the anchor image will be chosen automatically. Image alignment parameters are applied and the new aligned image stack is saved as so called "prep1" images. The background is padded white for T stain and black for NTB stain.
 
-__User step__: Manually fix incorrect alignments. The image alignment scripts is imperfect and has an error rate of 5-10%. The incorrectly aligned slides must be aligned and saved by hand. The built in GUI can be run using `python $REPO_DIR/gui/preprocess_tool_v3.py $stack --tb_version $img_version_1`. Gui guide link (incomplete).
+__User step__: Manually fix incorrect alignments. The image alignment scripts is imperfect and has an error rate of 5-10%. The incorrectly aligned slides must be aligned and saved by hand. The built in GUI can be run using `python $REPO_DIR/gui/preprocess_tool_v3.py $stack --tb_version $img_version_1`. [Link to GUI guide](GUI_guides.md#alignment-gui)
 
-__User step 2__: Create initial segmentation outlines of the brain for every slice with the following command, `python $REPO_DIR/gui/mask_editing_tool_v4.py $stack $img_version_1`. Gui guide link (incomplete).
+__User step 2__: Create initial segmentation outlines of the brain for every slice with the following command, `python $REPO_DIR/gui/mask_editing_tool_v4.py $stack $img_version_1`. [Link to GUI guide](GUI_guides.md#masking-gui-1-initial-manual-mask-contours)
 
 
 ---------------------------
@@ -53,7 +53,7 @@ __Command__: `python a_script_preprocess_3.py $stack $stain`
 
 __Description__: Generates binary masks for every image to segment the pixels containing the brain using the user's initial segmentation outline for assistance.
 
-__User step__: Manually correct the generated masks with the following command, `python $REPO_DIR/gui/mask_editing_tool_v4.py $stack $img_version_1` and save these prep1 thumbnail image masks. Gui guide link (incomplete).
+__User step__: Manually correct the generated masks with the following command, `python $REPO_DIR/gui/mask_editing_tool_v4.py $stack $img_version_1` and save these prep1 thumbnail image masks. [Link to GUI guide](GUI_guides.md#masking-gui-2-correct-auto-generated-masks)
 
 
 ---------------------------
