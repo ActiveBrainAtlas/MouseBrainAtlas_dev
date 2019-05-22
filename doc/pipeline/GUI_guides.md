@@ -14,9 +14,34 @@ The automatic intra-stack alignment has an error rate of about 5-10%, it will be
 
 
 # Masking GUI:
-Command: `python $REPO_DIR/gui/mask_editing_tool_v4.py $stack $img_version_1`
+Command: `python $REPO_DIR/gui/mask_editing_tool_v4.py $stack $img_version_1`\
 
+This GUI is used twice. Once so the user can create rough outlines of the brain tissue on each image, this assists the automatic mask-generation by giving it a starting point. After the automatic mask-generation, this GUI is run again to correct the masks that have been created.
 
+## Masking GUI 1: Initial Manual Mask Contours
+GUI controls:
+- Wheel to zoom
+- Click and drag to translate
+- `[` and `]` to cycle through images
+
+Working on the top-left image field:
+  - Right click, select `create initial snake contour`.
+    - Click around the tissue, creating a set of vertices joined together by lines. Ensure that the tissue is within the polygon you are creating. Once the encapsulating polygon is about finished, click your first point to close and complete it.
+    - Right click, select `set this contour as anchor contour`
+  - Run the last bullet in its entirety for about 5-8 sections in a stack of 300-400 images. Try to keep the anchor contours spaced out.
+  - Right click, select `automatically estimate all contours`. This generates contours on every image that is NOT an anchor contour via linear interpolation.
+  Looking at the bottom push buttons: 
+    - Press `save anchor contours`
+    - Press `save initial contours`
+
+## Masking GUI 2: Correct Auto-generated Masks
+
+Working in the bottom-left image field:
+  - 
 
 
 # Annotation GUI:
+Command: `python $REPO_DIR/gui/brain_labeling_gui_v28.py $stack --prep 2 --img_version $img_version_2`
+
+
+
