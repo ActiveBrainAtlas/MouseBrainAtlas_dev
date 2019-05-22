@@ -10,8 +10,7 @@ The automatic intra-stack alignment has an error rate of about 5-10%, it will be
   - Click the button `add anchor pair`
     - Every time you click this button you add a corresponding pair of points to the left and middle images. Click on the leftmost image to add its point, then click on the middle image to add the corresponding point. These points should be located in the exact same region on both images such that when overlayed, the points will overlap. Do this for 4-6 points for every pair of misaligned images.
     - Click the button `compute transform` and move on to the next pair of images
-
-
+  - Close the GUI
 
 # Masking GUI:
 Command: `python $REPO_DIR/gui/mask_editing_tool_v4.py $stack $img_version_1`\
@@ -33,12 +32,17 @@ Working on the top-left image field:
   Looking at the bottom push buttons: 
     - Press `save anchor contours`
     - Press `save initial contours`
+  - Close the GUI
 
 ## Masking GUI 2: Correct Auto-generated Masks
 
 Working in the bottom-left image field:
-  - 
-
+  - Using the right click menu, add and remove vertices as is necessary. Click and drag existing vertices to move them. For every incorrect mask, create / remove / drag the contours until they are correct.
+    - Once finished, push `update merged mask`, then click `save final mask for current section`.
+  - After every incorrect mask has been corrected following the above bullet point:
+    - Push `save final masks for all sections`
+    - Push `export masks as PNG for all sections`
+  - Close the GUI
 
 # Annotation GUI:
 Command: `python $REPO_DIR/gui/brain_labeling_gui_v28.py $stack --prep 2 --img_version $img_version_2`
