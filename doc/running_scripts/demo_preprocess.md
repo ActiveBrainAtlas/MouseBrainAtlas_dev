@@ -10,19 +10,6 @@ The preprocessing stage of the code can be broken down into the following 7-8 st
 7) [Brainstem Crop](#brainstem-crop)
 8) [(Optional) Simple Global Alignment](#optional-obtain-a-simple-global-alignment)
 
-## Changes
-
-- Changed `warp_crop.py` line 91
-    - op = load_ini( os.path.join( DATA_ROOTDIR, 'operation_configs', op_name + '.ini'))
-- Changed `crop_orig.ini`line 7
-    - cropboxes_csv = demo_data/CSHL_data_processed/DEMO998/DEMO998_original_image_crop.csv---[original line]
-    - needs to be based off of environment variable, probably delete this line and change code in warp_crop.py
-    - cropboxes_csv = /home/alexn/brainDev/demo/DEMO998_original_image_crop.csv---[New, temporary line]
-- Changed `distributed_utilities.py` lines 304, 336, 337
-    - temp_script = os.path.join( DATA_ROOTDIR, 'runall.sh' )
-    - stdout_template = os.path.join( DATA_ROOTDIR, 'stdout_%d.log')
-    - stderr_template = os.path.join( DATA_ROOTDIR, 'stderr_%d.log')
-
 ## Preprocess
 
 Install ImageMagick 6.8.9.
