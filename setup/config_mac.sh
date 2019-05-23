@@ -23,18 +23,25 @@ export THUMBNAIL_DATA_ROOTDIR=~/BstemAtlasDataBackup/ucsd_brain/
 # export DATA_ROOTDIR=/media/alexn/BstemAtlasDataBackup/pipeline_test/
 # export THUMBNAIL_DATA_ROOTDIR=/media/alexn/BstemAtlasDataBackup/pipeline_test/
 
+venv_dir=~/Github/venv/$virtualenv
 
-if [ ! -d $PROJECT_DIR/$virtualenv ]; then
-        echo ""
-        echo -e "${green}Creating a virtualenv environment${NC}"
-        #virtualenv --system-site-packages $virtualenv
-        virtualenv -p python $PROJECT_DIR/$virtualenv
-        echo ""
-        echo -e "${green}[virtualenv] Installing Python packages${NC}"
-        pip install -r $PROJECT_DIR/setup/requirements.txt
+
+if [ ! -d $venv_dir ]; then
+    echo ""
+    echo -e "${green}Creating a virtualenv environment${NC}"
+    #virtualenv --system-site-packages $virtualenv
+    virtualenv -p python2 $venv_dir
+
+    echo ""
+    echo -e "${green}Activating the virtualenv environment${NC}"
+    source $venv_dir/bin/activate
+
+    echo ""
+    echo -e "${green}[virtualenv] Installing Python packages${NC}"
+    pip install -r $PROJECT_DIR/setup/requirements.txt
 fi
 
 echo ""
 echo -e "${green}Activating the virtualenv environment${NC}"
-source $PROJECT_DIR/$virtualenv/bin/activate
+source $venv_dir/bin/activate
 
