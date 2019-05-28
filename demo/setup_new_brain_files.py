@@ -124,7 +124,7 @@ elif answer=='no':
             raw_fp = DataManager.get_image_filepath_v2(stack, None, version=None, resol="raw", fn="$")
             os.makedirs( raw_fp[:raw_fp.index('$')] )
         except Exception as e:
-            print(e)
+            #print(e)
             pass
 
         filenames_list = DataManager.load_sorted_filenames(stack)[0].keys()
