@@ -16,7 +16,6 @@ Firstly, you need to know the directory in which you installed this "MouseBrainA
     - Set `PROJECT_DIR` to the directory in which this Github repo is located on your computer.
     - Set `ROOT_DIR` to a folder that will be the root of all data loaded and generated throughout the pipeline. Expect about 1TB of space to be taken up by every brain stack as it runs through the pipeline.
 - `cd` into this repository's directory and run the command `source setup/config.sh`. Check we are now working under the `mousebrainatlas_virtualenv` virtual environment. The command prompt should now have `mousebrainatlas_virtualenv` in parentheses prepended on the left side.
-- `cd demo`.
 
 #### Input new brain metadata
 
