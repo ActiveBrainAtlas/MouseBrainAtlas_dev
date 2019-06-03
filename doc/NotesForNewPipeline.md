@@ -1,6 +1,6 @@
 # Rotation
 - If raw data needs flip/rotation first, use `warp_crop.py` with one of the rotate operations (e.g. "rotate_transverse", "rotate_transpose", "rotate90").
-  - example: `python a_script_rotate.py DK17 NTB` will call warp_crop_v3.
+  - example: `python a_script_rotate.py DK17 NTB rotate90 thumbnail NtbNormalized None`
 - op_id transformations:
   - Reference [THIS WEBSITE](http://www.imagemagick.org/Usage/warping/#flip)
 # Notes
