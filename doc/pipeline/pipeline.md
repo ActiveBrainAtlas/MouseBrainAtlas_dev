@@ -24,8 +24,8 @@ __Description__: Downloads the following files from S3: operation configs, mxnet
 ---------------------------
 ### Prepare Images
 ---------------------------
-__Rotation__: Some images will need to be rotated such that they are oriented with the rostral side on the left, caudal on the right, for sagittal sections. Images should be rotated as needed to make this true. The below command will rotate (clockwise, always) every single image by 90 degrees. the rotation options are: `rotate90`, `rotate180`, and `rotate270`.
-    - `python a_script_rotate.py DK17 NTB rotate90 raw None None` (40 seconds per image)
+__Rotation__: Some images will need to be rotated such that they are oriented with the rostral side on the left, caudal on the right, for sagittal sections. Images should be rotated as needed to make this true. The below command will rotate (clockwise, always) every single image by 90 degrees. the rotation options are: `rotate90`, `rotate180`, and `rotate270`. `python a_script_rotate.py DK17 NTB rotate90 raw None None` (40 seconds per image)
+
 __Flipping__: Run the following command to mirror each image acroos a vertical line drawn down the center of the image.
     - `python a_script_rotate.py DK17 NTB flip raw None None` (40 seconds per image)
 
