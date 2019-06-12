@@ -6,6 +6,12 @@ import subprocess
 import time
 import json
 
+sys.path.append(os.path.join(os.environ['REPO_DIR'], 'utilities'))
+#from utilities2015 import *
+#from data_manager import *
+#from distributed_utilities import *
+from metadata import *
+
 def create_input_spec_ini( name, image_name_list, stack, prep_id, version, resol  ):
     f = open(name, "w")
     
@@ -101,6 +107,27 @@ def make_manual_anchor_points( stack, x_12N, y_12N, x_3N, y_3N, z_midline):
     f.write('x_3N = '+str(x_3N)+'\n')
     f.write('y_3N = '+str(y_3N)+'\n')
     f.write('z_midline = '+str(z_midline))
+    f.close()
+    
+def make_rotation_ini(stack, base_prep_id, dest_prep_id, rotation_type):
+    '''
+    Creates operation configuration files that specify the kind of rotation / flipping to apply to images (Clockwise rotations).
+    
+    http://www.imagemagick.org/Usage/warping/#flip
+    '''
+    assert rotation_type in orientation_argparse_str_to_imagemagick_str.keys()
+    
+    # Defined in metadata
+    base_prep_id = prep_id_short_str_to_full[ base_prep_id ]
+    dest_prep_id = prep_id_short_str_to_full[ dest_prep_id ]
+    
+    fn = os.path.join( os.environ['DATA_ROOTDIR'], 'CSHL_data_processed', stack, 'operation_configs', 'rotate_transverse.ini' )
+    f = open(fn, "w")
+    f.write('[DEFAULT]\n')
+    f.write('type = rotate\n')
+    f.write('how = '+rotation_type+'\n\n')
+    f.write('base_prep_id = '+base_prep_id+'\n')
+    f.write('dest_prep_id = '+dest_prep_id+'\n\n')
     f.close()
     
 def make_structure_fixed_and_moving_brain_specs( stack, id_detector, structure):

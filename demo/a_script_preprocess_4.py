@@ -63,7 +63,6 @@ if stain == 'NTB':
     completion_message = 'Transforming masks back into orientation of original raw images finished.'
     call_and_time( command, completion_message=completion_message)
 
-
     create_input_spec_ini_all( name='input_spec.ini', stack=stack, \
                 prep_id='None', version='Ntb', resol='raw')
     # Local adaptive intensity normalization

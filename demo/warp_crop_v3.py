@@ -81,22 +81,22 @@ def convert_operation_to_arr(op, resol, inverse=False, return_str=False, stack=N
 	return cropboxes
 
     elif op['type'] == 'rotate':
-	return {img_name: op['how'] for img_name in image_name_list}
+        return {img_name: op['how'] for img_name in image_name_list}
 
     else:
-	raise Exception("Operation type specified by ini must be either warp, crop or rotate.")
+        raise Exception("Operation type specified by ini must be either warp, crop or rotate.")
 
 
 def parse_operation_sequence(op_name, resol, return_str=False, stack=None):
     inverse = op_name.startswith('-')
     if inverse:
-	op_name = op_name[1:]
+        op_name = op_name[1:]
 
     #op = load_ini(os.path.join(DATA_ROOTDIR, 'CSHL_data_processed', stack, 'operation_configs', op_name + '.ini'))
     op_path = os.path.join( DATA_ROOTDIR,'CSHL_data_processed',stack, 'operation_configs', op_name + '.ini')
     op = load_ini(op_path)
     if op is None:
-	raise Exception("Cannot load %s.ini" % op_name)
+        raise Exception("Cannot load %s.ini" % op_name)
     if 'operation_sequence' in op: # composite operation
 
 	assert not inverse, "Inverse composite operation is not implemented."
@@ -132,24 +132,31 @@ if args.op_id is not None:
 
     ops_in_prep_id = op_seq[0][2]
     out_prep_id = op_seq[-1][3]
+    
+    if prep_id==None:
+        prep_id = "None"
+    if ops_in_prep_id==None:
+        ops_in_prep_id = "None"
+        
+    if version=="None":
+        version = None
 
     assert ops_in_prep_id == prep_id, "Input prep according to operation configs is %s, but the provided input_spec is %s." % (ops_in_prep_id, prep_id)
    
     ops_str_all_images = defaultdict(str)
     for op_type, op_params_str_all_images, _, _ in op_seq:
-	for img_name, op_params_str in op_params_str_all_images.items():
-		
-	    # replace leading minus sign with ^ to satisfy argparse
-	    if op_params_str.startswith('-'):
-		op_params_str = '^' + op_params_str[1:]
+        for img_name, op_params_str in op_params_str_all_images.items():
+            # replace leading minus sign with ^ to satisfy argparse
+            if op_params_str.startswith('-'):
+                op_params_str = '^' + op_params_str[1:]
 
-	    ops_str_all_images[img_name] += ' --op %s %s ' % (op_type, op_params_str)
-
+            ops_str_all_images[img_name] += ' --op %s %s ' % (op_type, op_params_str)
 
     # sequantial_dispatcher argument cannot be too long, so we must limit the number of images processed each time
     batch_size = 100
     for batch_id in range(0, len(image_name_list), batch_size):
-
+        #sys.stderr.write("HOHOHOHO: "+ops_str_all_images[img_name])
+        # Removes stderr and stdout
         run_distributed('python %(script)s --input_fp \"%%(input_fp)s\" --output_fp \"%%(output_fp)s\" %%(ops_str)s --pad_color %%(pad_color)s' % \
 		{'script':  os.path.join(os.getcwd(), 'warp_crop.py'),
 		},
@@ -191,7 +198,12 @@ elif args.op is not None:
      'h': str(h),
      }
 
+        
 	elif op_type == 'rotate':
+            print op_params
+            print orientation_argparse_str_to_imagemagick_str.keys()
+            print orientation_argparse_str_to_imagemagick_str[op_params]
+            print op_str
 	    op_str += ' ' + orientation_argparse_str_to_imagemagick_str[op_params]
 
 	else:
@@ -205,13 +217,11 @@ elif args.op is not None:
     create_parent_dir_if_not_exists(output_fp)
 
     try:
-	execute_command("convert \"%(input_fp)s\"  +repage -virtual-pixel background -background %(bg_color)s %(op_str)s -flatten -compress lzw \"%(output_fp)s\"" % \
-                {
-'op_str': op_str,
-     'input_fp': input_fp,
-     'output_fp': output_fp,
-     'bg_color': pad_color
-})
+        execute_command("convert \"%(input_fp)s\"  +repage -virtual-pixel background -background %(bg_color)s %(op_str)s -flatten -compress lzw \"%(output_fp)s\"" % \
+                {'op_str': op_str,
+                 'input_fp': input_fp,
+                 'output_fp': output_fp,
+                 'bg_color': pad_color})
     except Exception as e:
 	sys.stderr.write("ImageMagick convert failed for input_fp %s: %s\n" % (input_fp, e.message))
 

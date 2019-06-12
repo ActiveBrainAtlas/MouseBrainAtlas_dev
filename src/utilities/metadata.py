@@ -14,17 +14,17 @@ username = subprocess.check_output("whoami", shell=True).strip()
 
 if 'ENABLE_UPLOAD_S3' in os.environ:
     ENABLE_UPLOAD_S3 = bool(int(os.environ['ENABLE_UPLOAD_S3']))
-    sys.stderr.write("ENABLE_UPLOAD_S3 set to %s\n" % ENABLE_UPLOAD_S3)
+    #sys.stderr.write("ENABLE_UPLOAD_S3 set to %s\n" % ENABLE_UPLOAD_S3)
 else:
     ENABLE_UPLOAD_S3 = False
-    sys.stderr.write("ENABLE_UPLOAD_S3 is not set, default to False.\n")
+    #sys.stderr.write("ENABLE_UPLOAD_S3 is not set, default to False.\n")
 
 if 'ENABLE_DOWNLOAD_S3' in os.environ:
     ENABLE_DOWNLOAD_S3 = bool(int(os.environ['ENABLE_DOWNLOAD_S3']))
-    sys.stderr.write("ENABLE_DOWNLOAD_S3 set to %s\n" % ENABLE_DOWNLOAD_S3)
+    #sys.stderr.write("ENABLE_DOWNLOAD_S3 set to %s\n" % ENABLE_DOWNLOAD_S3)
 else:
     ENABLE_DOWNLOAD_S3 = False
-    sys.stderr.write("ENABLE_DOWNLOAD_S3 is not set, default to False.\n")
+    #sys.stderr.write("ENABLE_DOWNLOAD_S3 is not set, default to False.\n")
 
 if hostname == 'yuncong-MacbookPro':
     print 'Setting environment for Local Macbook Pro'
@@ -600,24 +600,29 @@ XY_PIXEL_DISTANCE_TB_AXIOSCAN = XY_PIXEL_DISTANCE_LOSSLESS_AXIOSCAN * 32
 #all_ntb_stacks = ['UCSD001','DK1-2']
 #all_stacks = all_nissl_stacks + all_ntb_stacks
 
-with open(os.environ['REPO_DIR']+'utilities/registered_brains.json', 'r') as json_file:
-    contents = json.load( json_file )
 
-# Load Nissl and Ntb stacks
-all_nissl_stacks = contents['all_thionin_stacks']
-all_ntb_stacks = contents['all_ntb_stacks']
-#all_stacks = all_nissl_stacks + all_ntb_stacks
+all_stacks = []
+all_ntb_stacks = []
+all_nissl_stacks = []
+if False:
+    with open(os.environ['REPO_DIR']+'utilities/registered_brains.json', 'r') as json_file:
+        contents = json.load( json_file )
 
-# Load annotated stacks
-all_annotated_ntb_stacks = contents['all_annotated_ntb_stacks']
-all_annotated_nissl_stacks = contents['all_annotated_thionin_stacks']
-all_annotated_stacks = all_annotated_nissl_stacks + all_annotated_ntb_stacks
+    # Load Nissl and Ntb stacks
+    all_nissl_stacks = contents['all_thionin_stacks']
+    all_ntb_stacks = contents['all_ntb_stacks']
+    #all_stacks = all_nissl_stacks + all_ntb_stacks
 
-all_dk_ntb_stacks = contents['all_dk_ntb_stacks']
-all_alt_nissl_ntb_stacks = contents['all_alt_thionin_ntb_stacks']
-all_alt_nissl_tracing_stacks = contents['all_alt_thionin_tracing_stacks']
-all_stacks = all_nissl_stacks + all_ntb_stacks + all_alt_nissl_ntb_stacks + all_alt_nissl_tracing_stacks + all_dk_ntb_stacks
-#all_stacks = ['MD603','MD635','MD585']
+    # Load annotated stacks
+    all_annotated_ntb_stacks = contents['all_annotated_ntb_stacks']
+    all_annotated_nissl_stacks = contents['all_annotated_thionin_stacks']
+    all_annotated_stacks = all_annotated_nissl_stacks + all_annotated_ntb_stacks
+
+    all_dk_ntb_stacks = contents['all_dk_ntb_stacks']
+    all_alt_nissl_ntb_stacks = contents['all_alt_thionin_ntb_stacks']
+    all_alt_nissl_tracing_stacks = contents['all_alt_thionin_tracing_stacks']
+    all_stacks = all_nissl_stacks + all_ntb_stacks + all_alt_nissl_ntb_stacks + all_alt_nissl_tracing_stacks + all_dk_ntb_stacks
+    #all_stacks = ['MD603','MD635','MD585']
 
 
 BRAINS_INFO_DIR = os.path.join(DATA_ROOTDIR, 'brains_info')
@@ -648,11 +653,26 @@ def load_ini(fp, split_newline=True, convert_none_str=True, section='DEFAULT'):
     return input_spec
 
 planar_resolution = {}
+stack_metadata = {}
 if os.path.exists(BRAINS_INFO_DIR):
     for brain_ini in os.listdir(BRAINS_INFO_DIR):
         brain_name = os.path.splitext(brain_ini)[0]
         brain_info = load_ini(os.path.join(BRAINS_INFO_DIR, brain_ini))
         planar_resolution[brain_name] = float(brain_info['planar_resolution_um'])
+        stain = brain_info['stain']
+        cutting_plane = brain_info['cutting_plane']
+        
+        all_stacks.append( brain_name )
+        if stain == "NTB":
+            all_ntb_stacks.append( brain_name )
+        elif stain == "Thionin":
+            all_nissl_stacks.append( brain_name )
+        # Fill in stack_metadata:
+        stack_metadata[brain_name] = {'stain': stain,
+                                      'cutting_plane': cutting_plane,
+                                      'resolution': float(brain_info['planar_resolution_um'])
+                                     }
+            
 
 print planar_resolution
 
@@ -731,5 +751,27 @@ orientation_argparse_str_to_imagemagick_str = \
 {'transpose': '-transpose',
  'transverse': '-transverse',
  'rotate90': '-rotate 90',
- 'rotate270': '-rotate 270'
+ 'rotate180': '-rotate 180',
+ 'rotate270': '-rotate 270',
+ 'flip': '-flip',
+ 'flop': '-flop'
 }
+
+prep_id_short_str_to_full = {
+    'None': 'None',
+    'aligned': 'aligned',
+    'padded': 'alignedPadded',
+    'brainstem': 'alignedBrainstemCrop',
+    'wholeslice': 'alignedWithMargin'}
+
+prep_id_num_to_str = {
+    0:'raw',
+    1:'alignedPadded',
+    2:'alignedBrainstemCrop',
+    3:'alignedThalamusCrop',
+    4:'alignedNoMargin',
+    5:'alignedWithMargin',
+    6:'rawCropped',
+    7:'rawBeforeRotation'}
+
+prep_id_str_to_num = dict(map(reversed, prep_id_num_to_str.items()))

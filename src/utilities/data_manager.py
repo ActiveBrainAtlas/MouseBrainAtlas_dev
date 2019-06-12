@@ -5506,7 +5506,7 @@ def generate_metadata_cache():
         
         # Don't print out long error messages if base folder not found
         if not os.path.exists(os.environ['ROOT_DIR']+'CSHL_data_processed/'+stack+'/'):
-            sys.stderr.write("Folder for stack %s not found, skipping.\n" % (stack))
+            #sys.stderr.write("Folder for stack %s not found, skipping.\n" % (stack))
             continue
         # Try to load metadata_cache.json file before doing anything else
         try:

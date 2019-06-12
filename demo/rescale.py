@@ -36,8 +36,12 @@ image_name_list = input_spec['image_name_list']
 if image_name_list == 'all':
     image_name_list = DataManager.load_sorted_filenames(stack=stack)[0].keys()
 
+    
+from PIL import Image
+Image.MAX_IMAGE_PIXELS = 1000000000000
 
 for img_name in image_name_list:
+    
 
     t = time.time()
 
@@ -45,12 +49,21 @@ for img_name in image_name_list:
     out_fp = DataManager.get_image_filepath_v2(stack=stack, prep_id=prep_id, resol=args.out_resol, version=version, fn=img_name)
     create_parent_dir_if_not_exists(out_fp)
     
-    img = imread(in_fp)
+    img = imread(in_fp, plugin='pil')
     print in_fp
     print img.dtype
     print np.shape(img)
     
     img_tb = img[::int(1./args.rescale_factor), ::int(1./args.rescale_factor)]
+    del img
+    if img_tb.dtype.kind=='u':
+        import matplotlib.pyplot as plt
+        #plt.imshow(img)
+        pass
+    elif img_tb.dtype.kind=='b':
+        print( 'Image labeled as wrong type, skipping!' )
+        print( out_fp+' FAILED')
+        continue
     imsave(out_fp, img_tb)
 
     # Alternative: ImageMagick introduces an artificial noisy stripe in the output image.
