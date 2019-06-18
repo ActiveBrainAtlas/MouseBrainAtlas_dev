@@ -83,7 +83,7 @@ __Command__: `python a_script_preprocess_5.py $stack $stain -l $rostral_limit $c
 
 __Description__: Using the user specified whole brain cropbox, cropped images are generated and saved as raw "prep5" images. Thumbnails are then generated.
 
-__User step__: Similar to the last user step, the user specifies a cropping box for the brainstem region (called prep2 crop). Using the prep5 thumbnail images, the user should open one of the larger slices near the middle of the stack (where the brainstem region's size would be maximized) and must find the vertices of a rectangle that encloses the brainstem region. Record this cropping box in the following fomat: (rostral_limit, caudal_limit, dorsal_limit, ventral_limit). For convenience this is equivalent to: (x_min, x_max, y_min, y_max). "_2" is appended to the limits when referenced in Script 6 to differentiate from the previous limits.
+__User step__: Similar to the last user step, the user specifies a cropping box for the brainstem region (called prep2 crop). Using the __prep1__ thumbnail images, the user should open one of the larger slices near the middle of the stack (where the brainstem region's size would be maximized) and must find the vertices of a rectangle that encloses the brainstem region. Record this cropping box in the following fomat: (rostral_limit, caudal_limit, dorsal_limit, ventral_limit). For convenience this is equivalent to: (x_min, x_max, y_min, y_max). "_2" is appended to the limits when referenced in Script 6 to differentiate from the previous limits.
 
 __User step 2__: Record (prep2_section_min, prep2_section_max). These are the slice numbers in which the brainstem region is enclosed. Typical values might be (90, 370).
 
