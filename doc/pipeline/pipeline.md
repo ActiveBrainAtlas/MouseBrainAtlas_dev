@@ -34,7 +34,7 @@ __Flipping__: Run the following command to mirror each image acroos a vertical l
 ---------------------------
 __Command__: `python a_script_preprocess_1.py $stack $stain`
 
-__Description__: Converts images from .jp2 format to .tiff format. Extracts the blue channel for slides stained with T or NTB. NTB slides are intensity normalized. 32x downsampled thumbnails are generated for every image.
+__Description__: Extracts the blue channel for slides stained with T or NTB. NTB slides are intensity normalized. 32x downsampled thumbnails are generated for every image.
 
 __User step__: Check slice orientations with GIMP/ImageJ/Photoshop/etc.. All slices must be cut sagittally, roughly oriented with the rostral side on the left, and slices must begin on the left hemisphere of the brain.
 
