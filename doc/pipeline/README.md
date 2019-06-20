@@ -40,7 +40,7 @@ The mouse brain atlas pipeline relies on a strict filepath managemant system suc
 Run the following command:
 - `python setup_new_brain_files.py $stack`
     - This script will prompt you to first select the location of your `<STACK>_sorted_filenames.txt` and will automatically copy it to the porper location. 
-    - Next the script will prompt you for the location of one of the raw jp2 files, and those will be copied to the proper location as well. Double click on any of the image files, if they are all located in the same folder they will all be copied properly. (No files will be deleted at any point)
+    - Next the script will prompt you for the location of one of the raw jp2 or tiff files, and those will be copied to the proper location as well. Double click on any of the image files, if they are all located in the same folder they will all be copied properly. (No files will be deleted at any point)
     
     
 ## Setup for Continuing to Run a Brain (initial setup already run)
