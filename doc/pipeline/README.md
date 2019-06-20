@@ -31,6 +31,7 @@ Run the following commands:
     - Only needs to be run once.
 - `source ../setup/set_<STACK>_metadata.sh`, where "`<STACK>`" should be replaced with the name of the brain stack. 
     - This will set the variables `stack`, `stain`, and `detector_id` in your terminal for convenice. Run `echo $stack` to verify that the variables were saved properly.
+    - This command must be run each time you open a new terminal window.
 
 
 #### Copy files into proper input location
