@@ -123,7 +123,7 @@ __Description__: Generates intensity volume, then obtains simple global alignmen
     - Structure Registration
     - Generate visualizations of registered structures and patch features
 
-__Command__: `python a_script_processing.py $stack $stain $id_detector`
+__Command__: `python a_script_processing.py $stack $stain $detector_id`
 
 - __Patch Features Algorithm__: 
     - Computing patch features requires a CNN model (uses mxnet model inception-bn-blue), a windowing id (which dictates the spacing and x-y dimensions of the patches used, default=7), and a normalization scheme (default is None). First the patches and locations need to be generated. Using the specified windowing id patch origin locations will be generated for every image, these patches will span the mask of the prep2 image. The patches are individually fed into the inception-bn-blue pre-trained neural network and the output layer, of length 1024, is returned and assigned to that patch. Each patch location will have this associated 1024-length patch feature.
