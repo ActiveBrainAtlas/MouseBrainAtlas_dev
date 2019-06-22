@@ -104,6 +104,12 @@ def save_dict_as_ini( input_dict, fp ):
 
     for key in input_dict.keys():
         config[key] = input_dict[key]
+        
+    #print fp
+    #try:
+    #    os.mkdir( fp )
+    #except:
+    #    pass
     
     with open(fp, 'w') as configfile:
         config.write(configfile)

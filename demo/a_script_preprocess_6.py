@@ -27,10 +27,11 @@ from preprocess_utilities import *
 from data_manager import DataManager
 from a_driver_utilities import *
 
-
+# Create from_padded_to_brainstem.ini
 make_from_x_to_y_ini( stack, x='padded', y='brainstem',\
-                     rostral_limit=rostral_limit,caudal_limit=caudal_limit,\
-                     dorsal_limit=dorsal_limit,ventral_limit=ventral_limit)
+                     rostral_limit=rostral_limit, caudal_limit=caudal_limit,\
+                     dorsal_limit=dorsal_limit, ventral_limit=ventral_limit)
+# Create prep2-section_limits.ini
 create_prep2_section_limits(stack, prep2_section_min, prep2_section_max)
 
 if stain == 'NTB':

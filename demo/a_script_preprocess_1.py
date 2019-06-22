@@ -12,7 +12,7 @@ args = parser.parse_args()
 stack = args.stack
 stain = args.stain
 
-import os
+import oss
 import subprocess
 import numpy as np
 import sys
@@ -24,6 +24,8 @@ from preprocess_utilities import *
 from data_manager import DataManager
 from a_driver_utilities import *
 
+
+# Do quality check on sorted_filenames.txt
 
 # Make sure ROOT_DIR/CSHL_data_processed/STACK/STACK_raw/SLICE_raw.tif files all exist, otherwise can't continue
 sorted_fns = get_fn_list_from_sorted_filenames( stack )

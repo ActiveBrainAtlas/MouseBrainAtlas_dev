@@ -3256,6 +3256,9 @@ def draw_scoremap(clfs, scheme, stack, win_id, prep_id=2,
     
     # structures = [convert_to_original_name(structure)]
 
+    print bbox
+    bbox = None
+    
     if bbox is None:
         roi_xmin = 0
         roi_ymin = 0
@@ -3279,6 +3282,8 @@ def draw_scoremap(clfs, scheme, stack, win_id, prep_id=2,
     indices_roi = locate_patches_v2(grid_spec=grid_spec, mask_tb=mask_tb,
                                     bbox_lossless=(roi_xmin, roi_ymin, roi_w, roi_h))
     sys.stderr.write('locate patches: %.2f seconds\n' % (time.time() - t))
+    
+#    sys.exit()
 
     sample_locations_roi = grid_parameters_to_sample_locations(grid_spec=grid_spec)[indices_roi]
     if len(sample_locations_roi) == 0:

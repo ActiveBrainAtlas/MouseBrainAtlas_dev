@@ -1090,7 +1090,7 @@ class DataManager(object):
     def load_anchor_filename(stack):
         fp = DataManager.get_anchor_filename_filename(stack)
         if not os.path.exists(fp):
-            sys.stderr.write("No anchor.txt is found. Seems we are using the operation ini to provide anchor. Try to load operation ini.\n")
+            #sys.stderr.write("No anchor.txt is found. Seems we are using the operation ini to provide anchor. Try to load operation ini.\n")
             fp = DataManager.get_anchor_filename_filename_v2(stack) # ini
             anchor_image_name = load_ini(fp)['anchor_image_name']
         else:
@@ -1284,7 +1284,7 @@ class DataManager(object):
             raise Exception("prep_id %s must be either str or int" % prep_id)
 
         if not os.path.exists(fp):
-            sys.stderr.write("Seems you are using operation INIs to provide cropbox.\n")
+            #sys.stderr.write("Seems you are using operation INIs to provide cropbox.\n")
             if prep_id == 2 or prep_id == 'alignedBrainstemCrop':
                 fp = os.path.join(DATA_ROOTDIR, 'CSHL_data_processed', stack, 'operation_configs', 'from_padded_to_brainstem.ini')
             elif prep_id == 5 or prep_id == 'alignedWithMargin':
@@ -5529,13 +5529,14 @@ def generate_metadata_cache():
         try:
             metadata_cache['anchor_fn'][stack] = DataManager.load_anchor_filename(stack)
         except Exception as e:
-            sys.stderr.write("Failed to cache %s anchor: %s\n" % (stack, e.message))
+            #sys.stderr.write("Failed to cache %s anchor: %s\n" % (stack, e.message))
             pass
 
         try:
             metadata_cache['sections_to_filenames'][stack] = DataManager.load_sorted_filenames(stack)[1]
         except Exception as e:
-            sys.stderr.write("Failed to cache %s sections_to_filenames: %s\n" % (stack, e.message))
+            #sys.stderr.write("Failed to cache %s sections_to_filenames: %s\n" % (stack, e.message))
+            pass
 
         try:
             metadata_cache['filenames_to_sections'][stack] = DataManager.load_sorted_filenames(stack)[0]
@@ -5546,18 +5547,21 @@ def generate_metadata_cache():
             if 'Rescan' in metadata_cache['filenames_to_sections'][stack]:
                 metadata_cache['filenames_to_sections'][stack].pop('Rescan')
         except Exception as e:
-            sys.stderr.write("Failed to cache %s filenames_to_sections: %s\n" % (stack, e.message))
+            #sys.stderr.write("Failed to cache %s filenames_to_sections: %s\n" % (stack, e.message))
+            pass
                     
         try:
             metadata_cache['section_limits'][stack] = DataManager.load_section_limits_v2(stack, prep_id=2)
         except Exception as e:
-            sys.stderr.write("Failed to cache %s section_limits: %s\n" % (stack, e.message))
+            #sys.stderr.write("Failed to cache %s section_limits: %s\n" % (stack, e.message))
+            pass
 
         try:
             # alignedBrainstemCrop cropping box relative to alignedpadded
             metadata_cache['cropbox'][stack] = DataManager.load_cropbox_v2(stack, prep_id=2)
         except Exception as e:
-            sys.stderr.write("Failed to cache %s cropbox: %s\n" % (stack, e.message))
+            #sys.stderr.write("Failed to cache %s cropbox: %s\n" % (stack, e.message))
+            pass
 
         try:
             first_sec, last_sec = metadata_cache['section_limits'][stack]
@@ -5567,7 +5571,8 @@ def generate_metadata_cache():
             metadata_cache['valid_filenames'][stack] = [metadata_cache['sections_to_filenames'][stack][sec] for sec in
                                                        metadata_cache['valid_sections'][stack]]
         except Exception as e:
-            sys.stderr.write("Failed to cache %s valid_sections/filenames: %s\n" % (stack, e.message))
+            #sys.stderr.write("Failed to cache %s valid_sections/filenames: %s\n" % (stack, e.message))
+            pass
 
         try:
             metadata_cache['valid_sections_all'][stack] = [sec for sec, fn in metadata_cache['sections_to_filenames'][stack].iteritems() if not is_invalid(fn=fn)]
@@ -5578,7 +5583,7 @@ def generate_metadata_cache():
         try:
             metadata_cache['image_shape'][stack] = DataManager.get_image_dimension(stack)
         except Exception as e:
-            sys.stderr.write("Failed to cache %s image_shape: %s\n" % (stack, e.message))
+            #sys.stderr.write("Failed to cache %s image_shape: %s\n" % (stack, e.message))
             pass
 
     return metadata_cache

@@ -98,6 +98,24 @@ def all_adaptive_intensity_floatHistograms_present( stack ):
             missing_files.append(img_fp)
     return all_files_present, missing_files
 
+def check_for_file( file_to_check, stack ):
+    all_files_present = True
+    missing_files = []
+    
+    if file_to_check=='atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol':
+        fp = os.path.join(os.environ['ROOT_DIR'], 'CSHL_simple_global_registration', 
+            stack + '_T_atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol.bp')
+        if not os.path.isfile( fp ):
+            all_files_present = False
+            missing_files.append(fp)
+    elif file_to_check=='registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners':
+        fp = os.path.join(os.environ['ROOT_DIR'], 'CSHL_simple_global_registration', 
+            stack + '_registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners.json')
+        if not os.path.isfile( fp ):
+            all_files_present = False
+            missing_files.append(fp)
+    return all_files_present, missing_files
+
 def get_text_of_pipeline_status( stack, stain ):
     text = ""
     all_correct = True
@@ -112,6 +130,10 @@ def get_text_of_pipeline_status( stack, stain ):
                     all_files_present, missing_files = all_autoSubmasks_present( stack )
                 elif contents=='floatHistogram':
                     all_files_present, missing_files = all_adaptive_intensity_floatHistograms_present( stack )
+                elif contents=='atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol':
+                    all_files_present, missing_files = check_for_file( contents, stack )
+                elif contents=='registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners':
+                    all_files_present, missing_files = check_for_file( contents, stack )
             else:
                 prep_id = contents['prep_id']
                 version = contents['version']
@@ -136,7 +158,9 @@ def get_text_of_pipeline_status( stack, stain ):
                 #text += "\n"+script_name + " " + image_set + " is missing files:\n\n"
                 text += "\n" + script_name + " did not run properly and has missing files:\n"
                 text += "(" + str(num_missing_files) + " missing out of "+str(num_total_files)+")\n\n"
-                text += "`" + img_root_fp + "` is the image directory in which there are the following missing files:\n\n"
+                text += "Missing Directory:   "+img_root_fp+"\n\n"
+                #text += "`" + img_root_fp + "` is the image directory in which there are the following missing files:\n\n"
+                text += "Missing Files:\n"
                 missing_files.sort()
                 for fn in missing_files:
                     img_fp = DataManager.get_image_filepath_v2(stack=stack, prep_id=prep_id, resol=resol, version=version, fn=fn)

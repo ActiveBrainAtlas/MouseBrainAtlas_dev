@@ -37,20 +37,22 @@ if stain == 'Thionin':
     
 
 # Compute patch features
-create_input_spec_ini_all( name='input_spec.ini', stack=stack, \
-                           prep_id='alignedBrainstemCrop', \
-                           version=img_version,\
-                           resol='raw')
-command = [ 'python', 'demo_compute_features_v2.py', 'input_spec.ini','--win_id','7']
-completion_message = 'Finished generating patch features.'
-call_and_time( command, completion_message=completion_message)
+#create_input_spec_ini_all( name='input_spec.ini', stack=stack, \
+#                           prep_id='alignedBrainstemCrop', \
+#                           version=img_version,\
+#                           resol='raw')
+#command = [ 'python', 'demo_compute_features_v2.py', 'input_spec.ini','--win_id','7']
+#completion_message = 'Finished generating patch features.'
+#call_and_time( command, completion_message=completion_message)
 
 
 # Generate Probability Volumes
-command = [ 'python', 'generate_prob_volumes.py', stack, id_detector, img_version]
-#command = [ 'python', 'generate_prob_volumes.py', stack, id_detector, img_version, '-s', "[\"12N\"]"]
+#command = [ 'python', 'generate_prob_volumes.py', stack, id_detector, img_version]
+command = [ 'python', 'generate_prob_volumes.py', stack, id_detector, img_version, '-s', "[\"SNR\"]"]
 completion_message = 'Finished generating probability volumes.'
 call_and_time( command, completion_message=completion_message)
+
+sys.exit()
 
 
 # Registration script ran on each structure individually
