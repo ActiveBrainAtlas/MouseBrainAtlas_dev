@@ -2,9 +2,11 @@
 
 ## Setup New Brain Metainformation
 
+This guide in its current form assumes the computer being worked on has the necessary dependant software already installed and configured (CUDA, Python, ImageMagick, PyQt). 
+
 ---
 
-This guide in its current form assumes the computer being worked on has the necessary dependant software already installed and configured (CUDA, Python, ImageMagick, PyQt). 
+All variables will use the following syntax: `$VARIABLE_NAME`. These must be replaced by there proper values e.g. `$REPO_DIR` should be replaced with the actual filepath to your repository directory as described below.
 
 #### Initialize the virtual environment
 
@@ -18,7 +20,7 @@ Next, you must have enough diskspace available, at least 1TB per brain, to keep 
 
 #### Commands
 
-- Open the file "`PROJECT_DIR`/setup/config.sh" in your favorite text editor. Notice `PROJECT_DIR` and `ROOT_DIR` are set equal to certain filepaths at the beginning of the file. Change these filepaths as described in the following bullet points.
+- Open the file "`$PROJECT_DIR`/setup/config.sh" in your favorite text editor. Notice `PROJECT_DIR` and `ROOT_DIR` are set equal to certain filepaths at the beginning of the file. Change these filepaths as described in the following bullet points.
     - Set `PROJECT_DIR` to the directory in which this Github repo is located on your computer.
     - Set `ROOT_DIR` to a folder that will be the root of all data loaded and generated throughout the pipeline. Expect about 1TB of space to be taken up by every brain stack as it runs through the pipeline.
 
