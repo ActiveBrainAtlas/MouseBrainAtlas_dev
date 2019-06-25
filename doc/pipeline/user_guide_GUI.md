@@ -27,7 +27,7 @@ Next, you must have enough diskspace available, at least 1TB per brain, to keep 
 
 Now we enter in the metadata for the new brain. You will need to know the name of the brain stack, the cutting plane, the planar resolution of the images, the slice thickness, the stain used, and the alternating stain number two if applicable.
 
-Run the following commands:
+Run the following commands in the terminal window you have already opened:
 - `cd demo`
     - Move into the "demo/" directory, which contains all of the necessary scripts.
 - `python a_GUI_initial.py`
