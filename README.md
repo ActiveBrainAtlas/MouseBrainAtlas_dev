@@ -12,5 +12,4 @@ Associated Neuroglancer viewer of the three foundational thionin brains availabl
 
 ## Running the pipeline
 
-* __[Scripts](./demo/README.md):__   The scripts for performing the stack processing pipeline. Running through the listed commands is all that is necessary for a user.
-* __[Doc](./doc/README.MD):__        Documentation for the curious user and for the developer. Look through these files for a more in-depth description of the code and the scripts.
+* __[User Guide](./doc/pipeline/user_guide_GUI.md):__   This document will walk through how to start running a brain through the pipeline, and how to continue running the pipeline.
