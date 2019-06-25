@@ -21,11 +21,15 @@ Next, you must have enough diskspace available, at least 1TB per brain, to keep 
 - Open the file "`PROJECT_DIR`/setup/config.sh" in your favorite text editor. Notice `PROJECT_DIR` and `ROOT_DIR` are set equal to certain filepaths at the beginning of the file. Change these filepaths as described in the following bullet points.
     - Set `PROJECT_DIR` to the directory in which this Github repo is located on your computer.
     - Set `ROOT_DIR` to a folder that will be the root of all data loaded and generated throughout the pipeline. Expect about 1TB of space to be taken up by every brain stack as it runs through the pipeline.
-- Open the terminal. Change directories using the "`cd`" command into this repository's directory and run the command `source setup/config.sh`. Check we are now working under the `mousebrainatlas_virtualenv` virtual environment. The command prompt should now have `mousebrainatlas_virtualenv` in parentheses prepended on the left side.
+
+Open the terminal and run the following commands: 
+- Change directories using the "`cd`" command into this repository's directory. If you are unfamiliar with the terminal, please reference [this site](https://www.digitalocean.com/community/tutorials/how-to-use-cd-pwd-and-ls-to-explore-the-file-system-on-a-linux-server) which will walk through some file navigation commands.
+- Run the command `source setup/config.sh` inside of the terminal. 
+    - The command prompt should now have `mousebrainatlas_virtualenv` in parentheses prepended on the left side of the input line, this indicates that everything has run successfully.
 
 #### Running a new brain
 
-Now we enter in the metadata for the new brain. You will need to know the name of the brain stack, the cutting plane, the planar resolution of the images, the slice thickness, the stain used, and the alternating stain number two if applicable.
+Now we enter in the metadata for the new brain. You will need to know the name of the brain stack (or name it yourself), the cutting plane, the planar resolution of the images, the slice thickness, the stain used, and the alternating stain number two if applicable.
 
 Run the following commands in the terminal window you have already opened:
 - `cd demo`
