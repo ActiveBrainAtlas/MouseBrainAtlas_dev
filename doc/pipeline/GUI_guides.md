@@ -33,6 +33,7 @@ Working on the top-left image field:
     - Press `save anchor contours`
     - Press `save initial contours`
   - Close the GUI
+    - Note: this GUI will bring up a tiny, blank window that also needs to be closed
 
 ## Masking GUI 2: Correct Auto-generated Masks
 
