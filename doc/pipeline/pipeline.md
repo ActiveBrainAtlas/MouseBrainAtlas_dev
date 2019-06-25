@@ -1,10 +1,13 @@
 Note: Script names may change when the code is officially released. The current names are iterative using the order the scripts are meant to be run. The prepended `a_script_preprocess` is simply to organize the scripts together while in development.
 
-These scripts assume the stack has been given a name (example stack="MD585"), and the associated stain for each set of images has been defined (stain="NTB" or stain="Thionin" are the two current options). As a shorthand when referring to these stains, I will define T = Thionin and NTB = Neurotrace Blue.
+These scripts assume the stack has been given a name (example stack="MD585"), and the associated stain for each set of images has been defined (stain="NTB" or stain="Thionin" are the two current options). As a shorthand when referring to these stains, I will define T = Thionin and NTB = Neurotrace Blue. When `$stain` is used, this should be replaced by the name of your stack, this also goes for `$stain` and every other variable that starts with a dollar sign `$`.
 
 
 # Preprocessing Scripts
 ---------------------------
+
+## Description
+
 The single setup script and seven preprocessing scripts are spaced with user intervention steps such that the first script is run, the user is required to perform some step by hand, then the second script is run, etc... For every script there is listed the command to run it, a brief description of what the script does, and the manual step for the user after completion.
 
 - if stain=='Thionin':
@@ -13,6 +16,8 @@ The single setup script and seven preprocessing scripts are spaced with user int
 - if stain=='NTB':
     - img_version_1 = 'NtbNormalized'
     - img_version_2 = 'NtbNormalizedAdaptiveInvertedGamma'
+    
+## Scripts
 
 ---------------------------
 ### Setup Script
@@ -24,10 +29,10 @@ __Description__: Downloads the following files from S3: operation configs, mxnet
 ---------------------------
 ### Prepare Images
 ---------------------------
-__Rotation__: Some images will need to be rotated such that they are oriented with the rostral side on the left, caudal on the right, for sagittal sections. Images should be rotated as needed to make this true. The below command will rotate (clockwise, always) every single image by 90 degrees. the rotation options are: `rotate90`, `rotate180`, and `rotate270`. `python a_script_rotate.py DK17 NTB rotate90 raw None None` (40 seconds per image)
+__Rotation__: Some images will need to be rotated such that they are oriented with the rostral side on the left, caudal on the right, for sagittal sections. Images should be rotated as needed to make this true. The below command will rotate (clockwise, always) every single image by 90 degrees. the rotation options are: `rotate90`, `rotate180`, and `rotate270`. `python a_script_rotate.py $stack $stain rotate90 raw None None` (~40 seconds per image)
 
 __Flipping__: Run the following command to mirror each image acroos a vertical line drawn down the center of the image.
-    - `python a_script_rotate.py DK17 NTB flip raw None None` (40 seconds per image)
+    - `python a_script_rotate.py $stack $stain flip raw None None` (~40 seconds per image)
 
 ---------------------------
 ### Script 1
