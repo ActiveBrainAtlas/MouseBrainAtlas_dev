@@ -14,7 +14,7 @@ Prep_id describes the alignment and cropping of the images.
 
 - Possible values:
   - ""
-      - Image has not cropped or aligned
+      - Images have not been cropped or aligned
   - "prep1"
       - Images have all been aligned to each other
   - "prep5"
