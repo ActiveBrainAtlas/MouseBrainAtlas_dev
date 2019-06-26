@@ -5,7 +5,6 @@ The automatic intra-stack alignment has an error rate of about 5-10%, it will be
   - Click the button, `load_sorted_filenames`
   - Click the dropdown menu and select `Original_Aligned`
   - Identify the number of broken pairs. Slices are aligned to their neighbors, one slice being misaligned will require two corrections. Use "`[`" and "`]`" to the previous and next images.
-    - 
   - Click the button `edit transform`
     - A new screen should pop up with three images. The left and middle images are two slices that have been aligned, the right image is the overlay of both images. For every broken pair, follow the remaining instructions.
   - Click the button `add anchor pair`
