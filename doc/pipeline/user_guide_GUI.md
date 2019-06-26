@@ -26,6 +26,7 @@ Next, you must have enough diskspace available, at least 1TB per brain, to keep 
 
 Open the terminal and run the following commands: 
 - Change directories using the "`cd`" command into this repository's directory. If you are unfamiliar with the terminal, please reference [this site](https://www.digitalocean.com/community/tutorials/how-to-use-cd-pwd-and-ls-to-explore-the-file-system-on-a-linux-server) which will walk through some file navigation commands.
+    - To check that you are in the correct directory, type `ls` which lists all files and folders in the current directory. You should see the following folders: 'doc', 'src', 'demo', and 'setuup' among others.
 - Run the command `source setup/config.sh` inside of the terminal. 
     - The command prompt should now have `mousebrainatlas_virtualenv` in parentheses prepended on the left side of the input line, this indicates that everything has run successfully.
 
