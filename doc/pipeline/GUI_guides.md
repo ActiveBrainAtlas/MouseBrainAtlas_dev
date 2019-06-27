@@ -38,6 +38,7 @@ Working on the top-left image field:
 ## Masking GUI: Correct Auto-generated Masks
 
 Working in the bottom-left image field:
+  - Initially, if there is no image in the bottom left, click the image on the TOP left and press either `[` or `]` to load the next slice. Read the GUI controls above under "Masking GUI: Initial Manual Mask Contours"  as a reminder, this is the same GUI window, just being used for a different purpose.
   - Using the right click menu, add and remove vertices as is necessary. Left click and drag existing vertices to move them. For every incorrect mask, create / remove / drag the contours until they are correct.
     - Once finished, push `update merged mask`, then click `save final mask for current section`.
   - After every incorrect mask has been corrected following the above bullet point:
@@ -45,8 +46,13 @@ Working in the bottom-left image field:
     - Push `export masks as PNG for all sections`
   - Close the GUI
 
-# Annotation GUI:
+# Annotation GUI
 Command: `python $REPO_DIR/gui/brain_labeling_gui_v28.py $stack --prep 2 --img_version $img_version_2`
 
-
-
+- This GUI consists of one large window on the left, and three smaller windows on the right. For each window, you can scroll through slices using number keys, one to advance a slice and one to go back a slice, as follows:
+  - For the left window: `1` and `2`
+  - For the upper right window: `3` and `4`
+  - For the middle right window: `5` and `6`
+  - For the bottom right window: `7` and `8`
+- Hold space, then click on brain tissue in any of the four windows. This will select the point you clicked. If you hold space, red crosshairs should now be visible in each of the three planes. At the header bar of the GUI it will display the x, y, and z coordinates of your selection (z coordinate is just section number). Use this to find the centerpoint coordinates (X and Y) of `3N_R` and `12N`.
+  - This can also be done to find the midline of the stack, though you can use any method that you find intuitive. Record the section that lies at the approximate midpoint.
