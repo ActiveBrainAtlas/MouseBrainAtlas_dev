@@ -55,7 +55,7 @@ __Description__: Generates image translation and rotation alignment parameters, 
 
 __User step__: Manually fix incorrect alignments. The image alignment scripts is imperfect and has an error rate of 5-10%. The incorrectly aligned slides must be aligned and saved by hand. The built in GUI can be run using `python $REPO_DIR/gui/preprocess_tool_v3.py $stack --tb_version $img_version_1`. [Link to GUI guide](GUI_guides.md#alignment-gui)
 
-__User step 2__: Create initial segmentation outlines of the brain for every slice with the following command, `python $REPO_DIR/gui/mask_editing_tool_v4.py $stack $img_version_1`. [Link to GUI guide](GUI_guides.md#masking-gui-1-initial-manual-mask-contours)
+__User step 2__: Create initial segmentation outlines of the brain for every slice with the following command, `python $REPO_DIR/gui/mask_editing_tool_v4.py $stack $img_version_1`. [Link to GUI guide](GUI_guides.md#masking-gui-initial-manual-mask-contours)
 
 
 ---------------------------
@@ -65,7 +65,7 @@ __Command__: `python a_script_preprocess_3.py $stack $stain`
 
 __Description__: Generates binary masks for every image to segment the pixels containing the brain using the user's initial segmentation outline for assistance.
 
-__User step__: Manually correct the generated masks with the following command, `python $REPO_DIR/gui/mask_editing_tool_v4.py $stack $img_version_1` and save these prep1 thumbnail image masks. [Link to GUI guide](GUI_guides.md#masking-gui-2-correct-auto-generated-masks)
+__User step__: Manually correct the generated masks with the following command, `python $REPO_DIR/gui/mask_editing_tool_v4.py $stack $img_version_1` and save these prep1 thumbnail image masks. [Link to GUI guide](GUI_guides.md#masking-gui-correct-auto-generated-masks)
 
 
 ---------------------------
@@ -100,7 +100,8 @@ __Command__: `python a_script_preprocess_6.py $stack $stain -l $rostral_limit_2 
 
 __Description__: Using the user specified brainstem cropbox, cropped images are generated and saved as raw "prep2" images. Thumbnails are then generated. Raw prep2 images are compressed into jpeg format. Finally the masks are cropped to match the prep2 images. These raw prep2 images are finished being processed, they are the images that will be used throughout the rest of the pipeline.
 
-__User step__: Record X/Y/Z coordinates for midpoint of 12N, 3N_R on midplane, the following gui can be used to assist: `$REPO_DIR/gui/brain_labeling_gui_v28.py $stack --img_version $img_version_2`. If resolution of the images is NOT _0.46um_: set --resolution flag to 'thumbnail' or '1um' as follows: `--resolution 1um`.
+__User step__: Record X/Y/Z coordinates for midpoint of 12N, 3N_R on midplane, the following gui can be used to assist: `$REPO_DIR/gui/brain_labeling_gui_v28.py $stack --img_version $img_version_2`. If resolution of the images is NOT _0.46um_: set --resolution flag to 'thumbnail' or '1um' as follows: `--resolution 1um`. [Link to GUI guide](GUI_guides.md#annotation-gui)
+
 
 
 ---------------------------
