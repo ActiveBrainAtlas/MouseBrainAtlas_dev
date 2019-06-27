@@ -36,15 +36,24 @@ Working on the top-left image field:
     - Note: this GUI will bring up a tiny, blank window that also needs to be closed
 
 ## Masking GUI: Correct Auto-generated Masks
+GUI controls:
+- Wheel to zoom
+- Click and drag to translate
+- `[` and `]` to cycle through images
+- Right click -> add vertices
+  - Left clicking should now add new vertices. To disable, right click and select "remove vertices" and click anywhere
+- Right click -> remove vertices
+  - Then left click and drag a box, all vertices within this box will be deleted
 
 Working in the bottom-left image field:
-  - Initially, if there is no image in the bottom left, click the image on the TOP left and press either `[` or `]` to load the next slice. Read the GUI controls above under "Masking GUI: Initial Manual Mask Contours"  as a reminder, this is the same GUI window, just being used for a different purpose.
+  - Initially, if there is no image in the bottom left, click the image on the TOP left and press either `[` or `]` to load the next slice.
   - Using the right click menu, add and remove vertices as is necessary. Left click and drag existing vertices to move them. For every incorrect mask, create / remove / drag the contours until they are correct.
     - Once finished, push `update merged mask`, then click `save final mask for current section`.
   - After every incorrect mask has been corrected following the above bullet point:
     - Push `save final masks for all sections`
     - Push `export masks as PNG for all sections`
   - Close the GUI
+    - Note: this GUI will bring up a tiny, blank window that also needs to be closed
 
 # Annotation GUI
 Command: `python $REPO_DIR/gui/brain_labeling_gui_v28.py $stack --prep 2 --img_version $img_version_2`
