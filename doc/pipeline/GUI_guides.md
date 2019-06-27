@@ -17,7 +17,7 @@ Command: `python $REPO_DIR/gui/mask_editing_tool_v4.py $stack $img_version_1`\
 
 This GUI is used twice. Once so the user can create rough outlines of the brain tissue on each image, this assists the automatic mask-generation by giving it a starting point. After the automatic mask-generation, this GUI is run again to correct the masks that have been created.
 
-## Masking GUI 1: Initial Manual Mask Contours
+## Masking GUI: Initial Manual Mask Contours
 GUI controls:
 - Wheel to zoom
 - Click and drag to translate
@@ -35,10 +35,10 @@ Working on the top-left image field:
   - Close the GUI
     - Note: this GUI will bring up a tiny, blank window that also needs to be closed
 
-## Masking GUI 2: Correct Auto-generated Masks
+## Masking GUI: Correct Auto-generated Masks
 
 Working in the bottom-left image field:
-  - Using the right click menu, add and remove vertices as is necessary. Click and drag existing vertices to move them. For every incorrect mask, create / remove / drag the contours until they are correct.
+  - Using the right click menu, add and remove vertices as is necessary. Left click and drag existing vertices to move them. For every incorrect mask, create / remove / drag the contours until they are correct.
     - Once finished, push `update merged mask`, then click `save final mask for current section`.
   - After every incorrect mask has been corrected following the above bullet point:
     - Push `save final masks for all sections`
