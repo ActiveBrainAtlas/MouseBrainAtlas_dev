@@ -1,12 +1,12 @@
 import subprocess
-#from a_driver_utilities import *
-#sys.path.append(os.path.join(os.environ['REPO_DIR'], 'utilities'))
-#from utilities2015 import *
-#from registration_utilities import *
-#from annotation_utilities import *
-## from metadata import *
-#from data_manager import DataManager
-#from a_driver_utilities import *
+from a_driver_utilities import *
+sys.path.append(os.path.join(os.environ['REPO_DIR'], 'utilities'))
+from utilities2015 import *
+from registration_utilities import *
+from annotation_utilities import *
+# from metadata import *
+from data_manager import DataManager
+from a_driver_utilities import *
 
 import sys, os
 from PyQt4.QtCore import *
@@ -35,14 +35,12 @@ class init_GUI(QWidget):
         self.font_sub_header = QFont("Arial",16)
         self.font_left_col = QFont("Arial",16)
         
-        self.default_textbox_val = "-"
-        
         self.stack = stack
-        #self.stain = ""
-        #self.stain_2_if_alternating = ""
-        #self.planar_res = 0
-        #self.section_thickness = 0
-        #self.cutting_plane = ""
+        
+        self.filepath_sfns = ""
+        self.filepath_sfns_folder = ""
+        self.filepath_img = ""
+        self.filepath_img_folder = ""
         
         self.initUI()
         
@@ -65,8 +63,6 @@ class init_GUI(QWidget):
         self.grid_top.addWidget( self.e1, 0, 0)
         # Static Text Field
         self.e1 = QTextEdit()
-        #self.e1.setValidator( QIntValidator() )
-        #self.e1.setAlignment(Qt.AlignCenter)
         self.e1.setFont( self.font_sub_header )
         self.e1.setReadOnly( True )
         self.e1.setText( "You must select your sorted filenames (.txt) file created for "+self.stack+
@@ -74,14 +70,12 @@ class init_GUI(QWidget):
                        "Your raw image files must be in either *.jp2 or *.tif format and must all be "+
                        "located inside the same directory. Each filename in the sorted filenames must "+
                        "appear in the filename of a raw image file.")
-        #self.e1.setFrame( False )
         self.grid_top.addWidget( self.e1, 1, 0)
         
         ### Grid BODY (1 row) ###
         # Static Text Field
         self.e2 = QLineEdit()
         self.e2.setValidator( QIntValidator() )
-        #self.e2.setMaxLength(50)
         self.e2.setAlignment(Qt.AlignRight)
         self.e2.setFont( self.font_left_col )
         self.e2.setReadOnly( True )
@@ -115,7 +109,6 @@ class init_GUI(QWidget):
         # Static Text Field
         self.e7 = QLineEdit()
         self.e7.setValidator( QIntValidator() )
-        #self.e7.setMaxLength(50)
         self.e7.setAlignment(Qt.AlignRight)
         self.e7.setFont( self.font_left_col )
         self.e7.setReadOnly( True )
@@ -141,13 +134,8 @@ class init_GUI(QWidget):
         self.setWindowTitle("combo box demo")
         
     def validateEntries(self):
-        #entered_stack = str( self.t1.text() )
-        
-        #if float(entered_resolution) not in self.cutting_planar_resolution_options:
-        #    self.e7.setText( 'Resolution not valid' ) 
-        #    return False
-            
-        #self.e7.setText( 'Logging brain metadata!' ) 
+        if self.filepath_sfns=="" or self.filepath_img=="":
+            return False
         
         return True
         
@@ -155,27 +143,159 @@ class init_GUI(QWidget):
         if button == self.b1:
             validated = self.validateEntries()
             if validated:
-                subprocess.call( ['python', 'a_test.py'] )
+                # Create parent folders if necessary
+                create_parent_folder_for_files( self.stack )
+                # Copy sorted filenames file to proper lcoation
+                copy_over_sorted_filenames( self.stack, self.filepath_sfns )
+                
+                # Copy image files to proper location
+                if '.jp2' in self.filepath_img:
+                    self.e1.setText( "The sorted filenames text file has been copied over into "+
+                       self.filepath_sfns_folder+". The jp2 images are being converted and copied, "+
+                        "The process is expected to take 60-90 seconds per image.\n\n"+
+                        "Please revisit this GUI in a few hours.")
+                    self.e1.repaint()
+                    copy_over_jp2_files( self.stack, self.filepath_img, self.filepath_img_folder )
+                elif '.tif' in self.filepath_img:
+                    self.e1.setText( "The sorted filenames text file has been copied over into "+
+                       self.filepath_sfns_folder+". The tiff images are now being renamed and copied.")
+                    self.e1.repaint()
+                    copy_over_tif_files( self.stack, self.filepath_img_folder )
+                
                 close_gui()
+                subprocess.call( ['python', 'a_GUI_continue_brain.py'] )
                 
     def buttonPress_selectSFS(self, button):
         if button == self.b2:
             fp = get_selected_fp( default_filetype=[("text files","*.txt"),("all files","*.*")] )
-            validate_sorted_filenames()
-            self.e2.setText( fp ) 
+            self.filepath_sfns = fp
+            self.filepath_sfns_folder = fp[0:max(loc for loc, val in enumerate(fp) if val == '/')]
+            validated, err_msg = validate_sorted_filenames( fp )
+            if validated:
+                self.e2.setText( fp ) 
+            else:
+                self.e2.setText( err_msg )
+                self.filepath_sfns = ""
                 
     def buttonPress_selectIMG(self, button):
         if button == self.b3:
-            fp = get_selected_fp( default_filetype=[("tiff files","*.tif"), ("jp2 files","*.jp2"), ("all files","*.*")] )
+            if self.filepath_sfns_folder != '':
+                fp = get_selected_fp( initialdir = self.filepath_sfns_folder,
+                                     default_filetype=[("tiff files","*.tif"), ("jp2 files","*.jp2"), ("all files","*.*")] )
+            else:
+                fp = get_selected_fp( default_filetype=[("tiff files","*.tif"), ("jp2 files","*.jp2"), ("all files","*.*")] )
+            self.filepath_img = fp
+            self.filepath_img_folder = fp[0:max(loc for loc, val in enumerate(fp) if val == '/')]
             #validate_chosen_images()
-            self.e3.setText( fp ) 
-                
-def get_selected_fp( initialdir=os.environ['ROOT_DIR'], default_filetype=("jp2 files","*.jp2") ):
+            self.e3.setText( self.filepath_img_folder ) 
+            
+def create_parent_folder_for_files( stack ):
+    try:
+        raw_fp = DataManager.get_image_filepath_v2(stack, None, version=None, resol="raw", fn='$')
+        raw_fp = raw_fp[0:raw_fp.index('$')]
+        os.makedirs( raw_fp )
+    except:
+        pass
+            
+def copy_over_jp2_files( stack, raw_jp2_input_fn_fp, raw_jp2_input_fp ):
+    # Use name of jp2 image to find how the resolution is encoded
+    if 'raw' in raw_jp2_input_fn_fp:
+        resolution = '_raw'
+    elif 'lossless' in raw_jp2_input_fn_fp:
+        resolution = '_lossless'
+    else:
+        resolution = ''
+    
+    # CONVERT *.jp2 to *.tif
+    json_fn = stack+'_raw_input_spec.json'
+    
+    json_data = [{"version": None, \
+                 "resolution": "raw", \
+                 "data_dirs": raw_jp2_input_fp, \
+                 "filepath_to_imageName_mapping": raw_jp2_input_fp+"/(.*?)"+resolution+".jp2", \
+                 "imageName_to_filepath_mapping": raw_jp2_input_fp+"/%s"+resolution+".jp2"}]
+    with open( json_fn, 'w') as outfile:
+        json.dump( json_data, outfile)
+    command = ["python", "jp2_to_tiff.py", stack, json_fn]
+    completion_message = 'Completed converting and copying jp2 to tiff for all files in folder.'
+    call_and_time( command, completion_message=completion_message)
+    
+def copy_over_tif_files( stack, raw_tiff_input_fp ):
+    raw_tiff_input_fns = os.listdir( raw_tiff_input_fp )
+        
+    # Make STACKNAME_raw/ folder
+    try:
+        raw_fp = DataManager.get_image_filepath_v2(stack, None, version=None, resol="raw", fn="$")
+        os.makedirs( raw_fp[:raw_fp.index('$')] )
+    except Exception as e:
+        #print(e)
+        pass
+
+    filenames_list = DataManager.load_sorted_filenames(stack)[0].keys()
+    # Rename and copy over all tiff files in the selected folder
+    for fn in filenames_list:
+        for raw_tiff_input_fn in raw_tiff_input_fns:
+            if fn in raw_tiff_input_fn:
+                old_fp = os.path.join( raw_tiff_input_fp, raw_tiff_input_fn )
+                new_fp = DataManager.get_image_filepath_v2(stack, None, version=None, resol="raw", fn=fn)
+                command = ["cp", old_fp, new_fp]
+                completion_message = 'Finished copying and renaming tiff file into the proper location.'
+                call_and_time( command, completion_message=completion_message)
+                    
+def copy_over_sorted_filenames( stack, sfns_input_fp ):
+    correct_sorted_fns_fp = DataManager.get_sorted_filenames_filename(stack)
+    command = ["cp", sfns_input_fp, correct_sorted_fns_fp]
+    completion_message = 'Successfully copied sorted_filenames.txt over.'
+    call_and_time( command, completion_message=completion_message)
+    
+def load_sorted_filenames( fp ):
+    '''
+        load_sorted_filenames( stack ) returns a list of section names
+        and their associated section numbers
+    '''
+    #fn = stack+'_sorted_filenames.txt'
+    
+    file_sfns = open( fp, 'r')
+    section_names = []
+    section_numbers = []
+
+    for line in file_sfns: 
+        if 'Placeholder' in line:
+            continue
+        elif line == '':
+            continue
+        elif line == '\n':
+            continue
+        else:
+            try:
+                space_index = line.index(" ")
+            except Exception as e:
+                print(e)
+                print('ignoring the line with this error')
+                continue
+            section_name = line[ 0 : space_index ]
+            section_number = line[ space_index+1 : ]
+            section_names.append( section_name )
+            section_numbers.append( section_number )
+    return section_names, section_numbers
+
+def validate_sorted_filenames( fp ):
+    section_names, section_numbers = load_sorted_filenames( fp )
+    
+    if len(section_names) != len(set(section_names)):
+        return False, "Error: A section name appears multiple times"
+    if len(section_numbers) != len(set(section_numbers)):
+        return False, "Error: A section number appears multiple times"
+    
+    return True, ""
+
+def get_selected_fp( initialdir='/', default_filetype=("jp2 files","*.jp2") ):
+    # initialdir=os.environ['ROOT_DIR'
     # Use tkinter to ask user for filepath to jp2 images
     from tkinter import filedialog
     from tkinter import *
     root = Tk()
-    root.filename =  filedialog.askopenfilename(initialdir = initialdir,\
+    root.filename = filedialog.askopenfilename(initialdir = initialdir,\
                                                 title = "Select file",\
                                                 filetypes = default_filetype)
     fn = root.filename
@@ -183,12 +303,15 @@ def get_selected_fp( initialdir=os.environ['ROOT_DIR'], default_filetype=("jp2 f
     return fn
     
 def close_gui():
-    sys.exit( app.exec_() )
+    ex.hide()
+    #sys.exit()
+    #sys.exit( app.exec_() )
     
 def main():
-#     app = QApplication(sys.argv)
-    app = QApplication( [] )
+    global app 
+    app = QApplication( sys.argv )
     
+    global ex
     ex = init_GUI()
     ex.show()
     sys.exit( app.exec_() )

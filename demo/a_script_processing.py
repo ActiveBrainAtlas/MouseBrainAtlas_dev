@@ -39,7 +39,7 @@ if stain == 'Thionin':
 # Compute patch features
 #create_input_spec_ini_all( name='input_spec.ini', stack=stack, \
 #                           prep_id='alignedBrainstemCrop', \
-#                           version=img_version,\
+#                          version=img_version,\
 #                           resol='raw')
 #command = [ 'python', 'demo_compute_features_v2.py', 'input_spec.ini','--win_id','7']
 #completion_message = 'Finished generating patch features.'
@@ -47,19 +47,18 @@ if stain == 'Thionin':
 
 
 # Generate Probability Volumes
-#command = [ 'python', 'generate_prob_volumes.py', stack, id_detector, img_version]
-command = [ 'python', 'generate_prob_volumes.py', stack, id_detector, img_version, '-s', "[\"SNR\"]"]
+command = [ 'python', 'generate_prob_volumes.py', stack, id_detector, img_version]
+#command = [ 'python', 'generate_prob_volumes.py', stack, id_detector, img_version, '-s', "[\"SNR\"]"]
 completion_message = 'Finished generating probability volumes.'
 call_and_time( command, completion_message=completion_message)
-
-sys.exit()
 
 
 # Registration script ran on each structure individually
 for structure in structures_sided_sorted_by_size:
     # Make input specifications for the registration script, saved into json files
     fn_fixed, fn_moving = make_structure_fixed_and_moving_brain_specs( stack, id_detector, structure)
-    command = [ 'python', 'register_brains_demo.py', fn_fixed, fn_moving, '-g']
+    #command = [ 'python', 'register_brains_demo.py', fn_fixed, fn_moving, '-g']
+    command = [ 'python', 'register_brains_demo.py', fn_fixed, fn_moving]
     completion_message = 'Finished registration.'
     call_and_time( command, completion_message=completion_message)
 
@@ -68,7 +67,8 @@ for structure in structures_sided_sorted_by_size:
 for structure in structures_sided_sorted_by_size:
     # Make input specifications for the registration visualization script, saved into json files
     fn_vis_structures, fn_vis_global = make_registration_visualization_input_specs( stack, id_detector, structure)
-    command = [ 'python', 'visualize_registration.py', img_version+'Jpeg', fn_vis_structures, '-g', fn_vis_global]
+    #command = [ 'python', 'visualize_registration.py', img_version+'Jpeg', fn_vis_structures, '-g', fn_vis_global]
+    command = [ 'python', 'visualize_registration.py', img_version+'Jpeg', fn_vis_structures]
     completion_message = 'Finished registration visualization.'
     call_and_time( command, completion_message=completion_message)
     

@@ -31,9 +31,6 @@ from a_driver_utilities import *
 def create_from_none_to_aligned_file(  ):
     DATA_ROOTDIR = os.environ['DATA_ROOTDIR'] # THUMBNAIL_DATA_DIR
 
-    # Creating 'from_none_to_aligned.ini'
-    #none_to_aligned_fp = os.path.join(DATA_ROOTDIR, 'CSHL_data_processed', \
-    #                stack, 'operation_configs', 'from_none_to_aligned.ini')
     none_to_aligned_fp = os.path.join(DATA_ROOTDIR,'CSHL_data_processed',stack, 'operation_configs', 'from_none_to_aligned.ini')
 
     from_none_to_aligned_content = '[DEFAULT]\n\

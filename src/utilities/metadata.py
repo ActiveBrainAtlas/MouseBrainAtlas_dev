@@ -674,8 +674,10 @@ if os.path.exists(BRAINS_INFO_DIR):
                                      }
             
 
-print planar_resolution
-
+#print planar_resolution
+stain_to_metainfo = {'ntb': {'detector_id': 799, 'img_version_1': 'NtbNormalized', 
+                             'img_version_2': 'NtbNormalizedAdaptiveInvertedGamma'},
+                    'thionin': {'detector_id': 19, 'img_version_1': 'gray', 'img_version_2': 'gray'}}
 
 ########################################
 

@@ -25,7 +25,7 @@ class init_GUI(QWidget):
         self.font_header = QFont("Arial",32)
         self.font_left_col = QFont("Arial",16)
         
-        self.default_textbox_val = "-"
+        self.default_textbox_val = ""
         
         self.stack = ""
         self.stain = ""
@@ -179,7 +179,7 @@ class init_GUI(QWidget):
         self.setWindowTitle("combo box demo")
         
         # Update interactive windows
-        self.updateFields()
+        #self.updateFields()
         
     def validateEntries(self):
         entered_stack = str( self.t1.text() )
@@ -188,7 +188,7 @@ class init_GUI(QWidget):
         entered_thickness = str( self.t4.text() )
         entered_resolution = str( self.t5.text() )
         
-        if self.default_textbox_val in \
+        if self.default_textbox_val!='' and self.default_textbox_val in \
         entered_stack+entered_stain+entered_plane+entered_thickness+entered_resolution:
             self.e7.setText( 'All fields must be filled out' ) 
             return False
@@ -231,22 +231,23 @@ class init_GUI(QWidget):
                 
                 set_stack_metadata( entered_stack, entered_stain, entered_plane, entered_thickness, entered_resolution )
                 
-                subprocess.call( ['python', 'a_GUI_select_file_locations.py', entered_stack] )
                 close_gui()
+                subprocess.call( ['python', 'a_GUI_select_file_locations.py', entered_stack] )
                 
-    
-def close_gui():
-    sys.exit( app.exec_() )
-    
     
 # Records a stack's metadata after it is validated
 def set_stack_metadata( stack, stain, plane, thickness, resolution):
+    if stain=='ntb':
+        stain_capitalized = 'NTB'
+    if stain=='thionin':
+        stain_capitalized = 'Thionin'
+    
     input_dict = {}
     input_dict['DEFAULT'] = {'stack_name': stack, \
                              'cutting_plane': plane,\
                              'planar_resolution_um': resolution,\
                              'section_thickness_um': thickness,\
-                             'stain': stain,\
+                             'stain': stain_capitalized,\
                              'stain_2_if_alternating': ""}
     
     fp = os.path.join( os.environ['ROOT_DIR'], 'brains_info', stack+'.ini' )
@@ -273,7 +274,7 @@ def save_dict_as_ini( input_dict, fp ):
 
 # Save the brain_metadata.sh file
 def save_metadata_in_shell_script( stack, stain, plane, thickness, resolution ):
-    fp = os.path.join( os.environ['PROJECT_DIR'], '..', 'setup', 'set_'+stack+'_metadata.sh' )
+    fp = os.path.join( os.environ['PROJECT_DIR'], 'setup', 'set_'+stack+'_metadata.sh' )
     
     # Change ntb->NTB and thionin->Thionin
     if stain=='ntb':
@@ -296,11 +297,15 @@ def save_metadata_in_shell_script( stack, stain, plane, thickness, resolution ):
     with open( fp, 'w' ) as file:
         file.write( data )
 
+def close_gui():
+    ex.hide()
+    #sys.exit( app.exec_() )
     
 def main():
-#     app = QApplication(sys.argv)
-    app = QApplication( [] )
+    global app 
+    app = QApplication( sys.argv )
     
+    global ex
     ex = init_GUI()
     ex.show()
     sys.exit( app.exec_() )

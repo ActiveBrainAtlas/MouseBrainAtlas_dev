@@ -12,7 +12,7 @@ args = parser.parse_args()
 stack = args.stack
 stain = args.stain
 
-import oss
+import os
 import subprocess
 import numpy as np
 import sys

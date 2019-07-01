@@ -292,11 +292,11 @@ class init_GUI(QWidget):
     def dd1_selection( self ):
         dropdown_selection = self.dd1.currentText()
         dropdown_selection_str = str(dropdown_selection.toUtf8())
-        
-        if dropdown_selection_str=='Manual user step':
+                
+        if dropdown_selection_str=='Manual user step (1)':
             self.curr_script_or_manual_step = "manual"
             print self.curr_script_or_manual_step
-        elif dropdown_selection_str=='Script':
+        elif dropdown_selection_str=='Script (2)':
             self.curr_script_or_manual_step = "script"
             print self.curr_script_or_manual_step
         else:

@@ -192,7 +192,7 @@ def make_registration_visualization_input_specs( stack, id_detector, structure):
         }
     data["warp_setting"] = 0
 
-    with open(fp+fn, 'w') as outfile:
+    with open(fp+fn_global, 'w') as outfile:
         json.dump(data, outfile)
         
     fn_structures = stack+'_visualization_per_structure_alignment_spec.json'

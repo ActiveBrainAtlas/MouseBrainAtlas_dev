@@ -7,10 +7,17 @@ import subprocess
 ## from metadata import *
 #from data_manager import DataManager
 #from a_driver_utilities import *
-
+subprocess.call( ['which', 'python'] )
 import sys, os
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
+
+try:
+    assert( os.environ['ROOT_DIR']!=None )
+    assert( os.environ['REPO_DIR']!=None )
+except KeyError:
+    print('Please set up the virtual environment and try running this again')
+    sys.exit()
 
 class init_GUI(QWidget):
     def __init__(self, parent = None):
@@ -46,28 +53,27 @@ class init_GUI(QWidget):
             
     def buttonPress_b1(self, button):
         if button == self.b1:
-            #print "clicked button is "+button.text()
-            subprocess.call( ['python', 'a_GUI_new_brain_metadata.py'] )
             close_gui()
+            subprocess.call( ['python', 'a_GUI_new_brain_metadata.py'] )
             
     def buttonPress_b2(self, button):
         if button == self.b2:
-            #print "clicked button is "+button.text()
-            subprocess.call( ['python', 'a_test.py'] )
             close_gui()
+            subprocess.call( ['python', 'a_GUI_continue_brain.py'] )
             
 def close_gui():
-    sys.exit( app.exec_() )
-            
+    ex.hide()
+    #sys.exit( app.exec_() )
 
 def main():
-#     app = QApplication(sys.argv)
-    app = QApplication( [] )
+    global app 
+    app = QApplication( sys.argv )
     
+    global ex
     ex = init_GUI()
     ex.show()
     sys.exit( app.exec_() )
 
-app = None
+
 if __name__ == '__main__':
     main()
