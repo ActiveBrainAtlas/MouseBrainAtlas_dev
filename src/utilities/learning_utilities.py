@@ -35,8 +35,8 @@ from sklearn.calibration import CalibratedClassifierCV
 from sklearn.ensemble import GradientBoostingClassifier
 from skimage.feature import local_binary_pattern, greycoprops, greycomatrix
 
-sys.path.append('/home/yuncong/csd395/xgboost/python-package')
 try:
+    sys.path.append('/home/yuncong/csd395/xgboost/python-package')
     from xgboost.sklearn import XGBClassifier
 except:
     sys.stderr.write('xgboost is not loaded.\n')
@@ -3256,8 +3256,8 @@ def draw_scoremap(clfs, scheme, stack, win_id, prep_id=2,
     
     # structures = [convert_to_original_name(structure)]
 
-    print bbox
-    bbox = None
+    #print bbox
+    #bbox = None
     
     if bbox is None:
         roi_xmin = 0
