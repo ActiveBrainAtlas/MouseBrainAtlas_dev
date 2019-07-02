@@ -345,6 +345,15 @@ ROOT_DIR/
 				├── atlasV7_10.0um_scoreVolume_STR-RL_warp7_STACK_detector799_10.0um_scoreVolume_STR-RL_10.0um_STR-RL_origin_wrt_fixedWholebrain.txt
 				├── atlasV7_10.0um_scoreVolume_STR-RL_warp7_STACK_detector799_10.0um_scoreVolume_STR-RL_10.0um_STR-RL_surround_200um.bp
 				└── atlasV7_10.0um_scoreVolume_STR-RL_warp7_STACK_detector799_10.0um_scoreVolume_STR-RL_10.0um_STR-RL_surround_200um_origin_wrt_fixedWholebrain.txt
+				
+ROOT_DIR/
+└── CSHL_registration_parameters/
+	└── atlasV7
+		└── atlasV7_10.0um_scoreVolume_STR-RL_warp7_STACK_detector799_10.0um_scoreVolume_STR-RL
+			├── atlasV7_10.0um_scoreVolume_STR-RL_warp7_STACK_detector799_10.0um_scoreVolume_STR-RL_parameters.json
+			├── atlasV7_10.0um_scoreVolume_STR-RL_warp7_STACK_detector799_10.0um_scoreVolume_STR-RL_scoreEvolution.png
+			├── atlasV7_10.0um_scoreVolume_STR-RL_warp7_STACK_detector799_10.0um_scoreVolume_STR-RL_scoreHistory.bp
+			└── atlasV7_10.0um_scoreVolume_STR-RL_warp7_STACK_detector799_10.0um_scoreVolume_STR-RL_trajectory.bp
 ```
 
 ### Register 12N individually
