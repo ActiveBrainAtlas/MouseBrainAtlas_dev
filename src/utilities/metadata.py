@@ -508,7 +508,7 @@ classifier_settings = read_csv(CLASSIFIER_SETTINGS_CSV, header=0, index_col=0)
 registration_settings = read_csv(REGISTRATION_SETTINGS_CSV, header=0, index_col=0)
 preprocess_settings = read_csv(PREPROCESS_SETTINGS_CSV, header=0, index_col=0)
 detector_settings = read_csv(DETECTOR_SETTINGS_CSV, header=0, index_col=0)
-windowing_settings = {0:{"patch_size": 34, "spacing": 34},
+windowing_settings = {0:{"patch_size": 224, "spacing": 112},
                       1: {"patch_size": 224, "spacing": 56},
                       2: {'patch_size':224, 'spacing':56, 'comment':'larger margin'},
                      3: {'patch_size':224, 'spacing':32, 'comment':'smaller spacing'},
