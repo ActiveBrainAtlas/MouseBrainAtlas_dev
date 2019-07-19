@@ -10,12 +10,16 @@ These scripts assume the stack has been given a name (example stack="MD585"), an
 
 The single setup script and seven preprocessing scripts are spaced with user intervention steps such that the first script is run, the user is required to perform some step by hand, then the second script is run, etc... For every script there is listed the command to run it, a brief description of what the script does, and the manual step for the user after completion.
 
+## Variable Glossary
+
 - if stain=='Thionin':
-    - img_version_1 = 'gray'
-    - img_version_2 = 'gray'
+    - `$img_version_1` = 'gray'
+    - `$img_version_2` = 'gray'
 - if stain=='NTB':
-    - img_version_1 = 'NtbNormalized'
-    - img_version_2 = 'NtbNormalizedAdaptiveInvertedGamma'
+    - `$img_version_1` = 'NtbNormalized'
+    - `$img_version_2` = 'NtbNormalizedAdaptiveInvertedGamma'
+- `$REPO_DIR` = '/home/alexn/brainDev'
+- `$ROOT_DIR` = '/media/alexn/Data_2/Atlas_Root_Dirs/Duke_Brains'
     
 ## Scripts
 
