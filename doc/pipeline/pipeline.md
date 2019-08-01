@@ -45,6 +45,7 @@ __Command__: `python a_script_preprocess_1.py $stack $stain`
 
 __Description__: Extracts the blue channel for slides stained with T or NTB. NTB slides are intensity normalized. 32x downsampled thumbnails are generated for every image.
 
+---------------------------
 #### User Step 2
 ---------------------------
 
@@ -60,6 +61,7 @@ __Command (optional alternative)__: `python a_script_preprocess_2.py $stack $sta
 
 __Description__: Generates image translation and rotation alignment parameters, one "anchor" file is chosen which all other images are aligned to. User can choose to pass an images filename in to be the anchor image, otherwise the anchor image will be chosen automatically. Image alignment parameters are applied and the new aligned image stack is saved as so called "prep1" images. The background is padded white for T stain and black for NTB stain.
 
+---------------------------
 #### User Step 3
 ---------------------------
 
@@ -75,6 +77,7 @@ __Command__: `python a_script_preprocess_3.py $stack $stain`
 
 __Description__: Generates binary masks for every image to segment the pixels containing the brain using the user's initial segmentation outline for assistance.
 
+---------------------------
 #### User Step 4
 ---------------------------
 
@@ -92,6 +95,7 @@ __Description__: Creates "original_image_crop.csv" file which contains the dimen
     - local adaptive intensity normalization algorithm: [inc]
 
 
+---------------------------
 #### User Step 5
 ---------------------------
 
@@ -106,6 +110,7 @@ __Command__: `python a_script_preprocess_5.py $stack $stain -l $rostral_limit $c
 __Description__: Using the user specified whole brain cropbox, cropped images are generated and saved as raw "prep5" images. Thumbnails are then generated.
 
 
+---------------------------
 #### User Step 6
 ---------------------------
 
@@ -122,6 +127,7 @@ __Command__: `python a_script_preprocess_6.py $stack $stain -l $rostral_limit_2 
 __Description__: Using the user specified brainstem cropbox, cropped images are generated and saved as raw "prep2" images. Thumbnails are then generated. Raw prep2 images are compressed into jpeg format. Finally the masks are cropped to match the prep2 images. These raw prep2 images are finished being processed, they are the images that will be used throughout the rest of the pipeline.
 
 
+---------------------------
 #### User Step 7
 ---------------------------
 
