@@ -96,7 +96,7 @@ __Description__: Creates "original_image_crop.csv" file which contains the dimen
 
 
 ---------------------------
-#### User Step 5
+#### User Step 5 [OBSOLETE]
 ---------------------------
 
 __User step__: User specifies a cropping box for the entire brain (called prep5 crop). Using the *prep1 thumbnail images*, the user must open one of the larger slices near the middle of the stack (where the slice's size would be maximized) and must find the vertices of a rectangle that encloses the brain tissue, such that all the brain tissue on every image is enclosed in this space. Record this cropping box in the following fomat: (rostral_limit, caudal_limit, dorsal_limit, ventral_limit). For convenience this is equivalent to: (x_min, x_max, y_min, y_max).
