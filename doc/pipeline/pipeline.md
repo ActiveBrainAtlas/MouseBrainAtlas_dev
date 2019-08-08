@@ -45,6 +45,8 @@ __Command__: `python a_script_preprocess_1.py $stack $stain`
 
 __Description__: Extracts the blue channel for slides stained with T or NTB. NTB slides are intensity normalized. 32x downsampled thumbnails are generated for every image.
 
+__Expected script duration__: 
+
 ---------------------------
 #### User Step 2
 ---------------------------
@@ -61,6 +63,8 @@ __Command (optional alternative)__: `python a_script_preprocess_2.py $stack $sta
 
 __Description__: Generates image translation and rotation alignment parameters, one "anchor" file is chosen which all other images are aligned to. User can choose to pass an images filename in to be the anchor image, otherwise the anchor image will be chosen automatically. Image alignment parameters are applied and the new aligned image stack is saved as so called "prep1" images. The background is padded white for T stain and black for NTB stain.
 
+__Expected script duration__: 
+
 ---------------------------
 #### User Step 3
 ---------------------------
@@ -76,6 +80,8 @@ __User step 2__: Create initial segmentation outlines of the brain for every sli
 __Command__: `python a_script_preprocess_3.py $stack $stain`
 
 __Description__: Generates binary masks for every image to segment the pixels containing the brain using the user's initial segmentation outline for assistance.
+
+__Expected script duration__: 
 
 ---------------------------
 #### User Step 4
@@ -94,6 +100,7 @@ __Description__: Creates "original_image_crop.csv" file which contains the dimen
 - __Algorithm descriptions [inc]__
     - local adaptive intensity normalization algorithm: [inc]
 
+__Expected script duration__: upwards of 12-18 hours
 
 ---------------------------
 #### User Step 5 [OBSOLETE]
@@ -108,6 +115,8 @@ __User step__: User specifies a cropping box for the entire brain (called prep5 
 __Command__: `python a_script_preprocess_5.py $stack $stain -l $rostral_limit $caudal_limit $dorsal_limit $ventral_limit`
 
 __Description__: Using the user specified whole brain cropbox, cropped images are generated and saved as raw "prep5" images. Thumbnails are then generated.
+
+__Expected script duration__: 
 
 
 ---------------------------
@@ -126,6 +135,7 @@ __Command__: `python a_script_preprocess_6.py $stack $stain -l $rostral_limit_2 
 
 __Description__: Using the user specified brainstem cropbox, cropped images are generated and saved as raw "prep2" images. Thumbnails are then generated. Raw prep2 images are compressed into jpeg format. Finally the masks are cropped to match the prep2 images. These raw prep2 images are finished being processed, they are the images that will be used throughout the rest of the pipeline.
 
+__Expected script duration__: 
 
 ---------------------------
 #### User Step 7
@@ -147,6 +157,7 @@ __Description__: Generates intensity volume, then obtains simple global alignmen
     - Simple global alignment algorithm:
         - Affine transformations are applied to the atlas so that the midpoints of 3N_R and 12N coincide with the midpoints of the current stack as entered by the user. These two structures were chosen as they both lay on the midline and are relatively far apart from one another. Mapping the atlas this way gives a good starting transformation which is improved in future scripts.
 
+__Expected script duration__: 
 
 # Structure Registration Scripts
 
