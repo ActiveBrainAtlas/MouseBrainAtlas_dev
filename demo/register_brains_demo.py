@@ -68,11 +68,28 @@ brain_f_spec0.pop("structure")
 
 simpleGlobal_alignment_spec = dict(stack_m=brain_m_spec0, stack_f=brain_f_spec0, warp_setting=0)
 
+#print('$$$$$$$$$$$$$$$$$$$$$$$$')
+#print(alignment_spec)
+#print('$$$$$$$$$$$$$$$$$$$$$$$$')
+#print(structures_m)
+#print('$$$$$$$$$$$$$$$$$$$$$$$$')
+#print(fixed_surroundings_have_positive_value)
+#print('$$$$$$$$$$$$$$$$$$$$$$$$')
+#print(fixed_use_surround)
+#print('$$$$$$$$$$$$$$$$$$$$$$$$')
+
 aligner_parameters = generate_aligner_parameters_v2(alignment_spec=alignment_spec, 
                                                    structures_m=structures_m,
                                                    fixed_structures_are_sided=True,
                                                    fixed_surroundings_have_positive_value=fixed_surroundings_have_positive_value,
                                                    fixed_use_surround=fixed_use_surround)
+#print '\n\nXXX'
+#print aligner_parameters['volume_fixed'] # {}
+#print '\n\nXXX'
+#print aligner_parameters['volume_moving'] # good
+#print '\n\nXXX'
+#print aligner_parameters['label_mapping_m2f'] # {}
+#print 'XXX\n\n'
 
 aligner = Aligner(aligner_parameters['volume_fixed'], 
                   aligner_parameters['volume_moving'], 
@@ -85,8 +102,8 @@ aligner.set_label_weights(label_weights=aligner_parameters['label_weights_m'])
 
 if use_simple_global:
     T_atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol = np.loadtxt(os.path.join(DATA_ROOTDIR, 'CSHL_simple_global_registration', brain_f_spec['name'] + '_T_atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol.txt'))
-    aligner.set_initial_transform(T_atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol)
-    aligner.set_centroid(centroid_m='structure_centroid', centroid_f='centroid_m')
+    aligner.set_initial_transform( T_atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol)
+    aligner.set_centroid(centroid_m='structure_centroid', centroid_f='centroid_m') # # # # # # # # # # # # # # # # # # #
 else:
     T_atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol = np.array([[1,0,0,0],[0,1,0,0],[0,0,1,0]])
     aligner.set_initial_transform(T_atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol)

@@ -87,3 +87,17 @@ if stain == 'Thionin':
     call_and_time( command, completion_message=completion_message)
     
 print('\nFinished generating image crop csv file, transformating masks, and performing adaptive intensity normalization on images.')
+
+
+
+###################################################################################################
+# Running script 5 automatically
+###################################################################################################
+# The user step is outdated and can be performed automatically here.
+
+# This next line replaces the user step for  manually finding this cropbox
+rostral_lim, caudal_lim, dorsal_lim, ventral_lim = get_prep5_limits_from_prep1_thumbnail_masks(stack)
+
+command = ['python', 'a_script_preprocess_5.py', stack, stain, '-l', 
+           str(rostral_lim), str(caudal_lim), str(dorsal_lim), str(ventral_lim)]
+call_and_time( command, completion_message='')

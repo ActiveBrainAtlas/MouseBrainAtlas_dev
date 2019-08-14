@@ -15,8 +15,8 @@ This is the low-level usage. Note that the user must ensure the warp parameters 
 parser.add_argument("--input_spec", type=str, help="input specifier. ini")
 parser.add_argument("--op_id", type=str, help="operation id")
 parser.add_argument("--op", action='append', nargs=2, 
-#metavar=('op_type', 'op_params'), 
-help="operation list")
+    #metavar=('op_type', 'op_params'), 
+    help="operation list")
 parser.add_argument("--input_fp", type=str, help="input filepath")
 parser.add_argument("--output_fp", type=str, help="output filepath")
 parser.add_argument("--pad_color", type=str, help="background color (black or white)", default='auto')
@@ -155,19 +155,32 @@ if args.op_id is not None:
     # sequantial_dispatcher argument cannot be too long, so we must limit the number of images processed each time
     batch_size = 100
     for batch_id in range(0, len(image_name_list), batch_size):
-        #sys.stderr.write("HOHOHOHO: "+ops_str_all_images[img_name])
+            
         # Removes stderr and stdout
-        run_distributed('python %(script)s --input_fp \"%%(input_fp)s\" --output_fp \"%%(output_fp)s\" %%(ops_str)s --pad_color %%(pad_color)s' % \
-		{'script':  os.path.join(os.getcwd(), 'warp_crop.py'),
-		},
-		kwargs_list=[{'ops_str': ops_str_all_images[img_name],
-			    'input_fp': DataManager.get_image_filepath_v2(stack=stack, fn=img_name, prep_id=prep_id, version=version, resol=resol),
-			    'output_fp': DataManager.get_image_filepath_v2(stack=stack, fn=img_name, prep_id=out_prep_id, version=version, resol=resol),
-			    'pad_color': ('black' if img_name.split('-')[1][0] == 'F' else 'white') if pad_color == 'auto' else pad_color}
-			    for img_name in image_name_list[batch_id:batch_id+batch_size]],
-		argument_type='single',
-	       jobs_per_node=args.njobs,
-	    local_only=True)
+        run_distributed('python %(script)s --input_fp \"%%(input_fp)s\" \
+        --output_fp \"%%(output_fp)s\" %%(ops_str)s --pad_color %%(pad_color)s' % \
+        {'script':  os.path.join(os.getcwd(), 'warp_crop_v3.py'),},
+        kwargs_list=[{'ops_str': ops_str_all_images[img_name],
+        'input_fp': DataManager.get_image_filepath_v2(stack=stack, fn=img_name, prep_id=prep_id, version=version, resol=resol),
+        'output_fp': DataManager.get_image_filepath_v2(stack=stack, fn=img_name, prep_id=out_prep_id, version=version, resol=resol),
+        'pad_color': pad_color}
+            for img_name in image_name_list[batch_id:batch_id+batch_size]],
+        argument_type='single',
+        jobs_per_node=args.njobs,
+        local_only=True)
+        
+        # Removes stderr and stdout
+        #run_distributed('xpython %(script)s --input_fp \"%%(input_fp)s\" \
+        #--output_fp \"%%(output_fp)s\" %%(ops_str)s --pad_color %%(pad_color)s' % \
+        #{'script':  os.path.join(os.getcwd(), 'warp_crop_v3.py'),},
+        #kwargs_list=[{'ops_str': ops_str_all_images[img_name],
+        #'input_fp': DataManager.get_image_filepath_v2(stack=stack, fn=img_name, prep_id=prep_id, version=version, resol=resol),
+        #'output_fp': DataManager.get_image_filepath_v2(stack=stack, fn=img_name, prep_id=out_prep_id, version=version, resol=resol),
+        #'pad_color': ('black' if img_name.split('-')[1][0] == 'F' else 'white') if pad_color == 'auto' else pad_color}
+        #    for img_name in image_name_list[batch_id:batch_id+batch_size]],
+        #argument_type='single',
+        #jobs_per_node=args.njobs,
+        #local_only=True)
         
 elif args.op is not None:
 # Usage 1

@@ -60,6 +60,7 @@ for i in range(1, len(image_name_list)):
 
 transformation_to_anchor_sec = {}
 
+# Converts every transformation
 for moving_idx in range(len(image_name_list)):
 
     if moving_idx == anchor_idx:

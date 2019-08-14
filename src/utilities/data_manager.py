@@ -1464,18 +1464,28 @@ class DataManager(object):
             fp = os.path.join(THUMBNAIL_DATA_DIR, stack, stack + '_transforms_to_anchor.csv')
         return fp
 
+    @staticmethod
+    def get_elastix_output_dir(stack):
+        return os.path.join(DATA_DIR, stack, stack+'_elastix_output')
+    @staticmethod
+    def get_custom_output_dir(stack):
+        return os.path.join(DATA_DIR, stack, stack + '_custom_transforms')
 
     @staticmethod
-    def load_consecutive_section_transform(moving_fn, fixed_fn, elastix_output_dir, custom_output_dir=None, stack=None):
+    def load_consecutive_section_transform(moving_fn, fixed_fn, elastix_output_dir=None, custom_output_dir=None, stack=None):
         """
         Load pairwise transform.
 
         Returns:
             (3,3)-array.
         """
+        assert stack is not None
 
+        
+        if elastix_output_dir is None:
+            elastix_output_dir = DataManager.get_elastix_output_dir(stack)
         if custom_output_dir is None:
-            custom_output_dir = os.path.join(DATA_DIR, stack, stack + '_custom_transforms')
+            custom_output_dir = DataManager.get_custom_output_dir(stack)
 
         from preprocess_utilities import parse_elastix_parameter_file
 
@@ -1704,7 +1714,7 @@ class DataManager(object):
             elif isinstance(prep_id, int):
                 components.append('prep%(prep)d' % {'prep':prep_id})
         if detector_id is not None:
-            components.append('detector%(detector_id)d' % {'detector_id':detector_id})
+            components.append('detector%(detector_id)d' % {'detector_id':int(detector_id)})
         if resolution is not None:
             components.append(resolution)
 
@@ -3726,6 +3736,7 @@ class DataManager(object):
 
         for structure in structures:
             try:
+            #if True:
 
                 if loaded:
                     index = structure_to_label[structure]
@@ -3748,7 +3759,7 @@ class DataManager(object):
                     index += 1
 
             except Exception as e:
-                # raise e
+                raise e
                 sys.stderr.write('%s\n' % e)
                 sys.stderr.write('Score volume for %s does not exist.\n' % structure)
 

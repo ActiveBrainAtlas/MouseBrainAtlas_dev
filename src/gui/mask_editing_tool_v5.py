@@ -20,9 +20,9 @@ sys.path.append(os.path.join(os.environ['REPO_DIR'], 'web_services'))
 #from web_service import web_services_request
 
 from ui.ui_MaskEditingGui5 import Ui_MaskEditingGui
-from widgets.DrawableZoomableBrowsableGraphicsScene import DrawableZoomableBrowsableGraphicsScene
-from widgets.DrawableZoomableBrowsableGraphicsScene_ForMasking import DrawableZoomableBrowsableGraphicsScene_ForMasking
-from widgets.DrawableZoomableBrowsableGraphicsScene_ForSnake import DrawableZoomableBrowsableGraphicsScene_ForSnake
+from widgets.DrawableZoomableBrowsableGraphicsScene_v2 import DrawableZoomableBrowsableGraphicsScene
+from widgets.DrawableZoomableBrowsableGraphicsScene_ForMasking_v2 import DrawableZoomableBrowsableGraphicsScene_ForMasking
+from widgets.DrawableZoomableBrowsableGraphicsScene_ForSnake_v2 import DrawableZoomableBrowsableGraphicsScene_ForSnake
 from widgets.ZoomableBrowsableGraphicsScene import ZoomableBrowsableGraphicsScene
 from DataFeeder import ImageDataFeeder_v2
 
@@ -120,7 +120,8 @@ class MaskEditingGUI(QMainWindow):
         ## Generate submask review results. ##
         ######################################
 
-        self.auto_submasks_gscene = DrawableZoomableBrowsableGraphicsScene_ForSnake(id='init_snake_contours', gview=self.ui.init_snake_contour_gview)
+        self.auto_submasks_gscene = DrawableZoomableBrowsableGraphicsScene_ForSnake(id='init_snake_contours', 
+                                                                                    gview=self.ui.init_snake_contour_gview)
         self.auto_masks_feeder = ImageDataFeeder_v2(name='init_snake_contours', stack=self.stack, \
                                     sections=self.valid_sections, auto_load=True,
                                     resolution='thumbnail',
@@ -144,7 +145,8 @@ class MaskEditingGUI(QMainWindow):
         ## User Submasks Gscene ##
         ##########################
 
-        self.user_submasks_gscene = DrawableZoomableBrowsableGraphicsScene_ForMasking(id='user_submasks', gview=self.ui.gview_final_masks_user)
+        self.user_submasks_gscene = DrawableZoomableBrowsableGraphicsScene_ForMasking(id='user_submasks', 
+                                                                                      gview=self.ui.gview_final_masks_user)
         self.user_submasks_feeder = ImageDataFeeder_v2(name='user_submasks', stack=self.stack, \
                                     sections=self.valid_sections, auto_load=True,
                                     resolution='thumbnail',

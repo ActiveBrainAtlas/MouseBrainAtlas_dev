@@ -106,25 +106,27 @@ class init_GUI(QWidget):
         ### Grid Dropdowns ###
         # Dropbown Menu (ComboBox) for selecting Stack
         self.dd1 = QComboBox()
-        self.dd1.addItems( ['Manual user step (1)','Script (2)'] )
+        self.dd1.addItems( ['Manual user step','Script'] )
         self.dd1.setFont( self.font1 )
         self.dd1.currentIndexChanged.connect( self.dd1_selection )
         self.dd1.setEnabled(False)
         self.grid_dropdowns.addWidget(self.dd1, 0, 1)
         # Dropbown Menu (ComboBox) for selecting Stack
         self.dd2 = QComboBox()
-        self.dd2.addItems( ['Run next script', 'script 1...'] )
+        self.dd2.addItems( ['Start pipeline from an earlier point', 
+                            'Step 1', 'Step 2', 'Step 3', 'Step 4',
+                           'Step 5', 'Step 6', 'Step 7'] )
         self.dd2.setFont( self.font1 )
         self.dd2.currentIndexChanged.connect( self.dd2_selection )
         self.dd2.setEnabled(False)
         self.grid_dropdowns.addWidget(self.dd2, 0, 2)
         # Dropbown Menu (ComboBox) for selecting Stack
-        self.dd3 = QComboBox()
-        self.dd3.addItems( ['all structures']+all_known_structures_sided )
-        self.dd3.setFont( self.font1 )
-        self.dd3.currentIndexChanged.connect( self.dd3_selection )
-        self.dd3.setEnabled(False)
-        self.grid_dropdowns.addWidget(self.dd3, 0, 3)
+        #self.dd3 = QComboBox()
+        #self.dd3.addItems( ['all structures']+all_known_structures_sided )
+        #self.dd3.setFont( self.font1 )
+        #self.dd3.currentIndexChanged.connect( self.dd3_selection )
+        #self.dd3.setEnabled(False)
+        #self.grid_dropdowns.addWidget(self.dd3, 0, 3)
         # Dropbown Menu (ComboBox) for selecting Stack
         self.dd4 = QComboBox()
         self.dd4.addItems( ['Best detector', 'Detector 15 (Thionin)', 'Detector 19 (Thionin)', 
@@ -132,12 +134,12 @@ class init_GUI(QWidget):
         self.dd4.setFont( self.font1 )
         self.dd4.currentIndexChanged.connect( self.dd4_selection )
         self.dd4.setEnabled(False)
-        self.grid_dropdowns.addWidget(self.dd4, 0, 4)
+        self.grid_dropdowns.addWidget(self.dd4, 0, 3)
         
         ### Grid Text Field ###
         # Static Text Field
         self.e4 = QTextEdit()
-        self.e4.setAlignment(Qt.AlignLeft)
+        self.e4.setAlignment( Qt.AlignLeft )
         self.e4.setFont( self.font2 )
         self.e4.setReadOnly( True )
         self.e4.setText( "" )
@@ -210,13 +212,19 @@ class init_GUI(QWidget):
         text, script_name = get_text_of_pipeline_status( self.stack, self.stain )
         self.curr_script_name = script_name
         
+        # Changing "a_script_preprocess_1" to "Script 1"
+        text = text.replace('a_script_preprocess_', 'User Step, and then Script ')
+        
         self.update_large_text_field( text )
         
     def button_grid_push(self, button):
-        if button == self.b1:
+        if button == self.b1: # "Check pipeline status"
             self.updatePipelineStatusField()
             self.toggle_scriptRunningMode( False )
-        if button == self.b2: # "prepare to run next script"
+            # Reset dropdown menu to first option which does nothing
+            self.dd2.setCurrentIndex( 0 )
+            
+        if button == self.b2: # "Prepare to run next script"
             self.update_large_text_field( "** RUN THE MANUAL STEP **\n\n"+
                  "Use the dropdown menu on the top left to choose whether to display the manual user "+
                  "step command, or whether to display the command to run the script. The order is ALWAYS: manual step "+
@@ -230,7 +238,8 @@ class init_GUI(QWidget):
                  "If the command below has a dollarsign (`$`) preceding any variable, then it must be "+
                  "manually entered by you according to the pipeline intructions on Github.")
             self.toggle_scriptRunningMode( True )
-        if button == self.b3:
+            
+        if button == self.b3: # "Where are my files?"
             self.update_large_text_field( "** YOUR ROOT DIRECTORY **\n\n"+os.environ['ROOT_DIR']+"\n\n"+
                             "As you run the pipeline, various files will be generated and organized "+
                             "according to a strict file management system. You should not delete any files "+
@@ -253,7 +262,11 @@ class init_GUI(QWidget):
             self.bR.setStyleSheet('QPushButton {background-color: #A3C1DA; color: black;}')
             self.bR.setEnabled(True)
             
+            # Enable the "Manual user step / Script" dropdown
             self.dd1.setEnabled(True)
+            # Disable the "run from a previous script" dropdown
+            self.dd2.setEnabled(False)
+            
         else:
             self.e5.setText( self.initial_bottom_text )
             self.e5.setReadOnly( True )
@@ -262,7 +275,10 @@ class init_GUI(QWidget):
             self.bR.setStyleSheet('QPushButton {background-color: #444444; color: black;}')
             self.bR.setEnabled(False)
             
+            # Disable the "Manual user step / Script" dropdown
             self.dd1.setEnabled(False)
+            # Enable the "run from a previous script" dropdown
+            self.dd2.setEnabled(True)
             
     def buttonPressRunCommand(self, button):
         if button == self.bR:
@@ -293,10 +309,10 @@ class init_GUI(QWidget):
         dropdown_selection = self.dd1.currentText()
         dropdown_selection_str = str(dropdown_selection.toUtf8())
                 
-        if dropdown_selection_str=='Manual user step (1)':
+        if dropdown_selection_str=='Manual user step':
             self.curr_script_or_manual_step = "manual"
             print self.curr_script_or_manual_step
-        elif dropdown_selection_str=='Script (2)':
+        elif dropdown_selection_str=='Script':
             self.curr_script_or_manual_step = "script"
             print self.curr_script_or_manual_step
         else:
@@ -304,8 +320,30 @@ class init_GUI(QWidget):
             
         self.toggle_scriptRunningMode( True )
     
+    # Called when "Start pipeline from an earlier point" dropdown is used
     def dd2_selection( self ):
-        pass
+        selection_str = self.dd2.currentText()
+        if selection_str in ['Step 1', 'Step 2', 'Step 3', 'Step 4', 'Step 5', 'Step 6', 'Step 7']:
+            # convert string "Step 3" --> "a_script_preprocess_3"
+            script_name = 'a_script_preprocess_' + selection_str[-1:]
+            
+            if int(self.curr_script_name[-1:]) < int(selection_str[-1:]):
+                self.update_large_text_field("You cannot skip to a script beyond your current point in the pipeline")
+                return
+            
+            # Set the name of the script the user is currently on
+            self.curr_script_name = str( script_name )
+            # Toggle on "scriptRunningMode" so the selected script can be run
+            self.toggle_scriptRunningMode(True)
+        
+            self.update_large_text_field("Current step is now set to "+selection_str+'\n\n'+\
+                                    "Press \"prepare to run next script\" to continue running from this point.\n\n"+\
+                                    "You will need to manually select rerunning scripts up to your current "\
+                                    "position in the pipeline, e.g. if you are currently on script 6 and you selected "\
+                                    "rerunning script 3, you will need to manually select rerunning scripts 4-5 after "\
+                                    "this completes.")
+        else:
+            self.toggle_scriptRunningMode(False)
     
     def dd3_selection( self ):
         pass
