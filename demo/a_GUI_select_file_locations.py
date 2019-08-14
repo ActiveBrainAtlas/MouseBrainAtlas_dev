@@ -12,6 +12,11 @@ import sys, os
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 
+#from tkinter import filedialog
+#from tkinter import *
+import tkFileDialog as filedialog
+from Tkinter import *
+
 import argparse
 
 parser = argparse.ArgumentParser(
@@ -292,8 +297,8 @@ def validate_sorted_filenames( fp ):
 def get_selected_fp( initialdir='/', default_filetype=("jp2 files","*.jp2") ):
     # initialdir=os.environ['ROOT_DIR'
     # Use tkinter to ask user for filepath to jp2 images
-    from tkinter import filedialog
-    from tkinter import *
+    #from tkinter import filedialog
+    #from tkinter import *
     root = Tk()
     root.filename = filedialog.askopenfilename(initialdir = initialdir,\
                                                 title = "Select file",\

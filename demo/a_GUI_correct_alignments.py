@@ -375,10 +375,18 @@ class init_GUI(QWidget):
         
     def loadImage(self):
         # Get filepath of "curr_section" and set it as viewer's photo
-        fp = get_fp( self.curr_section, prep_id=1 )
-        self.viewer.setPhoto( QPixmap( fp ) )
+        #fp = get_fp( self.curr_section, prep_id=1 )
+        #self.viewer.setPhoto( QPixmap( fp ) )
+        #self.curr_T = None
         
-        self.curr_T = None
+        img, T = get_transformed_image( self.curr_section, 
+                                        transformation='pairwise', 
+                                        prev_section=self.prev_section )
+        height, width, channel = img.shape
+        bytesPerLine = 3 * width
+        qImg = QImage(img.data, width, height, bytesPerLine, QImage.Format_RGB888)
+        
+        self.viewer.setPhoto( QPixmap( qImg ) )
         
     def loadImageThenNormalize(self):
         # Get filepath of "curr_section" and set it as viewer's photo
@@ -618,26 +626,29 @@ class init_GUI(QWidget):
         self.e3.setText( str(self.prev_section) )
         
     def saveCurrTransform(self):
-        stack_root_dir = os.path.join( os.environ['ROOT_DIR'], 'CSHL_data_processed', stack )
-        curr_section_fn = self.sections_to_filenames[self.curr_section]
-        prev_section_fn = self.sections_to_filenames[self.prev_section]
-        
-        
-        custom_tf_txt_fn = os.path.join(stack_root_dir, stack+'_custom_transforms', 
-                                    curr_section_fn + '_to_' + prev_section_fn, 
-                                    curr_section_fn + '_to_' + prev_section_fn + '_customTransform.txt')
-        custom_tf_img_fn = os.path.join(stack_root_dir, stack+'_custom_transforms', 
-                                    curr_section_fn + '_to_' + prev_section_fn, 
-                                    curr_section_fn + '_alignedTo_' + prev_section_fn + '.tif')
-        T = self.curr_T
-        
-        # Saves the transformed image since we gave a specific output_fp
-        apply_transform( stack, self.curr_T, self.sections_to_filenames[self.curr_section], 
-                        output_fp=custom_tf_img_fn )
-        
-        with open(custom_tf_txt_fn, 'w') as file:
-            file.write( str(T[0,0])+' '+str(T[0,1])+' '+str(T[0,2])+' '+\
-                        str(T[1,0])+' '+str(T[1,1])+' '+str(T[1,2]) )
+        if self.transform_type=='pairwise':
+            stack_root_dir = os.path.join( os.environ['ROOT_DIR'], 'CSHL_data_processed', stack )
+            curr_section_fn = self.sections_to_filenames[self.curr_section]
+            prev_section_fn = self.sections_to_filenames[self.prev_section]
+
+
+            custom_tf_txt_fn = os.path.join(stack_root_dir, stack+'_custom_transforms', 
+                                        curr_section_fn + '_to_' + prev_section_fn, 
+                                        curr_section_fn + '_to_' + prev_section_fn + '_customTransform.txt')
+            custom_tf_img_fn = os.path.join(stack_root_dir, stack+'_custom_transforms', 
+                                        curr_section_fn + '_to_' + prev_section_fn, 
+                                        curr_section_fn + '_alignedTo_' + prev_section_fn + '.tif')
+            T = self.curr_T
+
+            # Saves the transformed image since we gave a specific output_fp
+            apply_transform( stack, self.curr_T, self.sections_to_filenames[self.curr_section], 
+                            output_fp=custom_tf_img_fn )
+
+            with open(custom_tf_txt_fn, 'w') as file:
+                file.write( str(T[0,0])+' '+str(T[0,1])+' '+str(T[0,2])+' '+\
+                            str(T[1,0])+' '+str(T[1,1])+' '+str(T[1,2]) )
+        else:
+            pass
         
                     
 def close_gui():
