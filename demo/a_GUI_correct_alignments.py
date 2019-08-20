@@ -73,7 +73,8 @@ def apply_transform( stack, T, fn, output_fp=None ):
         
         img = cv2.imread( output_fp )
         if delete_after:
-            os.remove( output_fp ) 
+            pass
+            #os.remove( output_fp ) 
         return img
     except Exception as e:
         print e
@@ -89,6 +90,56 @@ def get_pairwise_transform( stack, fn, prev_fn):
                 fixed_fn=prev_fn, 
                 stack=stack)
     T = np.linalg.inv(T)
+    return T
+
+def get_comulative_pairwise_transform( stack, fn):
+    
+    T = np.zeros((3,3))#[[0,0,0],[0,0,0],[0,0,1]]
+    T[2,2]=1
+    
+    #valid_fn_prev = metadata_cache['valid_filenames_all'][stack][0]
+    #for valid_fn in metadata_cache['valid_filenames_all'][stack][1:]:
+    #    if valid_fn == fn:
+    #        break
+    #    T_i = DataManager.load_consecutive_section_transform(
+    #                moving_fn=valid_fn, 
+    #                fixed_fn=valid_fn_prev, 
+    #                stack=stack)
+    
+    valid_sections = metadata_cache['valid_sections_all'][stack]
+    valid_sections.sort()
+    valid_sections.reverse()
+    
+    valid_sec = valid_sections[0]
+    for valid_sec_prev in valid_sections[1:]:
+        valid_fn = metadata_cache['sections_to_filenames'][stack][valid_sec]
+        valid_fn_prev = metadata_cache['sections_to_filenames'][stack][valid_sec_prev]
+        
+        if valid_fn == fn:
+            break
+            
+            
+        T_i = DataManager.load_consecutive_section_transform(
+                    moving_fn=valid_fn, 
+                    fixed_fn=valid_fn_prev, 
+                    stack=stack)
+    
+        print T_i
+        T_i = np.linalg.inv(T_i)
+        
+        T[0,0] = math.cos( math.acos( T[0,0] ) +  math.acos( T_i[0,0] ) )
+        T[1,1] = math.cos( math.acos( T[1,1] ) + math.acos( T_i[1,1] ) )
+        T[0,1] = -math.sin( math.asin( -T[0,1] ) + math.asin( -T_i[0,1] ) )
+        T[1,0] = math.sin( math.asin( T[1,0] ) + math.asin( T_i[1,0] ) )
+        T[0,2] += T_i[0,2]
+        T[1,2] += T_i[1,2]
+        
+        #valid_fn_prev = valid_fn
+        valid_sec = valid_sec_prev
+        
+    #T[0,2] = 0
+    #T[1,2] = 0
+    print T
     return T
 
 def get_transformed_image( section, transformation='anchor', prev_section=-1 ):
@@ -375,18 +426,25 @@ class init_GUI(QWidget):
         
     def loadImage(self):
         # Get filepath of "curr_section" and set it as viewer's photo
-        #fp = get_fp( self.curr_section, prep_id=1 )
-        #self.viewer.setPhoto( QPixmap( fp ) )
-        #self.curr_T = None
+        fp = get_fp( self.curr_section, prep_id=1 )
+        self.viewer.setPhoto( QPixmap( fp ) )
+        self.curr_T = None
+       # 
+       # img, T = get_transformed_image( self.curr_section, 
+       #                                 transformation='anchor', 
+       #                                 prev_section=self.prev_section )
         
-        img, T = get_transformed_image( self.curr_section, 
-                                        transformation='pairwise', 
-                                        prev_section=self.prev_section )
-        height, width, channel = img.shape
-        bytesPerLine = 3 * width
-        qImg = QImage(img.data, width, height, bytesPerLine, QImage.Format_RGB888)
         
-        self.viewer.setPhoto( QPixmap( qImg ) )
+        #T = get_comulative_pairwise_transform( stack, 
+        #               metadata_cache['sections_to_filenames'][stack][self.curr_section] )
+        #img = apply_transform( stack, T,  
+        #               metadata_cache['sections_to_filenames'][stack][self.curr_section])
+        
+        #height, width, channel = img.shape
+        #bytesPerLine = 3 * width
+        #qImg = QImage(img.data, width, height, bytesPerLine, QImage.Format_RGB888)
+       # 
+       # self.viewer.setPhoto( QPixmap( qImg ) )
         
     def loadImageThenNormalize(self):
         # Get filepath of "curr_section" and set it as viewer's photo
@@ -412,7 +470,7 @@ class init_GUI(QWidget):
             img_curr_red, T = get_transformed_image( self.curr_section, transformation='anchor' )
             img_prev_blue, Tb = get_transformed_image( self.prev_section, transformation='anchor' )
             self.curr_T = T
-        elif self.transform_type=='pairwise':
+        elif self.transform_type=='pairwise' and self.curr_section>self.prev_section:
             # Load pairwise-transformed images
             # The current red image is transformed to the previous blue image
             img_curr_red, T = get_transformed_image( self.curr_section, 
@@ -421,6 +479,13 @@ class init_GUI(QWidget):
             self.curr_T = T
             # Blue image does not change
             img_prev_blue = cv2.imread( fp_prev_blue )
+        elif self.transform_type=='pairwise' and self.curr_section<self.prev_section:
+            # In the case of wrapping (prev_section wrapps to the last section when curr_section is 0)
+            #   We just load the red ad blue channels of curr_section making it appear purple
+            self.curr_T = None
+            
+            img_curr_red = cv2.imread( get_fp( self.curr_section, prep_id=1 ) )
+            img_prev_blue = cv2.imread( get_fp( self.curr_section, prep_id=1 ) )
         
         height_r, width_r, _ = img_curr_red.shape
         height_b, width_b, _ = img_prev_blue.shape
@@ -556,27 +621,31 @@ class init_GUI(QWidget):
         if button in [self.b1, self.b2]:
             if button==self.b1:
                 self.prev_img_multiplier += 1
+                if self.prev_img_multiplier > 7:
+                    self.prev_img_multiplier = 1
             if button==self.b2:
                 self.curr_img_multiplier += 1
+                if self.curr_img_multiplier > 7:
+                    self.curr_img_multiplier = 1
         
         # Translate the red image and update T matrix
         if button in [self.b_right, self.b_left, self.b_up, self.b_down]:
             if button==self.b_right:
-                self.curr_T[0,2] += 7
+                self.curr_T[0,2] += 3
             if button==self.b_left:
-                self.curr_T[0,2] -= 7
+                self.curr_T[0,2] -= 3
             if button==self.b_up:
-                self.curr_T[1,2] -= 7
+                self.curr_T[1,2] -= 3
             if button==self.b_down:
-                self.curr_T[1,2] += 7
+                self.curr_T[1,2] += 3
             #self.transformImagesColored()
         
         # Rotate the red image and update T matrix
         if button in [self.b_clockwise, self.b_cclockwise]:
             if button==self.b_clockwise:
-                degrees = 0.7
+                degrees = 0.3
             if button==self.b_cclockwise:
-                degrees = -0.7
+                degrees = -0.3
             # Update matrix's rotation fields
             self.curr_T[0,0] = math.cos( math.acos(self.curr_T[0,0]) +  degrees*(math.pi/180) )
             self.curr_T[1,1] = math.cos( math.acos(self.curr_T[1,1]) + degrees*(math.pi/180) )

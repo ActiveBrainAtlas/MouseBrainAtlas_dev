@@ -56,7 +56,10 @@ transformation_to_previous_sec = {}
 
 for i in range(1, len(image_name_list)):
     
-    transformation_to_previous_sec[i] = DataManager.load_consecutive_section_transform(moving_fn=image_name_list[i], fixed_fn=image_name_list[i-1], elastix_output_dir=elastix_output_dir, custom_output_dir=custom_output_dir)
+    transformation_to_previous_sec[i] = DataManager.load_consecutive_section_transform(moving_fn=image_name_list[i], 
+                                                                                       fixed_fn=image_name_list[i-1], 
+                                                                                       stack=input_spec['stack'])
+    #transformation_to_previous_sec[i] = DataManager.load_consecutive_section_transform(moving_fn=image_name_list[i], fixed_fn=image_name_list[i-1], elastix_output_dir=elastix_output_dir, custom_output_dir=custom_output_dir)
 
 transformation_to_anchor_sec = {}
 

@@ -84,7 +84,6 @@ anchor_fn = create_anchor_file( anchor_fn=anchor_fn )
 create_from_none_to_aligned_file()
 
 if stain == 'NTB':
-
     create_input_spec_ini_all( name='input_spec.ini', \
             stack=stack, prep_id='None', version='NtbNormalized', resol='thumbnail')
     command = ['python', 'align_compose.py', 'input_spec.ini', '--op', 'from_none_to_aligned']

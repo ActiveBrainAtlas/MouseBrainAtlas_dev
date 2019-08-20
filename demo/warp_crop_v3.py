@@ -95,20 +95,22 @@ def parse_operation_sequence(op_name, resol, return_str=False, stack=None):
     #op = load_ini(os.path.join(DATA_ROOTDIR, 'CSHL_data_processed', stack, 'operation_configs', op_name + '.ini'))
     op_path = os.path.join( DATA_ROOTDIR,'CSHL_data_processed',stack, 'operation_configs', op_name + '.ini')
     op = load_ini(op_path)
+    print op
     if op is None:
         raise Exception("Cannot load %s.ini" % op_name)
     if 'operation_sequence' in op: # composite operation
 
-	assert not inverse, "Inverse composite operation is not implemented."
-	op_seq = list(chain(*map(lambda o: parse_operation_sequence(o, resol=resol, return_str=return_str, stack=stack), op['operation_sequence'])))
-	assert all([op_seq[i][3] == op_seq[i+1][2] for i in range(0, len(op_seq)-1)]), "In and out domains are not consistent along the composite operation chain. %s" % [(o[2], o[3]) for o in op_seq]
+        assert not inverse, "Inverse composite operation is not implemented."
+        op_seq = list(chain(*map(lambda o: parse_operation_sequence(o, resol=resol, return_str=return_str, stack=stack), op['operation_sequence'])))
+        assert all([op_seq[i][3] == op_seq[i+1][2] for i in range(0, len(op_seq)-1)]), "In and out domains are not consistent along the composite operation chain. %s" % [(o[2], o[3]) for o in op_seq]
 
     else: # single operation
         op_arr = convert_operation_to_arr(op, resol=resol, inverse=inverse, return_str=return_str, stack=stack)
-	if inverse:
-	    op_seq = [(op['type'], op_arr, op['dest_prep_id'], op['base_prep_id'])]
-	else:
-	    op_seq = [(op['type'], op_arr, op['base_prep_id'], op['dest_prep_id'])]
+        if inverse:
+            op_seq = [(op['type'], op_arr, op['dest_prep_id'], op['base_prep_id'])]
+        else:
+            op_seq = [(op['type'], op_arr, op['base_prep_id'], op['dest_prep_id'])]
+    print op_seq
     return op_seq
 
 
@@ -155,7 +157,7 @@ if args.op_id is not None:
     # sequantial_dispatcher argument cannot be too long, so we must limit the number of images processed each time
     batch_size = 100
     for batch_id in range(0, len(image_name_list), batch_size):
-            
+        
         # Removes stderr and stdout
         run_distributed('python %(script)s --input_fp \"%%(input_fp)s\" \
         --output_fp \"%%(output_fp)s\" %%(ops_str)s --pad_color %%(pad_color)s' % \

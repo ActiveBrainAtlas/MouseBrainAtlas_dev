@@ -1,11 +1,10 @@
-import os
+import os, sys
 import subprocess
-from a_driver_utilities import *
 sys.path.append(os.path.join(os.environ['REPO_DIR'], 'utilities'))
 from utilities2015 import *
 from registration_utilities import *
 from annotation_utilities import *
-# from metadata import *
+from metadata import *
 from data_manager import DataManager
 from a_driver_utilities import *
 
@@ -301,7 +300,13 @@ class init_GUI(QWidget):
                     end_time_gui_script = time.time()
                     text = "Script has finished! Took "+str(round(float(end_time_gui_script-start_time_gui_script)/60.0,1))+" minutes"
                     self.update_large_text_field( text )
-
+                    try:
+                        with open('/home/alexn/Desktop/times.txt', 'a') as myfile:
+                            myfile.write(  self.stack+' '+self.curr_script_name+' '+text+'\n\n')
+                    except:
+                        pass
+                    # Emulate User pressing the "Check pipeline status button"
+                    #self.button_grid_push(self.b1)
                 except Exception as e:
                     self.update_large_text_field( str(e) )
                 

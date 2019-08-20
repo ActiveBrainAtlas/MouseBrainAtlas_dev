@@ -8,7 +8,7 @@ import json
 
 sys.path.append(os.path.join(os.environ['REPO_DIR'], 'utilities'))
 #from utilities2015 import *
-#from data_manager import *
+from data_manager import *
 #from distributed_utilities import *
 from metadata import *
 

@@ -216,7 +216,7 @@ class init_GUI(QWidget):
             self.e7.setText( 'Resolution not valid' ) 
             return False
             
-        self.e7.setText( 'Logging brain metadata!' ) 
+        self.e7.setText( 'Logging brain metadata!' )
         return True
             
     def buttonPressSubmit(self, button):

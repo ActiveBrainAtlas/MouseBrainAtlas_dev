@@ -96,7 +96,7 @@ class MaskEditingGUI(QMainWindow):
         from pandas import read_csv
 
         # auto_submask_rootdir = DataManager.get_auto_submask_rootdir_filepath(stack)
-        for fn in self.valid_filenames:
+        for i, fn in enumerate(self.valid_filenames):
             # Get filepaths for auto + user submasks
             auto_decision_fp = DataManager.get_auto_submask_filepath(stack=stack, what='decisions', fn=fn)
             user_decision_fp = DataManager.get_user_modified_submask_filepath(stack=stack, fn=fn, what='decisions')
@@ -114,6 +114,21 @@ class MaskEditingGUI(QMainWindow):
                 for submask_ind in user_submask_decisions[fn].iterkeys()}
             else:
                 sys.stderr.write("No submasks exist for %s.\n" % fn)
+                
+                for ii in range(i-5,i+10):
+                    try:
+                        fn_sub = self.valid_filenames[ii]
+                        auto_decision_fp = DataManager.get_auto_submask_filepath(stack=stack, what='decisions', fn=fn_sub)
+                        if os.path.exists(auto_decision_fp):
+                            user_submask_decisions[fn] = read_csv(auto_decision_fp, header=None).to_dict()[1]
+                            self.user_submasks[fn] = {submask_ind: \
+                                imread(DataManager.get_auto_submask_filepath(stack=stack, what='submask', fn=fn_sub, submask_ind=submask_ind)).astype(np.bool)
+                                for submask_ind in user_submask_decisions[fn].iterkeys()}
+                            break
+                    except:
+                        sys.stderr.write("Could not substitute submask for %s.\n" % fn)
+                        continue
+                    
                 continue
 
         ######################################
