@@ -1,1 +1,67 @@
-.
+# Use Ubuntu runtime as parent image
+FROM ubuntu:16.04
+
+# Make /bin/bash==/bin/sh
+RUN rm /bin/sh && ln -s /bin/bash /bin/sh
+
+# Copy the current directory contents into the container at /app
+COPY . /app
+
+# Set the working directory to /app
+WORKDIR /app
+
+# Install packages from apt
+RUN apt-get -y update && \
+    apt-get -y install \
+         build-essential  \
+         autoconf libtool  \
+         pkg-config  \
+         python-opengl  \
+         python-pil  \
+         python-pyrex  \
+         idle-python2.7  \
+         qt4-dev-tools  \
+         qt4-designer  \
+         libqtgui4  \
+         libqtcore4  \
+         libqt4-xml  \
+         libqt4-test  \
+         libqt4-script  \
+         libqt4-network  \
+         libqt4-dbus  \
+         python-qt4  \
+         python-qt4-gl  \
+         libgle3  \
+         python-dev  \
+         python-subprocess32 \
+	 python-pip \
+	 imagemagick \
+	 x11-xserver-utils \
+	 python-tk \
+         git
+
+# Clone the Github repo
+RUN git clone --single-branch --branch alex_dev_branch https://github.com/ActiveBrainAtlas/MouseBrainAtlas_dev
+
+# Set the working directory to ~/mousebrainatlas_dev
+WORKDIR ./MouseBrainAtlas_dev
+
+# Setup and run the virtual_env creation
+RUN pip install virtualenv && \
+    chmod -R 777 /app/ && \
+    ./setup/docker_config.sh
+
+# Make port 80 available to the world outside this container
+EXPOSE 80
+
+
+
+################## UNUSED under here ##################
+
+# Install any needed packages specified in requirements.txt
+#RUN pip install --trusted-host pypi.python.org -r ./requirements.txt
+#RUN pip install --upgrade pip && \
+#    pip install -r ./requirements.txt
+
+# Define environment variable
+# ENV NAME World
