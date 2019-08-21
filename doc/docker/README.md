@@ -10,7 +10,7 @@ This document assumes Docker is already installed on your machine, you are using
 
 Before getting started, ensure that you have a directory to use as the root of the pipeline. This shall be known as the ROOT_DIRECTORY. Ensure that there is at least 1TB of free space in your ROOT_DIRECTORY. It is recommended that this directory be empty and reserved only for the outputs of the pipeline.
 
-Here is an example of a good ROOT_DIRECTORY: `/media/john/external_drive_1/atlas_root/`
+Here is an example of a good ROOT_DIRECTORY: `/media/john/external_drive_1/atlas_root`
 
 ## Download the Docker image
 
@@ -41,7 +41,7 @@ export containerId=$(docker ps -l -q)
 `xhost +local:root`
 
 ```
-docker run -it --env="DISPLAY" --env="QT_X11_NO_MITSHM=1" --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" -v /home/alexn/Desktop:/mnt/data anewberry/atlas_demo:atlas_v0.0.3
+docker run -it --env="DISPLAY" --env="QT_X11_NO_MITSHM=1" --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" -v ROOT_DIRECTORY:/mnt/data anewberry/atlas_demo:atlas_v0.0.3
 ```
 
 `xhost -local:root`
