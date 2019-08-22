@@ -33,12 +33,6 @@ if stain == 'NTB':
     tb_version = 'NtbNormalizedAdaptiveInvertedGamma'
 if stain == 'Thionin':
     tb_version = 'gray'
-    
-# Compute intensity volumes
-script_fp =  os.path.join( os.environ['REPO_DIR'], 'reconstruct', 'construct_intensity_volume.py')
-command = [ 'python', script_fp, stack, '--tb_version', tb_version, '--tb_resol', 'thumbnail']
-completion_message = 'Finished constructing intensity volume.'
-call_and_time( command, completion_message=completion_message)
 
 # Run simple global alignment
 manual_anchor_fp =  os.path.join( os.environ['DATA_ROOTDIR'], 'CSHL_simple_global_registration', stack+'_manual_anchor_points.ini' )

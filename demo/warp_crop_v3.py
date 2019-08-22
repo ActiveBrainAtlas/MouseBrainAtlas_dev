@@ -44,6 +44,7 @@ def convert_operation_to_arr(op, resol, inverse=False, return_str=False, stack=N
     if op['type'] == 'warp':
         tf_csv = op['transforms_csv']
         assert tf_csv.endswith('.csv'), "transforms_csv is not a csv file."
+        #print(tf_csv)
         transforms_to_anchor = csv_to_dict(tf_csv)
 
         transforms_resol = op['resolution']

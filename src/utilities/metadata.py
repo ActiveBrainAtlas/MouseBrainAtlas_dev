@@ -85,40 +85,28 @@ if hostname == 'yuncong-MacbookPro':
     ELASTIX_BIN = 'elastix'
 
 
-elif hostname == 'yuncong-Precision-WorkStation-T7500' and username == 'yuncong':
-    print 'Setting environment for Precision WorkStation'
-    HOST_ID = 'workstation'
-
-    if 'ROOT_DIR' in os.environ:
+elif hostname == 'atlasDocker':
+    print 'Setting environment for the Docker Container'
+    
+    try:
         ROOT_DIR = os.environ['ROOT_DIR']
-    else:
-        ROOT_DIR = '/home/yuncong/'
-
-    if 'DATA_ROOTDIR' in os.environ:
-        DATA_ROOTDIR = os.environ['DATA_ROOTDIR']
-    else:
-        # DATA_ROOTDIR = '/media/yuncong/BstemAtlasData'
-        DATA_ROOTDIR = '/data'
-
-    if 'THUMBNAIL_DATA_ROOTDIR' in os.environ:
-        THUMBNAIL_DATA_ROOTDIR = os.environ['THUMBNAIL_DATA_ROOTDIR']
-    else:
-        # THUMBNAIL_DATA_ROOTDIR = '/media/yuncong/BstemAtlasData'
-        THUMBNAIL_DATA_ROOTDIR = '/data'
-
-    RAW_DATA_DIR = os.path.join(DATA_ROOTDIR, 'CSHL_data')
+        DATA_ROOTDIR = os.environ['ROOT_DIR']
+        THUMBNAIL_DATA_ROOTDIR = os.environ['ROOT_DIR']
+        REPO_DIR = os.environ['REPO_DIR']
+    except KeyError:
+        print("Please ensure you are inside the virtual environment.")
+        print("Run `source ./app`")
+        sys.exit(0)
+        
 
     ON_AWS = False
     S3_DATA_BUCKET = 'mousebrainatlas-data'
     S3_RAWDATA_BUCKET = 'mousebrainatlas-rawdata'
-
-    REPO_DIR = os.environ['REPO_DIR']
-
+    
+    RAW_DATA_DIR = os.path.join(DATA_ROOTDIR, 'CSHL_data')
     DATA_DIR = os.path.join(DATA_ROOTDIR, 'CSHL_data_processed')
-
     THUMBNAIL_DATA_DIR = os.path.join(THUMBNAIL_DATA_ROOTDIR, 'CSHL_data_processed')
     VOLUME_ROOTDIR = os.path.join(ROOT_DIR, 'CSHL_volumes')
-    # MESH_ROOTDIR =  '/home/yuncong/CSHL_meshes'
     MESH_ROOTDIR = os.path.join(ROOT_DIR, 'CSHL_meshes')
 
     # annotation_rootdir =  os.path.join(ROOT_DIR, 'CSHL_data_labelings_losslessAlignCropped')
@@ -137,7 +125,7 @@ elif hostname == 'yuncong-Precision-WorkStation-T7500' and username == 'yuncong'
     REGISTRATION_PARAMETERS_ROOTDIR = os.path.join(ROOT_DIR, 'CSHL_registration_parameters')
     REGISTRATION_VIZ_ROOTDIR = os.path.join(ROOT_DIR, 'CSHL_registration_visualization')
 
-    KDU_EXPAND_BIN = '/home/yuncong/KDU7A2_Demo_Apps_for_Centos7-x86-64_170827/kdu_expand'
+    KDU_EXPAND_BIN = '/app/KDU7A2_Demo_Apps_for_Ubuntu-x86-64_170827/kdu_expand'
 
     CLASSIFIER_SETTINGS_CSV = os.path.join(REPO_DIR, 'learning', 'classifier_settings.csv')
     DATASET_SETTINGS_CSV = os.path.join(REPO_DIR, 'learning', 'dataset_settings.csv')

@@ -35,6 +35,11 @@ make_from_x_to_y_ini( stack, x='padded', y='brainstem',\
 create_prep2_section_limits(stack, prep2_section_min, prep2_section_max)
 
 if stain == 'NTB':
+    tb_version = 'NtbNormalizedAdaptiveInvertedGamma'
+if stain == 'Thionin':
+    tb_version = 'gray'
+
+if stain == 'NTB':
     create_input_spec_ini_all( name='input_spec.ini', stack=stack, \
                 prep_id='alignedWithMargin', version='NtbNormalizedAdaptiveInvertedGamma', resol='raw')
     # Creates prep2 raw images
@@ -96,3 +101,9 @@ if stain == 'Thionin':
     completion_message = 'Finished creating prep2 thumbnail masks.'
     call_and_time( command, completion_message=completion_message)
     
+    
+# Compute intensity volumes
+script_fp =  os.path.join( os.environ['REPO_DIR'], 'reconstruct', 'construct_intensity_volume.py')
+command = [ 'python', script_fp, stack, '--tb_version', tb_version, '--tb_resol', 'thumbnail']
+completion_message = 'Finished constructing intensity volume.'
+call_and_time( command, completion_message=completion_message)
