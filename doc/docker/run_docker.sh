@@ -27,7 +27,14 @@ docker run -it \
 --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
 -v "${1}":"/mnt/data" \
 -v "/":"/mnt/computer_root" \
+-p 8899:8888 \
+--hostname atlasDocker \
 anewberry/atlas_demo:atlas_v0.0.3
+
+
+#jupyter notebook --ip 0.0.0.0 --no-browser --allow-root --NotebookApp.token='' --NotebookApp.password=''
+#http://172.17.0.2:8888/tree
+#http://localhost:8899/tree
 
 echo "*********************************"
 echo "  Leaving the Docker Container"
