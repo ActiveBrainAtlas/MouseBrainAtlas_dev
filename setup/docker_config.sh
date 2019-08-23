@@ -34,6 +34,9 @@ echo ""
 echo -e "${green}[virtualenv] Installing Python packages${NC}"
 pip install -r $PROJECT_DIR/setup/requirements.txt
 
+### Setup Kakadu
+#source setup_kakadu_docker.sh
+
 
 # PyQT stuff
 #ln -s /usr/lib/python2.7/dist-packages/PyQt4/ $PROJECT_DIR/$virtualenv/lib/python2.7/site-packages/
