@@ -13,100 +13,39 @@ import sys
 #from PyQt4.QtCore import *
 #from PyQt4.QtGui import *
 
-script_list = ['initial setup gui',         # 0
-               'a_script_preprocess_setup', # 1
-               'a_script_preprocess_1',     # 2
-               'a_script_preprocess_2',     # 3
-               'a_script_preprocess_3',     # 4
-               'a_script_preprocess_4',     # 5
-               'a_script_preprocess_5',     # 6
-               'a_script_preprocess_6',     # 7
-               'a_script_preprocess_7',     # 8
-               'a_script_processing_setup', # 9
-              'a_script_processing']        # 10
+necessary_image_files_by_script_ntb = {}
 
-#necessary_image_files_by_script_ntb
+necessary_image_files_by_script_ntb['  initial setup gui'] = {'image_set_1': {'prep_id':'None', 'version':'None', 'resol':'raw'}}
 
-necessary_files_by_script = {}
-necessary_files_by_script['ntb'] = {}
-necessary_files_by_script['thionin'] = {}
+necessary_image_files_by_script_ntb[' a_script_preprocess_setup'] = {'output_file_1':'setup_files'}
 
-#for script_name in script_list:
-#    necessary_files_by_script['ntb'][script_name] = {}
-#    necessary_files_by_script['thionin'][script_name] = {}
+necessary_image_files_by_script_ntb['a_script_preprocess_1'] = {'image_set_1': {'prep_id':'None', 'version':'Ntb', 'resol':'raw'},
+                                              'image_set_2': {'prep_id':'None', 'version':'Ntb', 'resol':'thumbnail'},
+                                              'image_set_3': {'prep_id':'None', 'version':'NtbNormalized', 'resol':'thumbnail'}}
 
+necessary_image_files_by_script_ntb['a_script_preprocess_2'] = {'image_set_1': {'prep_id':1, 'version':'NtbNormalized', 'resol':'thumbnail'}}
 
-# initial setup gui
-necessary_files_by_script['ntb'][script_list[0]] = {'image_set_1': {'prep_id':'None', 'version':'None', 'resol':'raw'}}
-necessary_files_by_script['thionin'][script_list[0]] = {'image_set_1': {'prep_id':'None', 'version':'None', 'resol':'raw'}}
+necessary_image_files_by_script_ntb['a_script_preprocess_3'] = {'image_set_1': 'autoSubmasks'}
 
-# a_script_preprocess_setup
-necessary_files_by_script['ntb'][script_list[1]] = {'output_file_1':'setup_files'}
-necessary_files_by_script['thionin'][script_list[1]] = {'output_file_1':'setup_files'}
+necessary_image_files_by_script_ntb['a_script_preprocess_4'] = {'image_set_1': {'prep_id':'None', 'version':'mask', 'resol':'thumbnail'},
+                                                               'image_set_2': 'floatHistogram',
+                                                               'image_set_3': {'prep_id':'None', 'version':'NtbNormalizedAdaptiveInvertedGamma', 'resol':'raw'}}
 
-# a_script_preprocess_1
-necessary_files_by_script['ntb'][script_list[2]] = {
-    'image_set_1': {'prep_id':'None', 'version':'Ntb', 'resol':'raw'},
-    'image_set_2': {'prep_id':'None', 'version':'Ntb', 'resol':'thumbnail'},
-    'image_set_3': {'prep_id':'None', 'version':'NtbNormalized', 'resol':'thumbnail'}}
-necessary_files_by_script['thionin'][script_list[2]] = {
-    'image_set_1': {'prep_id':'None', 'version':'None', 'resol':'thumbnail'},
-    'image_set_2': {'prep_id':'None', 'version':'gray', 'resol':'raw'},
-    'image_set_3': {'prep_id':'None', 'version':'gray', 'resol':'thumbnail'}}
+necessary_image_files_by_script_ntb['a_script_preprocess_5'] = {'image_set_1': {'prep_id':5, 'version':'NtbNormalizedAdaptiveInvertedGamma', 'resol':'raw'},
+                                                               'image_set_2': {'prep_id':5, 'version':'NtbNormalizedAdaptiveInvertedGamma', 'resol':'thumbnail'}}
 
-# a_script_preprocess_2
-necessary_files_by_script['ntb'][script_list[3]] = {'image_set_1': {'prep_id':1, 'version':'NtbNormalized', 'resol':'thumbnail'}}
-necessary_files_by_script['thionin'][script_list[3]] = {'image_set_1': {'prep_id':1, 'version':'gray', 'resol':'thumbnail'}}
+necessary_image_files_by_script_ntb['a_script_preprocess_6'] = {'image_set_1': {'prep_id':2, 'version':'NtbNormalizedAdaptiveInvertedGamma', 'resol':'raw'},
+                                                               'image_set_2': {'prep_id':2, 'version':'NtbNormalizedAdaptiveInvertedGamma', 'resol':'thumbnail'},
+                                                               'image_set_3': {'prep_id':2, 'version':'mask', 'resol':'thumbnail'}}
 
-# a_script_preprocess_3
-necessary_files_by_script['ntb'][script_list[4]] = {'image_set_1': 'autoSubmasks'}
-necessary_files_by_script['thionin'][script_list[4]] = {'image_set_1': 'autoSubmasks'}
+necessary_image_files_by_script_ntb['a_script_preprocess_7'] = {'output_file_1': 'atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol',
+                                                               'output_file_2': 'registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners'}
 
-# a_script_preprocess_4
-necessary_files_by_script['ntb'][script_list[5]] = {
-    'image_set_1': {'prep_id':'None', 'version':'mask', 'resol':'thumbnail'},
-    'image_set_2': 'floatHistogram',
-    'image_set_3': {'prep_id':'None', 'version':'NtbNormalizedAdaptiveInvertedGamma', 'resol':'raw'}}
-necessary_files_by_script['thionin'][script_list[5]] = {
-    'image_set_1': {'prep_id':'None', 'version':'mask', 'resol':'thumbnail'},
-    'image_set_2': 'floatHistogram',
-    'image_set_3': {'prep_id':'None', 'version':'gray', 'resol':'raw'}}
+necessary_image_files_by_script_ntb['a_script_processing_setup'] = {'output_file_1': 'classifier_setup_files'}
+necessary_image_files_by_script_ntb['a_script_processing`'] = {'output_file_1': 'x'}
 
-# a_script_preprocess_5
-necessary_files_by_script['ntb'][script_list[6]] = {
-    'image_set_1': {'prep_id':5, 'version':'NtbNormalizedAdaptiveInvertedGamma', 'resol':'raw'},
-    'image_set_2': {'prep_id':5, 'version':'NtbNormalizedAdaptiveInvertedGamma', 'resol':'thumbnail'}}
-necessary_files_by_script['thionin'][script_list[6]] = {
-    'image_set_1': {'prep_id':5, 'version':'gray', 'resol':'raw'},
-    'image_set_2': {'prep_id':5, 'version':'gray', 'resol':'thumbnail'}}
-
-# a_script_preprocess_6
-necessary_files_by_script['ntb'][script_list[7]] = {
-    'image_set_1': {'prep_id':2, 'version':'NtbNormalizedAdaptiveInvertedGamma', 'resol':'raw'},
-    'image_set_2': {'prep_id':2, 'version':'NtbNormalizedAdaptiveInvertedGamma', 'resol':'thumbnail'},
-    'image_set_3': {'prep_id':2, 'version':'mask', 'resol':'thumbnail'}}
-necessary_files_by_script['thionin'][script_list[7]] = {
-    'image_set_1': {'prep_id':2, 'version':'gray', 'resol':'raw'},
-    'image_set_2': {'prep_id':2, 'version':'gray', 'resol':'thumbnail'},
-    'image_set_3': {'prep_id':2, 'version':'mask', 'resol':'thumbnail'}}
-
-# a_script_preprocess_7
-necessary_files_by_script['ntb'][script_list[8]] = {
-    'output_file_1': 'atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol',
-    'output_file_2': 'registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners'}
-necessary_files_by_script['thionin'][script_list[8]] = {}
-
-# a_script_processing_setup
-necessary_files_by_script['ntb'][script_list[9]] = {'output_file_1': 'classifier_setup_files'}
-necessary_files_by_script['thionin'][script_list[9]] = {'output_file_1': 'classifier_setup_files'}
-
-# a_script_processing
-necessary_files_by_script['ntb'][script_list[10]] = {'output_file_1': 'x'}
-necessary_files_by_script['thionin'][script_list[10]] = {'output_file_1': 'x'}
-
-
-script_name_to_full_command = { 'initial setup gui': 'Please rerun the new brain setup by rerunning this GUI',
-                              'a_script_preprocess_setup': 'python a_script_preprocess_setup.py $stack $stain',
+script_name_to_full_command = { '  initial setup gui': 'Please rerun the new brain setup by rerunning this GUI',
+                              ' a_script_preprocess_setup': 'python a_script_preprocess_setup.py $stack $stain',
                               'a_script_preprocess_1': 'python a_script_preprocess_1.py $stack $stain',
                               'a_script_preprocess_2': 'python a_script_preprocess_2.py $stack $stain',
                               'a_script_preprocess_3': 'python a_script_preprocess_3.py $stack $stain',
@@ -115,10 +54,10 @@ script_name_to_full_command = { 'initial setup gui': 'Please rerun the new brain
                               'a_script_preprocess_6': 'python a_script_preprocess_6.py $stack $stain -l $rostral_limit_2 $caudal_limit_2 $dorsal_limit_2 $ventral_limit_2 $prep2_section_min $prep2_section_max',
                               'a_script_preprocess_7': 'python a_script_preprocess_7.py $stack $stain -l $x_12N $y_12N $x_3N $y_3N $z_midline',
                               'a_script_processing_setup': 'python a_script_processing_setup.py $stack $stain $detector_id',
-                              'a_script_processing': 'python a_script_processing.py $stack $stain $detector_id'}
+                              'a_script_processing`': 'python a_script_processing.py $stack $stain $detector_id'}
 
-script_name_to_prev_manual_command = { 'initial setup gui': 'Please rerun the new brain setup by rerunning this GUI',
-                              'a_script_preprocess_setup': '',
+script_name_to_prev_manual_command = { '  initial setup gui': 'Please rerun the new brain setup by rerunning this GUI',
+                              ' a_script_preprocess_setup': '',
                               'a_script_preprocess_1': 'python a_script_rotate.py $stack $stain rotate90 raw None None (please confirm rotation type prior to running this, likely wont even be necessary)',
                               'a_script_preprocess_2': '(Check image orientations with outside program)',
                               'a_script_preprocess_3': 'cmd 1:   python $REPO_DIR/gui/preprocess_tool_v3.py $stack --tb_version $img_version_1     cmd 2:   python $REPO_DIR/gui/mask_editing_tool_v4.py $stack $img_version_1',
@@ -127,7 +66,7 @@ script_name_to_prev_manual_command = { 'initial setup gui': 'Please rerun the ne
                               'a_script_preprocess_6': '(write down the brainstem crop cropbox values, write down the first and last image numbers that contain the brainstem, GIMP makes the first part easy)',
                               'a_script_preprocess_7': 'python $REPO_DIR/gui/brain_labeling_gui_v28.py $stack --img_version $img_version_2',
                               'a_script_processing_setup': '',
-                              'a_script_processing': ''}
+                              'a_script_processing`': ''}
 
 def all_img_files_valid( stack, prep_id='None', version='Ntb', resol='thumbnail' ):
     all_files_valid = True
@@ -202,7 +141,7 @@ def all_setupFiles_present( stack ):
             
     # Check operation configs
     op_config_fp = os.path.join( os.environ['ROOT_DIR'], 'CSHL_data_processed', stack, 'operation_configs' )
-    for op_config_name in ['from_aligned_to_none.ini', 'from_aligned_to_padded.ini', 
+    for op_config_name in ['from_aligned_to_none.ini', 'from_aligned_to_padded.ini', 'from_none_to_aligned.ini', 
                            'from_none_to_brainstem.ini', 'from_wholeslice_to_brainstem.ini', 'from_padded_to_wholeslice.ini', 
                            'from_padded_to_none.ini', 'from_padded_to_brainstem.ini', 'from_none_to_wholeslice.ini']:
         if not os.path.isfile( os.path.join( op_config_fp, op_config_name) ):
@@ -243,14 +182,12 @@ def check_for_file( file_to_check, stack ):
 def get_text_of_pipeline_status( stack, stain ):
     text = ""
     all_correct = True
-    
-    stain = stain.lower()
 
-    for script_name in script_list:
+    for script_name in sorted(necessary_image_files_by_script_ntb.keys()):
 
-        for image_set in necessary_files_by_script[stain][script_name].keys():
+        for image_set in necessary_image_files_by_script_ntb[script_name].keys():
 
-            contents = necessary_files_by_script[stain][script_name][image_set]
+            contents = necessary_image_files_by_script_ntb[script_name][image_set]
 
             if type(contents)==str:
                 if contents=='setup_files':
