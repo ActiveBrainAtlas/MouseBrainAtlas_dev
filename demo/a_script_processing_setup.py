@@ -34,17 +34,17 @@ id_classifier = detector_settings.loc[id_detector]['feature_classifier_id']
 # Download mxnet files
 s3_fp = 's3://mousebrainatlas-data/mxnet_models/inception-bn-blue/'
 local_fp = os.path.join( os.environ['ROOT_DIR'], 'mxnet_models', 'inception-bn-blue/')
-command = ["aws", "s3", "cp", '--recursive', s3_fp, local_fp]
+command = ["aws", "s3", "cp", '--recursive', '--no-sign-request', s3_fp, local_fp]
 subprocess.call( command )
     
 # Download AtlasV7 volume files
 s3_fp = 's3://mousebrainatlas-data/CSHL_volumes/atlasV7/atlasV7_10.0um_scoreVolume/score_volumes/'
 local_fp = os.path.join( os.environ['ROOT_DIR'], 'CSHL_volumes', 'atlasV7', 'atlasV7_10.0um_scoreVolume', 'score_volumes/')
-command = ["aws", "s3", "cp", '--recursive', s3_fp, local_fp]
+command = ["aws", "s3", "cp", '--recursive', '--no-sign-request', s3_fp, local_fp]
 subprocess.call( command )
 
 # Download pre-trained classifiers for a particular setting
 s3_fp = 's3://mousebrainatlas-data/CSHL_classifiers/setting_'+str(id_classifier)+'/classifiers/'
 local_fp = os.path.join( os.environ['ROOT_DIR'], 'CSHL_classifiers', 'setting_'+str(id_classifier), 'classifiers/')
-command = ["aws", "s3", "cp", '--recursive', s3_fp, local_fp]
+command = ["aws", "s3", "cp", '--recursive', '--no-sign-request', s3_fp, local_fp]
 subprocess.call( command )
