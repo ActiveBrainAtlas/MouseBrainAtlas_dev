@@ -125,7 +125,7 @@ script_name_to_prev_manual_command = { 'initial setup gui': 'Please rerun the ne
                               'a_script_preprocess_4': 'python $REPO_DIR/gui/mask_editing_tool_v4.py $stack $img_version_1',
                               'a_script_preprocess_5': '(write down the whole brain crop cropbox values, GIMP makes this easy)',
                               'a_script_preprocess_6': '(write down the brainstem crop cropbox values, write down the first and last image numbers that contain the brainstem, GIMP makes the first part easy)',
-                              'a_script_preprocess_7': 'python $REPO_DIR/gui/brain_labeling_gui_v28.py $stack --img_version $img_version_2',
+                              'a_script_preprocess_7': 'python $REPO_DIR/gui/brain_labeling_gui_v28.py $stack --img_version $img_version_2 --resolution 1um',
                               'a_script_processing_setup': '',
                               'a_script_processing': ''}
 
