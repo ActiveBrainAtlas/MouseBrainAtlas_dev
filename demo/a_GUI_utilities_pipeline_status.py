@@ -68,9 +68,7 @@ necessary_files_by_script['ntb'][script_list[5]] = {
     'image_set_2': 'floatHistogram',
     'image_set_3': {'prep_id':'None', 'version':'NtbNormalizedAdaptiveInvertedGamma', 'resol':'raw'}}
 necessary_files_by_script['thionin'][script_list[5]] = {
-    'image_set_1': {'prep_id':'None', 'version':'mask', 'resol':'thumbnail'},
-    'image_set_2': 'floatHistogram',
-    'image_set_3': {'prep_id':'None', 'version':'gray', 'resol':'raw'}}
+    'image_set_1': {'prep_id':'None', 'version':'mask', 'resol':'thumbnail'}}
 
 # a_script_preprocess_5
 necessary_files_by_script['ntb'][script_list[6]] = {
