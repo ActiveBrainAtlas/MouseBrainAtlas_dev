@@ -1,6 +1,7 @@
 ipykernel
 jupyter
 
+numpy==1.15.4
 opencv-python==3.1.0.3
 scikit-image==0.14.2
 scikit-learn==0.19.1
@@ -13,7 +14,6 @@ shapely==1.6.4
 randomcolor==0.4.4.5
 mxnet-cu90==1.0.0
 joblib==0.10.2
-numpy==1.15.4
 xgboost
 
 awscli
