@@ -8,7 +8,9 @@ if [ "$1" == "" ]; then
 	return 0
 elif [ "$2" != "" ]; then
 	echo ""
-	echo "Either you tried to pass multiple arguments, or your first argument has a space in it. If the filepath you are passing has spaces in it, ensure you have quotation marks around it."
+	echo "Either you tried to pass multiple arguments, \
+or your first argument has a space in it. If the filepath \
+you are passing has spaces in it, ensure you have quotation marks around it."
 	echo "Replace this: source run_docker.sh \"\$ROOT_FP\""
 	echo ""
 	return 0
@@ -29,8 +31,7 @@ docker run -it \
 -v "/":"/mnt/computer_root" \
 -p 8899:8888 \
 --hostname atlasDocker \
-anewberry/atlas_demo:atlas_v0.0.3
-
+anewberry/atlas_demo:atlas_v0.0.4
 
 #jupyter notebook --ip 0.0.0.0 --no-browser --allow-root --NotebookApp.token='' --NotebookApp.password=''
 #http://172.17.0.2:8888/tree
