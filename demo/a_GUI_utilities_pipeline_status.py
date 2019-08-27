@@ -92,7 +92,9 @@ necessary_files_by_script['thionin'][script_list[7]] = {
 necessary_files_by_script['ntb'][script_list[8]] = {
     'output_file_1': 'atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol',
     'output_file_2': 'registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners'}
-necessary_files_by_script['thionin'][script_list[8]] = {}
+necessary_files_by_script['thionin'][script_list[8]] = {
+    'output_file_1': 'atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol',
+    'output_file_2': 'registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners'}
 
 # a_script_processing_setup
 necessary_files_by_script['ntb'][script_list[9]] = {'output_file_1': 'classifier_setup_files'}
