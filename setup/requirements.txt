@@ -17,6 +17,6 @@ joblib==0.10.2
 xgboost
 
 awscli
-# Keeps saying "ImportError: no module named numpy"
+# Must have numpy already installed on computer
 qimage2ndarray==1.5.0
 pymcubes==0.0.9
