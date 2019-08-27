@@ -2,6 +2,7 @@ ipykernel
 jupyter
 
 awscli
+qimage2ndarray==1.5.0
 
 opencv-python==3.1.0.3
 scikit-image==0.14.2
