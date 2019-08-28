@@ -63,9 +63,7 @@ necessary_files_by_script['ntb'][script_list[5]] = {
     'image_set_2': 'floatHistogram',
     'image_set_3': {'prep_id':'None', 'version':'NtbNormalizedAdaptiveInvertedGamma', 'resol':'raw'}}
 necessary_files_by_script['thionin'][script_list[5]] = {
-    'image_set_1': {'prep_id':'None', 'version':'mask', 'resol':'thumbnail'},
-    'image_set_2': 'floatHistogram',
-    'image_set_3': {'prep_id':'None', 'version':'gray', 'resol':'raw'}}
+    'image_set_1': {'prep_id':'None', 'version':'mask', 'resol':'thumbnail'}}
 
 # a_script_preprocess_5
 necessary_files_by_script['ntb'][script_list[6]] = {
@@ -89,7 +87,9 @@ necessary_files_by_script['thionin'][script_list[7]] = {
 necessary_files_by_script['ntb'][script_list[8]] = {
     'output_file_1': 'atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol',
     'output_file_2': 'registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners'}
-necessary_files_by_script['thionin'][script_list[8]] = {}
+necessary_files_by_script['thionin'][script_list[8]] = {
+    'output_file_1': 'atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol',
+    'output_file_2': 'registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners'}
 
 # a_script_processing_setup
 necessary_files_by_script['ntb'][script_list[9]] = {'output_file_1': 'classifier_setup_files'}
@@ -100,6 +100,7 @@ necessary_files_by_script['ntb'][script_list[10]] = {'output_file_1': 'x'}
 necessary_files_by_script['thionin'][script_list[10]] = {'output_file_1': 'x'}
 
 
+<<<<<<< HEAD
 script_name_to_full_command = { 
     'initial setup gui': 'Please rerun the new brain setup by rerunning this GUI',
     'a_script_preprocess_setup': 'python a_script_preprocess_setup.py $stack $stain',
