@@ -14,8 +14,9 @@ Here is an example of a good ROOT_DIRECTORY: `/media/john/external_drive_1/atlas
 
 ## Download the initial script
 
-Enter in the multiline command below into your linux terminal while you are logged into your user account. It will create a directory called "atlas_docker_demo" in your home folder and copy the shell script "run_docker.sh" into it.
+Enter in the multiline command below into your linux terminal while you are logged into your user account (you can copy and paste the entire chunk). It will create a directory called "atlas_docker_demo" in your home folder and copy the shell script "run_docker.sh" into it.
 
+__Command 1:__
 ```
 cd ~ && \
 mkdir -p ./atlas_docker_demo/ && \
@@ -24,17 +25,24 @@ curl -O "https://raw.githubusercontent.com/ActiveBrainAtlas/MouseBrainAtlas_dev/
 "./run_docker.sh"
 ```
 
-Next we will want to run the script we just downloaded, named "run_docker.sh". When running the script, it will initially ask you to download Docker as well as the newest Docker Image for this project. 
+Next we will want to run the script we just downloaded, named "run_docker.sh". Before attempting to run the Docker container, it will first verify that you have Docker installed as well as the latest Docker Image for this project. If either are not installed, they will be automatically installed. Please replace the `$ROOT_DIRECTORY` with the root directory you have chosen as described above.
 
-Now run the following command: `source run_docker.sh`. 
+__Command 2:__
 
-## Download the Docker image
+`source run_docker.sh $ROOT_DIRECTORY`. 
+
+This will need several minutes to run as it downloads and runs the Docker Image. You will know it has finished successfully when a GUI is displayed prompting to either "continue a brain" or "start a new brain" through the pipeline.
+
+
+
+
+## Download the Docker image manually
 
 The current docker image is denoted: `anewberry/atlas_demo:atlas_v0.0.5`. 
 
 To download it, enter into the command line: `docker pull anewberry/atlas_demo:atlas_v0.0.5`
 
-## Run the Docker image
+## Run the Docker image manually
 
 ### No GUI
 
