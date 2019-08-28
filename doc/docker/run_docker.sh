@@ -31,7 +31,7 @@ docker run -it \
 -v "/":"/mnt/computer_root" \
 -p 8899:8888 \
 --hostname atlasDocker \
-anewberry/atlas_demo:atlas_v0.0.4
+anewberry/atlas_demo:atlas_v0.0.5
 
 #jupyter notebook --ip 0.0.0.0 --no-browser --allow-root --NotebookApp.token='' --NotebookApp.password=''
 #http://172.17.0.2:8888/tree
