@@ -8,9 +8,9 @@ if [[ "$(docker -v  2> /dev/null)" == "" ]]; then
 fi
 
 # Pull the docker image if not pulled
-if [[ "$(docker images -q anewberry/atlas_demo:atlas_v0.0.4 2> /dev/null)" == "" ]]; then
+if [[ "$(docker images -q anewberry/atlas_demo:atlas_v0.0.5 2> /dev/null)" == "" ]]; then
   echo "Pull the docker image"
-  echo "Command: docker pull anewberry/atlas_demo:atlas_v0.0.4"
+  echo "Command: docker pull anewberry/atlas_demo:atlas_v0.0.5"
   return
 fi
 
