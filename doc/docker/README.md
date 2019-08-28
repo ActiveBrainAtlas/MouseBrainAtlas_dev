@@ -12,11 +12,27 @@ Before getting started, ensure that you have a directory to use as the root of t
 
 Here is an example of a good ROOT_DIRECTORY: `/media/john/external_drive_1/atlas_root`
 
+## Download the initial script
+
+Enter in the multiline command below into your linux terminal while you are logged into your user account. It will create a directory called "atlas_docker_demo" in your home folder and copy the shell script "run_docker.sh" into it.
+
+```
+cd ~ && \
+mkdir -p ./atlas_docker_demo/ && \
+cd ./atlas_docker_demo/
+curl -O "https://raw.githubusercontent.com/ActiveBrainAtlas/MouseBrainAtlas_dev/master/doc/docker/run_docker.sh" \
+"./run_docker.sh"
+```
+
+Next we will want to run the script we just downloaded, named "run_docker.sh". When running the script, it will initially ask you to download Docker as well as the newest Docker Image for this project. 
+
+Now run the following command: `source run_docker.sh`. 
+
 ## Download the Docker image
 
-The current docker image is denoted: `anewberry/atlas_demo:atlas_v0.0.3`. 
+The current docker image is denoted: `anewberry/atlas_demo:atlas_v0.0.5`. 
 
-To download it, enter into the command line: `docker pull anewberry/atlas_demo:atlas_v0.0.3`
+To download it, enter into the command line: `docker pull anewberry/atlas_demo:atlas_v0.0.5`
 
 ## Run the Docker image
 
