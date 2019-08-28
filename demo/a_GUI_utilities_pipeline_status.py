@@ -23,18 +23,13 @@ script_list = ['initial setup gui',         # 0
                'a_script_preprocess_6',     # 7
                'a_script_preprocess_7',     # 8
                'a_script_processing_setup', # 9
-              'a_script_processing']        # 10
+               'a_script_processing']       # 10
 
 #necessary_image_files_by_script_ntb
 
 necessary_files_by_script = {}
 necessary_files_by_script['ntb'] = {}
 necessary_files_by_script['thionin'] = {}
-
-#for script_name in script_list:
-#    necessary_files_by_script['ntb'][script_name] = {}
-#    necessary_files_by_script['thionin'][script_name] = {}
-
 
 # initial setup gui
 necessary_files_by_script['ntb'][script_list[0]] = {'image_set_1': {'prep_id':'None', 'version':'None', 'resol':'raw'}}
@@ -105,29 +100,31 @@ necessary_files_by_script['ntb'][script_list[10]] = {'output_file_1': 'x'}
 necessary_files_by_script['thionin'][script_list[10]] = {'output_file_1': 'x'}
 
 
-script_name_to_full_command = { 'initial setup gui': 'Please rerun the new brain setup by rerunning this GUI',
-                              'a_script_preprocess_setup': 'python a_script_preprocess_setup.py $stack $stain',
-                              'a_script_preprocess_1': 'python a_script_preprocess_1.py $stack $stain',
-                              'a_script_preprocess_2': 'python a_script_preprocess_2.py $stack $stain',
-                              'a_script_preprocess_3': 'python a_script_preprocess_3.py $stack $stain',
-                              'a_script_preprocess_4': 'python a_script_preprocess_4.py $stack $stain',
-                              'a_script_preprocess_5': 'python a_script_preprocess_5.py $stack $stain -l $rostral_limit $caudal_limit $dorsal_limit $ventral_limit',
-                              'a_script_preprocess_6': 'python a_script_preprocess_6.py $stack $stain -l $rostral_limit_2 $caudal_limit_2 $dorsal_limit_2 $ventral_limit_2 $prep2_section_min $prep2_section_max',
-                              'a_script_preprocess_7': 'python a_script_preprocess_7.py $stack $stain -l $x_12N $y_12N $x_3N $y_3N $z_midline',
-                              'a_script_processing_setup': 'python a_script_processing_setup.py $stack $stain $detector_id',
-                              'a_script_processing': 'python a_script_processing.py $stack $stain $detector_id'}
+script_name_to_full_command = { 
+    'initial setup gui': 'Please rerun the new brain setup by rerunning this GUI',
+    'a_script_preprocess_setup': 'python a_script_preprocess_setup.py $stack $stain',
+    'a_script_preprocess_1': 'python a_script_preprocess_1.py $stack $stain',
+    'a_script_preprocess_2': 'python a_script_preprocess_2.py $stack $stain',
+    'a_script_preprocess_3': 'python a_script_preprocess_3.py $stack $stain',
+    'a_script_preprocess_4': 'python a_script_preprocess_4.py $stack $stain',
+    'a_script_preprocess_5': 'python a_script_preprocess_5.py $stack $stain -l $rostral_limit $caudal_limit $dorsal_limit $ventral_limit',
+    'a_script_preprocess_6': 'python a_script_preprocess_6.py $stack $stain -l $rostral_limit_2 $caudal_limit_2 $dorsal_limit_2 $ventral_limit_2 $prep2_section_min $prep2_section_max',
+    'a_script_preprocess_7': 'python a_script_preprocess_7.py $stack $stain -l $x_12N $y_12N $x_3N $y_3N $z_midline',
+    'a_script_processing_setup': 'python a_script_processing_setup.py $stack $stain $detector_id',
+    'a_script_processing': 'python a_script_processing.py $stack $stain $detector_id'}
 
-script_name_to_prev_manual_command = { 'initial setup gui': 'Please rerun the new brain setup by rerunning this GUI',
-                              'a_script_preprocess_setup': '',
-                              'a_script_preprocess_1': 'python a_script_rotate.py $stack $stain rotate90 raw None None (please confirm rotation type prior to running this, likely wont even be necessary)',
-                              'a_script_preprocess_2': '(Check image orientations with outside program)',
-                              'a_script_preprocess_3': 'cmd 1:   python $REPO_DIR/gui/preprocess_tool_v3.py $stack --tb_version $img_version_1     cmd 2:   python $REPO_DIR/gui/mask_editing_tool_v4.py $stack $img_version_1',
-                              'a_script_preprocess_4': 'python $REPO_DIR/gui/mask_editing_tool_v4.py $stack $img_version_1',
-                              'a_script_preprocess_5': '(write down the whole brain crop cropbox values, GIMP makes this easy)',
-                              'a_script_preprocess_6': '(write down the brainstem crop cropbox values, write down the first and last image numbers that contain the brainstem, GIMP makes the first part easy)',
-                              'a_script_preprocess_7': 'python $REPO_DIR/gui/brain_labeling_gui_v28.py $stack --img_version $img_version_2',
-                              'a_script_processing_setup': '',
-                              'a_script_processing': ''}
+script_name_to_prev_manual_command = { 
+    'initial setup gui': 'Please rerun the new brain setup by rerunning this GUI',
+    'a_script_preprocess_setup': '',
+    'a_script_preprocess_1': 'python a_script_rotate.py $stack $stain rotate90 raw None None (please confirm rotation type prior to running this, likely wont even be necessary)',
+    'a_script_preprocess_2': '(Check image orientations with outside program)',
+    'a_script_preprocess_3': 'cmd 1:   python a_GUI_correct_alignments.py $stack --tb_version $img_version_1     cmd 2:   python $REPO_DIR/gui/mask_editing_tool_v4.py $stack $img_version_1',
+    'a_script_preprocess_4': 'python $REPO_DIR/gui/mask_editing_tool_v4.py $stack $img_version_1',
+    'a_script_preprocess_5': '(write down the whole brain crop cropbox values, GIMP makes this easy)',
+    'a_script_preprocess_6': '(write down the brainstem crop cropbox values, write down the first and last image numbers that contain the brainstem, GIMP makes the first part easy)',
+    'a_script_preprocess_7': 'python $REPO_DIR/gui/brain_labeling_gui_v28.py $stack --img_version $img_version_2',
+    'a_script_processing_setup': '',
+    'a_script_processing': ''}
 
 def all_img_files_valid( stack, prep_id='None', version='Ntb', resol='thumbnail' ):
     all_files_valid = True

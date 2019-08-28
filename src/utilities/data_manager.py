@@ -1480,7 +1480,6 @@ class DataManager(object):
             (3,3)-array.
         """
         assert stack is not None
-
         
         if elastix_output_dir is None:
             elastix_output_dir = DataManager.get_elastix_output_dir(stack)
@@ -1493,6 +1492,7 @@ class DataManager(object):
 
         custom_tf_fp2 = os.path.join(custom_output_dir, moving_fn + '_to_' + fixed_fn, 'TransformParameters.0.txt')
 
+        print(custom_tf_fp)
         if os.path.exists(custom_tf_fp):
             # if custom transform is provided
             sys.stderr.write('Load custom transform: %s\n' % custom_tf_fp)

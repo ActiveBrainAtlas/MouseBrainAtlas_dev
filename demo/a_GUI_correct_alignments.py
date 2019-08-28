@@ -20,8 +20,18 @@ from registration_utilities import find_contour_points
 from gui_utilities import *
 from qt_utilities import *
 from preprocess_utilities import *
+from a_driver_utilities import *
 sys.path.append(os.path.join(os.environ['REPO_DIR'], 'web_services'))
 
+def get_padding_color(stack):
+    stain = stack_metadata[stack]['stain']
+    
+    if stain.lower() == 'ntb':
+        return 'black'
+    elif stain.lower() == 'thionin':
+        return 'white'
+    else:
+        return 'auto'
 
 def get_img( section, prep_id='None', resol='thumbnail', version='NtbNormalized' ):
     return DataManager.load_image_v2(stack=stack, 
@@ -53,6 +63,16 @@ def apply_transform( stack, T, fn, output_fp=None ):
      'tx':T[0,2],
      'ty':T[1,2],}
     
+    x = 0
+    y = 0
+    w = 2000
+    h = 1000
+    op_str += ' -crop %(w)sx%(h)s%(x)s%(y)s\! ' % {
+                     'x': '+' + str(x) if int(x) >= 0 else str(x),
+                     'y': '+' + str(y) if int(y) >= 0 else str(y),
+                     'w': str(w),
+                     'h': str(h)}
+    
     if output_fp==None:
         output_fp_root = os.path.join( os.environ['ROOT_DIR'], 'CSHL_data_processed', stack, 'tmp')
         if not os.path.exists( output_fp_root ):
@@ -65,16 +85,18 @@ def apply_transform( stack, T, fn, output_fp=None ):
         delete_after = False
 
     try:
+        bg_color = get_padding_color(stack)
+        
         execute_command("convert \"%(input_fp)s\"  +repage -virtual-pixel background -background %(bg_color)s %(op_str)s -flatten -compress lzw \"%(output_fp)s\"" % \
                     {'op_str': op_str,
                      'input_fp': img_fp,
                      'output_fp': output_fp,
-                     'bg_color': 'black'})
+                     'bg_color': bg_color})
         
         img = cv2.imread( output_fp )
         if delete_after:
+            os.remove( output_fp ) 
             pass
-            #os.remove( output_fp ) 
         return img
     except Exception as e:
         print e
@@ -247,7 +269,7 @@ class ImageViewer( QGraphicsView):
             self.photoClicked.emit( QPoint(event.pos()) )
         super(ImageViewer, self).mousePressEvent(event)
 
-
+        
 class init_GUI(QWidget):
     
     def __init__(self, parent = None):
@@ -299,6 +321,13 @@ class init_GUI(QWidget):
         self.e1.setText( "Quality Checker" )
         self.e1.setFrame( False )
         self.grid_top.addWidget( self.e1, 0, 0)
+        # Button Text Field
+        self.b_help = QPushButton("HELP")
+        self.b_help.setDefault(True)
+        self.b_help.setEnabled(True)
+        self.b_help.clicked.connect(lambda:self.help_button_press(self.b_help))
+        self.b_help.setStyleSheet("color: rgb(0,0,0); background-color: rgb(250,250,250);")
+        self.grid_top.addWidget(self.b_help, 0, 1)
         
         ### Grid BODY UPPER ###
         # Static Text Field
@@ -423,6 +452,24 @@ class init_GUI(QWidget):
         # Loads self.curr_section as the current image and sets all fields appropriatly
         self.setCurrSection( self.curr_section )
         
+    def help_button_press(self, button):
+        info_text = "This GUI is used to align slices to each other. The shortcut commands are as follows: \n\n\
+    -  `m`: Toggle between view mode (grayscale) and alignment mode (red & blue).\n\
+    -  `[`: Go back one section. \n\
+    -  `]`: Go forward one section. \n\
+    -  `q`: Toggle pixel selection mode. Clicking on the image will print out pixel position into the terminal.\n\n\
+    \
+    All changes must be done in alignment mode. Alignment mode will display the pairwise alignment between the current \
+active section (red) and the previous section (blue). Using the buttons at the foot of the GUI, you can translate and \
+rotate the active section (red) as well as brighten either the active or previous section. Adjust the red slice such \
+that it is aligned to the blue slice as well as possible and press \"Save Transformation\".\n\n\
+    \
+    The grayscale images should all be aligned to one another. Please verify that all sections are aligned properly \
+before you finish this step."
+        
+        QMessageBox.information( self, "Empty Field",
+                    info_text)
+        
         
     def loadImage(self):
         # Get filepath of "curr_section" and set it as viewer's photo
@@ -494,7 +541,6 @@ class init_GUI(QWidget):
         
         img_combined = np.ones((new_height, new_width, 3))
         img_combined[0:height_r, 0:width_r, 0] += img_curr_red[:,:,0]
-        #img_combined[0:height_r, 0:width_r, 1] += img_curr_red[:,:,0]
         img_combined[0:height_b, 0:width_b, 2] += img_prev_blue[:,:,0]
         
         img_combined = np.array(img_combined, dtype=np.uint8) # This line only change the type, not values
@@ -534,14 +580,13 @@ class init_GUI(QWidget):
         
         img_combined = np.ones((new_height, new_width, 3))
         img_combined[0:height_r, 0:width_r, 0] += img_curr_red[:,:,0]*self.curr_img_multiplier
-        #img_combined[0:height_r, 0:width_r, 1] += img_curr_red[:,:,0]
         img_combined[0:height_b, 0:width_b, 2] += img_prev_blue[:,:,0]*self.prev_img_multiplier
         
         img_combined = np.array(img_combined, dtype=np.uint8) # This line only change the type, not values
         
         # Create a "qImg" which allows you to create a QPixmap from a matrix
         bytesPerLine = 3 * new_width
-        qImg = QImage(img_combined.data*2, new_width, new_height, 
+        qImg = QImage( img_combined.data*2, new_width, new_height, 
                       bytesPerLine, QImage.Format_RGB888)
         
         pixmap = QPixmap(qImg)                                                                                                                                                                               
@@ -621,11 +666,11 @@ class init_GUI(QWidget):
         if button in [self.b1, self.b2]:
             if button==self.b1:
                 self.prev_img_multiplier += 1
-                if self.prev_img_multiplier > 7:
+                if self.prev_img_multiplier > 5:
                     self.prev_img_multiplier = 1
             if button==self.b2:
                 self.curr_img_multiplier += 1
-                if self.curr_img_multiplier > 7:
+                if self.curr_img_multiplier > 5:
                     self.curr_img_multiplier = 1
         
         # Translate the red image and update T matrix
@@ -654,6 +699,7 @@ class init_GUI(QWidget):
             
         if button==self.b_save_transform:
             self.saveCurrTransform()
+            self.update_prep1_images()
         
         self.transformImagesColored()
         
@@ -693,6 +739,23 @@ class init_GUI(QWidget):
     def updatePrevHeaderFields(self):
         self.e2.setText( str(self.sections_to_filenames[self.prev_section]) )
         self.e3.setText( str(self.prev_section) )
+        
+    def update_prep1_images(self):
+        stain = stack_metadata[stack]['stain'].lower()
+        version = stain_to_metainfo[stain]['img_version_1']
+        create_input_spec_ini_all( name='input_spec.ini', \
+            stack=stack, prep_id='None', version=version, resol='thumbnail')
+        
+        # Call "compose" to regenerate the csv file
+        command = ['python', 'compose_v3.py', 'input_spec.ini', '--op', 'from_none_to_aligned']
+        completion_message = 'Finished creating transforms to anchor csv file.'
+        call_and_time( command, completion_message=completion_message)
+        
+        # Apply transformations from csv and save as prep1 images
+        command = ['python', 'warp_crop_v3.py','--input_spec', 'input_spec.ini', 
+                   '--op_id', 'from_none_to_padded','--njobs','8','--pad_color', get_padding_color(stack)]
+        completion_message = 'Finished transformation to padded (prep1).'
+        call_and_time( command, completion_message=completion_message)
         
     def saveCurrTransform(self):
         if self.transform_type=='pairwise':

@@ -26,18 +26,6 @@ from data_manager import DataManager
 from a_driver_utilities import *
 
 if stain == 'NTB':
-    ### Next 2 commands rerun script 2 alignments
-    create_input_spec_ini_all( name='input_spec.ini', \
-            stack=stack, prep_id='None', version='NtbNormalized', resol='thumbnail')
-    command = ['python', 'align_compose.py', 'input_spec.ini', '--op', 'from_none_to_aligned']
-    completion_message = 'Finished preliminary alignment.'
-    call_and_time( command, completion_message=completion_message)
-    
-    command = ['python', 'warp_crop_v3.py','--input_spec', 'input_spec.ini', '--op_id', 'from_none_to_padded','--njobs','8','--pad_color','black']
-    completion_message = 'Finished transformation to padded (prep1).'
-    call_and_time( command, completion_message=completion_message)
-    
-    
     # Generate masks
     create_input_spec_ini_all( name='input_spec.ini', stack=stack, \
                 prep_id='alignedPadded', version='NtbNormalized', resol='thumbnail')
@@ -48,18 +36,6 @@ if stain == 'NTB':
     call_and_time( command, completion_message=completion_message)
 
 if stain == 'Thionin':
-    ### Next 2 commands rerun script 2 alignments
-    create_input_spec_ini_all( name='input_spec.ini', \
-            stack=stack, prep_id='None', version='gray', resol='thumbnail')
-    command = ['python', 'align_compose.py', 'input_spec.ini', '--op', 'from_none_to_aligned']
-    completion_message = 'Finished preliminary alignment.'
-    call_and_time( command, completion_message=completion_message)
-    
-    command = ['python', 'warp_crop_v3.py','--input_spec', 'input_spec.ini', '--op_id', 'from_none_to_padded','--njobs','8','--pad_color','white']
-    completion_message = 'Finished transformation to padded (prep1).'
-    call_and_time( command, completion_message=completion_message)
-    
-    
     # Generate masks
     create_input_spec_ini_all( name='input_spec.ini', stack=stack, \
                 prep_id='alignedPadded', version='gray', resol='thumbnail')

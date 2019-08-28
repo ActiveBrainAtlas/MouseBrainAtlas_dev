@@ -332,9 +332,13 @@ class init_GUI(QWidget):
             # convert string "Step 3" --> "a_script_preprocess_3"
             script_name = 'a_script_preprocess_' + selection_str[-1:]
             
-            if int(self.curr_script_name[-1:]) < int(selection_str[-1:]):
-                self.update_large_text_field("You cannot skip to a script beyond your current point in the pipeline")
-                return
+            try:
+                if int(self.curr_script_name[-1:]) < int(selection_str[-1:]):
+                    self.update_large_text_field("You cannot skip to a script beyond your current point in the pipeline")
+                    return
+            except ValueError:
+                pass
+                
             
             # Set the name of the script the user is currently on
             self.curr_script_name = str( script_name )

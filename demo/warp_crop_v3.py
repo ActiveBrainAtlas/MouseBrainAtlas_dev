@@ -50,16 +50,16 @@ def convert_operation_to_arr(op, resol, inverse=False, return_str=False, stack=N
         transforms_resol = op['resolution']
         transforms_scale_factor = convert_resolution_string_to_um(stack=stack, resolution=transforms_resol) / convert_resolution_string_to_um(stack=stack, resolution=resol)
         tf_mat_mult_factor = np.array([[1,1,transforms_scale_factor],[1,1,transforms_scale_factor]])
-	if inverse:
+        if inverse:
             transforms_to_anchor = {img_name: convert_2d_transform_forms(np.linalg.inv(np.reshape(tf, (3,3)))[:2] * tf_mat_mult_factor, out_form='str') for img_name, tf in transforms_to_anchor.iteritems()}
-	else:
-	    transforms_to_anchor = {img_name: convert_2d_transform_forms(np.reshape(tf, (3,3))[:2] * tf_mat_mult_factor, out_form='str') for img_name, tf in transforms_to_anchor.iteritems()}
+        else:
+            transforms_to_anchor = {img_name: convert_2d_transform_forms(np.reshape(tf, (3,3))[:2] * tf_mat_mult_factor, out_form='str') for img_name, tf in transforms_to_anchor.iteritems()}
 
-	return transforms_to_anchor
+        return transforms_to_anchor
 
     elif op['type'] == 'crop':
-	cropbox_resol = op['resolution']
-	
+        cropbox_resol = op['resolution']
+        
 	if 'cropboxes_csv' in op: # each image has a different cropbox
 	    cropboxes_all = csv_to_dict(op['cropboxes_csv'])
 
@@ -96,7 +96,7 @@ def parse_operation_sequence(op_name, resol, return_str=False, stack=None):
     #op = load_ini(os.path.join(DATA_ROOTDIR, 'CSHL_data_processed', stack, 'operation_configs', op_name + '.ini'))
     op_path = os.path.join( DATA_ROOTDIR,'CSHL_data_processed',stack, 'operation_configs', op_name + '.ini')
     op = load_ini(op_path)
-    print op
+    #print op
     if op is None:
         raise Exception("Cannot load %s.ini" % op_name)
     if 'operation_sequence' in op: # composite operation
@@ -111,7 +111,7 @@ def parse_operation_sequence(op_name, resol, return_str=False, stack=None):
             op_seq = [(op['type'], op_arr, op['dest_prep_id'], op['base_prep_id'])]
         else:
             op_seq = [(op['type'], op_arr, op['base_prep_id'], op['dest_prep_id'])]
-    print op_seq
+    #print op_seq
     return op_seq
 
 
@@ -120,6 +120,9 @@ pad_color = args.pad_color
 
 
 if args.op_id is not None:
+    
+    #print 'args.op_id'
+    #print args.op_id
     
     input_spec = load_ini(args.input_spec)
     stack = input_spec['stack']
@@ -135,6 +138,10 @@ if args.op_id is not None:
 
     ops_in_prep_id = op_seq[0][2]
     out_prep_id = op_seq[-1][3]
+    
+    #print op_seq
+    #print ops_in_prep_id
+    #print out_prep_id
     
     if prep_id==None:
         prep_id = "None"
@@ -154,10 +161,14 @@ if args.op_id is not None:
                 op_params_str = '^' + op_params_str[1:]
 
             ops_str_all_images[img_name] += ' --op %s %s ' % (op_type, op_params_str)
-
+            
     # sequantial_dispatcher argument cannot be too long, so we must limit the number of images processed each time
     batch_size = 100
     for batch_id in range(0, len(image_name_list), batch_size):
+        
+        #print '_____________________________________________'
+        #print batch_id
+        #print '_____________________________________________'
         
         # Removes stderr and stdout
         run_distributed('python %(script)s --input_fp \"%%(input_fp)s\" \
@@ -187,43 +198,41 @@ if args.op_id is not None:
         
 elif args.op is not None:
 # Usage 1
-   
+
     op_str = ''
     for op_type, op_params in args.op: # args.op is a list
 
-	# revert the leading minus sign hack
-	if op_params.startswith('^'):
-	    op_params = '-' + op_params[1:]
+        # revert the leading minus sign hack
+        if op_params.startswith('^'):
+            op_params = '-' + op_params[1:]
 
-	if op_type == 'warp':
-	    T = np.linalg.inv(convert_2d_transform_forms(transform=op_params, out_form=(3,3)))
-	    op_str += " +distort AffineProjection '%(sx)f,%(rx)f,%(ry)f,%(sy)f,%(tx)f,%(ty)f' " % {
+        if op_type == 'warp':
+            T = np.linalg.inv(convert_2d_transform_forms(transform=op_params, out_form=(3,3)))
+            op_str += " +distort AffineProjection '%(sx)f,%(rx)f,%(ry)f,%(sy)f,%(tx)f,%(ty)f' " % {
                     'sx':T[0,0],
-     'sy':T[1,1],
-     'rx':T[1,0],
-    'ry':T[0,1],
-     'tx':T[0,2],
-     'ty':T[1,2],
-	}
-	elif op_type == 'crop':
+                     'sy':T[1,1],
+                     'rx':T[1,0],
+                    'ry':T[0,1],
+                     'tx':T[0,2],
+                     'ty':T[1,2] }
+        elif op_type == 'crop':
             x, y, w, h = convert_cropbox_fmt(data=op_params, out_fmt='arr_xywh', in_fmt='str_xywh')
-	    op_str += ' -crop %(w)sx%(h)s%(x)s%(y)s\! ' % {
-     'x': '+' + str(x) if int(x) >= 0 else str(x),
-     'y': '+' + str(y) if int(y) >= 0 else str(y),
-     'w': str(w),
-     'h': str(h),
-     }
+            op_str += ' -crop %(w)sx%(h)s%(x)s%(y)s\! ' % {
+                             'x': '+' + str(x) if int(x) >= 0 else str(x),
+                             'y': '+' + str(y) if int(y) >= 0 else str(y),
+                             'w': str(w),
+                             'h': str(h)}
 
         
-	elif op_type == 'rotate':
-            print op_params
-            print orientation_argparse_str_to_imagemagick_str.keys()
-            print orientation_argparse_str_to_imagemagick_str[op_params]
-            print op_str
-	    op_str += ' ' + orientation_argparse_str_to_imagemagick_str[op_params]
+        elif op_type == 'rotate':
+            #print op_params
+            #print orientation_argparse_str_to_imagemagick_str.keys()
+            #print orientation_argparse_str_to_imagemagick_str[op_params]
+            #print op_str
+            op_str += ' ' + orientation_argparse_str_to_imagemagick_str[op_params]
 
-	else:
-	    raise Exception("Op_id must be either warp or crop.")
+        else:
+            raise Exception("Op_id must be either warp or crop.")
 
 
     assert args.input_fp is not None and args.output_fp is not None
@@ -239,6 +248,6 @@ elif args.op is not None:
                  'output_fp': output_fp,
                  'bg_color': pad_color})
     except Exception as e:
-	sys.stderr.write("ImageMagick convert failed for input_fp %s: %s\n" % (input_fp, e.message))
+        sys.stderr.write("ImageMagick convert failed for input_fp %s: %s\n" % (input_fp, e.message))
 
 
