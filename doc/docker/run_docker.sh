@@ -2,16 +2,22 @@
 
 # Install docker if it is not installed
 if [[ "$(docker -v  2> /dev/null)" == "" ]]; then
-  echo "Install Docker"
-  echo "Command: sudo apt-get install docker"
-  return
+  echo "**********************************************"
+  echo "Installing Docker"
+  echo "Running Command: sudo apt-get install docker"
+  echo "**********************************************"
+  sudo apt-get install docker
+  #return
 fi
 
 # Pull the docker image if not pulled
 if [[ "$(docker images -q anewberry/atlas_demo:atlas_v0.0.5 2> /dev/null)" == "" ]]; then
+  echo "**********************************************"
   echo "Pull the docker image"
   echo "Command: docker pull anewberry/atlas_demo:atlas_v0.0.5"
-  return
+  echo "**********************************************"
+  docker pull anewberry/atlas_demo:atlas_v0.0.5
+  #return
 fi
 
 
