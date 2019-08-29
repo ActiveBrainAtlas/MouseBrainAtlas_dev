@@ -32,3 +32,7 @@ __Command 2:__
 ```source run_docker.sh $ROOT_DIRECTORY```
 
 This will need several minutes to run as it downloads and runs the Docker Image. You will know it has finished successfully when a GUI is displayed prompting to either "continue a brain" or "start a new brain" through the pipeline.
+
+__Using the GUI:__
+
+[The guide for using the main GUI (either continuing a brain or starting a new one) can be found here.](../pipeline/pipeline.md)
