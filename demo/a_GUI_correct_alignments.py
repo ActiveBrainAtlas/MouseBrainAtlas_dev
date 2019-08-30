@@ -32,13 +32,24 @@ def get_padding_color(stack):
         return 'white'
     else:
         return 'auto'
+    
+def get_version(stack):
+    stain = stack_metadata[stack]['stain']
+    
+    return stain_to_metainfo[stain]['img_version_1']
 
-def get_img( section, prep_id='None', resol='thumbnail', version='NtbNormalized' ):
+def get_img( section, prep_id='None', resol='thumbnail', version='' ):
+    if version=='':
+        version = get_version(stack)
+        
     return DataManager.load_image_v2(stack=stack, 
                           section=section, prep_id=prep_id,
                           resol=resol, version=version)
 
-def get_fp( section, prep_id='None', resol='thumbnail', version='NtbNormalized' ):
+def get_fp( section, prep_id='None', resol='thumbnail', version='' ):
+    if version=='':
+        version = get_version(stack)
+    
     return DataManager.get_image_filepath_v2(stack=stack, 
                           section=section, prep_id=prep_id,
                           resol=resol, version=version)
@@ -48,8 +59,7 @@ def apply_transform( stack, T, fn, output_fp=None ):
     Applies transform T onto the image at img_fp and return the result
     """
     
-    stain = stack_metadata[stack]['stain'].lower()
-    version = stain_to_metainfo[stain]['img_version_1']
+    version = get_version(stack)
     
     img_fp = DataManager.get_image_filepath_v2(stack=stack, section=metadata_cache['filenames_to_sections'][stack][fn], 
                             prep_id='None', resol='thumbnail', version=version)
