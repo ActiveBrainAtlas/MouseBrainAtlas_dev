@@ -231,8 +231,11 @@ class init_GUI(QWidget):
                 
                 set_stack_metadata( entered_stack, entered_stain, entered_plane, entered_thickness, entered_resolution )
                 
-                close_gui()
+                hide_gui()
                 subprocess.call( ['python', 'a_GUI_select_file_locations.py', entered_stack] )
+                
+    def closeEvent(self, event):
+        close_gui()
                 
     
 # Records a stack's metadata after it is validated
@@ -297,6 +300,9 @@ def save_metadata_in_shell_script( stack, stain, plane, thickness, resolution ):
     with open( fp, 'w' ) as file:
         file.write( data )
 
+def hide_gui():
+    ex.hide()
+        
 def close_gui():
     ex.hide()
     # We manually kill this operation by getting a list of p_ids running this process 

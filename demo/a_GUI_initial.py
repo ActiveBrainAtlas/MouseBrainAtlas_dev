@@ -53,14 +53,20 @@ class init_GUI(QWidget):
             
     def buttonPress_b1(self, button):
         if button == self.b1:
-            close_gui()
+            hide_gui()
             subprocess.call( ['python', 'a_GUI_new_brain_metadata.py'] )
             
     def buttonPress_b2(self, button):
         if button == self.b2:
-            close_gui()
+            hide_gui()
             subprocess.call( ['python', 'a_GUI_continue_brain.py'] )
             
+    def closeEvent(self, event):
+        close_gui()
+            
+def hide_gui():
+    ex.hide()
+    
 def close_gui():
     ex.hide()
     # We manually kill this operation by getting a list of p_ids running this process 
