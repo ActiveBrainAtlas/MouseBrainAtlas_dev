@@ -253,6 +253,10 @@ def get_text_of_pipeline_status( stack, stain ):
             if type(contents)==str:
                 if contents=='setup_files':
                     all_files_present, missing_files = all_setupFiles_present( stack )
+                    # Setup always gives a weird error
+                    if len(missing_files)>0:
+                        text += 'Please run '+script_name+' and then continue to the next script.'
+                        break
                 elif contents=='autoSubmasks':
                     all_files_present, missing_files = all_autoSubmasks_present( stack )
                 elif contents=='floatHistogram':

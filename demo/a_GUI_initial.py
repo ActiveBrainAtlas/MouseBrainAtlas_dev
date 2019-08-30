@@ -63,7 +63,27 @@ class init_GUI(QWidget):
             
 def close_gui():
     ex.hide()
-    #sys.exit( app.exec_() )
+    # We manually kill this operation by getting a list of p_ids running this process 
+    #  (in case there are multiple hanging instances)
+    ps = subprocess.Popen(('ps','aux'), stdout=subprocess.PIPE)
+    output = subprocess.check_output(('grep', 'python a_GUI_initial.py'), stdin=ps.stdout)
+    python_GUI_initial_processes = output.split('\n')
+    
+    for process_str in python_GUI_initial_processes:
+        # We are currently running a grep command that we should not kill
+        if 'grep' in process_str or process_str == '':
+            continue
+        # Get the p-id of every a_GUI_initial.py process and kill it in cold blood
+        else:
+            p_id = process_str.split()[1]
+            subprocess.call(['kill','-9',p_id])
+            
+    print('\n\n***********************')
+    print('\n\nGUI closed down successfully!\n\n')
+    print('***********************\n\n')
+    
+    sys.exit( app.exec_() )
+    sys.exit()
 
 def main():
     global app 

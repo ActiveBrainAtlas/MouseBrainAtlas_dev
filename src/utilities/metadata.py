@@ -649,6 +649,8 @@ if os.path.exists(BRAINS_INFO_DIR):
         planar_resolution[brain_name] = float(brain_info['planar_resolution_um'])
         stain = brain_info['stain']
         cutting_plane = brain_info['cutting_plane']
+        cutting_plane = brain_info['cutting_plane']
+        section_thickness = brain_info['section_thickness_um']
         
         all_stacks.append( brain_name )
         if stain == "NTB":
@@ -658,7 +660,8 @@ if os.path.exists(BRAINS_INFO_DIR):
         # Fill in stack_metadata:
         stack_metadata[brain_name] = {'stain': stain,
                                       'cutting_plane': cutting_plane,
-                                      'resolution': float(brain_info['planar_resolution_um'])
+                                      'resolution': float(brain_info['planar_resolution_um']),
+                                      'section_thickness': section_thickness
                                      }
             
 
