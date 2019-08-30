@@ -41,7 +41,7 @@ you are passing has spaces in it, ensure you have quotation marks around it."
 fi
 
 # Check if docker container is running, if it is, stop and remove it
-if [[ "$(docker container ls | $image 2> /dev/null)" == "" ]]; then
+if [[ "$(docker container ls | grep $image 2> /dev/null)" != "" ]]; then
   docker rm $(docker stop $(docker ps -a -q --filter ancestor=$image --format="{{.ID}}"))
   echo "Deleted the running Atlas Docker Container"
 fi
@@ -61,7 +61,7 @@ docker run -it \
 -v "/":"/mnt/computer_root" \
 -p 8899:8888 \
 --hostname atlasDocker \
-anewberry/atlas_demo:atlas_v0.0.5
+$image
 
 #jupyter notebook --ip 0.0.0.0 --no-browser --allow-root --NotebookApp.token='' --NotebookApp.password=''
 #http://172.17.0.2:8888/tree
