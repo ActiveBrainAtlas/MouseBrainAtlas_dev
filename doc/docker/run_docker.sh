@@ -1,5 +1,7 @@
 #!/bin/bash
 
+export image='anewberry/atlas_demo:atlas_v0.0.5'
+
 # Install docker if it is not installed
 if [[ "$(docker -v  2> /dev/null)" == "" ]]; then
   echo "**********************************************"
@@ -11,9 +13,10 @@ if [[ "$(docker -v  2> /dev/null)" == "" ]]; then
 fi
 
 # Pull the docker image if not pulled
-if [[ "$(docker images -q anewberry/atlas_demo:atlas_v0.0.5 2> /dev/null)" == "" ]]; then
+if [[ "$(docker images -q $image 2> /dev/null)" == "" ]]; then
   echo "**********************************************"
   echo "Pull the docker image"
+  echo "Command: $image"
   echo "Command: docker pull anewberry/atlas_demo:atlas_v0.0.5"
   echo "**********************************************"
   docker pull anewberry/atlas_demo:atlas_v0.0.5
@@ -35,6 +38,12 @@ you are passing has spaces in it, ensure you have quotation marks around it."
 	echo "Replace this: source run_docker.sh \"\$ROOT_FP\""
 	echo ""
 	return 0
+fi
+
+# Check if docker container is running, if it is, stop and remove it
+if [[ "$(docker container ls | $image 2> /dev/null)" == "" ]]; then
+  docker rm $(docker stop $(docker ps -a -q --filter ancestor=$image --format="{{.ID}}"))
+  echo "Deleted the running Atlas Docker Container"
 fi
 
 
