@@ -25,8 +25,8 @@ fi
 
 if [ "$1" == "" ]; then
 	echo ""
-	echo "Argument ROOT_FP not passed in."
-	echo "source run_docker.sh \"\$ROOT_FP\""
+	echo "Argument DATA_DIRECTORY not passed in."
+	echo "source run_docker.sh \"\$DATA_DIRECTORY\""
 	echo ""
 	return 0
 elif [ "$2" != "" ]; then
@@ -34,7 +34,7 @@ elif [ "$2" != "" ]; then
 	echo "Either you tried to pass multiple arguments, \
 or your first argument has a space in it. If the filepath \
 you are passing has spaces in it, ensure you have quotation marks around it."
-	echo "Replace this: source run_docker.sh \"\$ROOT_FP\""
+	echo "Replace this: source run_docker.sh \"\$DATA_DIRECTORY\""
 	echo ""
 	return 0
 fi
