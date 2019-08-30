@@ -16,7 +16,6 @@ fi
 if [[ "$(docker images -q $image 2> /dev/null)" == "" ]]; then
   echo "**********************************************"
   echo "Pull the docker image"
-  echo "Command: $image"
   echo "Command: docker pull $image"
   echo "**********************************************"
   docker pull $image
