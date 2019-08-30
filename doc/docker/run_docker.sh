@@ -17,9 +17,9 @@ if [[ "$(docker images -q $image 2> /dev/null)" == "" ]]; then
   echo "**********************************************"
   echo "Pull the docker image"
   echo "Command: $image"
-  echo "Command: docker pull anewberry/atlas_demo:atlas_v0.0.5"
+  echo "Command: docker pull $image"
   echo "**********************************************"
-  docker pull anewberry/atlas_demo:atlas_v0.0.5
+  docker pull $image
   #return
 fi
 
