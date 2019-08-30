@@ -12,4 +12,4 @@ Associated Neuroglancer viewer of the three foundational thionin brains availabl
 
 ## Running the pipeline
 
-* __[User Guide](./doc/pipeline/user_guide_GUI.md):__   This document will walk through how to start running a brain through the pipeline, and how to continue running the pipeline.
+* __[User Guide](./doc/docker/README.md):__   This document will walk through how to start running a brain through the pipeline, and how to continue running the pipeline.
