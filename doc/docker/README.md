@@ -8,7 +8,7 @@ This document assumes Docker is already installed on your machine, you are using
 
 ## Your data root directory
 
-Before getting started, ensure that you have a directory to use as the output location of the pipeline. All files will be outputted here. This shall be known as the DATA_DIRECTORY. Ensure that there is at least 1TB of free space in your DATA_DIRECTORY. It is recommended that this directory be empty and reserved only for the outputs of the pipeline.
+Before getting started, ensure that you have a directory to use as the output location of the pipeline. All files will be outputted here. This shall be known as the DATA_DIRECTORY. Ensure that there is at least 1TB of free space in your DATA_DIRECTORY per new brain (this space will fill up gradually over the course of the pipeline). It is recommended that this directory be empty and reserved only for the outputs of the pipeline.
 
 Here is an example of a good DATA_DIRECTORY: `/media/john/external_drive_1/atlas_root`
 
@@ -25,7 +25,7 @@ curl -O "https://raw.githubusercontent.com/ActiveBrainAtlas/MouseBrainAtlas_dev/
 "./run_docker.sh"
 ```
 
-Next we will want to run the script we just downloaded, named "run_docker.sh". Before attempting to run the Docker container, it will first verify that you have Docker installed as well as the latest Docker Image for this project. If either are not installed, they will be automatically installed. Please replace the `$DATA_DIRECTORY` with the root directory you have chosen as described above.
+Next we will want to run the script we just downloaded, named "run_docker.sh". Before attempting to run the Docker container, it will first verify that you have Docker installed as well as the latest Docker Image for this project. If either are not installed, they will be automatically installed. Please replace "`$DATA_DIRECTORY`" with the actual data directory you have chosen as described above.
 
 __Command 2:__
 
