@@ -100,7 +100,6 @@ necessary_files_by_script['ntb'][script_list[10]] = {'output_file_1': 'x'}
 necessary_files_by_script['thionin'][script_list[10]] = {'output_file_1': 'x'}
 
 
-<<<<<<< HEAD
 script_name_to_full_command = { 
     'initial setup gui': 'Please rerun the new brain setup by rerunning this GUI',
     'a_script_preprocess_setup': 'python a_script_preprocess_setup.py $stack $stain',
