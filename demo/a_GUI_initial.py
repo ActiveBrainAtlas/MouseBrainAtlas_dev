@@ -58,8 +58,14 @@ class init_GUI(QWidget):
             
     def buttonPress_b2(self, button):
         if button == self.b2:
-            hide_gui()
-            subprocess.call( ['python', 'a_GUI_continue_brain.py'] )
+            try:
+                hide_gui()
+                subprocess.call( ['python', 'a_GUI_continue_brain.py'] )
+            except:
+                print('\n\n***********************')
+                print('\n\nCannot continue a brain! No data found in your Data Root Directory!\n\n')
+                print('***********************\n\n')
+                close_gui()
             
     def closeEvent(self, event):
         close_gui()
