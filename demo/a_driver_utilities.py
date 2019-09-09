@@ -325,10 +325,10 @@ def get_prep5_limits_from_prep1_thumbnail_masks( stack, max_distance_to_scan_fro
                c='r')
             plt.show()
 
-    final_rostral_lim = (curr_rostral_lim_d16-1)*16
-    final_caudal_lim = (curr_caudal_lim_d16-1)*16
-    final_dorsal_lim = (curr_dorsal_lim_d16-1)*16
-    final_ventral_lim = (curr_ventral_lim_d16-1)*16
+    final_rostral_lim = (curr_rostral_lim_d16-1.5)*16
+    final_caudal_lim = (curr_caudal_lim_d16+1.5)*16
+    final_dorsal_lim = (curr_dorsal_lim_d16-1.5)*16
+    final_ventral_lim = (curr_ventral_lim_d16+1.5)*16
 
     #print('rostral:',final_rostral_lim)
     #print('caudal:',final_caudal_lim)
@@ -336,6 +336,33 @@ def get_prep5_limits_from_prep1_thumbnail_masks( stack, max_distance_to_scan_fro
     #print('ventral:',final_ventral_lim)
     
     return final_rostral_lim, final_caudal_lim, final_dorsal_lim, final_ventral_lim
+
+def close_main_gui( ex, reopen=True ):
+    ex.hide()
+    # We manually kill this operation by getting a list of p_ids running this process 
+    #  (in case there are multiple hanging instances)
+    ps = subprocess.Popen(('ps','aux'), stdout=subprocess.PIPE)
+    output = subprocess.check_output(('grep', 'python a_GUI_main.py'), stdin=ps.stdout)
+    python_GUI_initial_processes = output.split('\n')
+    
+    for process_str in python_GUI_initial_processes:
+        # We are currently running a grep command that we should not kill
+        if 'grep' in process_str or process_str == '':
+            continue
+        # Get the p-id of every a_GUI_initial.py process and kill it in cold blood
+        else:
+            p_id = process_str.split()[1]
+            subprocess.call(['kill','-9',p_id])
+            
+    print('\n\n***********************')
+    print('\n\nGUI closed down successfully!\n\n')
+    print('***********************\n\n')
+    
+    #sys.exit( app.exec_() )
+    #sys.exit()
+    
+    if reopen:
+        subprocess.call(['python', os.path.join(os.environ['REPO_DIR'], '..', 'demo', 'a_GUI_main.py')])
     
 def call_and_time( command_list, completion_message='' ):
     start_t = time.time()

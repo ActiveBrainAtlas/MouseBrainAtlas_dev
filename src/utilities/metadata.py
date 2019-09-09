@@ -137,7 +137,7 @@ elif hostname == 'atlasDocker':
 
     ELASTIX_BIN = 'elastix'
 
-elif hostname == 'yuncong-Precision-WorkStation-T7500' and username == 'alexn':
+elif hostname == 'ratto.dk.ucsd.edu' and username == 'adnewber':
     print 'Setting environment for Precision WorkStation for Alex Newberry'
     HOST_ID = 'workstation'
 

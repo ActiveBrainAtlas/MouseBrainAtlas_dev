@@ -118,7 +118,7 @@ script_name_to_prev_manual_command = {
     'a_script_preprocess_setup': '',
     'a_script_preprocess_1': 'python a_script_rotate.py $stack $stain rotate90 raw None None (please confirm rotation type prior to running this, likely wont even be necessary)',
     'a_script_preprocess_2': '(Check image orientations with outside program)',
-    'a_script_preprocess_3': 'cmd 1:   python a_GUI_correct_alignments.py $stack --tb_version $img_version_1     cmd 2:   python $REPO_DIR/gui/mask_editing_tool_v4.py $stack $img_version_1',
+    'a_script_preprocess_3': 'cmd-1:   python a_GUI_correct_alignments.py $stack    cmd-2:   python $REPO_DIR/gui/mask_editing_tool_v4.py $stack $img_version_1',
     'a_script_preprocess_4': 'python $REPO_DIR/gui/mask_editing_tool_v4.py $stack $img_version_1',
     'a_script_preprocess_5': '(write down the whole brain crop cropbox values, GIMP makes this easy)',
     'a_script_preprocess_6': '(write down the brainstem crop cropbox values, write down the first and last image numbers that contain the brainstem, GIMP makes the first part easy)',

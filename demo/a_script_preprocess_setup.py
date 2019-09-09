@@ -24,10 +24,12 @@ from preprocess_utilities import *
 from data_manager import DataManager
 from a_driver_utilities import *
 
-if stain=="NTB":
-    id_detector = 799
-elif stain=="Thionin":
-    id_detector = 19
+if stain=="unknown":
+    id_detectors = [799,19]
+elif stain.lower()=="ntb":
+    id_detectors = [799]
+elif stain.lower()=="thionin":
+    id_detectors = [19]
 
 def create_folder_if_nonexistant( directory ):
     if not os.path.exists(directory):
@@ -39,9 +41,6 @@ local_fp = os.path.join( os.environ['ROOT_DIR'], 'CSHL_data_processed', stack, '
 create_folder_if_nonexistant( local_fp )
 command = ["aws", "s3", "cp", '--recursive', '--no-sign-request',s3_fp, local_fp]
 subprocess.call( command )
-
-
-id_classifier = detector_settings.loc[id_detector]['feature_classifier_id']
     
 # Download mxnet files
 s3_fp = 's3://mousebrainatlas-data/mxnet_models/inception-bn-blue/'
@@ -57,9 +56,14 @@ create_folder_if_nonexistant( local_fp )
 command = ["aws", "s3", "cp", '--recursive', '--no-sign-request', s3_fp, local_fp]
 subprocess.call( command )
 
-# Download pre-trained classifiers for a particular setting
-s3_fp = 's3://mousebrainatlas-data/CSHL_classifiers/setting_'+str(id_classifier)+'/classifiers/'
-local_fp = os.path.join( os.environ['ROOT_DIR'], 'CSHL_classifiers', 'setting_'+str(id_classifier), 'classifiers/')
-create_folder_if_nonexistant( local_fp )
-command = ["aws", "s3", "cp", '--recursive', '--no-sign-request', s3_fp, local_fp]
-subprocess.call( command )
+# Download all classifiers according to the list of detectors
+for id_detector in id_detectors:
+    # Get the classifier ID from the detector ID
+    id_classifier = detector_settings.loc[id_detector]['feature_classifier_id']
+
+    # Download pre-trained classifiers for a particular setting
+    s3_fp = 's3://mousebrainatlas-data/CSHL_classifiers/setting_'+str(id_classifier)+'/classifiers/'
+    local_fp = os.path.join( os.environ['ROOT_DIR'], 'CSHL_classifiers', 'setting_'+str(id_classifier), 'classifiers/')
+    create_folder_if_nonexistant( local_fp )
+    command = ["aws", "s3", "cp", '--recursive', '--no-sign-request', s3_fp, local_fp]
+    subprocess.call( command )

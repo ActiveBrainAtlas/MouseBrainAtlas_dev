@@ -66,6 +66,10 @@ def get_czi_metadata( czi_fp, get_full_metadata=False ):
         
         metadata_dict[series_i]['channels'] = channel_count
         
+        # Extract channel names
+        str_to_search = 'Information|Image|Channel|Name #'+str(series_i+1)+': '
+        channel_name = czi_metadata_global[czi_metadata_global.index(str_to_search)]
+        
     return metadata_dict
 
 def get_fullres_series_indices( metadata_dict ):
@@ -158,9 +162,13 @@ def extract_tiff_from_czi( fn_czi, tiff_target_folder, series_i, channel ):
     clean_up_tiff_directory( tiff_target_folder )
     
 def clean_up_tiff_directory( tiff_target_folder ):
+    # Create path if it doesn't exist
+    if not os.path.exists(tiff_target_folder):
+        os.makedirs(tiff_target_folder)
+    
     for tiff_fn in os.listdir(tiff_target_folder):
         # Do nothing if expected patterns don't show up in the file
-        if not '.czi' in tiff_fn or not '.tiff' in tiff_fn:
+        if (not '.czi' in tiff_fn and not '.ndpi' in tiff_fn) or not '.tiff' in tiff_fn:
             continue
             
         old_fn = os.path.join(tiff_target_folder, tiff_fn)

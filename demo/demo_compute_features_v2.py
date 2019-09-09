@@ -57,8 +57,10 @@ win_id = args.win_id
 batch_size = 256
 model_dir_name = 'inception-bn-blue'
 model_name = 'inception-bn-blue'
-model, mean_img = load_mxnet_model(model_dir_name=model_dir_name, model_name=model_name, 
-                                   num_gpus=1, batch_size=batch_size)
+model, mean_img = load_mxnet_model(model_dir_name=model_dir_name, 
+                                   model_name=model_name, 
+                                   num_gpus=1, 
+                                   batch_size=batch_size)
 
 for image_name in image_name_list:
 #for sec in sections:
@@ -83,16 +85,16 @@ for image_name in image_name_list:
 #         continue
 
     compute_and_save_features_one_section(
-                            version=version,
-#                                 scheme='normalize_mu_region_sigma_wholeImage_(-1,5)', 
-                            scheme='none', 
-#                             bbox=(11217, 16886, 13859, 18404),
-#                                 method='glcm',
+                        version=version,
+#                       scheme='normalize_mu_region_sigma_wholeImage_(-1,5)', 
+                        scheme='none', 
+#                       bbox=(11217, 16886, 13859, 18404),
+#                       method='glcm',
                         method='cnn',
                         win_id=win_id, prep_id=prep_id,
                         stack=stack, sec=metadata_cache['filenames_to_sections'][stack][image_name], 
                         model=model, model_name=model_name,
-                         mean_img=mean_img, 
-                         batch_size=batch_size, 
-    attach_timestamp=False, 
-    recompute=True)
+                        mean_img=mean_img, 
+                        batch_size=batch_size, 
+                        attach_timestamp=False, 
+                        recompute=False)

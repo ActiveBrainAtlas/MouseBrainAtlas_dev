@@ -44,11 +44,37 @@ use_simple_global = args.use_simple_global
 
 structures_f = brain_f_spec['structure']
 if isinstance(structures_f, str):
-    structures_f = [structures_f]
+    c = [structures_f]
     
 structures_m = brain_m_spec['structure']
 if isinstance(structures_m, str):
     structures_m = [structures_m]
+    
+# Verify that there are probability volumes for each structure
+for structure in structures_m:
+    try:
+        volume_fixed, structure_to_label_fixed, label_to_structure_fixed = \
+        DataManager.load_original_volume_all_known_structures_v3(stack_spec=brain_f_spec,
+                                                         in_bbox_wrt='wholebrain',
+                                                         # out_bbox_wrt='wholebrain',
+                                                         structures=[structure],
+                                                         # sided=False,
+                                                         # include_surround=include_surround,
+                                                         include_surround=False,
+                                                         return_label_mappings=True,
+                                                         name_or_index_as_key='index',
+                                                         common_shape=False,
+                                                         return_origin_instead_of_bbox=True)
+    except Exception as e:
+        sys.stderr.write('\nNo volume files found for structure %s, cannot perform registration for this structure: \n%s\n\n' % (structure, e))
+        sys.stderr.write('Skipping %s\n\n' % (structure))
+        structures_m.remove( structure )
+        structures_f.remove( structure )
+# If All structures to be registered do not have volumes (as checked directly above)
+#    then do not try to run the registration algorithm
+if structures_m==[] or structures_f==[]:
+    sys.exit(1)
+        
 
 if brain_f_spec['vol_type'] == 'annotationAsScore': # If Neurolucida annotation
     fixed_surroundings_have_positive_value = True
@@ -68,28 +94,21 @@ brain_f_spec0.pop("structure")
 
 simpleGlobal_alignment_spec = dict(stack_m=brain_m_spec0, stack_f=brain_f_spec0, warp_setting=0)
 
-#print('$$$$$$$$$$$$$$$$$$$$$$$$')
-#print(alignment_spec)
-#print('$$$$$$$$$$$$$$$$$$$$$$$$')
-#print(structures_m)
-#print('$$$$$$$$$$$$$$$$$$$$$$$$')
-#print(fixed_surroundings_have_positive_value)
-#print('$$$$$$$$$$$$$$$$$$$$$$$$')
-#print(fixed_use_surround)
-#print('$$$$$$$$$$$$$$$$$$$$$$$$')
-
+print '\n\n************************'
+print ' Aligner parameters:'
+print '************************\n'
 aligner_parameters = generate_aligner_parameters_v2(alignment_spec=alignment_spec, 
                                                    structures_m=structures_m,
                                                    fixed_structures_are_sided=True,
                                                    fixed_surroundings_have_positive_value=fixed_surroundings_have_positive_value,
                                                    fixed_use_surround=fixed_use_surround)
-#print '\n\nXXX'
-#print aligner_parameters['volume_fixed'] # {}
-#print '\n\nXXX'
-#print aligner_parameters['volume_moving'] # good
-#print '\n\nXXX'
-#print aligner_parameters['label_mapping_m2f'] # {}
-#print 'XXX\n\n'
+#print aligner_parameters['volume_fixed']
+#print aligner_parameters['volume_moving']
+#print aligner_parameters['label_mapping_m2f']
+
+print '\n\n************************'
+print ' Initializing Aligner:'
+print '************************\n'
 
 aligner = Aligner(aligner_parameters['volume_fixed'], 
                   aligner_parameters['volume_moving'], 
@@ -112,10 +131,12 @@ else:
 ################################
 
 grid_search_T, _ = aligner.do_grid_search( grid_search_iteration_number=0, grid_search_sample_number=10, 
-                       std_tx=100, std_ty=100, std_tz=30, 
-                       grid_search_eta=3.0, 
-                       stop_radius_voxel=10, indices_m=None, parallel=True, 
-                       init_T=None)
+                                           std_tx=100, std_ty=100, std_tz=30, 
+                                           grid_search_eta=3.0, 
+                                           stop_radius_voxel=10, 
+                                           indices_m=None, 
+                                           parallel=True, 
+                                           init_T=None)
 
 # grid_search_T = np.array([[1,0,0,0],[0,1,0,0],[0,0,1,0]])
 
@@ -126,15 +147,19 @@ aligner.set_initial_transform(init_T)
 aligner.set_centroid(centroid_m='structure_centroid', centroid_f='centroid_m')
 
 ########################################
+# Gradient descent iterations for local alignment
+
+print '\n\n************************'
+print ' Beginning Alignment Process:'
+print '************************\n'
 
 t = time.time()
-_, _ = aligner.optimize(tf_type=aligner_parameters['transform_type'], 
-                             max_iter_num=1000,
+_, _ = aligner.optimize(tf_type=aligner_parameters['transform_type'], # rigid
+                             max_iter_num=3,#1000,
                              history_len=100, 
                              terminate_thresh_trans=.01,
-                            terminate_thresh_rot=.01,
-                             full_lr=np.array([1,1,1,.01,.01,.01]),
-                            )
+                             terminate_thresh_rot=.01,
+                             full_lr=np.array([ 1, 1, 1, .01, .01, .01]) )
 sys.stderr.write("Optimize: %.2f seconds.\n" % (time.time() - t))
 
 # plot_alignment_results(traj=aligner.Ts, scores=aligner.scores, select_best='max_value')
@@ -150,11 +175,12 @@ print 'New Alignment Matrix:'
 print tf_atlas_to_subj
 
 # Saves all 'CSHL_registration_parameters/atlas_v7/...' files (4 per structure)
-DataManager.save_alignment_results_v3(transform_parameters=convert_transform_forms(transform=tf_atlas_to_subj, out_form='dict'),
-                   score_traj=aligner.scores,
-                   parameter_traj=aligner.Ts,
-                  alignment_spec=alignment_spec,
-                                     upload_s3=False)
+DataManager.save_alignment_results_v3( transform_parameters=convert_transform_forms( transform=tf_atlas_to_subj, 
+                                                                                     out_form='dict'),
+                                       score_traj=aligner.scores,
+                                       parameter_traj=aligner.Ts,
+                                       alignment_spec=alignment_spec,
+                                       upload_s3=False)
 
 # Transform moving structures. Save transformed version.
 
@@ -188,7 +214,7 @@ for structure_m in structures_m:
 
         # Load the Atlas volume
         atlas_structure_wrt_canonicalAtlasSpace_atlasResol = \
-        DataManager.load_original_volume_v2(stack_spec=stack_m_spec, bbox_wrt='canonicalAtlasSpace', structure=s)
+            DataManager.load_original_volume_v2(stack_spec=stack_m_spec, bbox_wrt='canonicalAtlasSpace', structure=s)
 
         aligned_structure_wrt_wholebrain_inputResol = \
             transform_volume_v4(volume=atlas_structure_wrt_canonicalAtlasSpace_atlasResol,
@@ -196,7 +222,7 @@ for structure_m in structures_m:
 
         DataManager.save_transformed_volume_v2(volume=aligned_structure_wrt_wholebrain_inputResol, 
                                                alignment_spec=alignment_spec,
-                                              structure=s,
+                                               structure=s,
                                                upload_s3=False)
 
         ###############################

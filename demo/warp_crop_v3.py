@@ -60,26 +60,26 @@ def convert_operation_to_arr(op, resol, inverse=False, return_str=False, stack=N
     elif op['type'] == 'crop':
         cropbox_resol = op['resolution']
         
-	if 'cropboxes_csv' in op: # each image has a different cropbox
-	    cropboxes_all = csv_to_dict(op['cropboxes_csv'])
+        if 'cropboxes_csv' in op: # each image has a different cropbox
+            cropboxes_all = csv_to_dict(op['cropboxes_csv'])
 
-	    cropboxes = {}
-	    for img_name in image_name_list:
-		arr_xxyy = convert_cropbox_fmt(data=cropboxes_all[img_name], in_fmt='arr_xywh', out_fmt='arr_xxyy')
-		if inverse:
+            cropboxes = {}
+            for img_name in image_name_list:
+                arr_xxyy = convert_cropbox_fmt(data=cropboxes_all[img_name], in_fmt='arr_xywh', out_fmt='arr_xxyy')
+                if inverse:
                     arr_xxyy = np.array([-arr_xxyy[0], arr_xxyy[1], -arr_xxyy[2], arr_xxyy[3]])
-		cropboxes[img_name] = convert_cropbox_fmt(data=arr_xxyy, in_fmt='arr_xxyy', out_fmt='str_xywh' if return_str else 'arr_xywh', in_resol=cropbox_resol, out_resol=resol, stack=stack)
+                cropboxes[img_name] = convert_cropbox_fmt(data=arr_xxyy, in_fmt='arr_xxyy', out_fmt='str_xywh' if return_str else 'arr_xywh', in_resol=cropbox_resol, out_resol=resol, stack=stack)
 
-#	    cropboxes = {img_name: convert_cropbox_fmt(data=cropboxes_all[img_name], in_fmt='arr_xywh', out_fmt='str_xywh' if return_str else 'arr_xywh', in_resol=cropbox_resol, out_resol=resol, stack=stack) for img_name in image_name_list}
+#               cropboxes = {img_name: convert_cropbox_fmt(data=cropboxes_all[img_name], in_fmt='arr_xywh', out_fmt='str_xywh' if return_str else 'arr_xywh', in_resol=cropbox_resol, out_resol=resol, stack=stack) for img_name in image_name_list}
 
-	else: # a single cropbox for all images
-	    arr_xxyy = convert_cropbox_fmt(data=op, in_fmt='dict', out_fmt='arr_xxyy', in_resol=cropbox_resol, out_resol=resol, stack=stack)
-	    if inverse:
-   	        arr_xxyy = np.array([-arr_xxyy[0], arr_xxyy[1], -arr_xxyy[2], arr_xxyy[3]])
-	    cropbox = convert_cropbox_fmt(data=arr_xxyy, in_fmt='arr_xxyy', out_fmt='str_xywh' if return_str else 'arr_xywh', stack=stack)
-	    cropboxes = {img_name: cropbox for img_name in image_name_list}
-	
-	return cropboxes
+        else: # a single cropbox for all images
+            arr_xxyy = convert_cropbox_fmt(data=op, in_fmt='dict', out_fmt='arr_xxyy', in_resol=cropbox_resol, out_resol=resol, stack=stack)
+            if inverse:
+                arr_xxyy = np.array([-arr_xxyy[0], arr_xxyy[1], -arr_xxyy[2], arr_xxyy[3]])
+            cropbox = convert_cropbox_fmt(data=arr_xxyy, in_fmt='arr_xxyy', out_fmt='str_xywh' if return_str else 'arr_xywh', stack=stack)
+            cropboxes = {img_name: cropbox for img_name in image_name_list}
+
+        return cropboxes
 
     elif op['type'] == 'rotate':
         return {img_name: op['how'] for img_name in image_name_list}
@@ -150,6 +150,14 @@ if args.op_id is not None:
         
     if version=="None":
         version = None
+        
+    # Choose pad color
+    if version=="NtbNormalized":
+        pad_color = 'black'
+    elif version=="NtbNormalizedAdaptiveInvertedGamma":
+        pad_color = 'white'
+    elif version=="gray":
+        pad_color = 'white'
 
     assert ops_in_prep_id == prep_id, "Input prep according to operation configs is %s, but the provided input_spec is %s." % (ops_in_prep_id, prep_id)
    
@@ -182,19 +190,6 @@ if args.op_id is not None:
         argument_type='single',
         jobs_per_node=args.njobs,
         local_only=True)
-        
-        # Removes stderr and stdout
-        #run_distributed('xpython %(script)s --input_fp \"%%(input_fp)s\" \
-        #--output_fp \"%%(output_fp)s\" %%(ops_str)s --pad_color %%(pad_color)s' % \
-        #{'script':  os.path.join(os.getcwd(), 'warp_crop_v3.py'),},
-        #kwargs_list=[{'ops_str': ops_str_all_images[img_name],
-        #'input_fp': DataManager.get_image_filepath_v2(stack=stack, fn=img_name, prep_id=prep_id, version=version, resol=resol),
-        #'output_fp': DataManager.get_image_filepath_v2(stack=stack, fn=img_name, prep_id=out_prep_id, version=version, resol=resol),
-        #'pad_color': ('black' if img_name.split('-')[1][0] == 'F' else 'white') if pad_color == 'auto' else pad_color}
-        #    for img_name in image_name_list[batch_id:batch_id+batch_size]],
-        #argument_type='single',
-        #jobs_per_node=args.njobs,
-        #local_only=True)
         
 elif args.op is not None:
 # Usage 1

@@ -386,14 +386,14 @@ def generate_aligner_parameters_v2(alignment_spec,
     DataManager.load_original_volume_all_known_structures_v3(stack_spec=stack_f_spec,
                                 in_bbox_wrt=in_bbox_wrt,
                                                      # out_bbox_wrt='wholebrain',
-                                                             structures=structures_f,
+                                                     structures=structures_f,
                                                     # sided=False,
                                                     # include_surround=include_surround,
-                                                    include_surround=include_surround if fixed_use_surround else False,
+                                                     include_surround=include_surround if fixed_use_surround else False,
                                                      return_label_mappings=True,
                                                      name_or_index_as_key='index',
                                                      common_shape=False,
-                                                            return_origin_instead_of_bbox=True)
+                                                     return_origin_instead_of_bbox=True)
 
     if len(volume_fixed) == 0:
         sys.stderr.write("No fixed volumes.\n")

@@ -36,7 +36,7 @@ def get_padding_color(stack):
 def get_version(stack):
     stain = stack_metadata[stack]['stain']
     
-    return stain_to_metainfo[stain]['img_version_1']
+    return stain_to_metainfo[stain.lower()]['img_version_1']
 
 def get_img( section, prep_id='None', resol='thumbnail', version='' ):
     if version=='':

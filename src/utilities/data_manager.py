@@ -3689,10 +3689,10 @@ class DataManager(object):
     def load_original_volume_all_known_structures_v3(stack_spec,
                                                      in_bbox_wrt,
                                                      out_bbox_wrt='wholebrain',
-                                                    structures=None,
-                                                    sided=True,
-                                                    include_surround=False,
-                                                    surround_margin='200um',
+                                                     structures=None,
+                                                     sided=True,
+                                                     include_surround=False,
+                                                     surround_margin='200um',
                                                      return_label_mappings=False,
                                                      name_or_index_as_key='name',
                                                      common_shape=False,
@@ -3736,16 +3736,18 @@ class DataManager(object):
 
         for structure in structures:
             try:
-            #if True:
-
                 if loaded:
                     index = structure_to_label[structure]
 
-                v, o = DataManager.load_original_volume_v2(stack_spec, structure=structure, bbox_wrt=in_bbox_wrt, resolution=stack_spec['resolution'])
+                v, o = DataManager.load_original_volume_v2(stack_spec, 
+                                                           structure=structure, 
+                                                           bbox_wrt=in_bbox_wrt, 
+                                                           resolution=stack_spec['resolution'])
 
-                in_bbox_origin_wrt_wholebrain = DataManager.get_domain_origin(stack=stack_spec['name'], domain=in_bbox_wrt,
-                                                                             resolution=stack_spec['resolution'],
-                                                                             loaded_cropbox_resolution=stack_spec['resolution'])
+                in_bbox_origin_wrt_wholebrain = DataManager.get_domain_origin(stack=stack_spec['name'], 
+                                                                              domain=in_bbox_wrt,
+                                                                              resolution=stack_spec['resolution'],
+                                                                              loaded_cropbox_resolution=stack_spec['resolution'])
                 o = o + in_bbox_origin_wrt_wholebrain
 
                 if name_or_index_as_key == 'name':
@@ -3762,6 +3764,7 @@ class DataManager(object):
                 raise e
                 sys.stderr.write('%s\n' % e)
                 sys.stderr.write('Score volume for %s does not exist.\n' % structure)
+                continue
 
         if common_shape:
             volumes_normalized, common_bbox = convert_vol_bbox_dict_to_overall_vol(vol_bbox_dict=volumes)
@@ -5477,6 +5480,22 @@ class DataManager(object):
                 return 'F'
 
 ##################################################
+    
+    @staticmethod
+    def get_czi_output_filepath_root(stack):
+        return os.path.join( os.environ['ROOT_DIR'], stack, 'images', 'czi_raw_output/' )
+
+    @staticmethod
+    def get_czi_output_filepath(stack, section=None, fn=None):
+        return get_czi_output_filepath_root(stack)
+    
+    @staticmethod
+    def get_ndpi_output_filepath_root(stack):
+        return os.path.join( os.environ['ROOT_DIR'], stack, 'images', 'ndpi_raw_output/' )
+
+    @staticmethod
+    def get_ndpi_output_filepath(stack, section=None, fn=None):
+        return get_ndpi_output_filepath_root(stack)
 
 def download_all_metadata():
 

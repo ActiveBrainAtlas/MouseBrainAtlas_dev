@@ -23,8 +23,10 @@ parser = argparse.ArgumentParser(
     formatter_class=argparse.RawDescriptionHelpFormatter,
     description='')
 parser.add_argument("stack", type=str, help="The name of the stack")
+parser.add_argument("input_filetype", type=str, help="The name of the stack")
 args = parser.parse_args()
 stack = args.stack
+input_filetype = args.input_filetype
 
 def is_number(s):
     try:
@@ -72,7 +74,7 @@ class init_GUI(QWidget):
         self.e1.setReadOnly( True )
         self.e1.setText( "You must select your sorted filenames (.txt) file created for "+self.stack+
                         ". This must be a text file formatted as described in the github page.\n"+
-                       "Your raw image files must be in either *.jp2 or *.tif format and must all be "+
+                       "Your raw image files are expected to be in "+input_filetype+" format and must all be "+
                        "located inside the same directory. Each filename in the sorted filenames must "+
                        "appear in the filename of a raw image file.")
         self.grid_top.addWidget( self.e1, 1, 0)
@@ -195,6 +197,9 @@ class init_GUI(QWidget):
             self.filepath_img_folder = fp[0:max(loc for loc, val in enumerate(fp) if val == '/')]
             #validate_chosen_images()
             self.e3.setText( self.filepath_img_folder ) 
+            
+    def closeEvent(self, event):
+        close_main_gui( ex )
             
 def create_parent_folder_for_files( stack ):
     try:

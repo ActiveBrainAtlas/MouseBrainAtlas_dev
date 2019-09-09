@@ -101,18 +101,6 @@ class Aligner(object):
 
         assert volume_f is not None, 'Fixed volume is not specified.'
         assert volume_m is not None, 'Moving volume is not specified.'
-        
-        print '%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%'
-        print self.all_indices_m # set([])
-        print '%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%'
-        
-        print '1%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%'
-        print nz_thresh # 0
-        print '1%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%'
-        
-        print '2%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%'
-        print volume_m # {}
-        print '2%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%'
 
         # Identify the set of moving voxels that are used for registration.
         global nzvoxels_m
@@ -137,6 +125,7 @@ class Aligner(object):
             self.reg_weight = 0
         else:
             self.reg_weights = reg_weights
+            
 
         self.inv_covar_mats_all_indices = {ind_m: np.eye(3) for ind_m in self.all_indices_m}
 
@@ -1137,13 +1126,15 @@ class Aligner(object):
                 lr1 = 10
         else:
             raise Exception('Type must be either rigid or affine.')
-
-        # if init_T is None:
-        #     T = self.init_T
-        # else:
-        #     T = init_T
-
-        T = np.array([1,0,0,0,0,1,0,0,0,0,1,0])
+            
+            
+        if init_T is None:
+            if self.init_T is not None:
+                T = self.init_T
+            else:
+                T = np.array([1,0,0,0,0,1,0,0,0,0,1,0])
+        else:
+            T = init_T
 
         score_best = -np.inf
         self.Ts = [T]
@@ -1167,11 +1158,13 @@ class Aligner(object):
                 else:
                     lr = np.r_[lr1,lr1,lr1,lr2,lr2,lr2]
 
-                new_T, s, grad_historical, sq_updates_historical = self.step_lie(T, lr=lr,
-                    grad_historical=grad_historical, sq_updates_historical=sq_updates_historical,
-                    num_samples=grad_computation_sample_number,
-                    indices_m=indices_m,
-                    epsilon=epsilon)
+                new_T, s, grad_historical, sq_updates_historical = \
+                    self.step_lie(T, lr = lr,
+                                  grad_historical = grad_historical, 
+                                  sq_updates_historical = sq_updates_historical,
+                                  num_samples = grad_computation_sample_number,
+                                  indices_m = indices_m,
+                                  epsilon = epsilon)
 
             elif tf_type == 'affine':
 
@@ -1257,9 +1250,9 @@ class Aligner(object):
 
         Returns:
             (tuple): tuple containing:
-                new_T ((12,) vector): the new parameters
-                score (float): current score
-                grad_historical ((12,) vector): new accumulated gradient magnitude, used for Adagrad
+            new_T ((12,) vector): the new parameters
+            score (float): current score
+            grad_historical ((12,) vector): new accumulated gradient magnitude, used for Adagrad
         """
 
         if indices_m is None:
@@ -1272,8 +1265,8 @@ class Aligner(object):
         # grad is (6,)-array
         # Here grad is dObjective/d\epsilon. epsilon is the small adjustment in the linearization of manifold at current estimate.
 
-        # print 'score:', score
-        # print 'grad:', grad
+        print 'score:', score
+        print 'grad:', grad
 
         # # AdaGrad Rule
         grad_historical += grad**2
@@ -1299,15 +1292,20 @@ class Aligner(object):
 
         ########### New ############
 
-#         epsilon_opt = lr * grad_adjusted # no minus sign because we are maximizing objective instead of minimizing.
-#         # epsilon_opt is the optimal small adjustment in the linearization of manifold from the current estimate.
+ #       epsilon_opt = lr * grad_adjusted # no minus sign because we are maximizing objective instead of minimizing.
+ #       # epsilon_opt is the optimal small adjustment in the linearization of manifold from the current estimate.
 
-#         exp_w_skew, Vt = matrix_exp_v(epsilon_opt) # 3x3, 3x1
-#         exp_epsilon_opt = np.vstack([np.c_[exp_w_skew, Vt], [0,0,0,1]]) # 4x4
-#         T4x4 = np.vstack([np.reshape(T, (3,4)), [0,0,0,1]]) # 4x4
-#         newT4x4 = np.dot(exp_epsilon_opt, T4x4)
-#         R_new = newT4x4[:3, :3]
-#         t_new = newT4x4[:3, 3]
+ #       exp_w_skew, Vt = matrix_exp_v(epsilon_opt) # 3x3, 3x1
+ #       exp_epsilon_opt = np.vstack([np.c_[exp_w_skew, Vt], [0,0,0,1]]) # 4x4
+ #       T4x4 = np.vstack([np.reshape(T, (3,4)), [0,0,0,1]]) # 4x4
+ #       newT4x4 = np.dot(exp_epsilon_opt, T4x4)
+ #       R_new = newT4x4[:3, :3]
+ #       t_new = newT4x4[:3, 3]
+        
+ #       print '=========================================='
+ #       print R_new
+ #       print t_new
+ #       print '=========================================='
 
         ############ Old ############
         v_opt = lr * grad_adjusted # no minus sign because we are maximizing objective instead of minimizing.
@@ -1325,6 +1323,19 @@ class Aligner(object):
         t_new = np.dot(exp_w, t) + Vt
         # t_new = t + Vt
         # print 't_new', t_new
+        print '=========================================='
+        #print R
+        #print R_new # BAD
+        #print t_new # BAD
+        #print exp_w # BAD
+        #print Vt # BAD
+        print v_opt
+        print lr
+        print grad_adjusted
+        
+        #print t
+        #print Tm
+        print '=========================================='
         ###########################
 
         euler_angles_R_new = rotationMatrixToEulerAngles(R_new) # (around x, around y, around z)
