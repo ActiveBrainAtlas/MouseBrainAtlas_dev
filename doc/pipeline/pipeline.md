@@ -133,7 +133,7 @@ __User step 2__: Record (prep2_section_min, prep2_section_max). These are the sl
 ---------------------------
 __Command__: `python a_script_preprocess_6.py $stack $stain -l $rostral_limit_2 $caudal_limit_2 $dorsal_limit_2 $ventral_limit_2 $prep2_section_min $prep2_section_max`
 
-__Description__: Using the user specified brainstem cropbox, cropped images are generated and saved as raw "prep2" images. Thumbnails are then generated. Raw prep2 images are compressed into jpeg format. Finally the masks are cropped to match the prep2 images. These raw prep2 images are finished being processed, they are the images that will be used throughout the rest of the pipeline.
+__Description__: Using the user specified brainstem cropbox, cropped images are generated and saved as raw "prep2" images. Thumbnails are then generated. Raw prep2 images are compressed into jpeg format. Finally the masks are cropped to match the prep2 images. These raw prep2 images are finished being processed, they are the images that will be used throughout the rest of the pipeline. Finally, intensity volume is generated for the brain.
 
 __Expected script duration__: 
 
@@ -149,7 +149,7 @@ __User step__: Record X/Y/Z coordinates for midpoint of 12N, 3N_R on midplane, t
 ---------------------------
 __Command__: `python a_script_preprocess_7.py $stack $stain -l $x_12N $y_12N $x_3N $y_3N $z_midline`
 
-__Description__: Generates intensity volume, then obtains simple global alignment of the atlas using manually inputted 12N and 3N_R center coordinates.
+__Description__: Obtains simple global alignment of the atlas using manually inputted 12N and 3N_R center coordinates.
 
 - __Algorithm descriptions__
     - Intensity volume generation algorithm:
