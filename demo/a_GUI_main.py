@@ -5,7 +5,7 @@ from utilities2015 import *
 from registration_utilities import *
 from annotation_utilities import *
 from metadata import *
-from data_manager import DataManager
+from data_manager_v2 import DataManager
 from a_driver_utilities import *
 
 from a_GUI_utilities_pipeline_status import *
@@ -15,7 +15,7 @@ import sys
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 
-def format_grid_buttons_initial( button ):
+def format_grid_button_initial( button ):
     button.setDefault( True )
     button.setEnabled(True)
     button.setStyleSheet('QPushButton { \
@@ -25,7 +25,7 @@ def format_grid_buttons_initial( button ):
                           font-size: 26px;}')
     button.setMinimumSize(QSize(150, 150))
     
-def format_grid_buttons_completed( button ):
+def format_grid_button_cantStart( button ):
     button.setEnabled(False)
     button.setStyleSheet('QPushButton { \
                           background-color: #868686; \
@@ -33,6 +33,13 @@ def format_grid_buttons_completed( button ):
                           border-radius: 15px; \
                           font-size: 26px;}')
 
+def format_grid_button_completed( button ):
+    button.setEnabled(False)
+    button.setStyleSheet('QPushButton { \
+                          background-color: #B69696; \
+                          color: black; \
+                          border-radius: 15px; \
+                          font-size: 26px;}')
 
 class init_GUI(QWidget):
     def __init__(self, parent = None):
@@ -47,7 +54,7 @@ class init_GUI(QWidget):
         self.img_version_1 = ""
         self.img_version_2 = ""
         
-        self.curr_script_name = ""
+        self.curr_step = ""
         
         self.initial_bottom_text = "Push `Finished` to exit the GUI"
 
@@ -102,32 +109,32 @@ class init_GUI(QWidget):
         ### Grid Buttons ###
         # Button
         self.b_setup = QPushButton("Setup")
-        format_grid_buttons_initial( self.b_setup )
+        format_grid_button_initial( self.b_setup )
         self.b_setup.clicked.connect( lambda:self.button_grid_push(self.b_setup) )
         self.grid_buttons.addWidget( self.b_setup, 0, 0)
         # Button
         self.b_align = QPushButton("Align")
-        format_grid_buttons_initial( self.b_align )
+        format_grid_button_initial( self.b_align )
         self.b_align.clicked.connect( lambda:self.button_grid_push(self.b_align) )
         self.grid_buttons.addWidget( self.b_align, 0, 1)
         # Button
         self.b_mask = QPushButton("Mask")
-        format_grid_buttons_initial( self.b_mask )
+        format_grid_button_initial( self.b_mask )
         self.b_mask.clicked.connect( lambda:self.button_grid_push(self.b_mask) )
         self.grid_buttons.addWidget( self.b_mask, 0, 2)
         # Button
         self.b_crop = QPushButton("Crop")
-        format_grid_buttons_initial( self.b_crop )
+        format_grid_button_initial( self.b_crop )
         self.b_crop.clicked.connect( lambda:self.button_grid_push(self.b_crop) )
         self.grid_buttons.addWidget( self.b_crop, 1, 0)
         # Button
         self.b_globalFit = QPushButton("Global Atlas Fit")
-        format_grid_buttons_initial( self.b_globalFit )
+        format_grid_button_initial( self.b_globalFit )
         self.b_globalFit.clicked.connect( lambda:self.button_grid_push(self.b_globalFit) )
         self.grid_buttons.addWidget( self.b_globalFit, 1, 1)
         # Button
         self.b_localFit = QPushButton("Local Atlas Fit")
-        format_grid_buttons_initial( self.b_localFit )
+        format_grid_button_initial( self.b_localFit )
         self.b_localFit.clicked.connect( lambda:self.button_grid_push(self.b_localFit) )
         self.grid_buttons.addWidget( self.b_localFit, 1, 2)
         
@@ -148,7 +155,7 @@ class init_GUI(QWidget):
         self.b_datajoint.clicked.connect(lambda:self.button_push(self.b_datajoint))
         self.grid_bottom.addWidget(self.b_datajoint, 0, 3)
         # Button Text Field
-        self.b_exit = QPushButton("Finished")
+        self.b_exit = QPushButton("Exit")
         self.b_exit.setDefault(True)
         self.b_exit.clicked.connect(lambda:self.button_push(self.b_exit))
         self.grid_bottom.addWidget(self.b_exit, 0, 4)
@@ -179,47 +186,144 @@ class init_GUI(QWidget):
         
         # Set stack-specific variables
         self.stack = dropdown_selection_str
-        self.stain = stack_metadata[ self.stack ]['stain']
-        self.detector_id = stain_to_metainfo[ self.stain.lower() ]['detector_id']
-        self.img_version_1 = stain_to_metainfo[ self.stain.lower() ]['img_version_1']
-        self.img_version_2 = stain_to_metainfo[ self.stain.lower() ]['img_version_1']
-        # Update "stain" field to self.stack's stain
-        self.e3.setText( self.stain )
+        try:
+            self.stain = stack_metadata[ self.stack ]['stain']
+            self.detector_id = stain_to_metainfo[ self.stain.lower() ]['detector_id']
+            self.img_version_1 = stain_to_metainfo[ self.stain.lower() ]['img_version_1']
+            self.img_version_2 = stain_to_metainfo[ self.stain.lower() ]['img_version_1']
+            # Update "stain" field to self.stack's stain
+            self.e3.setText( self.stain )
+            # Check the brains_info/STACK_progress.ini file for which step we're on
+            self.curr_step = get_current_step_from_progress_ini( self.stack )
+            # Disable all grid buttons except for the one corresponding to our current step
+            self.format_grid_buttons()
+        # If there are no stacks/brains that have been started
+        except KeyError:
+            for grid_button in [self.b_setup, self.b_align, self.b_mask, self.b_crop, 
+                            self.b_globalFit, self.b_localFit]:
+                format_grid_button_cantStart( grid_button )
         
-                
+    def format_grid_buttons(self):
+        """
+        Locates where you are in the pipeline by reading the brains_info/STACK_progress.ini
+        
+        Buttons corresponding to previous steps are marked as "completed", buttons corresponding
+        to future steps are marked as "unpressable" and are grayed out.
+        """
+        curr_step = self.curr_step
+        
+        if 'setup' in curr_step:
+            # Done-ish
+            active_button = self.b_setup
+        elif 'align' in curr_step:
+            active_button = self.b_align
+        elif 'mask' in curr_step:
+            active_button = self.b_mask
+        elif 'crop' in curr_step:
+            active_button = self.b_crop
+        elif 'fit_atlas_global' in curr_step:
+            active_button = self.b_globalFit
+        elif 'fit_atlas_local' in curr_step:
+            active_button = self.b_localFit
+        else:
+            print curr_step
+            
+        passed_curr_step = False
+        for grid_button in [self.b_setup, self.b_align, self.b_mask, self.b_crop, 
+                            self.b_globalFit, self.b_localFit]:
+            if not passed_curr_step and grid_button != active_button:
+                format_grid_button_completed( grid_button )
+            elif grid_button == active_button:
+                passed_curr_step = True
+                format_grid_button_initial(active_button)
+            elif passed_curr_step and grid_button != active_button:
+                format_grid_button_cantStart( grid_button )
+                        
     def button_grid_push(self, button):
+        """
+        If any of the "grid" buttons are pressed, this is the callback function.
+        
+        In this case, "grid" buttons have a one-to_one correspondance to the steps in the pipeline.
+        The completion of each step means you move onto the next one.
+        """
+        # 1) Setup
+        # Runs preprocessing script 1 & 2
         if button == self.b_setup:
-            subprocess.call(['python','a_GUI_setup_p1.py'])
+            if self.curr_step == '1-1_setup_metadata': 
+                subprocess.call(['python','a_GUI_setup_newBrainMetadata.py'])
+            else: 
+                subprocess.call(['python','a_GUI_setup_main.py', self.stack])
+                
+        # 2) Align slices
         elif button == self.b_align:
-            pass
+            try:
+                subprocess.call(['python','a_GUI_align_main.py', self.stack])
+            except Exception as e:
+                sys.stderr.write( e )
+                
+        # 3) Mask
+        # Runs preprocessing script 3 & 4 & 5
         elif button == self.b_mask:
-            pass
+            try:
+                subprocess.call(['python','a_GUI_mask_main.py', self.stack])
+            except Exception as e:
+                sys.stderr.write( e )
+        
+        # 4) Crop
+        # Runs preprocessing script 
         elif button == self.b_crop:
-            pass
+            try:
+                subprocess.call(['python','a_GUI_crop_main.py', self.stack])
+            except Exception as e:
+                sys.stderr.write( e )
+        
+        # 5) Fit atlas global
         elif button == self.b_globalFit:
-            pass
+            try:
+                subprocess.call(['python','a_GUI_atlas_global_main.py', self.stack])
+            except Exception as e:
+                sys.stderr.write( e )
+        
+        # 6) Fit atlas local
         elif button == self.b_localFit:
-            pass
+            try:
+                subprocess.call(['python','a_GUI_atlas_local_main.py', self.stack])
+            except Exception as e:
+                sys.stderr.write( e )
+        
+        self.format_grid_buttons()
             
     def button_push(self, button):
+        """
+        Secondary button callback function
+        """
         if button == self.b_exit:
-            close_gui()
+            close_main_gui( ex, reopen=False )
         elif button == self.b_neuroglancer:
             pass
         elif button == self.b_datajoint:
             pass
         elif button == self.b_newBrain:
-            pass
+            subprocess.call(['python','a_GUI_setup_newBrainMetadata.py'])
      
     def center(self):
+        """
+        This function simply aligns the GUI to the center of your monitor.
+        """
         frameGm = self.frameGeometry()
         screen = QApplication.desktop().screenNumber( QApplication.desktop().cursor().pos())
         centerPoint = QApplication.desktop().screenGeometry(screen).center()
         frameGm.moveCenter(centerPoint)
         self.move(frameGm.topLeft())
             
+    def mousePressEvent(self, event):
+        self.updateFields()
+        
+    def mouseMoveEvent(self, event):
+        self.updateFields()
+        
     def closeEvent(self, event):
-        close_main_gui( ex, reopen=False )
+        close_main_gui( app, reopen=True )
         
 def main():
     global app 

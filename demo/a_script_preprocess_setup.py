@@ -21,7 +21,7 @@ import time
 sys.path.append(os.path.join(os.environ['REPO_DIR'], 'utilities'))
 from metadata import *
 from preprocess_utilities import *
-from data_manager import DataManager
+from data_manager_v2 import DataManager
 from a_driver_utilities import *
 
 if stain=="unknown":
@@ -37,11 +37,11 @@ def create_folder_if_nonexistant( directory ):
 
 # Download operation config files
 s3_fp = 's3://mousebrainatlas-data/operation_configs/'
-local_fp = os.path.join( os.environ['ROOT_DIR'], 'CSHL_data_processed', stack, 'operation_configs/' )
+local_fp = os.path.join( DataManager.get_images_root_folder(stack), 'operation_configs/' )
 create_folder_if_nonexistant( local_fp )
 command = ["aws", "s3", "cp", '--recursive', '--no-sign-request',s3_fp, local_fp]
 subprocess.call( command )
-    
+     
 # Download mxnet files
 s3_fp = 's3://mousebrainatlas-data/mxnet_models/inception-bn-blue/'
 local_fp = os.path.join( os.environ['ROOT_DIR'], 'mxnet_models', 'inception-bn-blue/')
@@ -63,7 +63,7 @@ for id_detector in id_detectors:
 
     # Download pre-trained classifiers for a particular setting
     s3_fp = 's3://mousebrainatlas-data/CSHL_classifiers/setting_'+str(id_classifier)+'/classifiers/'
-    local_fp = os.path.join( os.environ['ROOT_DIR'], 'CSHL_classifiers', 'setting_'+str(id_classifier), 'classifiers/')
+    local_fp = os.path.join( os.environ['ROOT_DIR'], 'classifiers', 'setting_'+str(id_classifier), 'classifiers/')
     create_folder_if_nonexistant( local_fp )
     command = ["aws", "s3", "cp", '--recursive', '--no-sign-request', s3_fp, local_fp]
     subprocess.call( command )

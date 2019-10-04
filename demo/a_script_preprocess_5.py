@@ -13,6 +13,10 @@ args = parser.parse_args()
 stack = args.stack
 stain = args.stain
 rostral_limit, caudal_limit, dorsal_limit, ventral_limit = args.list
+rostral_limit = float(rostral_limit)
+caudal_limit = float(caudal_limit)
+dorsal_limit = float(dorsal_limit)
+ventral_limit = float(ventral_limit)
 
 # Import other modules and packages
 import os
@@ -24,7 +28,7 @@ import time
 sys.path.append(os.path.join(os.environ['REPO_DIR'], 'utilities'))
 from metadata import *
 from preprocess_utilities import *
-from data_manager import DataManager
+from data_manager_v2 import DataManager
 from a_driver_utilities import *
 
 # Create from_aligned_to_wholeslice.ini

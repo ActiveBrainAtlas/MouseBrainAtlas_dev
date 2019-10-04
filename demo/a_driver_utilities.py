@@ -8,9 +8,50 @@ import json
 
 sys.path.append(os.path.join(os.environ['REPO_DIR'], 'utilities'))
 #from utilities2015 import *
-from data_manager import *
+from data_manager_v2 import *
 #from distributed_utilities import *
 from metadata import *
+
+
+def save_dict_as_ini( input_dict, fp ):
+    import configparser
+    assert 'DEFAULT' in input_dict.keys()
+
+    config = configparser.ConfigParser()
+
+    for key in input_dict.keys():
+        config[key] = input_dict[key]
+        
+    with open(fp, 'w') as configfile:
+        config.write(configfile)
+
+def get_current_step_from_progress_ini( stack ):
+    #try:
+    if True:
+        progress_dict = DataManager.get_brain_info_progress( stack )
+
+        for pipeline_step in ordered_pipeline_steps:
+            completed = progress_dict[ pipeline_step ] in ['True','true']
+            if not completed:
+                return pipeline_step
+        return None
+    #except Exception as e:
+    #    sys.stderr.write( 'Something went wrong loading the progress ini.\n' )
+    #    sys.stderr.write( str(e) )
+    #    print( str(e) )
+    #    return 'setup_metadata'
+    
+def set_step_completed_in_progress_ini( stack, step ):
+    progress_dict = DataManager.get_brain_info_progress( stack )
+    progress_dict[step] = True
+    
+    # Dave PROGRESS ini
+    progress_ini_to_save = {}
+    progress_ini_to_save['DEFAULT'] = progress_dict
+    
+    # Get filepath and save ini
+    fp = DataManager.get_brain_info_progress_fp( stack )
+    save_dict_as_ini( progress_ini_to_save, fp )
 
 def create_input_spec_ini( name, image_name_list, stack, prep_id, version, resol  ):
     f = open(name, "w")
@@ -39,15 +80,16 @@ def get_fn_list_from_sorted_filenames( stack ):
         get_fn_list_from_sorted_filenames( stack ) returns a list of all the valid
         filenames for the current stack.
     '''
-    fp = os.path.join( os.environ['DATA_ROOTDIR'], 'CSHL_data_processed', stack+'/')
-    fn = stack+'_sorted_filenames.txt'
+    #fp = DataManager.get_images_root_folder(stack)
+    #fn = stack+'_sorted_filenames.txt'
+    sfns_fp = DataManager.get_sorted_filenames_filename(stack)
     
     try:
-        file0 = open( fp+fn, 'r')
+        file0 = open( sfns_fp, 'r')
     except:
         print('_________________________________________________________________________________')
         print('_________________________________________________________________________________')
-        print('\"'+fp+fn+'\" not found!')
+        print('\"'+sfns_fp+'\" not found!')
         print('')
         print('This file must be present for the pipeline to continue. Add the file and rerun the script.')
         print('_________________________________________________________________________________')
@@ -82,7 +124,7 @@ def make_from_x_to_y_ini(stack,x,y,rostral_limit,caudal_limit,dorsal_limit,ventr
     elif y=='brainstem':
         dest_prep_id = 'alignedBrainstemCrop'
     
-    fn = os.path.join( os.environ['DATA_ROOTDIR'], 'CSHL_data_processed', stack, 'operation_configs', 'from_'+x+'_to_'+y+'.ini' )
+    fn = os.path.join( DataManager.get_images_root_folder(stack), 'operation_configs', 'from_'+x+'_to_'+y+'.ini' )
     f = open(fn, "w")
     f.write('[DEFAULT]\n')
     f.write('type = crop\n\n')
@@ -96,10 +138,10 @@ def make_from_x_to_y_ini(stack,x,y,rostral_limit,caudal_limit,dorsal_limit,ventr
     f.close()
     
 def make_manual_anchor_points( stack, x_12N, y_12N, x_3N, y_3N, z_midline):
-    if not os.path.exists( os.path.join( os.environ['DATA_ROOTDIR'], 'CSHL_simple_global_registration') ):
-        os.mkdir( os.path.join( os.environ['DATA_ROOTDIR'], 'CSHL_simple_global_registration') )
+    if not os.path.exists( DataManager.get_simple_global_root_folder(stack) ):
+        os.mkdir( DataManager.get_simple_global_root_folder(stack) )
     
-    fn = os.path.join( os.environ['DATA_ROOTDIR'], 'CSHL_simple_global_registration', stack+'_manual_anchor_points.ini' )
+    fn = os.path.join( DataManager.get_simple_global_root_folder(stack), stack+'_manual_anchor_points.ini' )
     f = open(fn, "w")
     f.write('[DEFAULT]\n')
     f.write('x_12N = '+str(x_12N)+'\n')
@@ -121,7 +163,7 @@ def make_rotation_ini(stack, base_prep_id, dest_prep_id, rotation_type):
     base_prep_id = prep_id_short_str_to_full[ base_prep_id ]
     dest_prep_id = prep_id_short_str_to_full[ dest_prep_id ]
     
-    fn = os.path.join( os.environ['DATA_ROOTDIR'], 'CSHL_data_processed', stack, 'operation_configs', 'rotate_transverse.ini' )
+    fn = os.path.join( DataManager.get_images_root_folder(stack), 'operation_configs', 'rotate_transverse.ini' )
     f = open(fn, "w")
     f.write('[DEFAULT]\n')
     f.write('type = rotate\n')
@@ -221,7 +263,7 @@ def make_registration_visualization_input_specs( stack, id_detector, structure):
     return fn_structures, fn_global
 
 def create_prep2_section_limits( stack, lower_lim, upper_lim):
-    fn = os.path.join( os.environ['DATA_ROOTDIR'], 'CSHL_data_processed', stack, stack+'_prep2_sectionLimits.ini' )
+    fn = os.path.join( DataManager.get_images_root_folder(stack), stack+'_prep2_sectionLimits.ini' )
     f = open(fn, "w")
     f.write('[DEFAULT]\n')
     f.write('left_section_limit = '+str(lower_lim)+'\n')
@@ -325,19 +367,25 @@ def get_prep5_limits_from_prep1_thumbnail_masks( stack, max_distance_to_scan_fro
                c='r')
             plt.show()
 
+    # Make the boundary slightly larger
     final_rostral_lim = (curr_rostral_lim_d16-1.5)*16
     final_caudal_lim = (curr_caudal_lim_d16+1.5)*16
     final_dorsal_lim = (curr_dorsal_lim_d16-1.5)*16
     final_ventral_lim = (curr_ventral_lim_d16+1.5)*16
-
-    #print('rostral:',final_rostral_lim)
-    #print('caudal:',final_caudal_lim)
-    #print('dorsal:',final_dorsal_lim)
-    #print('ventral:',final_ventral_lim)
+    # If boundary goes past the image, reset to the min/max value
+    final_rostral_lim = min( final_rostral_lim, width )
+    final_caudal_lim = max( final_caudal_lim, 0 )
+    final_dorsal_lim = min( final_dorsal_lim, height )
+    final_ventral_lim = max( final_ventral_lim, 0 )
+ 
+    print('rostral:',final_rostral_lim)
+    print('caudal:',final_caudal_lim)
+    print('dorsal:',final_dorsal_lim)
+    print('ventral:',final_ventral_lim)
     
     return final_rostral_lim, final_caudal_lim, final_dorsal_lim, final_ventral_lim
 
-def close_main_gui( ex, reopen=True ):
+def close_main_gui_old( ex, reopen=True ):
     ex.hide()
     # We manually kill this operation by getting a list of p_ids running this process 
     #  (in case there are multiple hanging instances)
@@ -363,6 +411,9 @@ def close_main_gui( ex, reopen=True ):
     
     if reopen:
         subprocess.call(['python', os.path.join(os.environ['REPO_DIR'], '..', 'demo', 'a_GUI_main.py')])
+    
+def close_main_gui( app, reopen=True ):
+    sys.exit( app.exec_() )
     
 def call_and_time( command_list, completion_message='' ):
     start_t = time.time()

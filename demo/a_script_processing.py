@@ -26,7 +26,7 @@ from metadata import *
 from utilities2015 import *
 from registration_utilities import *
 from annotation_utilities import *
-from data_manager import DataManager
+from data_manager_v2 import DataManager
 from a_driver_utilities import *
 
 

@@ -21,6 +21,14 @@ from qt_utilities import *
 from preprocess_utilities import *
 sys.path.append(os.path.join(os.environ['REPO_DIR'], 'web_services'))
 
+parser = argparse.ArgumentParser(
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        description='Mask Editing GUI')
+parser.add_argument("stack", type=str, help="stack name")
+args = parser.parse_args()
+global stack
+stack = args.stack
+
 
 def get_img( section, prep_id='None', resol='thumbnail', version='NtbNormalized' ):
     return DataManager.load_image_v2(stack=stack, 
@@ -154,37 +162,21 @@ class init_GUI(QWidget):
         
         ### Grid BODY UPPER ###
         # Static Text Field
-        self.e2 = QLineEdit()
-        self.e2.setAlignment(Qt.AlignCenter)
-        self.e2.setFont( self.font_p1 )
-        self.e2.setReadOnly( True )
-        self.e2.setText( "Filename: " )
-        self.e2.setStyleSheet("color: rgb(50,50,250); background-color: rgb(250,250,250);")
-        self.grid_body_upper.addWidget( self.e2, 0, 0)
-        # Static Text Field
-        self.e3 = QLineEdit()
-        self.e3.setAlignment(Qt.AlignCenter)
-        self.e3.setFont( self.font_p1 )
-        self.e3.setReadOnly( True )
-        self.e3.setText( "Section: " )
-        self.e3.setStyleSheet("color: rgb(50,50,250); background-color: rgb(250,250,250);")
-        self.grid_body_upper.addWidget( self.e3, 0, 1)
-        # Static Text Field
         self.e4 = QLineEdit()
         self.e4.setAlignment(Qt.AlignCenter)
         self.e4.setFont( self.font_p1 )
         self.e4.setReadOnly( True )
         self.e4.setText( "Filename: " )
-        self.e4.setStyleSheet("color: rgb(250,50,50); background-color: rgb(250,250,250);")
-        self.grid_body_upper.addWidget( self.e4, 0, 2)
+        #self.e4.setStyleSheet("color: rgb(250,50,50); background-color: rgb(250,250,250);")
+        self.grid_body_upper.addWidget( self.e4, 0, 0)
         # Static Text Field
         self.e5 = QLineEdit()
         self.e5.setAlignment(Qt.AlignCenter)
         self.e5.setFont( self.font_p1 )
         self.e5.setReadOnly( True )
         self.e5.setText( "Section: " )
-        self.e5.setStyleSheet("color: rgb(250,50,50); background-color: rgb(250,250,250);")
-        self.grid_body_upper.addWidget( self.e5, 0, 3)
+        #self.e5.setStyleSheet("color: rgb(250,50,50); background-color: rgb(250,250,250);")
+        self.grid_body_upper.addWidget( self.e5, 0, 1)
                 
         ### Grid BODY ###
         # Custom VIEWER
@@ -228,7 +220,7 @@ class init_GUI(QWidget):
         
         ### STRETCH rows + cols
         self.grid_body_upper.setColumnStretch(0, 2)
-        self.grid_body_upper.setColumnStretch(2, 2)
+        #self.grid_body_upper.setColumnStretch(2, 2)
         
         ### SUPERGRID ###
         self.supergrid = QGridLayout()
@@ -276,9 +268,6 @@ class init_GUI(QWidget):
         elif key==81: # Q
             self.pixInfo()
             
-        elif key==77: # M
-            self.toggleMode()
-            
         else:
             print(key)
             
@@ -296,7 +285,6 @@ class init_GUI(QWidget):
         self.next_section = self.getNextValidSection( self.curr_section )
         # Update the section and filename at the top
         self.updateCurrHeaderFields()
-        self.updatePrevHeaderFields()
             
         self.loadImage()
         
@@ -345,14 +333,8 @@ class init_GUI(QWidget):
         return prev_section
         
     def updateCurrHeaderFields(self):
-        #self.e2.setText( "Filename: "+str(self.sections_to_filenames[self.curr_section]) )
-        #self.e3.setText( "Section: "+str(self.curr_section) )
         self.e4.setText( str(self.sections_to_filenames[self.curr_section]) )
         self.e5.setText( str(self.curr_section) )
-        
-    def updatePrevHeaderFields(self):
-        self.e2.setText( str(self.sections_to_filenames[self.prev_section]) )
-        self.e3.setText( str(self.prev_section) )
         
                     
 def close_gui():
@@ -360,15 +342,6 @@ def close_gui():
     #sys.exit( app.exec_() )
 
 def main():
-    
-    parser = argparse.ArgumentParser(
-        formatter_class=argparse.RawDescriptionHelpFormatter,
-        description='Mask Editing GUI')
-    parser.add_argument("stack", type=str, help="stack name")
-    args = parser.parse_args()
-    global stack
-    stack = args.stack
-    
     global app 
     app = QApplication( sys.argv )
     

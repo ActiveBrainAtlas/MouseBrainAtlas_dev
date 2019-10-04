@@ -156,6 +156,10 @@ def convert_cropbox_from_arr_xywh_1um(data, out_fmt, out_resol, stack=None):
 def convert_cropbox_to_arr_xywh_1um(data, in_fmt, in_resol, stack=None):
 
     if isinstance(data, dict):
+        data['rostral_limit'] = float(data['rostral_limit'])
+        data['caudal_limit'] = float(data['caudal_limit'])
+        data['dorsal_limit'] = float(data['dorsal_limit'])
+        data['ventral_limit'] = float(data['ventral_limit'])
         arr_xywh = np.array([data['rostral_limit'], data['dorsal_limit'], data['caudal_limit'] - data['rostral_limit'] + 1, data['ventral_limit'] - data['dorsal_limit'] + 1])
         # Since this does not check for wrt, the user needs to make sure the cropbox is relative to the input prep (i.e. the wrt attribute is the same as input prep)
     elif isinstance(data, str):

@@ -21,7 +21,7 @@ import time
 sys.path.append(os.path.join(os.environ['REPO_DIR'], 'utilities'))
 from metadata import *
 from preprocess_utilities import *
-from data_manager import DataManager
+from data_manager_v2 import DataManager
 from a_driver_utilities import *
 
 
@@ -30,8 +30,8 @@ from a_driver_utilities import *
 # Make sure ROOT_DIR/CSHL_data_processed/STACK/STACK_raw/SLICE_raw.tif files all exist, otherwise can't continue
 sorted_fns = get_fn_list_from_sorted_filenames( stack )
 for fn in sorted_fns:
-    fp_tif = os.path.join( ROOT_DIR, 'CSHL_data_processed', stack, stack+'_raw', fn+'_raw.tif' )
-    fp_tif_generic = os.path.join( ROOT_DIR, 'CSHL_data_processed', stack, stack+'_raw', '<FILENAME>_raw.tif' )
+    fp_tif = os.path.join( DataManager.get_images_root_folder(stack), stack+'_raw', fn+'_raw.tif' )
+    fp_tif_generic = os.path.join( DataManager.get_images_root_folder(stack), stack+'_raw', '<FILENAME>_raw.tif' )
     #fp_tif = ROOT_DIR+'CSHL_data_processed/'+stack+'/'+stack+'_raw/'+fn+'_raw.tif'
     if not os.path.isfile(fp_tif):
         print('')
@@ -44,7 +44,7 @@ for fn in sorted_fns:
         print('_________________________________________________________________________________')
         sys.exit()
 
-        
+
 if stain == 'NTB':
     # Extract the BLUE channel, for NTB brains
     create_input_spec_ini_all( name='input_spec.ini', stack=stack, prep_id='None', version='None', resol='raw')

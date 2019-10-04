@@ -26,7 +26,7 @@ from metadata import *
 from utilities2015 import *
 from registration_utilities import *
 from annotation_utilities import *
-from data_manager import DataManager
+from data_manager_v2 import DataManager
 from a_driver_utilities import *
 
 id_classifier = detector_settings.loc[id_detector]['feature_classifier_id']
@@ -39,12 +39,12 @@ subprocess.call( command )
     
 # Download AtlasV7 volume files
 s3_fp = 's3://mousebrainatlas-data/CSHL_volumes/atlasV7/atlasV7_10.0um_scoreVolume/score_volumes/'
-local_fp = os.path.join( os.environ['ROOT_DIR'], 'CSHL_volumes', 'atlasV7', 'atlasV7_10.0um_scoreVolume', 'score_volumes/')
+local_fp = os.path.join( os.environ['ROOT_DIR'], 'atlas_volumes', 'atlasV7', 'atlasV7_10.0um_scoreVolume', 'score_volumes/')
 command = ["aws", "s3", "cp", '--recursive', '--no-sign-request', s3_fp, local_fp]
 subprocess.call( command )
 
 # Download pre-trained classifiers for a particular setting
 s3_fp = 's3://mousebrainatlas-data/CSHL_classifiers/setting_'+str(id_classifier)+'/classifiers/'
-local_fp = os.path.join( os.environ['ROOT_DIR'], 'CSHL_classifiers', 'setting_'+str(id_classifier), 'classifiers/')
+local_fp = os.path.join( os.environ['ROOT_DIR'], 'classifiers', 'setting_'+str(id_classifier), 'classifiers/')
 command = ["aws", "s3", "cp", '--recursive', '--no-sign-request', s3_fp, local_fp]
 subprocess.call( command )

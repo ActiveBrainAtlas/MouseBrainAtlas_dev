@@ -6,12 +6,22 @@ from a_driver_utilities import *
 #from registration_utilities import *
 #from annotation_utilities import *
 ## from metadata import *
-#from data_manager import DataManager
+from data_manager_v2 import DataManager
 #from a_driver_utilities import *
 
 import sys, os
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
+
+import argparse
+
+parser = argparse.ArgumentParser(
+    formatter_class=argparse.RawDescriptionHelpFormatter,
+    description='Optional to include a stack, in which the metadata autofills')
+
+parser.add_argument('--stack', default="", type=str)
+args = parser.parse_args()
+stack = args.stack
 
 def is_number(s):
     try:
@@ -249,31 +259,42 @@ class init_GUI(QWidget):
         if dropdown==self.dd1:
             self.input_filetype = dropdown.currentText()
             
+    def autofill(self, stack):
+        stack_metadata = DataManager.get_brain_info_metadata(stack)
+        
+        self.t1.setText( stack_metadata['stack_name'] )
+        self.t2.setText( stack_metadata['stain'] )
+        self.t3.setText( stack_metadata['cutting_plane'] )
+        self.t4.setText( str(stack_metadata['section_thickness_um']) )
+        self.t5.setText( str(stack_metadata['planar_resolution_um']) )
+            
     def buttonPressSubmit(self, button):
         if button == self.b1:
             validated = self.validateEntries()
             #####################################################################################################################
-            validated = True
+            #validated = True
             #####################################################################################################################
             if validated:
-                #entered_stack = str( self.t1.text() )
-                #entered_stain = str( self.t2.text() ).lower()
-                #entered_plane = str( self.t3.text() ).lower()
-                #entered_thickness = float( str( self.t4.text() ) )
-                #entered_resolution = float( str( self.t5.text() ) )
-                #entered_input_filetype = str( self.dd1.currentText() )
+                entered_stack = str( self.t1.text() )
+                entered_stain = str( self.t2.text() ).lower()
+                entered_plane = str( self.t3.text() ).lower()
+                entered_thickness = float( str( self.t4.text() ) )
+                entered_resolution = float( str( self.t5.text() ) )
+                entered_input_filetype = str( self.dd1.currentText() )
                 #####################################################################################################################
-                entered_stack = 'baba'
-                entered_stain = 'ntb'
-                entered_plane = 'sagittal'
-                entered_thickness = 20
-                entered_resolution = 0.46
-                entered_input_filetype = 'czi'
+                #entered_stack = 'baba'
+                #entered_stain = 'ntb'
+                #entered_plane = 'sagittal'
+                #entered_thickness = 20
+                #entered_resolution = 0.46
+                #entered_input_filetype = 'czi'
                 #####################################################################################################################
                 
                 set_stack_metadata( entered_stack, entered_stain, entered_plane, entered_thickness, entered_resolution )
+                set_step_completed_in_progress_ini( entered_stack, '1-1_setup_metadata')
                 
-                hide_gui()
+                #hide_gui()
+                sys.exit( app.exec_() )
                 
                 # Need to use the Bioformats GUI if czi or ndpi
                 bioformats_extraction = False
@@ -281,14 +302,15 @@ class init_GUI(QWidget):
                     bioformats_extraction = True
                     
                 if bioformats_extraction:
-                    subprocess.call( ['python', 'a_GUI_setup_p2_bioformats.py', 
+                    subprocess.call( ['python', 'a_GUI_setup_images_bioformats.py', 
                                       entered_stack] )
                 else:
-                    subprocess.call( ['python', 'a_GUI_setup_p2_nonbioformats.py', 
+                    subprocess.call( ['python', 'a_GUI_setup_images_nonbioformats.py', 
                                       entered_stack, entered_input_filetype] )
                 
     def closeEvent(self, event):
-        close_main_gui( ex )
+        sys.exit( app.exec_() )
+        #close_main_gui( ex )
                 
     
 # Records a stack's metadata after it is validated
@@ -298,22 +320,36 @@ def set_stack_metadata( stack, stain, plane, thickness, resolution):
     if stain=='thionin':
         stain_capitalized = 'Thionin'
     
+    # Save METADATA ini
     input_dict = {}
     input_dict['DEFAULT'] = {'stack_name': stack, \
                              'cutting_plane': plane,\
                              'planar_resolution_um': resolution,\
                              'section_thickness_um': thickness,\
-                             'stain': stain_capitalized,\
-                             'stain_2_if_alternating': ""}
+                             'stain': stain_capitalized}
     
-    fp = os.path.join( os.environ['ROOT_DIR'], 'brains_info', stack+'.ini' )
+    fp = DataManager.get_brain_info_metadata_fp( stack )
     try:
-        os.makedirs( os.path.join( os.environ['ROOT_DIR'], 'brains_info' ) )
+        os.makedirs( DataManager.get_brain_info_root_folder() )
     except:
         pass
     
     save_dict_as_ini( input_dict, fp )
     save_metadata_in_shell_script( stack, stain, plane, thickness, resolution )
+    
+    # Now save PROGRESS ini
+    input_dict_p = {}
+    input_dict_p['DEFAULT'] = {}
+    # Populate with contents of 'ordered_pipeline_steps' from src/utilities/metadata.py
+    for pipeline_step in ordered_pipeline_steps:
+        if pipeline_step == 'setup_metadata':
+            input_dict_p['DEFAULT'][pipeline_step] = True
+        else:
+            input_dict_p['DEFAULT'][pipeline_step] = False
+    
+    fp = DataManager.get_brain_info_progress_fp( stack )
+    
+    save_dict_as_ini( input_dict_p, fp )
     
 # Save the STACK.ini file
 def save_dict_as_ini( input_dict, fp ):
@@ -363,8 +399,13 @@ def main():
     global ex
     ex = init_GUI()
     ex.show()
+    
+    # User has passed in a stack
+    if stack!="":
+        ex.autofill(stack)
+    
     ###########################################################################################################################################
-    ex.buttonPressSubmit(ex.b1)
+    #ex.buttonPressSubmit(ex.b1)
     ###########################################################################################################################################
     sys.exit( app.exec_() )
 

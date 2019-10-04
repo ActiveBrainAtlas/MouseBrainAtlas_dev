@@ -435,12 +435,19 @@ class init_GUI(QWidget):
         self.b_cclockwise.setStyleSheet("color: rgb(250,50,50); background-color: rgb(250,250,250);")
         self.grid_body_lower_align_mode.addWidget(self.b_cclockwise, 0, 7)
         # Button Text Field
-        self.b_save_transform = QPushButton("Save CURRENT transformation")
+        self.b_save_transform = QPushButton("Save Transformation")
         self.b_save_transform.setDefault(True)
         self.b_save_transform.setEnabled(False)
         self.b_save_transform.clicked.connect(lambda:self.buttonPress(self.b_save_transform))
-        self.b_save_transform.setStyleSheet("color: rgb(0,0,0); background-color: rgb(250,050,250);")
+        self.b_save_transform.setStyleSheet("color: rgb(0,0,0); background-color: rgb(250,200,250);")
         self.grid_body_lower_align_mode.addWidget(self.b_save_transform, 1, 9)
+        # Button Text Field
+        self.b_done = QPushButton("DONE")
+        self.b_done.setDefault(True)
+        self.b_done.setEnabled(True)
+        self.b_done.clicked.connect(lambda:self.buttonPress(self.b_done))
+        self.b_done.setStyleSheet("color: rgb(0,0,0); background-color: rgb(200,250,250);")
+        self.grid_body_lower_align_mode.addWidget(self.b_done, 1, 10)
         
         
         # Grid stretching
@@ -710,6 +717,9 @@ before you finish this step."
         if button==self.b_save_transform:
             self.saveCurrTransform()
             self.update_prep1_images()
+            
+        if button==self.b_done:
+            sys.exit( app.exec_() )
         
         self.transformImagesColored()
         
@@ -794,8 +804,8 @@ before you finish this step."
         
                     
 def close_gui():
-    ex.hide()
-    #sys.exit( app.exec_() )
+    #ex.hide()
+    sys.exit( app.exec_() )
 
 def main():
     

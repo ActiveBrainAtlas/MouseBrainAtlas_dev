@@ -22,7 +22,7 @@ import time
 sys.path.append(os.path.join(os.environ['REPO_DIR'], 'utilities'))
 from metadata import *
 from preprocess_utilities import *
-from data_manager import DataManager
+from data_manager_v2 import DataManager
 from a_driver_utilities import *
 
 
@@ -31,14 +31,13 @@ def create_crop_orig():
 
     # Creating 'crop_orig.ini'
     fn = 'crop_orig.ini'
-    crop_orig_fp = os.path.join(DATA_ROOTDIR, 'CSHL_data_processed', \
-                    stack, 'operation_configs', fn)
+    crop_orig_fp = os.path.join(DataManager.get_images_root_folder(stack), 'operation_configs', fn)
 
     file_content = '[DEFAULT]\n\
 type = crop\n\
 base_prep_id = None\n\
 dest_prep_id = None\n\
-cropboxes_csv = '+DATA_ROOTDIR+'CSHL_data_processed/'+stack+'/'+stack+'_original_image_crop.csv\n\
+cropboxes_csv = '+DataManager.get_images_root_folder(stack)+'/'+stack+'_original_image_crop.csv\n\
 resolution = thumbnail'
 
     f = open( crop_orig_fp , "w")
@@ -96,8 +95,8 @@ print('\nFinished generating image crop csv file, transformating masks, and perf
 # The user step is outdated and can be performed automatically here.
 
 # This next line replaces the user step for  manually finding this cropbox
-rostral_lim, caudal_lim, dorsal_lim, ventral_lim = get_prep5_limits_from_prep1_thumbnail_masks(stack)
+#rostral_lim, caudal_lim, dorsal_lim, ventral_lim = get_prep5_limits_from_prep1_thumbnail_masks(stack)
 
-command = ['python', 'a_script_preprocess_5.py', stack, stain, '-l', 
-           str(rostral_lim), str(caudal_lim), str(dorsal_lim), str(ventral_lim)]
-call_and_time( command, completion_message='')
+#command = ['python', 'a_script_preprocess_5.py', stack, stain, '-l', 
+#           str(rostral_lim), str(caudal_lim), str(dorsal_lim), str(ventral_lim)]
+#call_and_time( command, completion_message='')

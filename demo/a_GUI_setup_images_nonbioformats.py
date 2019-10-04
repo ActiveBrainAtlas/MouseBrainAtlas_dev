@@ -5,7 +5,7 @@ from utilities2015 import *
 from registration_utilities import *
 from annotation_utilities import *
 # from metadata import *
-from data_manager import DataManager
+from data_manager_v2 import DataManager
 from a_driver_utilities import *
 
 import sys, os
@@ -169,11 +169,8 @@ class init_GUI(QWidget):
                     self.e1.repaint()
                     copy_over_tif_files( self.stack, self.filepath_img_folder )
                     
-                subprocess.call( ['python', 'a_script_preprocess_setup.py', stack, 'unknown'] )
-                
-                close_gui()
-                subprocess.call( ['python', 'a_GUI_continue_brain.py'] )
-                
+                self.finished()
+                                
     def buttonPress_selectSFS(self, button):
         if button == self.b2:
             fp = get_selected_fp( default_filetype=[("text files","*.txt"),("all files","*.*")] )
@@ -190,15 +187,25 @@ class init_GUI(QWidget):
         if button == self.b3:
             if self.filepath_sfns_folder != '':
                 fp = get_selected_fp( initialdir = self.filepath_sfns_folder,
-                                     default_filetype=[("tiff files","*.tif"), ("jp2 files","*.jp2"), ("all files","*.*")] )
+                                     default_filetype=[("tiff files","*.tif*"), ("jp2 files","*.jp2"), ("all files","*.*")] )
             else:
-                fp = get_selected_fp( default_filetype=[("tiff files","*.tif"), ("jp2 files","*.jp2"), ("all files","*.*")] )
+                fp = get_selected_fp( default_filetype=[("tiff files","*.tif*"), ("jp2 files","*.jp2"), ("all files","*.*")] )
             self.filepath_img = fp
             self.filepath_img_folder = fp[0:max(loc for loc, val in enumerate(fp) if val == '/')]
             #validate_chosen_images()
             self.e3.setText( self.filepath_img_folder ) 
             
     def closeEvent(self, event):
+        close_main_gui( ex )
+        
+    def finished(self):
+        if self.filepath_sfns != "":
+            set_step_completed_in_progress_ini( stack, '1-4_setup_sorted_filenames')
+        
+        subprocess.call( ['python', 'a_script_preprocess_setup.py', stack, 'unknown'] )
+        
+        set_step_completed_in_progress_ini( stack, '1-2_setup_images')
+        
         close_main_gui( ex )
             
 def create_parent_folder_for_files( stack ):
@@ -315,8 +322,8 @@ def get_selected_fp( initialdir='/', default_filetype=("jp2 files","*.jp2") ):
     root.destroy()
     return fn
     
-def close_gui():
-    ex.hide()
+#def close_gui():
+#    ex.hide()
     #sys.exit()
     #sys.exit( app.exec_() )
     

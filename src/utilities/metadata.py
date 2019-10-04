@@ -26,66 +26,7 @@ else:
     ENABLE_DOWNLOAD_S3 = False
     #sys.stderr.write("ENABLE_DOWNLOAD_S3 is not set, default to False.\n")
 
-if hostname == 'yuncong-MacbookPro':
-    print 'Setting environment for Local Macbook Pro'
-    HOST_ID = 'localhost'
-
-    # REPO_DIR = '/home/yuncong/Brain' # use os.environ['REPO_DIR'] instead
-    REPO_DIR = os.environ['REPO_DIR']
-
-    if 'ROOT_DIR' in os.environ:
-        ROOT_DIR = os.environ['ROOT_DIR']
-    else:
-        ROOT_DIR = '/home/yuncong'
-
-    if 'DATA_ROOTDIR' in os.environ:
-        DATA_ROOTDIR = os.environ['DATA_ROOTDIR']
-    else:
-        DATA_ROOTDIR = '/media/yuncong/YuncongPublic/'
-
-    if 'THUMBNAIL_DATA_ROOTDIR' in os.environ:
-        THUMBNAIL_DATA_ROOTDIR = os.environ['THUMBNAIL_DATA_ROOTDIR']
-    else:
-        THUMBNAIL_DATA_ROOTDIR = DATA_ROOTDIR
-
-    RAW_DATA_DIR = os.path.join(ROOT_DIR, 'CSHL_data')
-    DATA_DIR = os.path.join(DATA_ROOTDIR, 'CSHL_data_processed')
-    THUMBNAIL_DATA_DIR = os.path.join(THUMBNAIL_DATA_ROOTDIR, 'CSHL_data_processed')
-
-    # VOLUME_ROOTDIR = '/home/yuncong/CSHL_volumes'
-    VOLUME_ROOTDIR = os.path.join(DATA_ROOTDIR, 'CSHL_volumes')
-    # MESH_ROOTDIR =  '/home/yuncong/CSHL_meshes'
-    MESH_ROOTDIR = os.path.join(ROOT_DIR, 'CSHL_meshes')
-    # REGISTRATION_PARAMETERS_ROOTDIR = '/home/yuncong/CSHL_registration_parameters'
-    REGISTRATION_PARAMETERS_ROOTDIR = os.path.join(ROOT_DIR, 'CSHL_registration_parameters')
-
-    PATCH_FEATURES_ROOTDIR = os.path.join(DATA_ROOTDIR, 'CSHL_patch_features')
-
-    ANNOTATION_ROOTDIR = os.path.join(ROOT_DIR, 'CSHL_labelings_v3')
-    ANNOTATION_THALAMUS_ROOTDIR = os.path.join(ROOT_DIR, 'CSHL_labelings_thalamus')
-    CLF_ROOTDIR =  os.path.join(ROOT_DIR, 'CSHL_classifiers')
-
-    S3_DATA_BUCKET = 'mousebrainatlas-data'
-    S3_DATA_DIR = 'CSHL_data_processed'
-    S3_RAWDATA_BUCKET = 'mousebrainatlas-rawdata'
-
-    CLASSIFIER_SETTINGS_CSV = os.path.join(REPO_DIR, 'learning', 'classifier_settings.csv')
-    DATASET_SETTINGS_CSV = os.path.join(REPO_DIR, 'learning', 'dataset_settings.csv')
-    REGISTRATION_SETTINGS_CSV = os.path.join(REPO_DIR, 'registration', 'registration_settings.csv')
-    PREPROCESS_SETTINGS_CSV = os.path.join(REPO_DIR, 'preprocess', 'preprocess_settings.csv')
-    DETECTOR_SETTINGS_CSV = os.path.join(REPO_DIR, 'learning', 'detector_settings.csv')
-
-    SPARSE_SCORES_ROOTDIR = os.path.join(ROOT_DIR, 'CSHL_patch_scores')
-    PATCH_LOCATIONS_ROOTDIR = os.path.join(ROOT_DIR, 'CSHL_patch_locations')
-    SCOREMAP_ROOTDIR = os.path.join(ROOT_DIR, 'CSHL_scoremaps')
-    SCOREMAP_VIZ_ROOTDIR = os.path.join(ROOT_DIR, 'CSHL_scoremap_viz')
-
-    LABELED_NEURONS_ROOTDIR = os.path.join(ROOT_DIR, 'CSHL_labeled_neurons')
-
-    ELASTIX_BIN = 'elastix'
-
-
-elif hostname == 'atlasDocker':
+if hostname == 'atlasDocker':
     print 'Setting environment for the Docker Container'
     
     try:
@@ -642,9 +583,15 @@ def load_ini(fp, split_newline=True, convert_none_str=True, section='DEFAULT'):
 
 planar_resolution = {}
 stack_metadata = {}
-if os.path.exists(BRAINS_INFO_DIR):
-    for brain_ini in os.listdir(BRAINS_INFO_DIR):
+if os.path.exists( BRAINS_INFO_DIR ):
+    for brain_ini in os.listdir( BRAINS_INFO_DIR ):
+        # Two kinds of brain_ini files: 'progress' and 'metadata'
+        if 'progress' in brain_ini:
+            continue
+        
         brain_name = os.path.splitext(brain_ini)[0]
+        brain_name = brain_name.replace('_metadata', '')
+        
         brain_info = load_ini(os.path.join(BRAINS_INFO_DIR, brain_ini))
         planar_resolution[brain_name] = float(brain_info['planar_resolution_um'])
         stain = brain_info['stain']
@@ -661,8 +608,7 @@ if os.path.exists(BRAINS_INFO_DIR):
         stack_metadata[brain_name] = {'stain': stain,
                                       'cutting_plane': cutting_plane,
                                       'resolution': float(brain_info['planar_resolution_um']),
-                                      'section_thickness': section_thickness
-                                     }
+                                      'section_thickness': section_thickness}
             
 
 #print planar_resolution
@@ -746,6 +692,10 @@ orientation_argparse_str_to_imagemagick_str = \
  'rotate90': '-rotate 90',
  'rotate180': '-rotate 180',
  'rotate270': '-rotate 270',
+ 'rotate45': '-rotate 45',
+ 'rotate135': '-rotate 135',
+ 'rotate225': '-rotate 225',
+ 'rotate315': '-rotate 315',
  'flip': '-flip',
  'flop': '-flop'
 }
@@ -768,3 +718,21 @@ prep_id_num_to_str = {
     7:'rawBeforeRotation'}
 
 prep_id_str_to_num = dict(map(reversed, prep_id_num_to_str.items()))
+
+#ordered_pipeline_steps = ['1_setup_metadata', '1_setup_images', '1_setup_sorted_filenames', '1_setup_scripts',
+#                     '2_align', '3_mask', '4_crop', '5_fit_atlas_global', '6_fit_atlas_local']
+
+ordered_pipeline_steps = ['1-1_setup_metadata', 
+                          '1-2_setup_images', 
+                          '1-3_setup_thumbnails',
+                          '1-4_setup_sorted_filenames', 
+                          '1-5_setup_orientations',
+                          '1-6_setup_scripts',
+                          '2_align', 
+                          '3-1_mask_initial_contours', 
+                          '3-2_mask_scripts_1', 
+                          '3-3_mask_correct_contours', 
+                          '3-4_mask_scripts_2', 
+                          '4_crop', 
+                          '5_fit_atlas_global', 
+                          '6_fit_atlas_local']

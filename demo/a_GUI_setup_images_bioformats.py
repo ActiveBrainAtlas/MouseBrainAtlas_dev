@@ -5,7 +5,7 @@ from a_driver_utilities import *
 #from registration_utilities import *
 #from annotation_utilities import *
 ## from metadata import *
-from data_manager import DataManager
+from data_manager_v2 import DataManager
 #from a_driver_utilities import *
 
 from a_bioformats_utilities import *
@@ -44,6 +44,9 @@ class init_GUI(QWidget):
         self.czi_num_channels = None
         self.fullres_series_indices = []
         
+        self.metadata_dict = {}
+        self.main_channel = 0
+        
         self.initUI()
         #self.updateFields()
         
@@ -55,7 +58,7 @@ class init_GUI(QWidget):
         self.grid_body_lower = QGridLayout()
         self.grid_bottom = QGridLayout()
         
-        self.setFixedSize(700, 450)
+        self.setFixedSize(700, 500)
         
         ### Grid TOP (1 row) ###
         # Static Text Field
@@ -70,7 +73,7 @@ class init_GUI(QWidget):
         
         ### Grid BODY_UPPER (2 rows) ###
         # Button Text Field
-        self.b1 = QPushButton("Select ~a~ CZI file")
+        self.b1 = QPushButton("Select a CZI file")
         self.b1.setDefault(True)
         self.b1.clicked.connect(lambda:self.buttonPress(self.b1))
         self.b1.setStyleSheet('QPushButton {background-color: #A3C1DA; color: black;}')
@@ -80,15 +83,12 @@ class init_GUI(QWidget):
         self.cb1.setChecked(True)
         self.cb1.stateChanged.connect(lambda:self.checkboxPress(self.cb1))
         self.grid_body_upper.addWidget(self.cb1, 0, 1)
-        # Static Text Field
-        self.e4 = QLineEdit()
-        self.e4.setValidator( QIntValidator() )
-        self.e4.setAlignment(Qt.AlignRight)
-        self.e4.setFont( self.font_1 )
-        self.e4.setReadOnly( True )
-        self.e4.setText( "Lorem Ipsum" )
-        self.e4.setFrame( False )
-        #self.grid_body_upper.addWidget( self.e4, 1, 1)
+        # Button Text Field
+        self.b2 = QPushButton("Select \"Sorted Filenames\" TXT file (Optional)")
+        self.b2.setDefault(True)
+        self.b2.clicked.connect(lambda:self.buttonPress(self.b2))
+        self.b2.setStyleSheet('QPushButton {background-color: #A3C1DA; color: black;}')
+        self.grid_body_upper.addWidget(self.b2, 1, 0)
         
         ### Grid BODY_MID (X row) ###
         # Static Text Field
@@ -127,6 +127,36 @@ You can choose to convert just the selected file, or all files in its folder usi
         self.cb_c_3.stateChanged.connect(lambda:self.checkboxPress(self.cb_c_3))
         #self.grid_body_lower.addWidget(self.cb_c_3, 3, 0)
         
+        # Static Text Field
+        self.e5 = QLineEdit()
+        self.e5.setValidator( QIntValidator() )
+        self.e5.setAlignment(Qt.AlignLeft)
+        self.e5.setFont( QFont("Arial",12) )
+        self.e5.setReadOnly( True )
+        self.e5.setText( "Select the main channel (the nissl/nuclear stain):" )
+        self.e5.setFrame( False )
+        #self.grid_body_lower.addWidget( self.e5, 0, 1)
+        # Checkbox
+        self.cb_c_0_main = QCheckBox("Channel 0 is Main")
+        self.cb_c_0_main.setChecked(False)
+        self.cb_c_0_main.stateChanged.connect(lambda:self.checkboxPress(self.cb_c_0_main))
+        #self.grid_body_lower.addWidget(self.cb_c_0_main, 1, 1)
+        # Checkbox
+        self.cb_c_1_main = QCheckBox("Channel 1 is Main")
+        self.cb_c_1_main.setChecked(False)
+        self.cb_c_1_main.stateChanged.connect(lambda:self.checkboxPress(self.cb_c_1_main))
+        #self.grid_body_lower.addWidget(self.cb_c_1_main, 2, 1)
+        # Checkbox
+        self.cb_c_2_main = QCheckBox("Channel 2 is Main")
+        self.cb_c_2_main.setChecked(False)
+        self.cb_c_2_main.stateChanged.connect(lambda:self.checkboxPress(self.cb_c_2_main))
+        #self.grid_body_lower.addWidget(self.cb_c_2_main, 3, 1)
+        # Checkbox
+        self.cb_c_3_main = QCheckBox("Channel 3 is Main")
+        self.cb_c_3_main.setChecked(False)
+        self.cb_c_3_main.stateChanged.connect(lambda:self.checkboxPress(self.cb_c_3_main))
+        #self.grid_body_lower.addWidget(self.cb_c_3_main, 3, 1)
+        
         
         ### Grid BODY_BOTTOM (X row) ###
         # Button Text Field
@@ -153,31 +183,76 @@ You can choose to convert just the selected file, or all files in its folder usi
         self.setWindowTitle("combo box demo")
         
     def display_grid_body_lower(self):
+        # Add left column checkboxes
         self.grid_body_lower.addWidget(self.cb_c_all, 0, 0)
         self.grid_body_lower.addWidget(self.cb_c_0, 1, 0)
+        # Add right column checkboxes
+        self.grid_body_lower.addWidget( self.e5, 0, 1)
+        self.grid_body_lower.addWidget(self.cb_c_0_main, 1, 1)
+        self.cb_c_0_main.setText( self.metadata_dict['channel_0_name']+' (channel 0)' )
+        self.cb_c_0_main.setChecked(True)
+        
         if self.czi_num_channels < 2:
             return
+        # Add left column checkboxes
         self.grid_body_lower.addWidget(self.cb_c_1, 2, 0)
+        # Add right column checkboxes
+        self.grid_body_lower.addWidget(self.cb_c_1_main, 2, 1)
+        self.cb_c_1_main.setText( self.metadata_dict['channel_1_name']+' (channel 1)' )
+        
         if self.czi_num_channels < 3:
             return
+        # Add left column checkboxes
         self.grid_body_lower.addWidget(self.cb_c_2, 3, 0)
+        # Add right column checkboxes
+        self.grid_body_lower.addWidget(self.cb_c_2_main, 3, 1)
+        self.cb_c_2_main.setText( self.metadata_dict['channel_2_name']+' (channel 2)' )
+        
         if self.czi_num_channels < 4:
             return
-        self.grid_body_lower.addWidget(self.cb_c_3, 3, 0)
+        # Add left column checkboxes
+        self.grid_body_lower.addWidget(self.cb_c_3, 4, 0)
+        # Add right column checkboxes
+        self.grid_body_lower.addWidget(self.cb_c_3_main, 4, 1)
+        self.cb_c_3_main.setText( self.metadata_dict['channel_3_name']+' (channel 3)' )
 
     def checkboxPress(self, checkbox):
         # "Convert all CZI files in folder"
         if checkbox == self.cb1:
             #print( self.cb1.isChecked() )
             pass
-        
+        # If "Convert all channels" is selected, remove all other selections
         elif checkbox == self.cb_c_all and self.cb_c_all.isChecked():
             for cb_to_disable in [self.cb_c_0, self.cb_c_1, self.cb_c_2, self.cb_c_3]:
                 cb_to_disable.setChecked(False)
-        
+        # If A single channel is selected, deselect the "Convert all channels" option
         elif checkbox in [self.cb_c_0, self.cb_c_1, self.cb_c_2, self.cb_c_3] :
             if checkbox.isChecked():
                 self.cb_c_all.setChecked(False)
+                
+        # For selecting the "main" channel, disable all other options when one is selected
+        cbox_list = [self.cb_c_0_main, self.cb_c_1_main, self.cb_c_2_main, self.cb_c_3_main]
+        if checkbox in cbox_list:
+            if checkbox.isChecked():
+                for cbox_to_disable in cbox_list:
+                    # If the checkbox we're cycling through is the selected checkbox, ignore
+                    if checkbox==cbox_to_disable: # Don't disable the active checkbox
+                        # Set the "main_channel" equal to the selected checkbox
+                        if checkbox==self.cb_c_0_main:
+                            self.main_channel = 0
+                        if checkbox==self.cb_c_1_main:
+                            self.main_channel = 1
+                        if checkbox==self.cb_c_2_main:
+                            self.main_channel = 2
+                        if checkbox==self.cb_c_3_main:
+                            self.main_channel = 3
+                        continue
+
+                    if cbox_to_disable.isChecked():
+                        cbox_to_disable.setChecked(False)
+            else:
+                pass
+                #checkbox.setChecked(True)
         
     def buttonPress(self, button):
         # Button: "select CZI file"
@@ -189,6 +264,7 @@ You can choose to convert just the selected file, or all files in its folder usi
             
             # Retrieve relevant metadata of the czi as a dictionary
             metadata_dict = get_czi_metadata( self.filepath_czi )
+            self.metadata_dict = metadata_dict.copy()
             # Retrieves indices of proper fullres tissue images
             self.fullres_series_indices = get_fullres_series_indices(metadata_dict)
             
@@ -203,6 +279,24 @@ You can choose to convert just the selected file, or all files in its folder usi
             
             self.display_grid_body_lower()
             self.b1.setStyleSheet('QPushButton {background-color: #cacaca; color: black;}')
+            
+        # Button: "select TXT Sorted Filenames file"
+        if button == self.b2:
+            fp = get_selected_file( initialdir='/',
+                                   default_filetype=[("text files","*.txt"),("all files","*.*")] )
+            destination_fp = DataManager.get_sorted_filenames_filename(stack)
+            
+            # Create destination folder if does not exist
+            destination_folder = os.path.split( destination_fp )[0]
+            try:
+                if not os.path.exists( destination_folder ):
+                    os.makedirs( destination_folder )
+            except:
+                pass
+            
+            subprocess.call(['cp', fp, destination_fp])
+            set_step_completed_in_progress_ini( stack, '1-4_setup_sorted_filenames')
+            
             
         # Button: "Convert CZI File(s) to TIFF"
         if button == self.b3:
@@ -230,6 +324,7 @@ You can choose to convert just the selected file, or all files in its folder usi
             print('\n')
             
             czi_file_list = get_list_of_czis_in_folder( self.filepath_czi_folder )
+            print(czi_file_list)
             
             for i, czi_file in enumerate(czi_file_list):
                 full_czi_fn = os.path.join( self.filepath_czi_folder, czi_file)
@@ -239,7 +334,7 @@ You can choose to convert just the selected file, or all files in its folder usi
                 print('  Extracting czi file '+str(i+1)+' out of '+str(len(czi_file_list)) )
                 print_stars()
                 print_stars()
-                print('\n')
+                #print('\n')
                 
                 # Retrieve metadata of the czi as a dictionary of relevant values
                 metadata_dict = get_czi_metadata( full_czi_fn )
@@ -253,11 +348,14 @@ You can choose to convert just the selected file, or all files in its folder usi
                     print_stars()
                     print('\n')
                     for channel in self.channels_to_extract:
-                        print('Extracting channel: '+str(channel) )
+                        print('\nExtracting channel: '+str(channel) )
                         
                         # Extract file by file, section by section, channel by channel
                         extract_tiff_from_czi( full_czi_fn, self.tiff_destination, series_index, channel )
-                        
+            # Copy all files into the proper location
+            copy_extracted_tiffs_to_proper_locations( stack, self.tiff_destination, self.main_channel )
+            self.finished()
+                
         # If we are converting ONLY 1 czi file
         else:
             print('\n\n')
@@ -280,8 +378,8 @@ You can choose to convert just the selected file, or all files in its folder usi
     def validate_selections(self):
         # Check that CZI input folder and TIFF output folder are selected
         assert self.tiff_destination != ""
-        assert self.filepath_czi != ""
-        assert self.filepath_czi_folder != ""
+        #assert self.filepath_czi != ""
+        assert self.filepath_czi_folder != "", "No CZI file selected!"
         
         self.channels_to_extract = []
         if self.cb_c_all.isChecked():
@@ -300,7 +398,16 @@ You can choose to convert just the selected file, or all files in its folder usi
         return True
     
     def closeEvent(self, event):
-        close_main_gui( ex )
+        #close_main_gui( ex )
+        sys.exit( app.exec_() )
+        
+    def finished(self):
+        set_step_completed_in_progress_ini( stack, '1-2_setup_images')
+        
+        #subprocess.call( ['python', 'a_script_preprocess_setup.py', stack, 'unknown'] )
+        
+        #close_main_gui( ex )
+        sys.exit( app.exec_() )
         
 
 def get_selected_file( initialdir='/', default_filetype=("jp2 files","*.jp2") ):
@@ -339,7 +446,7 @@ def main():
     ex.show()
     sys.exit( app.exec_() )
     
-    clean_up_tiff_directory2( '/media/alexn/Data_2/czi_convert_test/tiffs/fftest/' )
+    #clean_up_tiff_directory2( '/media/alexn/Data_2/czi_convert_test/tiffs/fftest/' )
 
 if __name__ == '__main__':
     main()

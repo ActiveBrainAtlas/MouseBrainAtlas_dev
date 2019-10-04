@@ -24,7 +24,7 @@ import time
 sys.path.append(os.path.join(os.environ['REPO_DIR'], 'utilities'))
 from metadata import *
 from preprocess_utilities import *
-from data_manager import DataManager
+from data_manager_v2 import DataManager
 from a_driver_utilities import *
 
 # Create from_padded_to_brainstem.ini
@@ -68,6 +68,14 @@ if stain == 'NTB':
     fp =  os.path.join(DATA_ROOTDIR, 'CSHL_data_processed', stack, 'operation_configs', 'from_padded_to_brainstem')
     command = [ 'python', 'warp_crop_v3.py', '--input_spec', 'input_spec.ini', '--op_id', fp]
     completion_message = 'Finished creating prep2 thumbnail masks.'
+    call_and_time( command, completion_message=completion_message)
+    
+    create_input_spec_ini_all( name='input_spec.ini', stack=stack, \
+                prep_id='alignedPadded', version='mask', resol='thumbnail')
+    # Creates prep5 thumbnail masks
+    fp =  os.path.join(DATA_ROOTDIR, 'CSHL_data_processed',stack, 'operation_configs', 'from_padded_to_wholeslice')
+    command = [ 'python', 'warp_crop_v3.py', '--input_spec', 'input_spec.ini', '--op_id', fp]
+    completion_message = 'Finished creating prep5 brainstem thumbnail images.'
     call_and_time( command, completion_message=completion_message)
 
 if stain == 'Thionin':

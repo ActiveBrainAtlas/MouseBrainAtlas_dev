@@ -5,6 +5,9 @@ import numpy as np
 import subprocess
 import os, sys
 import cv2
+sys.path.append(os.path.join(os.environ['REPO_DIR'], 'utilities'))
+from data_manager_v2 import DataManager
+
 
 def get_czi_metadata( czi_fp, get_full_metadata=False ):
     command = ['showinf', '-nopix', czi_fp ]
@@ -65,15 +68,26 @@ def get_czi_metadata( czi_fp, get_full_metadata=False ):
         channel_count = int( czi_metadata_series_i[ channel_count_index: channel_count_index+1] )
         
         metadata_dict[series_i]['channels'] = channel_count
-        
+       
+    for channel_i in range( metadata_dict[0]['channels'] ):
         # Extract channel names
-        str_to_search = 'Information|Image|Channel|Name #'+str(series_i+1)+': '
-        channel_name = czi_metadata_global[czi_metadata_global.index(str_to_search)]
+        str_to_search = 'Information|Image|Channel|Name #'+str(channel_i+1)+': '
+        str_index = czi_metadata_global.index(str_to_search)
+        channel_name = czi_metadata_global[str_index+len(str_to_search):
+                                           czi_metadata_global.find('\n', str_index)]
+        metadata_dict['channel_'+str(channel_i)+'_name'] = channel_name
         
     return metadata_dict
 
 def get_fullres_series_indices( metadata_dict ):
     fullres_series_indices = []
+    
+    for key in metadata_dict.keys():
+        try:
+            int(key)
+        except:
+            del metadata_dict[key]
+            continue
     
     last_series_i = max(metadata_dict.keys())
     
@@ -81,6 +95,12 @@ def get_fullres_series_indices( metadata_dict ):
     series_0_height = int( metadata_dict[0]['height'] )
     
     for series_curr in metadata_dict.keys():
+        #try:
+        #    int(series_curr)
+        #xcept:
+        #    # Skip keys that are not integers
+        #    continue
+        
         # Series 0 is currently assumed to be real, fullres tissue
         if series_curr != 0:
             series_curr_width = int( metadata_dict[series_curr]['width'] )
@@ -123,7 +143,6 @@ def get_list_of_czis_in_folder( folder ):
         else:
             czi_files.append(file_to_check)
             
-            
     czi_files = []
     
     for possible_czi in os.listdir( folder ):
@@ -134,6 +153,46 @@ def get_list_of_czis_in_folder( folder ):
 
 def print_stars():
     print '********************************'
+    
+def copy_extracted_tiffs_to_proper_locations( stack, tiff_target_folder, main_channel):
+    # "Ancillary Channel list contains all possible channel numbers except for the main channel
+    ancillary_channel_list = []
+    for i in range(0,4):
+        if i == main_channel:
+            continue
+        else:
+            ancillary_channel_list.append(i)
+    
+    for fn in os.listdir(tiff_target_folder):
+        full_fn = os.path.join(tiff_target_folder, fn)
+        
+        for ancillary_channel in ancillary_channel_list:
+            # e.g.'C2' will appear in images of the third channel, use this to tell which channel each image is
+            
+            # If this image is a secondary/ancillary channel
+            if 'C'+str(ancillary_channel) in fn:
+                destination_fp = os.path.join( DataManager.get_images_root_folder(stack), 
+                                              stack+'_raw_C'+str(ancillary_channel_list.index(ancillary_channel)), 
+                                              fn[0:fn.index('.tiff')]+'_raw.tiff')
+                # Create directory if it doesn't exist
+                try:
+                    os.makedirs( os.path.split(destination_fp)[0] )
+                except:
+                    pass
+                command = ['cp', full_fn, destination_fp]
+                subprocess.call( command )
+                
+            # If this image is the main channel, copy to the main folder
+            elif 'C'+str(main_channel) in fn:
+                destination_fp = os.path.join( DataManager.get_images_root_folder(stack), 
+                                              stack+'_raw', fn[0:fn.index('.tiff')]+'_raw.tiff')
+                # Create directory if it doesn't exist
+                try:
+                    os.makedirs( os.path.split(destination_fp)[0] )
+                except:
+                    pass
+                command = ['cp', full_fn, destination_fp]
+                subprocess.call( command )
 
 def extract_tiff_from_czi_all_channels( fn_czi, tiff_target_folder, series_i ):
     # The name of the tiff file
@@ -149,7 +208,7 @@ def extract_tiff_from_czi_all_channels( fn_czi, tiff_target_folder, series_i ):
 def extract_tiff_from_czi( fn_czi, tiff_target_folder, series_i, channel ):
     # The name of the tiff file
     # %t is time, %z is z height, %s is series #, %c is channel #
-    target_tiff_fn = os.path.join( tiff_target_folder, '%n_S%s_C%c_%w.tiff' )
+    target_tiff_fn = os.path.join( tiff_target_folder, '%n_S%s_C%c_%w.tif' )
     
     #command = ['bfconvert', '-bigtiff', '-compression', 'LZW', '-separate', 
     #           '-series', str(series_i), '-channel', str(channel), fn_czi, target_tiff_fn]
@@ -168,7 +227,7 @@ def clean_up_tiff_directory( tiff_target_folder ):
     
     for tiff_fn in os.listdir(tiff_target_folder):
         # Do nothing if expected patterns don't show up in the file
-        if (not '.czi' in tiff_fn and not '.ndpi' in tiff_fn) or not '.tiff' in tiff_fn:
+        if (not '.czi' in tiff_fn and not '.ndpi' in tiff_fn) or not '.tif' in tiff_fn:
             continue
             
         old_fn = os.path.join(tiff_target_folder, tiff_fn)

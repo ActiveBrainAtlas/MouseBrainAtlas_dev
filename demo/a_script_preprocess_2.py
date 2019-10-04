@@ -24,14 +24,15 @@ import time
 sys.path.append(os.path.join(os.environ['REPO_DIR'], 'utilities'))
 from metadata import *
 from preprocess_utilities import *
-from data_manager import DataManager
+from data_manager_v2 import DataManager
 from a_driver_utilities import *
 
 
 def create_from_none_to_aligned_file(  ):
     DATA_ROOTDIR = os.environ['DATA_ROOTDIR'] # THUMBNAIL_DATA_DIR
 
-    none_to_aligned_fp = os.path.join(DATA_ROOTDIR,'CSHL_data_processed',stack, 'operation_configs', 'from_none_to_aligned.ini')
+    none_to_aligned_fp = os.path.join( DataManager.get_images_root_folder(stack), 
+                                      'operation_configs', 'from_none_to_aligned.ini')
 
     from_none_to_aligned_content = '[DEFAULT]\n\
 type=warp\n\
@@ -42,16 +43,14 @@ dest_prep_id=aligned\n\
 # For align\n\
 elastix_parameter_fp='+REPO_DIR+'/preprocess/parameters/Parameters_Rigid_MutualInfo_\
 noNumberOfSpatialSamples_4000Iters.txt\n\
-elastix_output_dir='+DATA_ROOTDIR+'CSHL_data_processed\
-/'+stack+'/'+stack+'_elastix_output\n\
-custom_output_dir='+DATA_ROOTDIR+'CSHL_data_processed\
-/'+stack+'/'+stack+'_custom_output\n\
+elastix_output_dir='+DataManager.get_images_root_folder(stack)+'/'+stack+'_elastix_output\n\
+custom_output_dir='+DataManager.get_images_root_folder(stack)+'/'+stack+'_custom_output\n\
 \n\
 # For compose\n\
 anchor_image_name='+anchor_fn+'\n\
-transforms_csv='+DATA_ROOTDIR+'CSHL_data_processed/'+stack+'\
+transforms_csv='+DataManager.get_images_root_folder(stack)+'\
 /'+stack+'_transforms_to_anchor.csv\n\
-#transforms_csv='+DATA_ROOTDIR+'CSHL_data_processed/'+stack+'\
+#transforms_csv='+DataManager.get_images_root_folder(stack)+'\
 /'+stack+'_transformsTo_'+anchor_fn+'.csv\n\
 resolution=thumbnail'
 
@@ -74,7 +73,7 @@ def create_anchor_file( anchor_fn='auto' ):
                     stack, stack+'_anchor.txt')
 
     f = open( anchor_text_fp , "w")
-    f.write( anchor_fn ) 
+    f.write( anchor_fn )
     f.close()
     # Returns the chosen anchor filename just in case it is being suto-selected
     return anchor_fn

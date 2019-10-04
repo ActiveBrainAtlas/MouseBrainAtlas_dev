@@ -38,9 +38,13 @@ tb_resol = args.tb_resol
 
 images = {}
 
-print metadata_cache
-print ''
-print metadata_cache['valid_sections']
+#print metadata_cache
+#print ''
+
+try:
+    valid_sections = metadata_cache['valid_sections']
+except Exception as e:
+    sys.stderr.write( 'valid_sections cant be loaded for some reason!' )
 
 #     for sec in metadata_cache['valid_sections_all'][stack]:
 for sec in metadata_cache['valid_sections'][stack]:
