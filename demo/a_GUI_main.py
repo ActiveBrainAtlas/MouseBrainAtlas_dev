@@ -15,6 +15,8 @@ import sys
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 
+subprocess.call(['git', 'pull'])
+
 def format_grid_button_initial( button ):
     button.setDefault( True )
     button.setEnabled(True)
