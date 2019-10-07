@@ -181,7 +181,7 @@ You can choose to convert just the selected file, or all files in its folder usi
         
         # Set layout and window title
         self.setLayout( self.supergrid )
-        self.setWindowTitle("combo box demo")
+        self.setWindowTitle("Extract tiffs using bioformats tools")
         
     def display_grid_body_lower(self):
         # Add left column checkboxes

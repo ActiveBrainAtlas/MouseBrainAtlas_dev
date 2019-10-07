@@ -204,7 +204,7 @@ class init_GUI(QWidget):
         
         # Set layout and window title
         self.setLayout( self.supergrid )
-        self.setWindowTitle("combo box demo")
+        self.setWindowTitle("Setup new brain metadata")
         
         #########################################################
         #self.buttonPressSubmit(self.b1)

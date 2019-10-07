@@ -174,7 +174,7 @@ def copy_extracted_tiffs_to_proper_locations( stack, tiff_target_folder, main_ch
             if 'C'+str(ancillary_channel) in fn:
                 destination_fp = os.path.join( DataManager.get_images_root_folder(stack), 
                                               stack+'_raw_C'+str(ancillary_channel_list.index(ancillary_channel)), 
-                                              fn[0:fn.index('.tiff')]+'_raw.tiff')
+                                              fn[0:fn.index('.tif')]+'_raw.tif')
                 # Create directory if it doesn't exist
                 try:
                     os.makedirs( os.path.split(destination_fp)[0] )
@@ -186,7 +186,7 @@ def copy_extracted_tiffs_to_proper_locations( stack, tiff_target_folder, main_ch
             # If this image is the main channel, copy to the main folder
             elif 'C'+str(main_channel) in fn:
                 destination_fp = os.path.join( DataManager.get_images_root_folder(stack), 
-                                              stack+'_raw', fn[0:fn.index('.tiff')]+'_raw.tiff')
+                                              stack+'_raw', fn[0:fn.index('.tif')]+'_raw.tif')
                 # Create directory if it doesn't exist
                 try:
                     os.makedirs( os.path.split(destination_fp)[0] )

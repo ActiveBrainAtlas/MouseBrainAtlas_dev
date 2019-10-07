@@ -138,7 +138,7 @@ class init_GUI(QWidget):
         
         # Set layout and window title
         self.setLayout( self.supergrid )
-        self.setWindowTitle("combo box demo")
+        self.setWindowTitle("Select tiffs/jp2 images")
         
     def validateEntries(self):
         if self.filepath_sfns=="" or self.filepath_img=="":
