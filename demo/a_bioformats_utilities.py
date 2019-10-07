@@ -11,6 +11,7 @@ from data_manager_v2 import DataManager
 
 def get_czi_metadata( czi_fp, get_full_metadata=False ):
     command = ['showinf', '-nopix', czi_fp ]
+    print czi_fp
     # "showinf -nopix" will return the metadata of a CZI file
     czi_metadata_full = subprocess.check_output( command )
     
