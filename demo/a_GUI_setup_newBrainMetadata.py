@@ -294,7 +294,7 @@ class init_GUI(QWidget):
                 set_step_completed_in_progress_ini( entered_stack, '1-1_setup_metadata')
                 
                 #hide_gui()
-                sys.exit( app.exec_() )
+                
                 
                 # Need to use the Bioformats GUI if czi or ndpi
                 bioformats_extraction = False
@@ -307,6 +307,8 @@ class init_GUI(QWidget):
                 else:
                     subprocess.call( ['python', 'a_GUI_setup_images_nonbioformats.py', 
                                       entered_stack, entered_input_filetype] )
+                    
+                sys.exit( app.exec_() )
                 
     def closeEvent(self, event):
         sys.exit( app.exec_() )
