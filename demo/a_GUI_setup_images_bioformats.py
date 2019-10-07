@@ -14,7 +14,8 @@ import sys, os
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 
-from Tkinter import *
+import Tkinter
+#from Tkinter import *
 #from Tkinter import filedialog
 
 import argparse
