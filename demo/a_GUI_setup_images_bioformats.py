@@ -415,7 +415,7 @@ def get_selected_file( initialdir='/', default_filetype=("jp2 files","*.jp2") ):
     # Use tkinter to ask user for filepath to jp2 images
     
     root = Tk()
-    root.filename = filedialog.askopenfilename(initialdir = initialdir,\
+    root.filename = Tkinter.filedialog.askopenfilename(initialdir = initialdir,\
                                                 title = "Select file",\
                                                 filetypes = default_filetype)
     fn = root.filename
@@ -427,7 +427,7 @@ def get_selected_folder( initialdir='/' ):
     # Use tkinter to ask user for filepath to jp2 images
     
     root = Tk()
-    root.filename = filedialog.askdirectory(initialdir = initialdir,\
+    root.filename = Tkinter.filedialog.askdirectory(initialdir = initialdir,\
                                                 title = "Select folder")
     fp = root.filename
     root.destroy()
