@@ -166,11 +166,11 @@ class init_GUI(QWidget):
         """
         # Alignment Correction GUI
         if button == self.b_1:
-            subprocess.call(['python','a_GUI_fit_atlas_global_select_centers.py', self.stack])
+            subprocess.call(['python','a_GUI_atlas_global_select_centers.py', self.stack])
 
             progress = get_pipeline_status( self.stack )
             if not progress=='a_script_preprocess_6':
-                set_step_completed_in_progress_ini( self.stack, '4_crop')
+                set_step_completed_in_progress_ini( self.stack, '5_fit_atlas_global')
             
         self.updateFields()
             

@@ -287,7 +287,14 @@ class init_GUI(QWidget):
         # 6) Fit atlas local
         elif button == self.b_localFit:
             try:
-                subprocess.call(['python','a_GUI_atlas_local_main.py', self.stack])
+                #subprocess.call(['python','a_GUI_atlas_local_main.py', self.stack])
+                
+                QMessageBox.about(self, "Popup Message", "The GUI window is not completely finished. A classifier will be chosen automatically \
+and all local alignment scripts will be run. This will take a long time.")
+                
+                detector = stain_to_metainfo[self.stain]["detector_id"]
+                subprocess.call(['python','a_script_processing.py', self.stack, self.stain, str(detector) ])
+                
             except Exception as e:
                 sys.stderr.write( e )
         
