@@ -14,7 +14,7 @@ import sys, os
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 
-import Tkinter
+#import Tkinter
 #from Tkinter import *
 #from Tkinter import filedialog
 
@@ -414,9 +414,10 @@ You can choose to convert just the selected file, or all files in its folder usi
 def get_selected_file( initialdir='/', default_filetype=("jp2 files","*.jp2") ):
     # initialdir=os.environ['ROOT_DIR']
     # Use tkinter to ask user for filepath to jp2 images
+    import tkFileDialog as filedialog
     
     root = Tk()
-    root.filename = Tkinter.filedialog.askopenfilename(initialdir = initialdir,\
+    root.filename = filedialog.askopenfilename(initialdir = initialdir,\
                                                 title = "Select file",\
                                                 filetypes = default_filetype)
     fn = root.filename
@@ -426,9 +427,10 @@ def get_selected_file( initialdir='/', default_filetype=("jp2 files","*.jp2") ):
 def get_selected_folder( initialdir='/' ):
     # initialdir=os.environ['ROOT_DIR'
     # Use tkinter to ask user for filepath to jp2 images
+    import tkFileDialog as filedialog
     
     root = Tk()
-    root.filename = Tkinter.filedialog.askdirectory(initialdir = initialdir,\
+    root.filename = filedialog.askdirectory(initialdir = initialdir,\
                                                 title = "Select folder")
     fp = root.filename
     root.destroy()
