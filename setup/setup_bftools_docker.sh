@@ -1,9 +1,8 @@
 #!/bin/bash
 
 curl \
-https://downloads.openmicroscopy.org/bioformats/6.2.1/artifacts/bftools.zip \
---output \
-/app/bftools.zip
+-o /app/bftools.zip \
+https://downloads.openmicroscopy.org/bioformats/6.2.1/artifacts/bftools.zip
 
 unzip /app/bftools.zip
 
