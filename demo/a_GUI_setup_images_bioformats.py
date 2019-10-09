@@ -353,6 +353,8 @@ You can choose to convert just the selected file, or all files in its folder usi
                         
                         # Extract file by file, section by section, channel by channel
                         extract_tiff_from_czi( full_czi_fn, self.tiff_destination, series_index, channel )
+                        if ii==0 and channel==0:
+                            extract_tiff_from_czi( full_czi_fn, self.tiff_destination, series_index, channel )
             # Copy all files into the proper location
             copy_extracted_tiffs_to_proper_locations( stack, self.tiff_destination, self.main_channel )
             self.finished()

@@ -243,6 +243,20 @@ class init_GUI(QWidget):
         # Vertical line
         self.grid_body_lower.addWidget(QVLine(), 0, 3, 1, 1)
         # Button Text Field
+        self.b_remove = QPushButton("Remove section")
+        self.b_remove.setDefault(True)
+        self.b_remove.setEnabled(False)
+        self.b_remove.clicked.connect(lambda:self.buttonPress(self.b_remove))
+        self.b_remove.setStyleSheet("color: rgb(0,0,0); background-color: #C91B1B;")
+        self.grid_body_lower.addWidget(self.b_remove, 1, 0)
+        # Button Text Field
+        self.b_addPlaceholder = QPushButton("Add Placeholder as prev section")
+        self.b_addPlaceholder.setDefault(True)
+        self.b_addPlaceholder.setEnabled(False)
+        self.b_addPlaceholder.clicked.connect(lambda:self.buttonPress(self.b_addPlaceholder))
+        self.b_addPlaceholder.setStyleSheet("color: rgb(0,0,0); background-color: #41C91B;")
+        self.grid_body_lower.addWidget(self.b_addPlaceholder, 1, 1)
+        # Button Text Field
         self.b_left = QPushButton("<--   Move Section Left   <--")
         self.b_left.setDefault(True)
         self.b_left.setEnabled(True)
@@ -391,7 +405,12 @@ class init_GUI(QWidget):
                 self.sections_to_filenames[ int(self.next_section) ] = curr_fn
                 self.sections_to_filenames[ int(self.curr_section) ] = next_fn
                 self.curr_section = self.getNextValidSection( self.curr_section )
-            
+                
+            elif button==self.b_addPlaceholder:
+                
+            elif button==self.b_remove:
+                
+                
             # Update the Viewer info and displayed image
             self.setCurrSection(self.curr_section)
             
