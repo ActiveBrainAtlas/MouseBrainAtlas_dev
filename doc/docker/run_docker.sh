@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export image='anewberry/atlas_demo:atlas_v0.0.6'
+export image='anewberry/atlas_demo:atlas_v0.0.7'
 
 # Install docker if it is not installed
 if [[ "$(docker -v  2> /dev/null)" == "" ]]; then
