@@ -17,13 +17,12 @@ Here is an example of a good DATA_DIRECTORY: `/media/john/external_drive_1/atlas
 Enter in the multiline command below into your linux terminal while you are logged into your user account (you can copy and paste the entire chunk). It will create a directory called "atlas_docker_demo" in your home folder and copy the shell script "run_docker.sh" into it.
 
 __Command 1:__
-```
-cd ~ && \
-mkdir -p ./atlas_docker_demo/ && \
-cd ./atlas_docker_demo/
-curl -O "https://raw.githubusercontent.com/ActiveBrainAtlas/MouseBrainAtlas_dev/master/doc/docker/run_docker.sh" \
-"./run_docker.sh"
-```
+
+Run each of the four following commands by copying them one at a time, pasting them into a terminal, and pushing enter.
+  - `cd ~`
+  - `mkdir -p ./atlas_docker_demo/`
+  - `cd ./atlas_docker_demo/`
+  - `curl -O "https://raw.githubusercontent.com/ActiveBrainAtlas/MouseBrainAtlas_dev/master/doc/docker/run_docker.sh" "./run_docker.sh"`
 
 Next we will want to run the script we just downloaded, named "run_docker.sh". Before attempting to run the Docker container, it will first verify that you have Docker installed as well as the latest Docker Image for this project. If either are not installed, they will be automatically installed. Please replace "`$DATA_DIRECTORY`" with the actual data directory you have chosen as described above.
 
