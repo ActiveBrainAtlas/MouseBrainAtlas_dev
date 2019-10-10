@@ -62,11 +62,17 @@ for image_name in image_name_list:
 
     raw_mask = resize(tb_mask, img.shape) > .5
     
+    print 'test1'
+    
     save_data(raw_mask, 
           DataManager.get_image_filepath_v2(stack=stack, prep_id=prep_id, fn=image_name, version='mask', resol=resol, ext='bp'), 
           upload_s3=False)
     
+    print 'test2'
+    
     sys.stderr.write('Rescale mask: %.2f seconds.\n' % (time.time() - t))
+    
+    print 'test3'
 
     t = time.time()
     
