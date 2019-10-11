@@ -3,7 +3,7 @@ jupyter
 
 numpy==1.15.4
 opencv-python==3.1.0.3
-scikit-image==0.13.1
+scikit-image==0.14.2
 scikit-learn==0.19.1
 matplotlib==2.2.2
 pandas==0.23.0
