@@ -1,7 +1,7 @@
 ### GUI Steps (Local)
 
-1) [Setup: Step 3, Create Sorted Filenames](#preprocess-setup)
-2) [Setup: Step 4, Orient Images](#preprocess-setup)
+1) [Setup: Step 3, Create Sorted Filenames](#create-sorted-filenames-gui)
+2) [Setup: Step 4, Orient Images](#orient-images-gui)
 3) [Alignment: Step 1, Correct Automatic ALignments](#alignment-gui)
 4) [Masking: Step 1, Create Initial Masks](#initial-mask-contours)
 5) [Masking: Step 3, Correct Automatic Masks](#correct-auto-generated-masks)
