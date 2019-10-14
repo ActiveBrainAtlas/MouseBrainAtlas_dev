@@ -12,6 +12,10 @@ Using the Docker terminal Ensure you are in the "demo" folder of this repository
 
 Run the following command to start up the GUI interface: `python a_GUI_main.py`
 
+### How to run the GUIs
+
+Several of the GUIs are quite involved and require following a set of instructions that is not immediatly apparent. [Please consult this guide for guides on how to use the various GUIs](./GUI_guides_v2.md).
+
 ## Errors
 
 If the GUI based pipeline does not behave as one would expect in any way, (e.g. running a script does not automatically proceed to the next step, getting stuck anywhere, buttons being unresponsive), please contact Alex Newberry by email at adnewber@ucsd.edu with the issue you are experiencing.
