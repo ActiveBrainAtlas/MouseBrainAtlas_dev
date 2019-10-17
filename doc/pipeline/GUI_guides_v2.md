@@ -30,18 +30,19 @@ Cycle through all existing images and ensure that the rostral side is pointing t
   - Once you have ensured that ALL of the slices have been properly oriented, click the "Done orienting" button.
 
 # Alignment GUI:
-Command: `python $REPO_DIR/gui/preprocess_tool_v3.py $stack --tb_version $img_version_1`
+GUI controls:
+- Wheel to zoom
+- `[` and `]` to cycle through images
+- `m`: Toggle between VIEW mode (grayscale) and ALIGN mode (red & blue)
+- Use the buttons on the bottom when in ALIGN mode to align slices.
 
-The automatic intra-stack alignment has an error rate of about 5-10%, it will be expected that the user corrects any erroneous alignments.
-  - Click the button, `load_sorted_filenames`
-  - Click the dropdown menu and select `Original_Aligned`
-  - Identify the number of broken pairs. Slices are aligned to their neighbors, one slice being misaligned will require two corrections. Use "`[`" and "`]`" to the previous and next images.
-  - Click the button `edit transform`
-    - A new screen should pop up with three images. The left and middle images are two slices that have been aligned, the right image is the overlay of both images. For every broken pair, follow the remaining instructions.
-  - Click the button `add anchor pair`
-    - Every time you click this button you add a corresponding pair of points to the left and middle images. Click on the leftmost image to add its point, then click on the middle image to add the corresponding point. These points should be located in the exact same region on both images such that when overlayed, the points will overlap. Do this for 4-6 points for every pair of misaligned images.
-    - Click the button `compute transform` and move on to the next pair of images
-  - Close the GUI
+    This GUI should start in VIEW mode, you can tell it is in VIEW mode because it will display only grayscale images. While it is in VIEW mode, press and hold either `[` or `]` to quickly cycle through images. The images should be aligned to one another such that quickly scrolling through is seamless, every subsequent section should be oriented the same way. In a case where going from one image to another clearly shows that they are not aligned, i.e. overlaying the images would show that they are not on top of one another, this is considered to be a "broken chain". 
+  
+    Alignment is such that slice A is aligned to slice B, B to C, C to D, D to E, E to F, and so on. If slice C is misaligned to slice D, then A->B->C will be aligned together, and D->E->F will be aligned together. C->D is the broken link, and must be corrected. Correcting broken links is done in ALIGN mode. Hit `m` on your keyboard to toggle modes. You know you are in ALIGN mode when you see two slices overlain, one in red, one in blue. Find the broken pair and go into ALIGN mode, you'll know it's a broken pair when the red and blue slices are not overlain properly.
+  
+    While still in ALIGN mode, use the buttons in the GUI's footer to align the red slice to the blue slice. The options include translating the red slice up/down/left/right, or rotating it clockwise/counterclockwise. Use these six buttons to align the red to the blue by eye. Once finished fixing the broken pair, click the `Save Transformation` button in the bottom right. REPEAT THESE INSTRUCTIONS FOR EVERY SINGLE BROKEN PAIR.
+  
+    Double and triple check that all broken pairs have been corrected. Best way to do this: go into VIEW mode and hold either `[` or `]`, verify by eye that every slice is aligned properly. Once you are certain there are no more broken pairs, click the button labeled `DONE`.
 
 
 # Masking GUI:
