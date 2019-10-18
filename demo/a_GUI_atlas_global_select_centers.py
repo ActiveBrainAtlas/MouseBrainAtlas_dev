@@ -414,10 +414,10 @@ class init_GUI(QWidget):
                 QMessageBox.about(self, "Popup Message", "This operation will take roughly 1.5 minutes per image.")
                 self.setCurrSection( self.curr_section )
                 stain = stack_metadata[stack]['stain']
-                subprocess.call(['python','a_script_preprocess_6.py', stack, stain, 
-                                '-l', str(self.rostral), str(self.caudal), 
-                                      str(self.dorsal), str(self.ventral), 
-                                      str(self.first_slice), str(self.last_slice)])
+                subprocess.call(['python','a_script_preprocess_7.py', stack, stain, 
+                                '-l', str(self.x_12N), str(self.y_12N), 
+                                      str(self.x_3N), str(self.y_3N), 
+                                      str(self.z_midline)])
                 sys.exit( app.exec_() )
             except Exception as e:
                 sys.stderr.write('\n ********************************\n')
