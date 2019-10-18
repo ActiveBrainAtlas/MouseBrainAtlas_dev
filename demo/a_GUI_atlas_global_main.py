@@ -170,7 +170,12 @@ class init_GUI(QWidget):
 
             progress = get_pipeline_status( self.stack )
             if not progress=='a_script_preprocess_6':
-                set_step_completed_in_progress_ini( self.stack, '5_fit_atlas_global')
+                fp1 = os.path.join(os.environ['ROOT_DIR'], 'CSHL_simple_global_registration', 
+                                   self.stack+'_T_atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol.txt')
+                fp2 = os.path.join(os.environ['ROOT_DIR'], 'CSHL_simple_global_registration', 
+                                   self.stack+'_T_atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol.bp')
+                if os.path.exists( fp1 ) and os.path.exists( fp2 ):
+                    set_step_completed_in_progress_ini( self.stack, '5_fit_atlas_global')
             
         self.updateFields()
             
