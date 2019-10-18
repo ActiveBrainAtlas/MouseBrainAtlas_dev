@@ -373,10 +373,10 @@ def get_prep5_limits_from_prep1_thumbnail_masks( stack, max_distance_to_scan_fro
     final_dorsal_lim = (curr_dorsal_lim_d16-1.5)*16
     final_ventral_lim = (curr_ventral_lim_d16+1.5)*16
     # If boundary goes past the image, reset to the min/max value
-    final_rostral_lim = min( final_rostral_lim, width )
-    final_caudal_lim = max( final_caudal_lim, 0 )
-    final_dorsal_lim = min( final_dorsal_lim, height )
-    final_ventral_lim = max( final_ventral_lim, 0 )
+    final_rostral_lim = max( final_rostral_lim, 0 )
+    final_caudal_lim = min( final_caudal_lim, width )
+    final_dorsal_lim = max( final_dorsal_lim, 0 )
+    final_ventral_lim = min( final_ventral_lim, height )
  
     print('rostral:',final_rostral_lim)
     print('caudal:',final_caudal_lim)

@@ -183,7 +183,7 @@ class init_GUI(QWidget):
     
     def updateFields(self):
         # Update the stack dropdown menu
-        self.updateStackDropdown()
+        #self.updateStackDropdown()
         
         # Get dropdown selection
         dropdown_selection = self.cb.currentText()
@@ -209,6 +209,8 @@ class init_GUI(QWidget):
                 format_grid_button_cantStart( grid_button )
         
     def updateStackDropdown(self):
+        dropdown_selection = self.cb.currentText()
+        
         all_stacks = []
         if os.path.exists( BRAINS_INFO_DIR ):
             for brain_ini in os.listdir( BRAINS_INFO_DIR ):
@@ -223,7 +225,7 @@ class init_GUI(QWidget):
         self.cb.clear()
         self.cb.addItems( all_stacks )
         
-        index = combo.findText(text, Qt.MatchFixedString)
+        index = self.cb.findText( dropdown_selection, Qt.MatchFixedString)
         if index >= 0:
              self.cb.setCurrentIndex(index)
         
@@ -322,6 +324,8 @@ and all local alignment scripts will be run. This will take a long time.")
             except Exception as e:
                 sys.stderr.write( e )
         
+        # Update the stack dropdown menu
+        self.updateStackDropdown()
         self.updateFields()
         self.format_grid_buttons()
             
@@ -368,3 +372,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+

@@ -16,6 +16,8 @@ stain = args.stain
 id_detector = args.id_detector
 structure = args.structure
 
+win_id = detector_settings.to_dict()['windowing_id'][int(id_detector)]
+
 # Import other modules and packages
 import os
 import subprocess
@@ -47,7 +49,7 @@ create_input_spec_ini_all( name='input_spec.ini', stack=stack, \
                            prep_id='alignedBrainstemCrop', \
                            version=img_version,\
                            resol='raw')
-command = [ 'python', 'demo_compute_features_v2.py', 'input_spec.ini','--win_id','7']
+command = [ 'python', 'demo_compute_features_v2.py', 'input_spec.ini','--win_id',str(win_id)]
 completion_message = 'Finished generating patch features.'
 call_and_time( command, completion_message=completion_message)
 
