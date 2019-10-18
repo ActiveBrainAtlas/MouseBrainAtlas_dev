@@ -417,7 +417,7 @@ class init_GUI(QWidget):
                 subprocess.call(['python','a_script_preprocess_7.py', stack, stain, 
                                 '-l', str(self.x_12N), str(self.y_12N), 
                                       str(self.x_3N), str(self.y_3N), 
-                                      str(self.z_midline)])
+                                      str(self.midline)])
                 sys.exit( app.exec_() )
             except Exception as e:
                 sys.stderr.write('\n ********************************\n')
