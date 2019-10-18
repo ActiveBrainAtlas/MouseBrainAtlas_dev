@@ -504,7 +504,7 @@ class init_GUI(QWidget):
     def validateChoices(self):
         validated = True
         
-        if self.y_12N < 0 or self.x_12N < 0 or self.y_3N < 0 or self.x_3N < 0 or :
+        if self.y_12N < 0 or self.x_12N < 0 or self.y_3N < 0 or self.x_3N < 0:
             QMessageBox.about(self, "Popup Message", "Make sure there are no negative values!")
             validated = False
         
