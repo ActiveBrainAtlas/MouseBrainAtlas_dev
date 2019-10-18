@@ -9,10 +9,12 @@ parser = argparse.ArgumentParser(
 parser.add_argument("stack", type=str, help="The name of the stack")
 parser.add_argument("stain", type=str, help="Either \'NTB\' or \'Thionin\'.")
 parser.add_argument("id_detector", type=str, help="A number indicating the detector settings you want.")
+parser.add_argument('--structure', default="ALL", type=str)
 args = parser.parse_args()
 stack = args.stack
 stain = args.stain
 id_detector = args.id_detector
+structure = args.structure
 
 # Import other modules and packages
 import os
@@ -34,6 +36,10 @@ if stain == 'NTB':
     img_version = 'NtbNormalizedAdaptiveInvertedGamma'
 if stain == 'Thionin':
     img_version = 'gray'
+    
+if structure=='ALL':
+    structure_list = structures_sided_sorted_by_rostral_caudal_position
+    structure_list_unsided = structures_unsided_sorted_by_rostral_caudal_position
     
 
 # Compute patch features

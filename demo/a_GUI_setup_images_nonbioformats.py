@@ -141,7 +141,9 @@ class init_GUI(QWidget):
         self.setWindowTitle("Select tiffs/jp2 images")
         
     def validateEntries(self):
-        if self.filepath_sfns=="" or self.filepath_img=="":
+        if self.filepath_sfns=="" and self.filepath_img=="":
+            return False
+        if self.filepath_img=="":
             return False
         
         return True
@@ -152,20 +154,23 @@ class init_GUI(QWidget):
             if validated:
                 # Create parent folders if necessary
                 create_parent_folder_for_files( self.stack )
-                # Copy sorted filenames file to proper lcoation
-                copy_over_sorted_filenames( self.stack, self.filepath_sfns )
+                
+                # Copy over sorted filenames if it was selected
+                if self.filepath_sfns=="":
+                    pass
+                else:
+                    # Copy sorted filenames file to proper lcoation
+                    copy_over_sorted_filenames( self.stack, self.filepath_sfns )
                 
                 # Copy image files to proper location
                 if '.jp2' in self.filepath_img:
-                    self.e1.setText( "The sorted filenames text file has been copied over into "+
-                       self.filepath_sfns_folder+". The jp2 images are being converted and copied, "+
+                    self.e1.setText( "The jp2 images are being converted and copied, "+
                         "The process is expected to take 60-90 seconds per image.\n\n"+
                         "Please revisit this GUI in a few hours.")
                     self.e1.repaint()
                     copy_over_jp2_files( self.stack, self.filepath_img, self.filepath_img_folder )
                 elif '.tif' in self.filepath_img:
-                    self.e1.setText( "The sorted filenames text file has been copied over into "+
-                       self.filepath_sfns_folder+". The tiff images are now being renamed and copied.")
+                    self.e1.setText( "The tiff images are now being renamed and copied. This will take about 30s - 1m per image.")
                     self.e1.repaint()
                     copy_over_tif_files( self.stack, self.filepath_img_folder )
                     
@@ -206,7 +211,8 @@ class init_GUI(QWidget):
         
         set_step_completed_in_progress_ini( stack, '1-2_setup_images')
         
-        close_main_gui( ex )
+        #close_main_gui( ex )
+        sys.exit( app.exec_() )
             
 def create_parent_folder_for_files( stack ):
     try:

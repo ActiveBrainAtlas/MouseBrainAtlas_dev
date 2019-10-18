@@ -182,6 +182,9 @@ class init_GUI(QWidget):
         self.center()
     
     def updateFields(self):
+        # Update the stack dropdown menu
+        self.updateStackDropdown()
+        
         # Get dropdown selection
         dropdown_selection = self.cb.currentText()
         dropdown_selection_str = str(dropdown_selection.toUtf8())
@@ -202,8 +205,27 @@ class init_GUI(QWidget):
         # If there are no stacks/brains that have been started
         except KeyError:
             for grid_button in [self.b_setup, self.b_align, self.b_mask, self.b_crop, 
-                            self.b_globalFit, self.b_localFit]:
+                                self.b_globalFit, self.b_localFit]:
                 format_grid_button_cantStart( grid_button )
+        
+    def updateStackDropdown(self):
+        all_stacks = []
+        if os.path.exists( BRAINS_INFO_DIR ):
+            for brain_ini in os.listdir( BRAINS_INFO_DIR ):
+                # Two kinds of brain_ini files: 'progress' and 'metadata'
+                if 'progress' in brain_ini:
+                    continue
+                
+                brain_name = os.path.splitext(brain_ini)[0]
+                brain_name = brain_name.replace('_metadata', '')
+                all_stacks.append( brain_name )
+                
+        self.cb.clear()
+        self.cb.addItems( all_stacks )
+        
+        index = combo.findText(text, Qt.MatchFixedString)
+        if index >= 0:
+             self.cb.setCurrentIndex(index)
         
     def format_grid_buttons(self):
         """
@@ -300,6 +322,7 @@ and all local alignment scripts will be run. This will take a long time.")
             except Exception as e:
                 sys.stderr.write( e )
         
+        self.updateFields()
         self.format_grid_buttons()
             
     def button_push(self, button):

@@ -473,8 +473,7 @@ class init_GUI(QWidget):
         info_text = "This GUI is used to align slices to each other. The shortcut commands are as follows: \n\n\
     -  `m`: Toggle between view mode (grayscale) and alignment mode (red & blue).\n\
     -  `[`: Go back one section. \n\
-    -  `]`: Go forward one section. \n\
-    -  `q`: Toggle pixel selection mode. Clicking on the image will print out pixel position into the terminal.\n\n\
+    -  `]`: Go forward one section. \n\n\
     \
     All changes must be done in alignment mode. Alignment mode will display the pairwise alignment between the current \
 active section (red) and the previous section (blue). Using the buttons at the foot of the GUI, you can translate and \
