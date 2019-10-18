@@ -138,10 +138,11 @@ def make_from_x_to_y_ini(stack,x,y,rostral_limit,caudal_limit,dorsal_limit,ventr
     f.close()
     
 def make_manual_anchor_points( stack, x_12N, y_12N, x_3N, y_3N, z_midline):
-    #if not os.path.exists( DataManager.get_simple_global_root_folder(stack) ):
-    #    os.mkdir( DataManager.get_simple_global_root_folder(stack) )
+    if not os.path.exists( DataManager.get_simple_global_root_folder(stack) ):
+        os.mkdir( DataManager.get_simple_global_root_folder(stack) )
     
     fn = os.path.join( DataManager.get_simple_global_root_folder(stack), stack+'_manual_anchor_points.ini' )
+    
     f = open(fn, "w")
     f.write('[DEFAULT]\n')
     f.write('x_12N = '+str(x_12N)+'\n')

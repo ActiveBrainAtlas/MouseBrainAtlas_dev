@@ -1421,7 +1421,8 @@ class DataManager(object):
     @staticmethod
     def get_simple_global_root_folder(stack):
         #return os.path.join( DataManager.get_registration_root_folder(stack), 'simple_global_alignment' )
-        return None
+        return os.path.join( os.environ['ROOT_DIR'], 'CSHL_simple_global_registration' )
+        #eturn None
 
     @staticmethod
     def get_patch_features_root_folder(stack):
