@@ -243,6 +243,7 @@ def load_data(fp, polydata_instead_of_face_vertex_list=True, download_s3=True):
 
     if fp.endswith('.bp'):
         try:
+            print 1/0
             data = bp.unpack_ndarray_file(fp)
         except:
             fp = fp.replace('.bp','.npy')
@@ -275,6 +276,7 @@ def save_data(data, fp, upload_s3=True):
 
     if fp.endswith('.bp'):
         try:
+            print 1/0
             bp.pack_ndarray_file(np.ascontiguousarray(data), fp)
             # ascontiguousarray is important, without which sometimes the loaded array will be different from saved.
         except:

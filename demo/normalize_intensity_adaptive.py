@@ -42,6 +42,8 @@ from skimage.transform import rotate
 # for section in set(metadata_cache['valid_sections_all'][stack]) - set(metadata_cache['valid_sections'][stack]):
 # for section in metadata_cache['valid_sections'][stack]:
 
+use_bp = False
+
 for image_name in image_name_list:
 
 #     print "Section", section
@@ -130,13 +132,25 @@ for image_name in image_name_list:
     create_parent_dir_if_not_exists(fp)
     np.savetxt(fp, mean_std_all_regions)
     
-    fp = DataManager.get_intensity_normalization_result_filepath(what='mean_map', stack=stack, fn=image_name)
-    create_parent_dir_if_not_exists(fp)
-    bp.pack_ndarray_file(mean_map.astype(np.float16), fp)
-    
-    fp = DataManager.get_intensity_normalization_result_filepath(what='std_map', stack=stack, fn=image_name)
-    create_parent_dir_if_not_exists(fp)
-    bp.pack_ndarray_file(std_map.astype(np.float16), fp)
+    if use_bp:
+        fp = DataManager.get_intensity_normalization_result_filepath(what='mean_map', stack=stack, fn=image_name)
+        create_parent_dir_if_not_exists(fp)
+        bp.pack_ndarray_file(mean_map.astype(np.float16), fp)
+
+        fp = DataManager.get_intensity_normalization_result_filepath(what='std_map', stack=stack, fn=image_name)
+        create_parent_dir_if_not_exists(fp)
+        bp.pack_ndarray_file(std_map.astype(np.float16), fp)
+    else:
+        fp = DataManager.get_intensity_normalization_result_filepath(what='mean_map', stack=stack, fn=image_name)
+        create_parent_dir_if_not_exists(fp)
+        #bp.pack_ndarray_file(mean_map.astype(np.float16), fp)
+        np.save( fp.replace('.bp','.npy'), mean_map.astype(np.float16))
+
+        fp = DataManager.get_intensity_normalization_result_filepath(what='std_map', stack=stack, fn=image_name)
+        create_parent_dir_if_not_exists(fp)
+        #bp.pack_ndarray_file(std_map.astype(np.float16), fp)
+        np.save( fp.replace('.bp','.npy'), std_map.astype(np.float16))
+        
 
     # Export normalized image.
     
