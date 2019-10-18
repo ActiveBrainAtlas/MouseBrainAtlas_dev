@@ -49,7 +49,8 @@ for img_name in image_name_list:
     out_fp = DataManager.get_image_filepath_v2(stack=stack, prep_id=prep_id, resol=args.out_resol, version=version, fn=img_name)
     create_parent_dir_if_not_exists(out_fp)
     
-    img = imread(in_fp, plugin='pil')
+    #img = imread(in_fp, plugin='pil')
+    img = imread(in_fp)
     print in_fp
     print img.dtype
     print np.shape(img)

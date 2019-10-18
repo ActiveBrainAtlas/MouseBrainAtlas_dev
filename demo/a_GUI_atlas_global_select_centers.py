@@ -504,20 +504,8 @@ class init_GUI(QWidget):
     def validateChoices(self):
         validated = True
         
-        if -1 in [self.rostral, self.caudal, self.dorsal, self.ventral, self.first_slice, self.last_slice]:
-            QMessageBox.about(self, "Popup Message", "Make sure all six fields have values!")
-            validated = False
-        elif self.rostral >= self.caudal:
-            #sys.stderr.write( 'Rostral Limit must be smaller than caudal limit!' )
-            QMessageBox.about(self, "Popup Message", "Rostral Limit must be smaller than caudal limit!")
-            validated = False
-        elif self.dorsal >= self.ventral:
-            #sys.stderr.write( 'Dorsal Limit must be smaller than Ventral limit!' )
-            QMessageBox.about(self, "Popup Message", "Dorsal Limit must be smaller than Ventral limit!")
-            validated = False
-        elif self.first_slice >= self.last_slice:
-            #sys.stderr.write( 'Last slice must be after the first slice!' )
-            QMessageBox.about(self, "Popup Message", "Last slice must be after the first slice!")
+        if self.y_12N < 0 or self.x_12N < 0 or self.y_3N < 0 or self.x_3N < 0 or :
+            QMessageBox.about(self, "Popup Message", "Make sure there are no negative values!")
             validated = False
         
         return validated

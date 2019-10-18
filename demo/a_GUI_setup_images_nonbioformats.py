@@ -211,8 +211,9 @@ class init_GUI(QWidget):
         
         set_step_completed_in_progress_ini( stack, '1-2_setup_images')
         
+        close_gui()
         #close_main_gui( ex )
-        sys.exit( app.exec_() )
+        #sys.exit( app.exec_() )
             
 def create_parent_folder_for_files( stack ):
     try:
@@ -328,10 +329,10 @@ def get_selected_fp( initialdir='/', default_filetype=("jp2 files","*.jp2") ):
     root.destroy()
     return fn
     
-#def close_gui():
+def close_gui():
+    sys.exit( app.exec_() )
 #    ex.hide()
     #sys.exit()
-    #sys.exit( app.exec_() )
     
 def main():
     global app 
