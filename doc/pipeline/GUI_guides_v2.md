@@ -60,7 +60,7 @@ Working on the top-left image field:
   - Right click, select `create initial snake contour`.
     - Click around the tissue, creating a set of vertices joined together by lines. Ensure that the tissue is within the polygon you are creating. Once the encapsulating polygon is about finished, click your first point to close and complete it.
     - Right click, select `set this contour as anchor contour`
-  - Run the last bullet in its entirety for about 5-8 sections in a stack of 300-400 images. Try to keep the anchor contours spaced out.
+  - Run the last step in its entirety for about 5-8 sections in a stack of 300-400 images. Try to keep the anchor contours spaced out.
   - Right click, select `automatically estimate all contours`. This generates contours on every image that is NOT an anchor contour via linear interpolation.
   Looking at the bottom push buttons: 
     - Press `save anchor contours`
