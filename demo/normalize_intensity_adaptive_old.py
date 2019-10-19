@@ -42,6 +42,8 @@ from skimage.transform import rotate
 # for section in set(metadata_cache['valid_sections_all'][stack]) - set(metadata_cache['valid_sections'][stack]):
 # for section in metadata_cache['valid_sections'][stack]:
 
+use_bp = False
+
 for image_name in image_name_list:
 
 #     print "Section", section
@@ -63,7 +65,7 @@ for image_name in image_name_list:
     raw_mask = resize(tb_mask, img.shape) > .5
         
     save_data(raw_mask, 
-          DataManager.get_image_filepath_v2(stack=stack, prep_id=prep_id, fn=image_name, version='mask', resol=resol, ext='npy'), 
+          DataManager.get_image_filepath_v2(stack=stack, prep_id=prep_id, fn=image_name, version='mask', resol=resol, ext='bp'), 
           upload_s3=False)
         
     sys.stderr.write('Rescale mask: %.2f seconds.\n' % (time.time() - t))
@@ -124,15 +126,24 @@ for image_name in image_name_list:
     create_parent_dir_if_not_exists(fp)
     np.savetxt(fp, mean_std_all_regions)
     
-    fp = DataManager.get_intensity_normalization_result_filepath(what='mean_map', stack=stack, fn=image_name)
-    create_parent_dir_if_not_exists(fp)
-    #bp.pack_ndarray_file(mean_map.astype(np.float16), fp)
-    np.save( fp, mean_map.astype(np.float16))
+    if use_bp:
+        fp = DataManager.get_intensity_normalization_result_filepath(what='mean_map', stack=stack, fn=image_name)
+        create_parent_dir_if_not_exists(fp)
+        bp.pack_ndarray_file(mean_map.astype(np.float16), fp)
 
-    fp = DataManager.get_intensity_normalization_result_filepath(what='std_map', stack=stack, fn=image_name)
-    create_parent_dir_if_not_exists(fp)
-    #bp.pack_ndarray_file(std_map.astype(np.float16), fp)
-    np.save( fp, std_map.astype(np.float16))
+        fp = DataManager.get_intensity_normalization_result_filepath(what='std_map', stack=stack, fn=image_name)
+        create_parent_dir_if_not_exists(fp)
+        bp.pack_ndarray_file(std_map.astype(np.float16), fp)
+    else:
+        fp = DataManager.get_intensity_normalization_result_filepath(what='mean_map', stack=stack, fn=image_name)
+        create_parent_dir_if_not_exists(fp)
+        #bp.pack_ndarray_file(mean_map.astype(np.float16), fp)
+        np.save( fp.replace('.bp','.npy'), mean_map.astype(np.float16))
+
+        fp = DataManager.get_intensity_normalization_result_filepath(what='std_map', stack=stack, fn=image_name)
+        create_parent_dir_if_not_exists(fp)
+        #bp.pack_ndarray_file(std_map.astype(np.float16), fp)
+        np.save( fp.replace('.bp','.npy'), std_map.astype(np.float16))
         
 
     # Export normalized image.
@@ -205,7 +216,7 @@ for image_name in image_name_list:
     sys.stderr.write('Rescale to uint8: %.2f seconds.\n' % (time.time() - t))
 
     t = time.time()
-    raw_mask = load_data(DataManager.get_image_filepath_v2(stack=stack, prep_id=prep_id, fn=image_name, version='mask', resol=resol, ext='npy'),
+    raw_mask = load_data(DataManager.get_image_filepath_v2(stack=stack, prep_id=prep_id, fn=image_name, version='mask', resol=resol, ext='bp'),
                         download_s3=False)
     img_normalized_uint8[~raw_mask] = 0
     sys.stderr.write('Load mask: %.2f seconds.\n' % (time.time() - t))

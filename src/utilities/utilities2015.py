@@ -282,6 +282,8 @@ def save_data(data, fp, upload_s3=True):
         except:
             fp = fp.replace('.bp','.npy')
             np.save( fp, np.ascontiguousarray(data))
+    elif fp.endswith('.npy'):
+        save_json(data, fp)
     elif fp.endswith('.json'):
         save_json(data, fp)
     elif fp.endswith('.pkl'):

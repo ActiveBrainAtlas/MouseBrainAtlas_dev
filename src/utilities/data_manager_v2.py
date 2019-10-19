@@ -4155,25 +4155,25 @@ class DataManager(object):
 
         if what == 'region_centers':
             fp = os.path.join( DataManager.get_images_root_folder(stack), stack + '_intensity_normalization_results', 'regionCenters',
-                         stack + '_' + fn + '_raw_regionCenters.bp')
+                         stack + '_' + fn + '_raw_regionCenters.npy')
         elif what == 'mean_std_all_regions':
             fp = os.path.join( DataManager.get_images_root_folder(stack), stack + '_intensity_normalization_results', 'meanStdAllRegions',
-                         stack + '_' + fn + '_raw_meanStdAllRegions.bp')
+                         stack + '_' + fn + '_raw_meanStdAllRegions.npy')
         elif what == 'mean_map':
             fp = os.path.join( DataManager.get_images_root_folder(stack), stack + '_intensity_normalization_results', 'meanMap',
-                         stack + '_' + fn + '_raw_meanMap.bp')
+                         stack + '_' + fn + '_raw_meanMap.npy')
         elif what == 'std_map':
             fp = os.path.join( DataManager.get_images_root_folder(stack), stack + '_intensity_normalization_results', 'stdMap',
-                         stack + '_' + fn + '_raw_stdMap.bp')
+                         stack + '_' + fn + '_raw_stdMap.npy')
         elif what == 'float_histogram_png':
             fp = os.path.join( DataManager.get_images_root_folder(stack), stack + '_intensity_normalization_results', 'floatHistogram',
                          stack + '_' + fn + '_raw_floatHistogram.png')
         elif what == 'normalized_float_map':
             fp = os.path.join( DataManager.get_images_root_folder(stack), stack + '_intensity_normalization_results', 'normalizedFloatMap',
-                         stack + '_' + fn + '_raw_normalizedFloatMap.bp')
+                         stack + '_' + fn + '_raw_normalizedFloatMap.npy')
         elif what == 'float_percentiles':
             fp = os.path.join( DataManager.get_images_root_folder(stack), stack + '_intensity_normalization_results', 'floatPercentiles',
-                         stack + '_' + fn + '_raw_floatPercentiles.bp')
+                         stack + '_' + fn + '_raw_floatPercentiles.npy')
         else:
             raise Exception("what = %s is not recognized." % what)
 

@@ -217,7 +217,7 @@ class init_GUI(QWidget):
         self.e1.setFont( self.font_p1 )
         #self.e1.setReadOnly( True )
         self.e1.setMaximumWidth( 120 )
-        self.e1.setText( "100" )
+        self.e1.setText( "1200" )
         self.e1.setStyleSheet("color: rgb(0,0,0); background-color: rgb(250,200,200);")
         self.grid_body_lower.addWidget( self.e1, 0, 1)
         # Static Text Field
@@ -235,7 +235,7 @@ class init_GUI(QWidget):
         self.e2.setFont( self.font_p1 )
         #self.e2.setReadOnly( True )
         self.e2.setMaximumWidth( 120 )
-        self.e2.setText( "100" )
+        self.e2.setText( "500" )
         self.e2.setStyleSheet("color: rgb(0,0,0); background-color: rgb(250,200,200);")
         self.grid_body_lower.addWidget( self.e2, 1, 1)
         # Static Text Field
@@ -253,7 +253,7 @@ class init_GUI(QWidget):
         self.e3.setFont( self.font_p1 )
         #self.e3.setReadOnly( True )
         self.e3.setMaximumWidth( 120 )
-        self.e3.setText( "200" )
+        self.e3.setText( "900" )
         self.e3.setStyleSheet("color: rgb(0,0,0); background-color: rgb(200,200,250);")
         self.grid_body_lower.addWidget( self.e3, 0, 3)
         # Static Text Field
@@ -271,7 +271,7 @@ class init_GUI(QWidget):
         self.e4.setFont( self.font_p1 )
         #self.e4.setReadOnly( True )
         self.e4.setMaximumWidth( 120 )
-        self.e4.setText( "200" )
+        self.e4.setText( "400" )
         self.e4.setStyleSheet("color: rgb(0,0,0); background-color: rgb(200,200,250);")
         self.grid_body_lower.addWidget( self.e4, 1, 3)
         # Static Text Field
