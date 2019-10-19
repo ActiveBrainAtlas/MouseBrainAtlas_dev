@@ -18,6 +18,8 @@ from distributed_utilities import *
 use_image_cache = False
 image_cache = {}
 
+from data_manager_v2 import *
+
 def get_random_masked_regions(region_shape, stack, num_regions=1, sec=None, fn=None):
     """
     Return a random region that is on mask.
