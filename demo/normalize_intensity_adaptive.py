@@ -15,10 +15,10 @@ import os
 
 sys.path.append(os.environ['REPO_DIR'] + '/utilities')
 from utilities2015 import *
-from data_manager_v2 import *
 from metadata import *
 from distributed_utilities import *
 from learning_utilities import *
+from data_manager_v2 import *
 
 input_spec = load_ini(args.input_spec)
 stack = input_spec['stack']
