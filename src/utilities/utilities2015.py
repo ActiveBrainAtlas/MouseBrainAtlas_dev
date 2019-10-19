@@ -243,11 +243,12 @@ def load_data(fp, polydata_instead_of_face_vertex_list=True, download_s3=True):
 
     if fp.endswith('.bp'):
         try:
-            print 1/0
             data = bp.unpack_ndarray_file(fp)
         except:
             fp = fp.replace('.bp','.npy')
             data = np.load(fp)
+    elif fp.endswith('.npy'):
+        data = np.load(fp)
     elif fp.endswith('.json'):
         data = load_json(fp)
     elif fp.endswith('.pkl'):
@@ -276,14 +277,13 @@ def save_data(data, fp, upload_s3=True):
 
     if fp.endswith('.bp'):
         try:
-            print 1/0
             bp.pack_ndarray_file(np.ascontiguousarray(data), fp)
             # ascontiguousarray is important, without which sometimes the loaded array will be different from saved.
         except:
             fp = fp.replace('.bp','.npy')
             np.save( fp, np.ascontiguousarray(data))
     elif fp.endswith('.npy'):
-        save_json(data, fp)
+        np.save( fp, np.ascontiguousarray(data))
     elif fp.endswith('.json'):
         save_json(data, fp)
     elif fp.endswith('.pkl'):
