@@ -9,6 +9,14 @@ These are the relevant fields:
 - feature_network
 - feature_classifier_id
 
+| detector_id	|	input_version |	windowing_id |	feature_network |	feature_classifier_id |	comments	|
+|-------------|---------------|------------|------------------|-----------------------|-----------|
+|15 |	gray |	5 |	inception-bn-blue |	73 |	NaN |
+|19 |	gray |	7 |	inception-bn-blue |	73 |	NaN |
+|799 |	NtbNormalizedAdaptiveInvertedGamma |	7 |	inception-bn-blue |	899 |	NaN |
+|998 |	normalized_-1_5 |	7 |	inception-bn-blue |	998 |	trained using normalized MD589/MD594/MD585 wit... |
+|999 |	normalized_-1_5 |	7 |	inception-bn-blue |	999 |	trained from auto-aligned MD661/MD662 before c... |
+
 There are separate classifiers for Ntb and Thionin brains. The Ntb classifier can be used on Thionin brains after intensity normalization, but will not work quite as well.
   - Detector 799, used for Ntb, uses classifier 899
   - Detector 19, used for Thionin, uses classifier 73
@@ -17,6 +25,7 @@ There are separate classifiers for Ntb and Thionin brains. The Ntb classifier ca
 Detector/classifier settings are read in [metadata line 509](https://github.com/ActiveBrainAtlas/MouseBrainAtlas_dev/blob/master/src/utilities/metadata.py#L535)
 
 `window_id`: It defines a particular mapping between location and gridpoint index. For example, say windowing_id =7, then patch_size_um = 103.04 for 0.46um/pixel images correspond to patch size of 224 pixel. The grid point with index 0 will be at coordinate (112, 112), spacing is 30 um which translates to 65 pixels, so the grid point with index 1 will be at coordinate (112 + 65, 112) .... Each grid point is associated a square image patch and the point is the center of the patch. Each index maps to a feature vector, as a result of "feature extraction".
+
 
 ### Inception-bn-blue feature vectors
 
