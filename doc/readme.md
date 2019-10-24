@@ -17,4 +17,4 @@
   * __[Low level walkthrough of the pipeline](./running_scripts/README.md):__ Walks through the entire pipeline, broken down into four stages. Descriptions of how it works, from environment variables to script functions to final outputs.
   * __[GUI-based User Guide](./doc/pipeline/user_guide_GUI_v2.md):__ This document explains how to set up and run the project's Docker Image, as well as how to run the GUI-based pipeline.
   * __[Docker Files](./docker/):__ Describes how to set up and run this project Docker.
-  * __[OLD User Guide](./User%20Manuals/UserGuide):__ Documentation for the old way of running the pipeline. May not be useful for a user. Written by Yuncong Chen.
+  * __[OLD User Guide](./User%20Manuals/UserGuide.md):__ Documentation for the old way of running the pipeline. May not be useful for a user. Written by Yuncong Chen.
