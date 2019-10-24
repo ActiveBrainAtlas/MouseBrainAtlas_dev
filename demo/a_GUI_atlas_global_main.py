@@ -174,7 +174,9 @@ class init_GUI(QWidget):
                                    self.stack+'_T_atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol.txt')
                 fp2 = os.path.join(os.environ['ROOT_DIR'], 'CSHL_simple_global_registration', 
                                    self.stack+'_T_atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol.bp')
-                if os.path.exists( fp1 ) and os.path.exists( fp2 ):
+                fp2_v2 = os.path.join(os.environ['ROOT_DIR'], 'CSHL_simple_global_registration', 
+                                   self.stack+'_T_atlas_wrt_canonicalAtlasSpace_subject_wrt_wholebrain_atlasResol.npy')
+                if os.path.exists( fp1 ) and ( os.path.exists( fp2 ) or os.path.exists( fp2_v2 ) ):
                     set_step_completed_in_progress_ini( self.stack, '5_fit_atlas_global')
             
         self.updateFields()

@@ -130,7 +130,7 @@ class init_GUI(QWidget):
         self.b_crop.clicked.connect( lambda:self.button_grid_push(self.b_crop) )
         self.grid_buttons.addWidget( self.b_crop, 1, 0)
         # Button
-        self.b_globalFit = QPushButton("Global Atlas Fit")
+        self.b_globalFit = QPushButton("Rough Atlas Fit")
         format_grid_button_initial( self.b_globalFit )
         self.b_globalFit.clicked.connect( lambda:self.button_grid_push(self.b_globalFit) )
         self.grid_buttons.addWidget( self.b_globalFit, 1, 1)
@@ -147,20 +147,25 @@ class init_GUI(QWidget):
         self.b_newBrain.clicked.connect(lambda:self.button_push(self.b_newBrain))
         self.grid_bottom.addWidget(self.b_newBrain, 0, 1)
         # Button Text Field
+        self.b_prevStep = QPushButton("Go to Previous Step")
+        self.b_prevStep.setDefault(True)
+        self.b_prevStep.clicked.connect(lambda:self.button_push(self.b_prevStep))
+        self.grid_bottom.addWidget(self.b_prevStep, 0, 2)
+        # Button Text Field
         self.b_neuroglancer = QPushButton("Neuroglancer Utilities")
         self.b_neuroglancer.setDefault(True)
         self.b_neuroglancer.clicked.connect(lambda:self.button_push(self.b_neuroglancer))
-        self.grid_bottom.addWidget(self.b_neuroglancer, 0, 2)
+        self.grid_bottom.addWidget(self.b_neuroglancer, 0, 3)
         # Button Text Field
         self.b_datajoint = QPushButton("Datajoint Utilities")
         self.b_datajoint.setDefault(True)
         self.b_datajoint.clicked.connect(lambda:self.button_push(self.b_datajoint))
-        self.grid_bottom.addWidget(self.b_datajoint, 0, 3)
+        self.grid_bottom.addWidget(self.b_datajoint, 0, 4)
         # Button Text Field
         self.b_exit = QPushButton("Exit")
         self.b_exit.setDefault(True)
         self.b_exit.clicked.connect(lambda:self.button_push(self.b_exit))
-        self.grid_bottom.addWidget(self.b_exit, 0, 4)
+        self.grid_bottom.addWidget(self.b_exit, 0, 5)
 
         #self.grid_buttons.setColumnStretch(1, 3)
         #self.grid_buttons.setRowStretch(1, 2)
@@ -182,9 +187,6 @@ class init_GUI(QWidget):
         self.center()
     
     def updateFields(self):
-        # Update the stack dropdown menu
-        #self.updateStackDropdown()
-        
         # Get dropdown selection
         dropdown_selection = self.cb.currentText()
         dropdown_selection_str = str(dropdown_selection.toUtf8())
@@ -205,29 +207,8 @@ class init_GUI(QWidget):
         # If there are no stacks/brains that have been started
         except KeyError:
             for grid_button in [self.b_setup, self.b_align, self.b_mask, self.b_crop, 
-                                self.b_globalFit, self.b_localFit]:
+                            self.b_globalFit, self.b_localFit]:
                 format_grid_button_cantStart( grid_button )
-        
-    def updateStackDropdown(self):
-        dropdown_selection = self.cb.currentText()
-        
-        all_stacks = []
-        if os.path.exists( BRAINS_INFO_DIR ):
-            for brain_ini in os.listdir( BRAINS_INFO_DIR ):
-                # Two kinds of brain_ini files: 'progress' and 'metadata'
-                if 'progress' in brain_ini:
-                    continue
-                
-                brain_name = os.path.splitext(brain_ini)[0]
-                brain_name = brain_name.replace('_metadata', '')
-                all_stacks.append( brain_name )
-                
-        self.cb.clear()
-        self.cb.addItems( all_stacks )
-        
-        index = self.cb.findText( dropdown_selection, Qt.MatchFixedString)
-        if index >= 0:
-             self.cb.setCurrentIndex(index)
         
     def format_grid_buttons(self):
         """
@@ -324,9 +305,6 @@ and all local alignment scripts will be run. This will take a long time.")
             except Exception as e:
                 sys.stderr.write( e )
         
-        # Update the stack dropdown menu
-        self.updateStackDropdown()
-        self.updateFields()
         self.format_grid_buttons()
             
     def button_push(self, button):
@@ -335,6 +313,8 @@ and all local alignment scripts will be run. This will take a long time.")
         """
         if button == self.b_exit:
             close_main_gui( ex, reopen=False )
+        elif button==self.b_prevStep:
+            pass
         elif button == self.b_neuroglancer:
             pass
         elif button == self.b_datajoint:
@@ -372,4 +352,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-

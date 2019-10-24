@@ -18,6 +18,8 @@ from distributed_utilities import *
 use_image_cache = False
 image_cache = {}
 
+from data_manager_v2 import *
+
 def get_random_masked_regions(region_shape, stack, num_regions=1, sec=None, fn=None):
     """
     Return a random region that is on mask.
@@ -696,7 +698,7 @@ class DataManager(object):
 
     @staticmethod
     def get_stacy_markers_filepath(stack, structure):
-        return os.path.join(ROOT_DIR, 'stacy_data', 'markers', stack, stack + '_markers_%s.npy' % structure)
+        return os.path.join(ROOT_DIR, 'stacy_data', 'markers', stack, stack + '_markers_%s.bp' % structure)
 
     ########################
     ##   Lauren's data    ##
@@ -704,7 +706,7 @@ class DataManager(object):
 
     @staticmethod
     def get_lauren_markers_filepath(stack, structure, resolution):
-        return os.path.join(ROOT_DIR, 'lauren_data', 'markers', stack, stack + '_markers_%s_%s.npy' % (resolution, structure))
+        return os.path.join(ROOT_DIR, 'lauren_data', 'markers', stack, stack + '_markers_%s_%s.bp' % (resolution, structure))
 
     ##############
     ##   SPM    ##
@@ -718,7 +720,7 @@ class DataManager(object):
         """
         if fn is None:
             fn = metadata_cache['sections_to_filenames'][stack][section]
-        return os.path.join(CSHL_SPM_ROOTDIR, 'sift_histograms', stack, fn + '_sift_histograms_l%d.npy' % level)
+        return os.path.join(CSHL_SPM_ROOTDIR, 'sift_histograms', stack, fn + '_sift_histograms_l%d.bp' % level)
 
     @staticmethod
     def get_sift_descriptor_vocabulary_filepath():
@@ -731,19 +733,19 @@ class DataManager(object):
     def get_sift_descriptors_labelmap_filepath(stack, section=None, fn=None):
         if fn is None:
             fn = metadata_cache['sections_to_filenames'][stack][section]
-        return os.path.join(CSHL_SPM_ROOTDIR, 'sift_labelmap', stack, fn + '_sift_labelmap.npy')
+        return os.path.join(CSHL_SPM_ROOTDIR, 'sift_labelmap', stack, fn + '_sift_labelmap.bp')
 
     @staticmethod
     def get_sift_descriptors_filepath(stack, section=None, fn=None):
         if fn is None:
             fn = metadata_cache['sections_to_filenames'][stack][section]
-        return os.path.join(CSHL_SPM_ROOTDIR, 'sift_descriptors', stack, fn + '_sift_descriptors.npy')
+        return os.path.join(CSHL_SPM_ROOTDIR, 'sift_descriptors', stack, fn + '_sift_descriptors.bp')
 
     @staticmethod
     def get_sift_keypoints_filepath(stack, section=None, fn=None):
         if fn is None:
             fn = metadata_cache['sections_to_filenames'][stack][section]
-        return os.path.join(CSHL_SPM_ROOTDIR, 'sift_keypoints', stack, fn + '_sift_keypoints.npy')
+        return os.path.join(CSHL_SPM_ROOTDIR, 'sift_keypoints', stack, fn + '_sift_keypoints.bp')
 
 
     ##########################
@@ -1078,7 +1080,7 @@ class DataManager(object):
 
     @staticmethod
     def get_anchor_filename_filename(stack):
-        fn = os.path.join( DataManager.get_images_root_folder(stack), stack + '_anchor.txt')
+        fn = os.path.join(THUMBNAIL_DATA_DIR, stack, stack + '_anchor.txt')
         return fn
 
     @staticmethod
@@ -1122,9 +1124,9 @@ class DataManager(object):
         if anchor_fn is None:
             anchor_fn = DataManager.load_anchor_filename(stack=stack)
 
-        fp = os.path.join( DataManager.get_images_root_folder(stack), stack + '_alignedTo_' + anchor_fn + '_prep' + str(prep_id) + '_sectionLimits.json')
+        fp = os.path.join(THUMBNAIL_DATA_DIR, stack, stack + '_alignedTo_' + anchor_fn + '_prep' + str(prep_id) + '_sectionLimits.json')
         if not os.path.exists(fp):
-            fp = os.path.join( DataManager.get_images_root_folder(stack), stack + '_prep' + str(prep_id) + '_sectionLimits.ini')
+            fp = os.path.join(DATA_DIR, stack, stack + '_prep' + str(prep_id) + '_sectionLimits.ini')
 
         return fp
 
@@ -1143,7 +1145,8 @@ class DataManager(object):
         if anchor_fn is None:
             anchor_fn = DataManager.load_anchor_filename(stack=stack)
 
-        fp = os.path.join( DataManager.get_images_root_folder(stack), stack + '_cropbox.ini')
+        #fp = os.path.join(THUMBNAIL_DATA_DIR, stack, stack + '_alignedTo_' + anchor_fn + '_prep' + str(prep_id) + '_cropbox.json')
+        fp = os.path.join(THUMBNAIL_DATA_DIR, stack, stack + '_cropbox.ini')
         return fp
 
     @staticmethod
@@ -1156,11 +1159,22 @@ class DataManager(object):
             anchor_fn = DataManager.load_anchor_filename(stack=stack)
 
         if prep_id == 3:
-            fn = os.path.join( DataManager.get_images_root_folder(stack), stack + '_alignedTo_' + anchor_fn + '_cropbox_thalamus.txt')
+            fn = os.path.join(THUMBNAIL_DATA_DIR, stack, stack + '_alignedTo_' + anchor_fn + '_cropbox_thalamus.txt')
         else:
-            fn = os.path.join( DataManager.get_images_root_folder(stack), stack + '_alignedTo_' + anchor_fn + '_cropbox.txt')
+            fn = os.path.join(THUMBNAIL_DATA_DIR, stack, stack + '_alignedTo_' + anchor_fn + '_cropbox.txt')
 
         return fn
+    #
+    # @staticmethod
+    # def get_cropbox_thalamus_filename(stack, anchor_fn=None):
+    #     """
+    #     Get the filename to thalamus crop box.
+    #     """
+    #
+    #     if anchor_fn is None:
+    #         anchor_fn = DataManager.load_anchor_filename(stack=stack)
+    #     fn = os.path.join(THUMBNAIL_DATA_DIR, stack, stack + '_alignedTo_' + anchor_fn + '_cropbox_thalamus.txt')
+    #     return fn
 
     @staticmethod
     def get_domain_origin(stack, domain, resolution, loaded_cropbox_resolution='down32'):
@@ -1367,7 +1381,6 @@ class DataManager(object):
             else:
                 assert not return_origin_instead_of_bbox
                 cropbox = np.array((xmin, xmax, ymin, ymax, secmin, secmax))
-                print cropbox
                 if only_2d:
                     return cropbox[:4].astype(np.int)
                 else:
@@ -1399,102 +1412,31 @@ class DataManager(object):
         else:
             return cropbox
 
-    ######################################################################################################################
-    #                                     ROOT FOLDERS                                                                   #
-    ######################################################################################################################
-
-    @staticmethod
-    def get_images_root_folder(stack):
-        #return os.path.join( os.environ['ROOT_DIR'], stack, 'preprocessing_data' )
-        return os.path.join( os.environ['ROOT_DIR'], 'CSHL_data_processed', stack )
-
-    @staticmethod
-    def get_volume_root_folder(stack):
-        #return os.path.join( os.environ['ROOT_DIR'], stack, 'volume_data' )
-        return os.path.join( os.environ['ROOT_DIR'], 'CSHL_volumes', stack )
-
-    @staticmethod
-    def get_registration_root_folder(stack):
-        #return os.path.join( os.environ['ROOT_DIR'], stack, 'registration_data' )
-        return None
-
-    @staticmethod
-    def get_simple_global_root_folder(stack):
-        #return os.path.join( DataManager.get_registration_root_folder(stack), 'simple_global_alignment' )
-        return os.path.join( os.environ['ROOT_DIR'], 'CSHL_simple_global_registration' )
-        #eturn None
-
-    @staticmethod
-    def get_patch_features_root_folder(stack):
-        #return os.path.join( DataManager.get_registration_root_folder(stack), 'patch_features' )
-        return None
-
-    @staticmethod
-    def get_scoremaps_root_folder(stack):
-        #return os.path.join( DataManager.get_registration_root_folder(stack), 'scoremaps' )
-        return None
+    # @staticmethod
+    # def load_cropbox_thalamus(stack, anchor_fn=None, convert_section_to_z=False):
+    #     """
+    #     Loads the crop box for thalamus.
+    #
+    #     Args:
+    #         convert_section_to_z (bool): If true, return (xmin,xmax,ymin,ymax,zmin,zmax); if false, return (xmin,xmax,ymin,ymax,secmin,secmax)
+    #     """
+    #
+    #     fp = DataManager.get_cropbox_thalamus_filename(stack=stack, anchor_fn=anchor_fn)
+    #     download_from_s3(fp, local_root=THUMBNAIL_DATA_ROOTDIR)
+    #
+    #     if convert_section_to_z:
+    #         xmin, xmax, ymin, ymax, secmin, secmax = np.loadtxt(fp).astype(np.int)
+    #         zmin = int(np.mean(DataManager.convert_section_to_z(stack=stack, sec=secmin, downsample=32, z_begin=0)))
+    #         zmax = int(np.mean(DataManager.convert_section_to_z(stack=stack, sec=secmax, downsample=32, z_begin=0)))
+    #         cropbox = np.array((xmin, xmax, ymin, ymax, zmin, zmax))
+    #     else:
+    #         cropbox = np.loadtxt(fp).astype(np.int)
+    #     return cropbox
 
     @staticmethod
     def get_sorted_filenames_filename(stack):
-        fn = os.path.join( DataManager.get_images_root_folder(stack), stack + '_sorted_filenames.txt')
+        fn = os.path.join(THUMBNAIL_DATA_DIR, stack, stack + '_sorted_filenames.txt')
         return fn
-    
-    @staticmethod
-    def setup_get_raw_fp(stack):
-        return os.path.join( DataManager.get_images_root_folder(stack), stack+'_raw' )
-        #return os.path.join( os.environ['ROOT_DIR'], stack, 'preprocessing_data', stack+'_raw' )
-    
-    @staticmethod
-    def setup_get_thumbnail_fp(stack):
-        return os.path.join( DataManager.get_images_root_folder(stack), stack+'_raw_thumbnail' )
-        #return os.path.join( os.environ['ROOT_DIR'], stack, 'preprocessing_data', stack+'_raw_thumbnail' )
-    
-    @staticmethod
-    def setup_get_raw_fp_secondary_channel(stack, channel):
-        return os.path.join( DataManager.get_images_root_folder(stack), 
-                            stack+'_raw_C'+str(channel) )
-        #return os.path.join( os.environ['ROOT_DIR'], stack, 'preprocessing_data', 
-        #                    stack+'_raw_C'+str(channel) )
-    
-    @staticmethod
-    def setup_get_thumbnail_fp_secondary_channel(stack, channel):
-        return os.path.join( DataManager.get_images_root_folder(stack), 
-                            stack+'_raw_thumbnail_C'+str(channel) )
-        #return os.path.join( os.environ['ROOT_DIR'], stack, 'preprocessing_data', 
-        #                    stack+'_raw_thumbnail_C'+str(channel) )
-    ######################################################################################################################
-
-    @staticmethod
-    def get_brain_info_root_folder():
-        return os.path.join( os.environ['ROOT_DIR'], 'brains_info')
-
-    @staticmethod
-    def get_brain_info_metadata_fp(stack):
-        return os.path.join( DataManager.get_brain_info_root_folder(), stack+'_metadata.ini' )
-
-    @staticmethod
-    def get_brain_info_progress_fp(stack):
-        return os.path.join( DataManager.get_brain_info_root_folder(), stack+'_progress.ini' )
-
-    @staticmethod
-    def get_brain_info_metadata(stack):
-        fp = DataManager.get_brain_info_metadata_fp(stack)
-        contents_dict = load_ini( fp )
-        if contents_dict is None:
-            sys.stderr.write( 'No brain_info_metadata' )
-            return None
-        else:
-            return contents_dict
-
-    @staticmethod
-    def get_brain_info_progress(stack):
-        fp = DataManager.get_brain_info_progress_fp(stack)
-        contents_dict = load_ini( fp )
-        if contents_dict is None:
-            sys.stderr.write( 'No brain_info_progress' )
-            return None
-        else:
-            return contents_dict
 
     @staticmethod
     def load_sorted_filenames(stack=None, fp=None, redownload=False):
@@ -1519,17 +1461,17 @@ class DataManager(object):
     def get_transforms_filename(stack, anchor_fn=None):
         if anchor_fn is None:
             anchor_fn = metadata_cache['anchor_fn'][stack]
-        fp = os.path.join( DataManager.get_images_root_folder(stack), stack + '_transformsTo_%s.pkl' % anchor_fn)
+        fp = os.path.join(THUMBNAIL_DATA_DIR, stack, stack + '_transformsTo_%s.pkl' % anchor_fn)
         if not os.path.exists(fp):
-            fp = os.path.join( DataManager.get_images_root_folder(stack), stack + '_transforms_to_anchor.csv')
+            fp = os.path.join(THUMBNAIL_DATA_DIR, stack, stack + '_transforms_to_anchor.csv')
         return fp
 
     @staticmethod
     def get_elastix_output_dir(stack):
-        return os.path.join( DataManager.get_images_root_folder(stack), stack+'_elastix_output')
+        return os.path.join(DATA_DIR, stack, stack+'_elastix_output')
     @staticmethod
     def get_custom_output_dir(stack):
-        return os.path.join( DataManager.get_images_root_folder(stack), stack + '_custom_transforms')
+        return os.path.join(DATA_DIR, stack, stack + '_custom_transforms')
 
     @staticmethod
     def load_consecutive_section_transform(moving_fn, fixed_fn, elastix_output_dir=None, custom_output_dir=None, stack=None):
@@ -1540,7 +1482,7 @@ class DataManager(object):
             (3,3)-array.
         """
         assert stack is not None
-
+        
         if elastix_output_dir is None:
             elastix_output_dir = DataManager.get_elastix_output_dir(stack)
         if custom_output_dir is None:
@@ -1579,10 +1521,10 @@ class DataManager(object):
     @staticmethod
     def load_image_filepath_warped_to_adjacent_section(stack, moving_fn, fixed_fn):
         # generated by manually specifying landmark points
-        custom_aligned_image_fn = os.path.join( DataManager.get_images_root_folder(stack), stack + '_custom_transforms', moving_fn + '_to_' + fixed_fn, moving_fn + '_alignedTo_' + fixed_fn + '.tif')
+        custom_aligned_image_fn = os.path.join(THUMBNAIL_DATA_DIR, stack, stack + '_custom_transforms', moving_fn + '_to_' + fixed_fn, moving_fn + '_alignedTo_' + fixed_fn + '.tif')
 
         # generated by running elastix
-        custom_aligned_image_fn2 = os.path.join( DataManager.get_images_root_folder(stack), stack + '_custom_transforms', moving_fn + '_to_' + fixed_fn, 'result.0.tif')
+        custom_aligned_image_fn2 = os.path.join(THUMBNAIL_DATA_DIR, stack, stack + '_custom_transforms', moving_fn + '_to_' + fixed_fn, 'result.0.tif')
 
         if os.path.exists(custom_aligned_image_fn):
             sys.stderr.write('Load custom transform image. %s\n' % custom_aligned_image_fn)
@@ -1591,8 +1533,33 @@ class DataManager(object):
             sys.stderr.write('Load custom transform image. %s\n' % custom_aligned_image_fn2)
             return custom_aligned_image_fn2
         else:
-            fp = os.path.join( DataManager.get_images_root_folder(stack), stack + '_elastix_output', moving_fn + '_to_' + fixed_fn, 'result.0.tif')
+            fp = os.path.join(THUMBNAIL_DATA_DIR, stack, stack + '_elastix_output', moving_fn + '_to_' + fixed_fn, 'result.0.tif')
             return fp
+
+#     @staticmethod
+#     def load_consecutive_section_transform(stack, moving_fn, fixed_fn):
+
+#         custom_tf_fn = os.path.join(DATA_DIR, stack, stack + '_custom_transforms', moving_fn + '_to_' + fixed_fn, moving_fn + '_to_' + fixed_fn + '_customTransform.txt')
+#         custom_tf_fn2 = os.path.join(DATA_DIR, stack, stack + '_custom_transforms', moving_fn + '_to_' + fixed_fn, 'TransformParameters.0.txt')
+#         if os.path.exists(custom_tf_fn):
+#             # if custom transform is provided
+#             sys.stderr.write('Load custom transform: %s\n' % custom_tf_fn)
+#             with open(custom_tf_fn, 'r') as f:
+#                 t11, t12, t13, t21, t22, t23 = map(float, f.readline().split())
+#             transformation_to_previous_sec = np.linalg.inv(np.array([[t11, t12, t13], [t21, t22, t23], [0,0,1]]))
+
+#         elif os.path.exists(custom_tf_fn2):
+#             sys.stderr.write('Load custom transform: %s\n' % custom_tf_fn2)
+#             transformation_to_previous_sec = parse_elastix_parameter_file(custom_tf_fn2)
+#         else:
+#             # otherwise, load elastix output
+#             sys.stderr.write('Load elastix-computed transform: %s\n' % custom_tf_fn2)
+#             param_fn = os.path.join(elastix_output_dir, moving_fn + '_to_' + fixed_fn, 'TransformParameters.0.txt')
+#             if not os.path.exists(param_fn):
+#                 raise Exception('Transform file does not exist: %s to %s, %s' % (moving_fn, fixed_fn, param_fn))
+#             transformation_to_previous_sec = parse_elastix_parameter_file(param_fn)
+
+#         return transformation_to_previous_sec
 
 
     @staticmethod
@@ -2052,7 +2019,7 @@ class DataManager(object):
                                 prep_id_m=None,
                                 prep_id_f=None,
                                 structure_f=None,
-                                structure_m=None,
+                        structure_m=None,
                             type_m='score', type_f='score', param_suffix=None,
                             trial_idx=None):
         basename = DataManager.get_warped_volume_basename(**locals())
@@ -2106,6 +2073,20 @@ class DataManager(object):
 
         return clf_allClasses
 
+#     @staticmethod
+#     def load_sparse_scores(stack, structure, classifier_id, sec=None, fn=None, anchor_fn=None):
+
+#         if fn is None:
+#             fn = metadata_cache['sections_to_filenames'][stack][sec]
+
+#         if anchor_fn is None:
+#             anchor_fn = metadata_cache['anchor_fn'][stack]
+
+#         sparse_scores_fn = DataManager.get_sparse_scores_filepath(stack=stack, structure=structure,
+#                                             classifier_id=classifier_id, fn=fn, anchor_fn=anchor_fn)
+#         download_from_s3(sparse_scores_fn)
+#         return DataManager.load_data(sparse_scores_fn, filetype='bp')
+
     @staticmethod
     def load_sparse_scores(stack, structure, detector_id, prep_id=2, sec=None, fn=None):
 
@@ -2124,8 +2105,20 @@ class DataManager(object):
         return os.path.join(SPARSE_SCORES_ROOTDIR, stack,
                             fn + '_prep%d'%prep_id,
                             'detector%d'%detector_id,
-                            fn + '_prep%d'%prep_id + '_detector%d'%detector_id + '_' + structure + '_sparseScores.npy')
+                            fn + '_prep%d'%prep_id + '_detector%d'%detector_id + '_' + structure + '_sparseScores.bp')
 
+
+#     @staticmethod
+#     def get_sparse_scores_filepath(stack, structure, classifier_id, sec=None, fn=None, anchor_fn=None):
+#         if fn is None:
+#             fn = metadata_cache['sections_to_filenames'][stack][sec]
+
+#         if anchor_fn is None:
+#             anchor_fn = metadata_cache['anchor_fn'][stack]
+
+#         return os.path.join(SPARSE_SCORES_ROOTDIR, stack, '%(fn)s_lossless_alignedTo_%(anchor_fn)s_cropped', \
+#                 '%(fn)s_lossless_alignedTo_%(anchor_fn)s_cropped_%(structure)s_sparseScores_setting_%(classifier_id)s.hdf') % \
+#                 {'fn': fn, 'anchor_fn': anchor_fn, 'structure':structure, 'classifier_id': classifier_id}
 
     @staticmethod
     def load_intensity_volume(stack, downscale=32):
@@ -2163,25 +2156,29 @@ class DataManager(object):
     @staticmethod
     def get_intensity_volume_filepath(stack, downscale=32):
         basename = DataManager.get_original_volume_basename(stack=stack, volume_type='intensity', downscale=downscale)
-        vol_fn = os.path.join( DataManager.get_volume_root_folder(stack), basename, basename + '.npy')
+        vol_fn = os.path.join(VOLUME_ROOTDIR, stack, basename, basename + '.bp')
         return vol_fn
 
     @staticmethod
     def get_intensity_volume_filepath_v2(stack, downscale=32, prep_id=2):
         basename = DataManager.get_original_volume_basename(stack=stack, volume_type='intensity', downscale=downscale, prep_id=prep_id)
-        vol_fn = os.path.join( DataManager.get_volume_root_folder(stack), basename, basename + '.npy')
+        vol_fn = os.path.join(VOLUME_ROOTDIR, stack, basename, basename + '.bp')
         return vol_fn
 
     @staticmethod
     def get_intensity_volume_bbox_filepath_v2(stack, downscale=32, prep_id=2):
         basename = DataManager.get_original_volume_basename(volume_type='intensity', **locals())
-        return os.path.join( DataManager.get_volume_root_folder(stack), basename, basename + '_bbox.txt')
+        return os.path.join(VOLUME_ROOTDIR, stack, basename, basename + '_bbox.txt')
 
     @staticmethod
     def get_intensity_volume_bbox_filepath(stack, downscale=32):
         basename = DataManager.get_original_volume_basename(volume_type='intensity', **locals())
-        return os.path.join( DataManager.get_volume_root_folder(stack), basename, basename + '_bbox.txt')
+        return os.path.join(VOLUME_ROOTDIR, stack, basename, basename + '_bbox.txt')
 
+    # @staticmethod
+    # def get_intensity_volume_bbox_filepath(stack, downscale=32):
+    #     basename = DataManager.get_original_volume_basename(volume_type='intensity', **locals())
+    #     return os.path.join(VOLUME_ROOTDIR, stack, basename, basename + '_bbox.txt')
 
     @staticmethod
     def get_intensity_volume_metaimage_filepath(stack, downscale=32):
@@ -2190,8 +2187,8 @@ class DataManager(object):
             (header *.mhd filepath, data *.raw filepath)
         """
         basename = DataManager.get_original_volume_basename(stack=stack, volume_type='intensity_metaimage', downscale=downscale)
-        vol_mhd_fp = os.path.join( DataManager.get_volume_root_folder(stack), basename, basename + '.mhd')
-        vol_raw_fp = os.path.join( DataManager.get_volume_root_folder(stack), basename, basename + '.raw')
+        vol_mhd_fp = os.path.join(VOLUME_ROOTDIR, stack, basename, basename + '.mhd')
+        vol_raw_fp = os.path.join(VOLUME_ROOTDIR, stack, basename, basename + '.raw')
         return vol_mhd_fp, vol_raw_fp
 
     @staticmethod
@@ -2201,8 +2198,8 @@ class DataManager(object):
             (header *.mhd filepath, data *.raw filepath)
         """
         basename = DataManager.get_original_volume_basename(stack=stack, volume_type='intensity_metaimage', downscale=downscale)
-        vol_mhd_fp = os.path.join( DataManager.get_volume_root_folder(stack), basename, basename + '_mask.mhd')
-        vol_raw_fp = os.path.join( DataManager.get_volume_root_folder(stack), basename, basename + '_mask.raw')
+        vol_mhd_fp = os.path.join(VOLUME_ROOTDIR, stack, basename, basename + '_mask.mhd')
+        vol_raw_fp = os.path.join(VOLUME_ROOTDIR, stack, basename, basename + '_mask.raw')
         return vol_mhd_fp, vol_raw_fp
 
     @staticmethod
@@ -2213,7 +2210,7 @@ class DataManager(object):
     @staticmethod
     def get_annotation_as_score_volume_filepath(stack, downscale, structure):
         basename = DataManager.get_original_volume_basename(volume_type='annotation_as_score', **locals())
-        vol_fn = os.path.join( DataManager.get_volume_root_folder(stack), basename, 'score_volumes', basename + '.npy')
+        vol_fn = os.path.join(VOLUME_ROOTDIR, stack, basename, 'score_volumes', basename + '.bp')
         return vol_fn
 
     @staticmethod
@@ -2225,18 +2222,18 @@ class DataManager(object):
     @staticmethod
     def get_annotation_volume_filepath(stack, downscale):
         basename = DataManager.get_original_volume_basename(volume_type='annotation', **locals())
-        vol_fn = os.path.join( DataManager.get_volume_root_folder(stack), basename, basename + '.npy')
+        vol_fn = os.path.join(VOLUME_ROOTDIR, stack, basename, basename + '.bp')
         return vol_fn
 
     @staticmethod
     def get_annotation_volume_bbox_filepath(stack, downscale=32):
         basename = DataManager.get_original_volume_basename(volume_type='annotation', **locals())
-        return os.path.join( DataManager.get_volume_root_folder(stack), basename, basename + '_bbox.txt')
+        return os.path.join(VOLUME_ROOTDIR, stack, basename, basename + '_bbox.txt')
 
     @staticmethod
     def get_annotation_volume_label_to_name_filepath(stack):
         basename = DataManager.get_original_volume_basename(volume_type='annotation', **locals())
-        fn = os.path.join( DataManager.get_volume_root_folder(stack), basename, basename + '_nameToLabel.txt')
+        fn = os.path.join(VOLUME_ROOTDIR, stack, basename, basename + '_nameToLabel.txt')
         # fn = os.path.join(volume_dir, stack, stack+'_down32_annotationVolume_nameToLabel.txt')
         return fn
 
@@ -2250,6 +2247,34 @@ class DataManager(object):
     ################
     # Mesh related #
     ################
+
+    # @staticmethod
+    # def load_shell_mesh(stack, downscale, return_polydata_only=True):
+    #     shell_mesh_fn = DataManager.get_shell_mesh_filepath(stack, downscale)
+    #     return load_mesh_stl(shell_mesh_fn, return_polydata_only=return_polydata_only)
+    #
+    # @staticmethod
+    # def get_shell_mesh_filepath(stack, downscale):
+    #     basename = DataManager.get_original_volume_basename(stack=stack, downscale=downscale, volume_type='outer_contour')
+    #     shell_mesh_fn = os.path.join(MESH_ROOTDIR, stack, basename, basename + "_smoothed.stl")
+    #     return shell_mesh_fn
+
+    # @staticmethod
+    # def get_mesh_filepath(stack_m,
+    #                         structure,
+    #                         detector_id_m=None,
+    #                       prep_id_f=None,
+    #                         detector_id_f=None,
+    #                         warp_setting=None,
+    #                         stack_f=None,
+    #                         downscale=32,
+    #                         vol_type_m='score',
+    #                       vol_type_f='score',
+    #                         trial_idx=None, **kwargs):
+    #     basename = DataManager.get_warped_volume_basename(**locals())
+    #     fn = basename + '_%s' % structure
+    #     return os.path.join(MESH_ROOTDIR, stack_m, basename, fn + '.stl')
+
     @staticmethod
     def get_mesh_filepath_v2(brain_spec, structure=None, resolution=None, level=None):
 
@@ -2395,7 +2420,7 @@ class DataManager(object):
         """
 
         if what == 'volume':
-            return os.path.join(MESH_ROOTDIR, atlas_name, 'mean_shapes', atlas_name + '_' + resolution + '_' + structure + '_meanShape_volume.npy')
+            return os.path.join(MESH_ROOTDIR, atlas_name, 'mean_shapes', atlas_name + '_' + resolution + '_' + structure + '_meanShape_volume.bp')
         elif what == 'origin_wrt_meanShapeCentroid':
             return os.path.join(MESH_ROOTDIR, atlas_name, 'mean_shapes', atlas_name + '_' + resolution + '_' + structure + '_meanShape_origin_wrt_meanShapeCentroid.txt')
         elif what == 'mesh':
@@ -2423,7 +2448,7 @@ class DataManager(object):
     # def get_structure_mean_shape_filepath(atlas_name, structure, **kwargs):
     #     """
     #     """
-    #     return os.path.join(MESH_ROOTDIR, atlas_name, 'mean_shapes', atlas_name + '_' + structure + '_meanShape.npy')
+    #     return os.path.join(MESH_ROOTDIR, atlas_name, 'mean_shapes', atlas_name + '_' + structure + '_meanShape.bp')
 
     # @staticmethod
     # def get_structure_mean_shape_origin_filepath(atlas_name, structure, **kwargs):
@@ -2466,7 +2491,7 @@ class DataManager(object):
         """
         Path to the covariance matrix files.
         """
-        return os.path.join(MESH_ROOTDIR, atlas_name, 'covariance_matrices', atlas_name + '_' + structure + '_convariance.npy')
+        return os.path.join(MESH_ROOTDIR, atlas_name, 'covariance_matrices', atlas_name + '_' + structure + '_convariance.bp')
 
     @staticmethod
     def load_prior_covariance_matrix(atlas_name, structure):
@@ -2959,12 +2984,9 @@ class DataManager(object):
                                                              trial_idx=trial_idx)
         vol_basename = warp_basename + '_' + resolution
         vol_basename_with_structure_suffix = vol_basename + ('_' + structure) if structure is not None else ''
-        
-        return os.path.join(VOLUME_ROOTDIR, alignment_spec['stack_m']['name'],
-                            vol_basename, 'score_volumes', vol_basename_with_structure_suffix + '.npy')
 
-        #return os.path.join(VOLUME_ROOTDIR, alignment_spec['stack_m']['name'],
-        #                    vol_basename, 'score_volumes', vol_basename_with_structure_suffix + '.bp')
+        return os.path.join(VOLUME_ROOTDIR, alignment_spec['stack_m']['name'],
+                            vol_basename, 'score_volumes', vol_basename_with_structure_suffix + '.bp')
 
     # OBSOLETE
     @staticmethod
@@ -2987,8 +3009,7 @@ class DataManager(object):
             fn = basename + '_%s' % structure
         else:
             fn = basename
-        return os.path.join( DataManager.get_volume_root_folder(stack_m), basename, 'score_volumes', fn + '.npy')
-        #return os.path.join( DataManager.get_volume_root_folder(stack_m), basename, 'score_volumes', fn + '.bp')
+        return os.path.join(VOLUME_ROOTDIR, stack_m, basename, 'score_volumes', fn + '.bp')
 
     # @staticmethod
     # def load_transformed_volume_bbox(stack_m, stack_f,
@@ -3034,6 +3055,80 @@ class DataManager(object):
         return os.path.join(VOLUME_ROOTDIR, alignment_spec['stack_m']['name'],
                             vol_basename, 'score_volumes', vol_basename_with_structure_suffix + '_origin_wrt_' + wrt + '.txt')
 
+        # volume_type = stack_spec['vol_type']
+        #
+        # if 'resolution' not in stack_spec or stack_spec['resolution'] is None:
+        #     assert resolution is not None
+        #     stack_spec['resolution'] = resolution
+        #
+        # if 'structure' not in stack_spec or stack_spec['structure'] is None:
+        #     vol_basename = DataManager.get_original_volume_basename_v2(stack_spec=stack_spec)
+        # else:
+        #     stack_spec_no_structure = stack_spec.copy()
+        #     stack_spec_no_structure['structure'] = None
+        #     vol_basename = DataManager.get_original_volume_basename_v2(stack_spec=stack_spec_no_structure)
+        #
+        # if volume_type == 'score' or volume_type == 'annotationAsScore':
+        #     origin_fp = os.path.join(VOLUME_ROOTDIR, '%(stack)s',
+        #                   '%(basename)s',
+        #                   'score_volumes',
+        #                  '%(basename)s_%(struct)s_origin' + ('_wrt_'+wrt if wrt is not None else '') + '.txt') % \
+        #     {'stack':stack_spec['name'], 'basename':vol_basename, 'struct':structure}
+        #
+        # elif volume_type == 'intensity':
+        #     origin_fp = os.path.join(VOLUME_ROOTDIR, stack_spec['name'], vol_basename, vol_basename + '_origin' + ('_wrt_'+wrt if wrt is not None else '') + '.txt')
+        # else:
+        #     raise Exception("vol_type of %s is not recognized." % stack_spec['vol_type'])
+        #
+        # return origin_fp
+
+    # @staticmethod
+    # def get_transformed_volume_bbox_filepath_v2(alignment_spec,
+    #                                             wrt,
+    #                                             resolution=None,
+    #                                     structure=None,
+    #                                     trial_idx=None):
+    #     """
+    #     Args:
+    #         alignment_spec (dict): specifies the multi-map.
+    #         wrt (str): specify which domain is the bounding box relative to.
+    #         resolution (str): specifies the resolution of the multi-map.
+    #         structure (str): specifies one map of the multi-map.
+    #     """
+    #
+    #     if resolution is None:
+    #         resolution = alignment_spec['stack_m']['resolution']
+    #
+    #     warp_basename = DataManager.get_warped_volume_basename_v2(alignment_spec=alignment_spec, trial_idx=trial_idx)
+    #     vol_basename = warp_basename + '_' + resolution
+    #     vol_basename_with_structure_suffix = vol_basename + ('_' + structure if structure is not None else '')
+    #
+    #     return os.path.join(VOLUME_ROOTDIR, alignment_spec['stack_m']['name'],
+    #                         vol_basename, 'score_volumes', vol_basename_with_structure_suffix + '_bbox_wrt_' + wrt + '.txt')
+
+    # @staticmethod
+    # def get_transformed_volume_bbox_filepath(stack_m, stack_f,
+    #                                     warp_setting,
+    #                                     prep_id_m=None,
+    #                                     prep_id_f=None,
+    #                                     detector_id_m=None,
+    #                                     detector_id_f=None,
+    #                                     structure_m=None,
+    #                                     structure_f=None,
+    #                                     downscale=32,
+    #                                     vol_type_m='score',
+    #                                     vol_type_f='score',
+    #                                     structure=None,
+    #                                     trial_idx=None):
+    #
+    #     basename = DataManager.get_warped_volume_basename(**locals())
+    #     if structure is not None:
+    #         fn = basename + '_%s' % structure
+    #     else:
+    #         fn = basename
+    #     return os.path.join(VOLUME_ROOTDIR, stack_m, basename, 'score_volumes', fn + '_bbox.txt')
+
+
 
     ##########################
     ## Probabilistic Shape  ##
@@ -3076,17 +3171,140 @@ class DataManager(object):
 
         return prob_shapes
 
+#     @staticmethod
+#     def get_prob_shape_viz_filepath(stack_m, structure,
+#                                     stack_f=None,
+#                                         warp_setting=None,
+#                                         classifier_setting_m=None,
+#                                         classifier_setting_f=None,
+#                                         downscale=32,
+#                                          type_m='score',
+#                                          type_f='score',
+#                                         trial_idx=0,
+#                                         suffix=None,
+#                                         **kwargs):
+#         """
+#         Return prob. shape volume filepath.
+#         """
+
+#         basename = DataManager.get_warped_volume_basename(**locals())
+#         assert structure is not None
+#         fn = basename + '_' + structure + '_' + suffix
+#         return os.path.join(, stack_m, basename, 'probabilistic_shape_viz', structure, fn + '.png')
+
+#     @staticmethod
+#     def get_prob_shape_volume_filepath(stack_m, stack_f=None,
+#                                         warp_setting=None,
+#                                         classifier_setting_m=None,
+#                                         classifier_setting_f=None,
+#                                         downscale=32,
+#                                          type_m='score',
+#                                          type_f='score',
+#                                         structure=None,
+#                                         trial_idx=0, **kwargs):
+#         """
+#         Return prob. shape volume filepath.
+#         """
+
+#         basename = DataManager.get_warped_volume_basename(**locals())
+#         if structure is not None:
+#             fn = basename + '_' + structure
+
+#         return os.path.join(VOLUME_ROOTDIR, stack_m, basename, 'probabilistic_shapes', fn + '.bp')
+
+#     @staticmethod
+#     def get_prob_shape_origin_filepath(stack_m, stack_f=None,
+#                                         warp_setting=None,
+#                                         classifier_setting_m=None,
+#                                         classifier_setting_f=None,
+#                                         downscale=32,
+#                                          type_m='score',
+#                                          type_f='score',
+#                                         structure=None,
+#                                         trial_idx=0, **kwargs):
+#         """
+#         Return prob. shape volume origin filepath.
+
+#         Note that these origins are with respect to
+
+#         """
+
+#         basename = DataManager.get_warped_volume_basename(**locals())
+#         if structure is not None:
+#             fn = basename + '_' + structure
+#         return os.path.join(VOLUME_ROOTDIR, stack_m, basename, 'probabilistic_shapes', fn + '_origin.txt')
+
+    # @staticmethod
+    # def get_volume_filepath(stack_m, stack_f=None,
+    #                                     warp_setting=None,
+    #                                     classifier_setting_m=None,
+    #                                     classifier_setting_f=None,
+    #                                     downscale=32,
+    #                                      type_m='score',
+    #                                       type_f='score',
+    #                                     structure=None,
+    #                                     trial_idx=None):
+    #
+    #     basename = DataManager.get_warped_volume_basename(**locals())
+    #
+    #     if structure is not None:
+    #         fn = basename + '_' + structure
+    #
+    #     if type_m == 'score':
+    #         return DataManager.get_score_volume_filepath(stack=stack_m, structure=structure, downscale=downscale)
+    #     else:
+    #         raise
+
+    # @staticmethod
+    # def get_score_volume_filepath(stack, structure, volume_type='score', prep_id=None, detector_id=None, downscale=32):
+    #     basename = DataManager.get_original_volume_basename(stack=stack, detector_id=detector_id, prep_id=prep_id, volume_type=volume_type, downscale=downscale)
+    #     vol_fp = os.path.join(VOLUME_ROOTDIR, '%(stack)s',
+    #                           '%(basename)s',
+    #                           'score_volumes',
+    #                          '%(basename)s_%(struct)s.bp') % \
+    #     {'stack':stack, 'basename':basename, 'struct':structure}
+    #     return vol_fp
+    #
+    # @staticmethod
+    # def get_score_volume_filepath_v2(stack, structure, resolution, volume_type='score', prep_id=None, detector_id=None):
+    #     basename = DataManager.get_original_volume_basename(stack=stack, detector_id=detector_id, prep_id=prep_id, volume_type=volume_type, resolution=resolution)
+    #     vol_fp = os.path.join(VOLUME_ROOTDIR, '%(stack)s',
+    #                           '%(basename)s',
+    #                           'score_volumes',
+    #                          '%(basename)s_%(struct)s.bp') % \
+    #     {'stack':stack, 'basename':basename, 'struct':structure}
+    #     return vol_fp
 
     @staticmethod
     def get_score_volume_filepath_v3(stack_spec, structure):
         basename = DataManager.get_original_volume_basename_v2(stack_spec=stack_spec)
-        vol_fp = os.path.join( DataManager.get_volume_root_folder(stack_spec['name']),
+        vol_fp = os.path.join(VOLUME_ROOTDIR, '%(stack)s',
                               '%(basename)s',
                               'score_volumes',
-                             '%(basename)s_%(struct)s.npy') % \
+                             '%(basename)s_%(struct)s.bp') % \
         {'stack':stack_spec['name'], 'basename':basename, 'struct':structure}
         return vol_fp
 
+
+    # @staticmethod
+    # def get_score_volume_bbox_filepath(stack, structure, downscale, detector_id, prep_id=2, volume_type='score', **kwargs):
+    #     basename = DataManager.get_original_volume_basename(stack=stack, detector_id=detector_id, prep_id=prep_id, volume_type=volume_type, downscale=downscale)
+    #     fp = os.path.join(VOLUME_ROOTDIR, '%(stack)s',
+    #                           '%(basename)s',
+    #                           'score_volumes',
+    #                          '%(basename)s_%(struct)s_bbox.txt') % \
+    #     {'stack':stack, 'basename':basename, 'struct':structure}
+    #     return fp
+    #
+    # @staticmethod
+    # def get_score_volume_bbox_filepath_v2(stack, structure, resolution, detector_id, prep_id=2, volume_type='score', **kwargs):
+    #     basename = DataManager.get_original_volume_basename(stack=stack, detector_id=detector_id, prep_id=prep_id, volume_type=volume_type, resolution=resolution)
+    #     fp = os.path.join(VOLUME_ROOTDIR, '%(stack)s',
+    #                           '%(basename)s',
+    #                           'score_volumes',
+    #                          '%(basename)s_%(struct)s_bbox.txt') % \
+    #     {'stack':stack, 'basename':basename, 'struct':structure}
+        # return fp
 
 
     @staticmethod
@@ -3129,7 +3347,7 @@ class DataManager(object):
     #     grad_fp = os.path.join(VOLUME_ROOTDIR, '%(stack)s',
     #                           '%(basename)s',
     #                           'score_volume_gradients',
-    #                          '%(basename)s_%(struct)s_%%(suffix)s.npy') % \
+    #                          '%(basename)s_%(struct)s_%%(suffix)s.bp') % \
     #     {'stack':stack, 'basename':basename, 'struct':structure}
     #     return grad_fp
     #
@@ -3157,7 +3375,7 @@ class DataManager(object):
         grad_fp = os.path.join(VOLUME_ROOTDIR, '%(stack)s',
                               '%(basename)s',
                               'score_volume_gradients',
-                             '%(basename)s_%(struct)s_%%(suffix)s.npy') % \
+                             '%(basename)s_%(struct)s_%%(suffix)s.bp') % \
         {'stack':stack_spec['name'], 'basename':vol_basename, 'struct':structure}
         return grad_fp
 
@@ -3191,7 +3409,7 @@ class DataManager(object):
             grad_fp = os.path.join(VOLUME_ROOTDIR, '%(stack)s',
                                   '%(basename)s',
                                   'score_volume_gradients',
-                                 '%(basename)s_%(struct)s_gradients.npy') % \
+                                 '%(basename)s_%(struct)s_gradients.bp') % \
             {'stack':stack_spec['name'], 'basename':vol_basename, 'struct':structure}
         else:
             grad_fp = DataManager.get_volume_gradient_filepath_template_v3(stack_spec=stack_spec, structure=structure)  % {'suffix': suffix}
@@ -3235,6 +3453,238 @@ class DataManager(object):
         gradients = load_data(DataManager.get_volume_gradient_filepath_v3(stack_spec=stack_spec, structure=structure))
         origin = load_data(DataManager.get_volume_gradient_origin_filepath_v3(stack_spec=stack_spec, structure=structure))
         return (gradients, origin)
+
+#     @staticmethod
+#     def load_original_volume_all_known_structures(stack, downscale=32, detector_id=None, prep_id=None,
+#     structures=None, sided=True, volume_type='score', return_structure_index_mapping=True, include_surround=False):
+#         """
+#         Args:
+#             return_structure_index_mapping (bool): if True, return both volumes and structure-label mapping. If False, return only volumes.
+
+#         Returns:
+#         """
+
+#         if structures is None:
+#             if sided:
+#                 if include_surround:
+#                     structures = all_known_structures_sided_with_surround
+#                 else:
+#                     structures = all_known_structures_sided
+#             else:
+#                 structures = all_known_structures
+
+#         if return_structure_index_mapping:
+
+#             try:
+#                 label_to_structure, structure_to_label = DataManager.load_volume_label_to_name(stack=stack)
+#                 loaded = True
+#                 sys.stderr.write('Load structure/index map.\n')
+#             except:
+#                 loaded = False
+#                 sys.stderr.write('Prior structure/index map not found. Generating a new one.\n')
+
+#             volumes = {}
+#             if not loaded:
+#                 structure_to_label = {}
+#                 label_to_structure = {}
+#                 index = 1
+#             for structure in sorted(structures):
+#                 try:
+#                     if loaded:
+#                         index = structure_to_label[structure]
+
+#                     volumes[index] = DataManager.load_original_volume(stack=stack, structure=structure,
+#                                             downscale=downscale, detector_id=detector_id, prep_id=prep_id,
+#                                             volume_type=volume_type)
+#                     if not loaded:
+#                         structure_to_label[structure] = index
+#                         label_to_structure[index] = structure
+#                         index += 1
+#                 except Exception as e:
+#                     sys.stderr.write('Score volume for %s does not exist: %s\n' % (structure, e))
+
+#             # One volume at down=32 takes about 1MB of memory.
+
+#             sys.stderr.write('Volume shape: (%d, %d, %d)\n' % volumes.values()[0].shape)
+#             return volumes, structure_to_label, label_to_structure
+
+#         else:
+#             volumes = {}
+#             for structure in structures:
+#                 try:
+#                     volumes[structure] = DataManager.load_original_volume(stack=stack, structure=structure,
+#                                             downscale=downscale, detector_id=detector_id, prep_id=prep_id,
+#                                             volume_type=volume_type)
+#                 except:
+#                     sys.stderr.write('Score volume for %s does not exist.\n' % structure)
+
+#             sys.stderr.write('Volume shape: (%d, %d, %d)\n' % volumes.values()[0].shape)
+#             return volumes
+
+#     @staticmethod
+#     def load_original_volume_all_known_structures(stack, downscale=32, detector_id=None, prep_id=None,
+#     structures=None, sided=True, volume_type='score', return_structure_index_mapping=True, include_surround=False):
+#         """
+#         Args:
+#             return_structure_index_mapping (bool): if True, return both volumes and structure-label mapping. If False, return only volumes.
+
+#         Returns:
+#         """
+
+#         if structures is None:
+#             if sided:
+#                 if include_surround:
+#                     structures = all_known_structures_sided_with_surround
+#                 else:
+#                     structures = all_known_structures_sided
+#             else:
+#                 structures = all_known_structures
+
+#         if return_structure_index_mapping:
+
+#             try:
+#                 label_to_structure, structure_to_label = DataManager.load_volume_label_to_name(stack=stack)
+#                 loaded = True
+#                 sys.stderr.write('Load structure/index map.\n')
+#             except:
+#                 loaded = False
+#                 sys.stderr.write('Prior structure/index map not found. Generating a new one.\n')
+
+#             volumes = {}
+#             if not loaded:
+#                 structure_to_label = {}
+#                 label_to_structure = {}
+#                 index = 1
+#             for structure in sorted(structures):
+#                 try:
+#                     if loaded:
+#                         index = structure_to_label[structure]
+
+#                     volumes[index] = DataManager.load_original_volume(stack=stack, structure=structure,
+#                                             downscale=downscale, detector_id=detector_id, prep_id=prep_id,
+#                                             volume_type=volume_type)
+#                     if not loaded:
+#                         structure_to_label[structure] = index
+#                         label_to_structure[index] = structure
+#                         index += 1
+#                 except Exception as e:
+#                     sys.stderr.write('Score volume for %s does not exist: %s\n' % (structure, e))
+
+#             # One volume at down=32 takes about 1MB of memory.
+
+#             sys.stderr.write('Volume shape: (%d, %d, %d)\n' % volumes.values()[0].shape)
+#             return volumes, structure_to_label, label_to_structure
+
+#         else:
+#             volumes = {}
+#             for structure in structures:
+#                 try:
+#                     volumes[structure] = DataManager.load_original_volume(stack=stack, structure=structure,
+#                                             downscale=downscale, detector_id=detector_id, prep_id=prep_id,
+#                                             volume_type=volume_type)
+#                 except:
+#                     sys.stderr.write('Score volume for %s does not exist.\n' % structure)
+
+#             sys.stderr.write('Volume shape: (%d, %d, %d)\n' % volumes.values()[0].shape)
+#             return volumes
+
+
+    # @staticmethod
+    # def load_original_volume_all_known_structures_v2(stack,
+    #                                                  in_bbox_wrt,
+    #                                                  out_bbox_wrt='wholebrain',
+    #                                                 detector_id=None,
+    #                                                  prep_id=None,
+    #                                                 volume_type='score',
+    #                                                 downscale=32,
+    #                                                 structures=None,
+    #                                                 sided=True,
+    #                                                 include_surround=False,
+    #                                                  return_label_mappings=False,
+    #                                                  name_or_index_as_key='name',
+    #                                                  common_shape=True
+    #                                                 ):
+    #     """
+    #     Load original (un-transformed) volumes for all structures and optionally pad them into a common shape.
+    #
+    #     Args:
+    #         common_shape (bool): If true, volumes are padded to the same shape.
+    #
+    #     Returns:
+    #         If `common_shape` is True:
+    #             if return_label_mappings is True, returns (volumes, common_bbox, structure_to_label, label_to_structure), volumes is dict.
+    #             else, returns (volumes, common_bbox).
+    #         Note that `common_bbox` is relative to the same origin the individual volumes' bounding boxes are (which, ideally, one can infer from the bbox filenames (TODO: systematic renaming)).
+    #         If `common_shape` is False:
+    #             if return_label_mappings is True, returns (dict of volume_bbox_tuples, structure_to_label, label_to_structure).
+    #             else, returns volume_bbox_tuples.
+    #     """
+    #
+    #     if structures is None:
+    #         if sided:
+    #             if include_surround:
+    #                 structures = all_known_structures_sided_with_surround
+    #             else:
+    #                 structures = all_known_structures_sided
+    #         else:
+    #             structures = all_known_structures
+    #
+    #     loaded = False
+    #     sys.stderr.write('Prior structure/index map not found. Generating a new one.\n')
+    #
+    #     volumes = {}
+    #     if not loaded:
+    #         structure_to_label = {}
+    #         label_to_structure = {}
+    #         index = 1
+    #
+    #     for structure in structures:
+    #         try:
+    #
+    #             if loaded:
+    #                 index = structure_to_label[structure]
+    #
+    #             v = DataManager.load_original_volume(stack=stack, volume_type=volume_type,
+    #                                                     downscale=downscale,
+    #                                                     prep_id=prep_id,
+    #                                                     detector_id=detector_id,
+    #                                                     structure=structure)
+    #
+    #             b = DataManager.load_original_volume_bbox(stack=stack, volume_type=volume_type,
+    #                                                     downscale=downscale,
+    #                                                     prep_id=prep_id,
+    #                                                     detector_id=detector_id,
+    #                                                       structure=structure)
+    #
+    #             in_bbox_origin_wrt_wholebrain = DataManager.get_domain_origin(stack=stack, domain=in_bbox_wrt)
+    #             b = b + in_bbox_origin_wrt_wholebrain[[0,0,1,1,2,2]]
+    #
+    #             if name_or_index_as_key == 'name':
+    #                 volumes[structure] = (v,b)
+    #             else:
+    #                 volumes[index] = (v,b)
+    #
+    #             if not loaded:
+    #                 structure_to_label[structure] = index
+    #                 label_to_structure[index] = structure
+    #                 index += 1
+    #
+    #         except Exception as e:
+    #             # raise e
+    #             sys.stderr.write('Error loading score volume for %s: %s.\n' % (structure, e))
+    #
+    #     if common_shape:
+    #         volumes_normalized, common_bbox = convert_vol_bbox_dict_to_overall_vol(vol_bbox_dict=volumes)
+    #
+    #         if return_label_mappings:
+    #             return volumes_normalized, common_bbox, structure_to_label, label_to_structure
+    #         else:
+    #             return volumes_normalized, common_bbox
+    #     else:
+    #         if return_label_mappings:
+    #             return volumes, structure_to_label, label_to_structure
+    #         else:
+    #             return volumes
 
 
     @staticmethod
@@ -3291,12 +3741,12 @@ class DataManager(object):
                 if loaded:
                     index = structure_to_label[structure]
 
-                v, o = DataManager.load_original_volume_v2(stack_spec,
-                                                           structure=structure,
-                                                           bbox_wrt=in_bbox_wrt,
+                v, o = DataManager.load_original_volume_v2(stack_spec, 
+                                                           structure=structure, 
+                                                           bbox_wrt=in_bbox_wrt, 
                                                            resolution=stack_spec['resolution'])
 
-                in_bbox_origin_wrt_wholebrain = DataManager.get_domain_origin(stack=stack_spec['name'],
+                in_bbox_origin_wrt_wholebrain = DataManager.get_domain_origin(stack=stack_spec['name'], 
                                                                               domain=in_bbox_wrt,
                                                                               resolution=stack_spec['resolution'],
                                                                               loaded_cropbox_resolution=stack_spec['resolution'])
@@ -3362,7 +3812,7 @@ class DataManager(object):
             {'stack':stack_spec['name'], 'basename':vol_basename, 'struct':structure}
 
         elif volume_type == 'intensity':
-            origin_fp = os.path.join( DataManager.get_volume_root_folder(stack_spec['name']), vol_basename, vol_basename + '_origin' + ('_wrt_'+wrt if wrt is not None else '') + '.txt')
+            origin_fp = os.path.join(VOLUME_ROOTDIR, stack_spec['name'], vol_basename, vol_basename + '_origin' + ('_wrt_'+wrt if wrt is not None else '') + '.txt')
         else:
             raise Exception("vol_type of %s is not recognized." % stack_spec['vol_type'])
 
@@ -3396,13 +3846,29 @@ class DataManager(object):
         vol_basename_with_structure_suffix = vol_basename + ('_' + structure) if structure is not None else ''
 
         if stack_spec['vol_type'] == 'score':
-            return os.path.join( DataManager.get_volume_root_folder(stack_spec['name']), vol_basename, 'score_volumes', vol_basename_with_structure_suffix + '.npy')
+            return os.path.join(VOLUME_ROOTDIR, stack_spec['name'], vol_basename, 'score_volumes', vol_basename_with_structure_suffix + '.bp')
         elif stack_spec['vol_type'] == 'annotationAsScore':
-            return os.path.join( DataManager.get_volume_root_folder(stack_spec['name']), vol_basename, 'score_volumes', vol_basename_with_structure_suffix + '.npy')
+            return os.path.join(VOLUME_ROOTDIR, stack_spec['name'], vol_basename, 'score_volumes', vol_basename_with_structure_suffix + '.bp')
         elif stack_spec['vol_type'] == 'intensity':
-            return os.path.join( DataManager.get_volume_root_folder(stack_spec['name']), vol_basename, vol_basename + '.npy')
+            return os.path.join(VOLUME_ROOTDIR, stack_spec['name'], vol_basename, vol_basename + '.bp')
         else:
             raise Exception("vol_type of %s is not recognized." % stack_spec['vol_type'])
+
+    # @staticmethod
+    # def get_original_volume_filepath(stack, structure, prep_id=None, detector_id=None, volume_type='score', downscale=32):
+    #     if volume_type == 'score':
+    #         fp = DataManager.get_score_volume_filepath(**locals())
+    #     elif volume_type == 'annotation':
+    #         fp = DataManager.get_annotation_volume_filepath(stack=stack, downscale=downscale)
+    #     elif volume_type == 'annotationAsScore':
+    #         fp = DataManager.get_score_volume_filepath(**locals())
+    #     elif volume_type == 'intensity':
+    #         fp = DataManager.get_intensity_volume_filepath(stack=stack, downscale=downscale)
+    #     elif volume_type == 'intensity_mhd':
+    #         fp = DataManager.get_intensity_volume_mhd_filepath(stack=stack, downscale=downscale)
+    #     else:
+    #         raise Exception("Volume type must be one of score, annotation, annotationAsScore or intensity.")
+    #     return fp
 
 
     @staticmethod
@@ -3435,6 +3901,39 @@ class DataManager(object):
         # else:
         #     convert_frame
         #     return volume, volume_bbox
+
+
+    # @staticmethod
+    # def load_original_volume_v2(stack, structure, downscale, prep_id=None, detector_id=None, volume_type='score'):
+    #     """
+    #     Args:
+    #
+    #     Returns:
+    #         (3d-array, (6,)-tuple): (volume, bounding box with respect to coordinates origin of the contours)
+    #     """
+    #     vol_fp = DataManager.get_original_volume_filepath(**locals())
+    #     download_from_s3(vol_fp, is_dir=False)
+    #     volume = DataManager.load_data(vol_fp, filetype='bp')
+    #     if volume_type == 'annotationAsScore':
+    #         volume = volume.astype(np.float32)
+    #
+    #     bbox_fp = DataManager.get_original_volume_bbox_filepath(**locals())
+    #     download_from_s3(bbox_fp)
+    #     volume_bbox = DataManager.load_data(bbox_fp, filetype='bbox')
+    #
+    #     return volume, volume_bbox
+
+    # @staticmethod
+    # def load_original_volume(stack, structure, downscale, prep_id=None, detector_id=None, volume_type='score'):
+    #     """
+    #     Args:
+    #     """
+    #     vol_fp = DataManager.get_original_volume_filepath(**locals())
+    #     download_from_s3(vol_fp, is_dir=False)
+    #     volume = DataManager.load_data(vol_fp, filetype='bp')
+    #     if volume_type == 'annotationAsScore':
+    #         volume = volume.astype(np.float32)
+    #     return volume
 
     # OBSOLETE
     @staticmethod
@@ -3470,6 +3969,47 @@ class DataManager(object):
 
         return volume_bbox_wrt_wholebrainXYcropped
 
+    # @staticmethod
+    # def load_original_volume_bbox_v2(stack_spec, structure=None, wrt='wholebrain', **kwargs):
+    #     """
+    #     """
+    #
+    #     bbox_fp = DataManager.get_original_volume_bbox_filepath_v2(**locals())
+    #     download_from_s3(bbox_fp)
+    #     return np.loadtxt(bbox_fp)
+
+#     @staticmethod
+#     def get_original_volume_origin_filepath_v2(stack_spec, structure=None, wrt='wholebrain', **kwargs):
+#         """
+#         """
+
+#         volume_type = stack_spec['vol_type']
+#         if volume_type == 'score':
+#             origin_fp = DataManager.get_score_volume_origin_filepath_v3(stack_spec=stack_spec, structure=structure, wrt=wrt)
+#         elif volume_type == 'annotationAsScore':
+#             origin_fp = DataManager.get_score_volume_origin_filepath_v3(stack_spec=stack_spec, structure=structure, wrt=wrt)
+#         elif volume_type == 'intensity':
+
+#             if 'resolution' not in stack_spec or stack_spec['resolution'] is None:
+#                 assert resolution is not None
+#                 stack_spec['resolution'] = resolution
+
+#             if 'structure' not in stack_spec or stack_spec['structure'] is None:
+#                 vol_basename = DataManager.get_original_volume_basename_v2(stack_spec=stack_spec)
+#             else:
+#                 stack_spec_no_structure = stack_spec.copy()
+#                 stack_spec_no_structure['structure'] = None
+#                 vol_basename = DataManager.get_original_volume_basename_v2(stack_spec=stack_spec_no_structure)
+
+#             origin_fp = os.path.join(VOLUME_ROOTDIR, stack_spec['name'], vol_basename + '_origin' + + ('_wrt_'+wrt if wrt is not None else '') + '.txt')
+#         # elif volume_type == 'shell':
+#         #     raise
+#         # elif volume_type == 'thumbnail':
+#         #     raise
+#         else:
+#             raise Exception("vol_type of %s is not recognized." % stack_spec['vol_type'])
+
+#         return origin_fp
 
     @staticmethod
     def save_original_volume(volume, stack_spec, structure=None, wrt='wholebrain', **kwargs):
@@ -3482,6 +4022,24 @@ class DataManager(object):
 
         save_data(vol, DataManager.get_original_volume_filepath_v2(stack_spec=stack_spec, structure=structure))
         save_data(ori, DataManager.get_original_volume_origin_filepath_v3(stack_spec=stack_spec, structure=structure, wrt=wrt))
+
+    # @staticmethod
+    # def get_original_volume_bbox_filepath_v2(stack_spec, structure=None, wrt='wholebrain', **kwargs):
+    #     volume_type = stack_spec['vol_type']
+    #     if volume_type == 'annotation':
+    #         raise
+    #     elif volume_type == 'score':
+    #         bbox_fn = DataManager.get_score_volume_bbox_filepath_v3(stack_spec=stack_spec, structure=structure, wrt=wrt)
+    #     elif volume_type == 'annotationAsScore':
+    #         bbox_fn = DataManager.get_score_volume_bbox_filepath_v3(stack_spec=stack_spec, structure=structure, wrt=wrt)
+    #     elif volume_type == 'shell':
+    #         raise
+    #     elif volume_type == 'thumbnail':
+    #         raise
+    #     else:
+    #         raise Exception('Type must be annotation, score, shell or thumbnail.')
+    #
+    #     return bbox_fn
 
     # OBSOLETE
     @staticmethod
@@ -3597,12 +4155,12 @@ class DataManager(object):
                                             '%(stack)s',
                                             '%(stack)s_prep%(prep)d_down%(smdown)d_detector%(detector_id)d',
                                            '%(fn)s_prep%(prep)d_down%(smdown)d_detector%(detector_id)d',
-                                           '%(fn)s_prep%(prep)d_down%(smdown)d_detector%(detector_id)d_%(structure)s_scoremap.npy') % {'stack':stack, 'prep':prep_id, 'fn': fn, 'smdown':downscale, 'detector_id': detector_id, 'structure':structure}
+                                           '%(fn)s_prep%(prep)d_down%(smdown)d_detector%(detector_id)d_%(structure)s_scoremap.bp') % {'stack':stack, 'prep':prep_id, 'fn': fn, 'smdown':downscale, 'detector_id': detector_id, 'structure':structure}
         elif out_resolution_um is not None:
             scoremap_bp_filepath = os.path.join(SCOREMAP_ROOTDIR, '%(outres).1fum', '%(stack)s',
                                                 '%(stack)s_prep%(prep)d_%(outres).1fum_detector%(detector_id)d',
                                                 '%(fn)s_prep%(prep)d_%(outres).1fum_detector%(detector_id)d',
-                                                '%(fn)s_prep%(prep)d_%(outres).1fum_detector%(detector_id)d_%(structure)s_scoremap.npy') % {'stack':stack, 'prep':prep_id, 'fn': fn, 'outres':out_resolution_um, 'detector_id': detector_id, 'structure':structure}
+                                                '%(fn)s_prep%(prep)d_%(outres).1fum_detector%(detector_id)d_%(structure)s_scoremap.bp') % {'stack':stack, 'prep':prep_id, 'fn': fn, 'outres':out_resolution_um, 'detector_id': detector_id, 'structure':structure}
 
         return scoremap_bp_filepath
 
@@ -3632,6 +4190,84 @@ class DataManager(object):
         """
         return DataManager.load_downscaled_scoremap(**locals())
 
+
+#     @staticmethod
+#     def load_downscaled_scoremap(stack, structure, classifier_id, section=None, fn=None, anchor_fn=None, downscale=32):
+#         """
+#         Return scoremaps as bp files.
+#         """
+
+#         # Load scoremap
+#         scoremap_bp_filepath = DataManager.get_downscaled_scoremap_filepath(stack, section=section, \
+#                         fn=fn, anchor_fn=anchor_fn, structure=structure, classifier_id=classifier_id,
+#                         downscale=downscale)
+
+#         download_from_s3(scoremap_bp_filepath)
+
+#         if not os.path.exists(scoremap_bp_filepath):
+#             raise Exception('No scoremap for image %s (section %d) for label %s\n' % \
+#             (metadata_cache['sections_to_filenames'][stack][section], section, structure))
+
+#         scoremap_downscaled = DataManager.load_data(scoremap_bp_filepath, filetype='bp')
+#         return scoremap_downscaled
+
+#     @staticmethod
+#     def get_scoremap_filepath(stack, structure, classifier_id, section=None, fn=None, anchor_fn=None, return_bbox_fp=False):
+
+#         if section is not None:
+#             fn = metadata_cache['sections_to_filenames'][stack][section]
+#             if is_invalid(fn):
+#                 raise Exception('Section is invalid: %s.' % fn)
+
+#         if anchor_fn is None:
+#             anchor_fn = metadata_cache['anchor_fn'][stack]
+
+#         scoremap_bp_filepath = os.path.join(SCOREMAPS_ROOTDIR, stack, \
+#         '%(fn)s_lossless_alignedTo_%(anchor_fn)s_cropped/%(fn)s_lossless_alignedTo_%(anchor_fn)s_cropped_%(structure)s_denseScoreMap_setting_%(classifier_id)d.hdf') \
+#         % dict(stack=stack, fn=fn, structure=structure, anchor_fn=anchor_fn, classifier_id=classifier_id)
+
+#         scoremap_bbox_filepath = os.path.join(SCOREMAPS_ROOTDIR, stack, \
+#         '%(fn)s_lossless_alignedTo_%(anchor_fn)s_cropped/%(fn)s_lossless_alignedTo_%(anchor_fn)s_cropped_%(structure)s_denseScoreMap_interpBox.txt') \
+#             % dict(stack=stack, fn=fn, structure=structure, anchor_fn=anchor_fn)
+
+#         if return_bbox_fp:
+#             return scoremap_bp_filepath, scoremap_bbox_filepath
+#         else:
+#             return scoremap_bp_filepath
+
+#     @staticmethod
+#     def load_scoremap(stack, structure, classifier_id, section=None, fn=None, anchor_fn=None, downscale=1):
+#         """
+#         Return scoremaps.
+#         """
+
+#         # Load scoremap
+#         scoremap_bp_filepath, scoremap_bbox_filepath = DataManager.get_scoremap_filepath(stack, section=section, \
+#                                     fn=fn, anchor_fn=anchor_fn, structure=structure, return_bbox_fp=True, classifier_id=classifier_id)
+#         if not os.path.exists(scoremap_bp_filepath):
+#             raise Exception('No scoremap for image %s (section %d) for label %s\n' % \
+#             (metadata_cache['sections_to_filenames'][stack][section], section, structure))
+
+#         scoremap = DataManager.load_data(scoremap_bp_filepath, filetype='hdf')
+
+#         # Load interpolation box
+#         xmin, xmax, ymin, ymax = DataManager.load_data(scoremap_bbox_filepath, filetype='bbox')
+#         ymin_downscaled = ymin / downscale
+#         xmin_downscaled = xmin / downscale
+
+#         full_width, full_height = metadata_cache['image_shape'][stack]
+#         scoremap_downscaled = np.zeros((full_height/downscale, full_width/downscale), np.float32)
+
+#         # To conserve memory, it is important to make a copy of the sub-scoremap and delete the original scoremap
+#         scoremap_roi_downscaled = scoremap[::downscale, ::downscale].copy()
+#         del scoremap
+
+#         h_downscaled, w_downscaled = scoremap_roi_downscaled.shape
+
+#         scoremap_downscaled[ymin_downscaled : ymin_downscaled + h_downscaled,
+#                             xmin_downscaled : xmin_downscaled + w_downscaled] = scoremap_roi_downscaled
+
+#         return scoremap_downscaled
 
     ###########################
     ######  CNN Features ######
@@ -3664,6 +4300,46 @@ class DataManager(object):
         locations = locs[:, 1:]
         return indices, locations
 
+#     @staticmethod
+#     def get_dnn_feature_locations_filepath(stack, model_name, section=None, fn=None, anchor_fn=None, input_img_version='cropped_gray'):
+
+#         if fn is None:
+#             fn = metadata_cache['sections_to_filenames'][stack][section]
+
+#         if anchor_fn is None:
+#             anchor_fn = metadata_cache['anchor_fn'][stack]
+
+#         image_version_basename = DataManager.get_image_version_basename(stack=stack, resol='lossless', version=input_img_version)
+#         image_basename = DataManager.get_image_basename(stack=stack, fn=fn, resol='lossless', version=input_img_version)
+
+#         # feature_locs_fn = os.path.join(PATCH_FEATURES_ROOTDIR, model_name, stack, \
+#         # '%(fn)s_lossless_alignedTo_%(anchor_fn)s_cropped/%(fn)s_lossless_alignedTo_%(anchor_fn)s_cropped_patch_locations.txt' % \
+#         # dict(fn=fn, anchor_fn=anchor_fn))
+
+#         feature_locs_fn = os.path.join(PATCH_FEATURES_ROOTDIR, model_name, stack, image_version_basename,
+#                                        image_basename + '_patch_locations.txt')
+#         return feature_locs_fn
+
+#     @staticmethod
+#     def get_dnn_feature_locations_filepath(stack, model_name, section=None, fn=None, prep_id=2, input_img_version='gray', win=1):
+
+#         if fn is None:
+#             fn = metadata_cache['sections_to_filenames'][stack][section]
+#         feature_locs_fp = os.path.join(PATCH_FEATURES_ROOTDIR, model_name, stack,
+#                                        stack+'_prep%(prep)d'%{'prep':prep_id}+'_'+input_img_version+'_win%(win)d'%{'win':win},
+#                                        fn+'_prep%(prep)d'%{'prep':prep_id}+'_'+input_img_version+'_win%(win)d'%{'win':win}+'_'+model_name+'_patch_locations.txt')
+#         return feature_locs_fp
+
+#     @staticmethod
+#     def get_dnn_feature_locations_filepath_v2(stack, section=None, fn=None, prep_id=2, input_img_version='gray', win=1):
+
+#         if fn is None:
+#             fn = metadata_cache['sections_to_filenames'][stack][section]
+#         feature_locs_fp = os.path.join(PATCH_FEATURES_ROOTDIR, stack,
+#                                        stack+'_prep%(prep)d'%{'prep':prep_id}+'_'+input_img_version+'_win%(win)d'%{'win':win},
+#                                        fn+'_prep%(prep)d'%{'prep':prep_id}+'_'+input_img_version+'_win%(win)d'%{'win':win}+'_patchLocations.txt')
+#         return feature_locs_fp
+
     @staticmethod
     def get_patch_locations_filepath(stack, win, section=None, fn=None, prep_id=2, input_img_version='gray'):
 
@@ -3673,6 +4349,36 @@ class DataManager(object):
                                        stack+'_prep%(prep)d'%{'prep':prep_id}+'_'+input_img_version+'_win%(win)d'%{'win':win},
                                        fn+'_prep%(prep)d'%{'prep':prep_id}+'_'+input_img_version+'_win%(win)d'%{'win':win}+'_patchLocations.txt')
         return feature_locs_fp
+
+#     @staticmethod
+#     def get_patch_locations_filepath_v2(stack, win, section=None, fn=None, prep_id=2, input_img_version='gray'):
+
+#         if fn is None:
+#             fn = metadata_cache['sections_to_filenames'][stack][section]
+#         feature_locs_fp = os.path.join(PATCH_LOCATIONS_ROOTDIR, stack,
+#                                        stack+'_prep%(prep)d'%{'prep':prep_id}+'_'+input_img_version+'_win%(win)d'%{'win':win},
+#                                        fn+'_prep%(prep)d'%{'prep':prep_id}+'_'+input_img_version+'_win%(win)d'%{'win':win}+'_patchLocations.txt')
+#         return feature_locs_fp
+
+#     @staticmethod
+#     def get_dnn_features_filepath(stack, model_name, section=None, fn=None, anchor_fn=None, input_img_version='cropped_gray'):
+#         """
+#         Args:
+#             version (str): default is cropped_gray.
+#         """
+
+#         if fn is None:
+#             fn = metadata_cache['sections_to_filenames'][stack][section]
+
+#         if anchor_fn is None:
+#             anchor_fn = metadata_cache['anchor_fn'][stack]
+
+#         image_version_basename = DataManager.get_image_version_basename(stack=stack, resol='lossless', version=input_img_version)
+#         image_basename = DataManager.get_image_basename(stack=stack, fn=fn, resol='lossless', version=input_img_version)
+
+#         feature_fn = os.path.join(PATCH_FEATURES_ROOTDIR, model_name, stack, image_version_basename, image_basename + '_features.bp')
+
+#         return feature_fn
 
 
     @staticmethod
@@ -3685,7 +4391,7 @@ class DataManager(object):
             what (str): "features" or "locations"
 
         Note:
-            If what == "locations", the output has extension '.npy'
+            If what == "locations", the output has extension '.bp' 
             but it is actually a text file. This is a legacy mistake.
         """
 
@@ -3703,8 +4409,8 @@ class DataManager(object):
 
         feature_fp = os.path.join(PATCH_FEATURES_ROOTDIR, model_name, stack,
                     stack + '_' + prep_str + '_' + normalization_scheme + '_' + win_str,
-            fn + '_' + prep_str + '_' + normalization_scheme + '_' + win_str + '_' + model_name + '_' + what + ('_%s'%timestamp if timestamp is not None else '') + '.npy')
-
+            fn + '_' + prep_str + '_' + normalization_scheme + '_' + win_str + '_' + model_name + '_' + what + ('_%s'%timestamp if timestamp is not None else '') + '.bp')
+        
         print feature_fp
 
         return feature_fp
@@ -3722,7 +4428,7 @@ class DataManager(object):
 
         Note: `mean_img` is assumed to be the default provided by mxnet.
         """
-
+        
         features_fp = DataManager.get_dnn_features_filepath_v2(stack=stack, sec=sec, fn=fn, prep_id=prep_id, win_id=win_id,
                               normalization_scheme=normalization_scheme,
                                              model_name=model_name, what='features')
@@ -3730,9 +4436,9 @@ class DataManager(object):
         print(features_fp)
         if not os.path.exists(features_fp):
             raise Exception("Features for %s, %s/%s does not exist." % (stack, sec, fn))
-
+            
         features = bp.unpack_ndarray_file(features_fp)
-
+        
         locations_fp = DataManager.get_dnn_features_filepath_v2(stack=stack, sec=sec, fn=fn, prep_id=prep_id, win_id=win_id,
                               normalization_scheme=normalization_scheme,
                                              model_name=model_name, what='locations')
@@ -3773,6 +4479,74 @@ class DataManager(object):
         if ENABLE_UPLOAD_S3:
             upload_to_s3(locations_fp)
 
+#     @staticmethod
+#     def get_dnn_features_filepath(stack, model_name, win, section=None, fn=None, prep_id=2, input_img_version='gray', suffix=None):
+#         """
+#         Args:
+#             input_img_version (str): default is gray.
+#         """
+#         if fn is None:
+#             fn = metadata_cache['sections_to_filenames'][stack][section]
+
+#         if suffix is None:
+#             feature_fp = os.path.join(PATCH_FEATURES_ROOTDIR, model_name, stack,
+#                                        stack+'_prep%(prep)d'%{'prep':prep_id}+'_'+input_img_version+'_win%(win)d'%{'win':win},
+#                                        fn+'_prep%(prep)d'%{'prep':prep_id}+'_'+input_img_version+'_win%(win)d'%{'win':win}+'_'+model_name+'_features.bp')
+#         else:
+#             feature_fp = os.path.join(PATCH_FEATURES_ROOTDIR, model_name, stack,
+#                                        stack+'_prep%(prep)d'%{'prep':prep_id}+'_'+input_img_version+'_win%(win)d'%{'win':win},
+#                                        fn+'_prep%(prep)d'%{'prep':prep_id}+'_'+input_img_version+'_win%(win)d'%{'win':win}+'_'+model_name+'_features_' + suffix + '.bp')
+
+#         return feature_fp
+
+#     @staticmethod
+#     def load_dnn_features(stack, model_name, win, section=None, fn=None, input_img_version='gray', prep_id=2, suffix=None):
+#         """
+#         Args:
+#             input_img_version (str): default is gray.
+#             win (int): the spacing/size scheme
+#         """
+
+#         features_fp = DataManager.get_dnn_features_filepath(**locals())
+#         download_from_s3(features_fp, local_root=DATA_ROOTDIR)
+
+#         try:
+#             return load_hdf(features_fp)
+#         except:
+#             pass
+
+#         try:
+#             return load_hdf_v2(features_fp)
+#         except:
+#             pass
+
+#         return bp.unpack_ndarray_file(features_fp)
+
+#     @staticmethod
+#     def load_dnn_features(stack, model_name, section=None, fn=None, anchor_fn=None, input_img_version='cropped_gray'):
+#         """
+#         Args:
+#             version (str): default is cropped_gray.
+#         """
+
+#         features_fp = DataManager.get_dnn_features_filepath(stack=stack, model_name=model_name, section=section, fn=fn, anchor_fn=anchor_fn, input_img_version=input_img_version)
+#         download_from_s3(features_fp)
+
+#         try:
+#             return load_hdf(features_fp)
+#         except:
+#             pass
+
+#         try:
+#             return load_hdf_v2(features_fp)
+#         except:
+#             pass
+
+#         return bp.unpack_ndarray_file(features_fp)
+
+
+
+
     ##################
     ##### Image ######
     ##################
@@ -3808,6 +4582,23 @@ class DataManager(object):
         return image_basename
 
 
+#     @staticmethod
+#     def get_image_basename_v2(stack, version, resol='lossless', anchor_fn=None, fn=None, section=None):
+
+#         if anchor_fn is None:
+#             anchor_fn = metadata_cache['anchor_fn'][stack]
+
+#         if section is not None:
+#             fn = metadata_cache['sections_to_filenames'][stack][section]
+#             assert is_invalid(fn=fn), 'Section is invalid: %s.' % fn
+
+#         if resol == 'lossless' and (version == 'cropped' or version == 'cropped_tif'):
+#             image_basename = fn + '_' + resol + '_alignedTo_' + anchor_fn + '_cropped'
+#         else:
+#             image_basename = fn + '_' + resol + '_alignedTo_' + anchor_fn + '_' + version
+
+#         return image_basename
+
     @staticmethod
     def get_image_dir_v2(stack, prep_id=None, version=None, resol=None,
                       data_dir=DATA_DIR, raw_data_dir=RAW_DATA_DIR, thumbnail_data_dir=THUMBNAIL_DATA_DIR):
@@ -3825,21 +4616,55 @@ class DataManager(object):
 
         if version is None:
             if resol == 'thumbnail' or resol == 'down64':
-                image_dir = os.path.join( DataManager.get_images_root_folder(stack),
-                                         stack + ('_prep%d' % prep_id if prep_id is not None else '') + '_%s' % resol)
+                image_dir = os.path.join(thumbnail_data_dir, stack, stack + ('_prep%d' % prep_id if prep_id is not None else '') + '_%s' % resol)
             else:
-                image_dir = os.path.join( DataManager.get_images_root_folder(stack),
-                                         stack + ('_prep%d' % prep_id if prep_id is not None else '') + '_%s' % resol)
+                image_dir = os.path.join(data_dir, stack, stack + ('_prep%d' % prep_id if prep_id is not None else '') + '_%s' % resol)
         else:
             if resol == 'thumbnail' or resol == 'down64':
-                image_dir = os.path.join( DataManager.get_images_root_folder(stack),
-                                         stack + ('_prep%d' % prep_id if prep_id is not None else '') + '_%s' % resol + '_' + version)
+                image_dir = os.path.join(thumbnail_data_dir, stack, stack + ('_prep%d' % prep_id if prep_id is not None else '') + '_%s' % resol + '_' + version)
             else:
-                image_dir = os.path.join( DataManager.get_images_root_folder(stack),
-                                         stack + ('_prep%d' % prep_id if prep_id is not None else '') + '_%s' % resol + '_' + version)
+                image_dir = os.path.join(data_dir, stack, stack + ('_prep%d' % prep_id if prep_id is not None else '') + '_%s' % resol + '_' + version)
 
         return image_dir
 
+
+    # @staticmethod
+    # def get_image_dir(stack, version, resol='lossless', anchor_fn=None, modality=None,
+    #                   data_dir=DATA_DIR, raw_data_dir=RAW_DATA_DIR, thumbnail_data_dir=THUMBNAIL_DATA_DIR):
+    #     """
+    #     Args:
+    #         data_dir: This by default is DATA_DIR, but one can change this ad-hoc when calling the function
+    #         resol: can be either lossless or thumbnail
+    #         version: TODO - Write a list of options
+    #         modality: can be either nissl or fluorescent. If not specified, it is inferred.
+    #
+    #     Returns:
+    #         Absolute path of the image directory.
+    #     """
+    #
+    #     if anchor_fn is None:
+    #         anchor_fn = DataManager.load_anchor_filename(stack)
+    #
+    #     if resol == 'lossless' and version == 'original_jp2':
+    #         image_dir = os.path.join(raw_data_dir, stack)
+    #     elif resol == 'lossless' and version == 'jpeg':
+    #         assert modality == 'nissl'
+    #         image_dir = os.path.join(data_dir, stack, stack+'_'+resol+'_alignedTo_%(anchor_fn)s_cropped_compressed' % {'anchor_fn':anchor_fn})
+    #     elif resol == 'lossless' and version == 'uncropped_tif':
+    #         image_dir = os.path.join(data_dir, stack, stack + '_' + resol + '_tif')
+    #     elif resol == 'lossless' and version == 'cropped_16bit':
+    #         image_dir = os.path.join(data_dir, stack, stack+'_'+resol+'_alignedTo_%(anchor_fn)s_cropped' % {'anchor_fn':anchor_fn})
+    #     elif resol == 'thumbnail' and (version == 'cropped' or version == 'cropped_tif'):
+    #         image_dir = os.path.join(thumbnail_data_dir, stack, stack+'_'+resol+'_alignedTo_%(anchor_fn)s_cropped' % {'anchor_fn':anchor_fn})
+    #     elif (resol == 'thumbnail' and version == 'aligned') or (resol == 'thumbnail' and version == 'aligned_tif'):
+    #         image_dir = os.path.join(thumbnail_data_dir, stack, stack+'_'+resol+'_alignedTo_%(anchor_fn)s' % {'anchor_fn':anchor_fn})
+    #     elif resol == 'thumbnail' and version == 'original_png':
+    #         image_dir = os.path.join(raw_data_dir, stack)
+    #     else:
+    #         # sys.stderr.write('No special rule for (%s, %s). So using the default image directory composition rule.\n' % (version, resol))
+    #         image_dir = os.path.join(data_dir, stack, stack + '_' + resol + '_alignedTo_' + anchor_fn + '_' + version)
+    #
+    #     return image_dir
 
     @staticmethod
     def load_image_v2(stack, prep_id, resol='raw', version=None, section=None, fn=None, data_dir=DATA_DIR, ext=None, thumbnail_data_dir=THUMBNAIL_DATA_DIR, convert_from_alternative=True):
@@ -4003,13 +4828,14 @@ class DataManager(object):
             Absolute path of the image file.
         """
 
-        if section is not None:
-            try:
-                metadata_cache['sections_to_filenames'][stack]
-            except:
-                sys.stderr.write( 'No sorted filenames could be loaded for '+stack+'. May not have been set up correctly.' )
-                return
+#         if resol == 'lossless':
+#             if stack == 'CHATM2' or stack == 'CHATM3':
+#                 resol = 'raw'
+#         elif resol == 'raw':
+#             if stack not in ['CHATM2', 'CHATM3', 'MD661', 'DEMO999']:
+#                 resol = 'lossless'
 
+        if section is not None:
 
             if sorted_filenames_fp is not None:
                 _, sections_to_filenames = DataManager.load_sorted_filenames(fp=sorted_filenames_fp)
@@ -4065,8 +4891,6 @@ class DataManager(object):
             Absolute path of the image file.
         """
 
-        return '! Use get_image_filepath_v2 !'
-
         image_name = None
 
         if section is not None:
@@ -4116,7 +4940,7 @@ class DataManager(object):
     def get_image_dimension(stack, prep_id='alignedBrainstemCrop'):
         """
         Returns the dimensions at raw resolution for the alignedBrainstemCrop images.
-
+        
         Returns:
             (raw image width, raw image height)
         """
@@ -4158,26 +4982,26 @@ class DataManager(object):
                 raise Exception('Section is invalid: %s.' % fn)
 
         if what == 'region_centers':
-            fp = os.path.join( DataManager.get_images_root_folder(stack), stack + '_intensity_normalization_results', 'regionCenters',
-                         stack + '_' + fn + '_raw_regionCenters.npy')
+            fp = os.path.join(DATA_DIR, stack, stack + '_intensity_normalization_results', 'regionCenters',
+                         stack + '_' + fn + '_raw_regionCenters.bp')
         elif what == 'mean_std_all_regions':
-            fp = os.path.join( DataManager.get_images_root_folder(stack), stack + '_intensity_normalization_results', 'meanStdAllRegions',
-                         stack + '_' + fn + '_raw_meanStdAllRegions.npy')
+            fp = os.path.join(DATA_DIR, stack, stack + '_intensity_normalization_results', 'meanStdAllRegions',
+                         stack + '_' + fn + '_raw_meanStdAllRegions.bp')
         elif what == 'mean_map':
-            fp = os.path.join( DataManager.get_images_root_folder(stack), stack + '_intensity_normalization_results', 'meanMap',
-                         stack + '_' + fn + '_raw_meanMap.npy')
+            fp = os.path.join(DATA_DIR, stack, stack + '_intensity_normalization_results', 'meanMap',
+                         stack + '_' + fn + '_raw_meanMap.bp')
         elif what == 'std_map':
-            fp = os.path.join( DataManager.get_images_root_folder(stack), stack + '_intensity_normalization_results', 'stdMap',
-                         stack + '_' + fn + '_raw_stdMap.npy')
+            fp = os.path.join(DATA_DIR, stack, stack + '_intensity_normalization_results', 'stdMap',
+                         stack + '_' + fn + '_raw_stdMap.bp')
         elif what == 'float_histogram_png':
-            fp = os.path.join( DataManager.get_images_root_folder(stack), stack + '_intensity_normalization_results', 'floatHistogram',
+            fp = os.path.join(DATA_DIR, stack, stack + '_intensity_normalization_results', 'floatHistogram',
                          stack + '_' + fn + '_raw_floatHistogram.png')
         elif what == 'normalized_float_map':
-            fp = os.path.join( DataManager.get_images_root_folder(stack), stack + '_intensity_normalization_results', 'normalizedFloatMap',
-                         stack + '_' + fn + '_raw_normalizedFloatMap.npy')
+            fp = os.path.join(DATA_DIR, stack, stack + '_intensity_normalization_results', 'normalizedFloatMap',
+                         stack + '_' + fn + '_raw_normalizedFloatMap.bp')
         elif what == 'float_percentiles':
-            fp = os.path.join( DataManager.get_images_root_folder(stack), stack + '_intensity_normalization_results', 'floatPercentiles',
-                         stack + '_' + fn + '_raw_floatPercentiles.npy')
+            fp = os.path.join(DATA_DIR, stack, stack + '_intensity_normalization_results', 'floatPercentiles',
+                         stack + '_' + fn + '_raw_floatPercentiles.bp')
         else:
             raise Exception("what = %s is not recognized." % what)
 
@@ -4268,15 +5092,15 @@ class DataManager(object):
 
     @staticmethod
     def get_initial_snake_contours_filepath(stack):
-        return os.path.join( DataManager.get_images_root_folder(stack), stack + '_prep1_thumbnail_initSnakeContours.pkl')
+        return os.path.join(THUMBNAIL_DATA_DIR, stack, stack + '_prep1_thumbnail_initSnakeContours.pkl')
 
     @staticmethod
     def get_anchor_initial_snake_contours_filepath(stack):
-        return os.path.join( DataManager.get_images_root_folder(stack), stack + '_prep1_thumbnail_anchorInitSnakeContours.pkl')
+        return os.path.join(THUMBNAIL_DATA_DIR, stack, stack + '_prep1_thumbnail_anchorInitSnakeContours.pkl')
 
     @staticmethod
     def get_auto_submask_rootdir_filepath(stack):
-        return os.path.join( DataManager.get_images_root_folder(stack), stack + '_prep1_thumbnail_autoSubmasks')
+        return os.path.join(THUMBNAIL_DATA_DIR, stack, stack + '_prep1_thumbnail_autoSubmasks')
 
     @staticmethod
     def get_auto_submask_dir_filepath(stack, fn=None, sec=None):
@@ -4307,7 +5131,7 @@ class DataManager(object):
 
     @staticmethod
     def get_user_modified_submask_rootdir_filepath(stack):
-        dir_path = os.path.join( DataManager.get_images_root_folder(stack), stack + '_prep1_thumbnail_userModifiedSubmasks')
+        dir_path = os.path.join(THUMBNAIL_DATA_DIR, stack, stack + '_prep1_thumbnail_userModifiedSubmasks')
         return dir_path
 
     @staticmethod
@@ -4347,7 +5171,7 @@ class DataManager(object):
         """
         Get directory path of thumbnail mask.
         """
-        return os.path.join( DataManager.get_images_root_folder(stack), stack + ('_prep%d_' % prep_id if prep_id is not None else '_') + 'thumbnail_mask')
+        return os.path.join(THUMBNAIL_DATA_DIR, stack, stack + ('_prep%d_' % prep_id if prep_id is not None else '_') + 'thumbnail_mask')
 
     @staticmethod
     def get_thumbnail_mask_filename_v3(stack, prep_id, section=None, fn=None):
@@ -4394,6 +5218,95 @@ class DataManager(object):
         """
         return DataManager.load_image_v2(stack=stack, prep_id=prep_id, section=section, fn=fn, version='mask', resol='thumbnail')
 
+#         try:
+#             fp = DataManager.get_thumbnail_mask_filename_v3(stack=stack, section=section, fn=fn, prep_id=prep_id)
+#             # download_from_s3(fp, local_root=THUMBNAIL_DATA_ROOTDIR)
+#             mask = imread(fp).astype(np.bool)
+#             return mask
+#         except:
+#             sys.stderr.write('Cannot load mask %s, section=%s, fn=%s, prep=%s\n' % (stack, section, fn, prep_id))
+
+#             if isinstance(prep_id, str):
+#                 prep_id = prep_str_to_id_2d[prep_id]
+
+#             if prep_id == 2:
+#                 # get prep 2 masks directly from prep 5 masks.
+#                 try:
+#                     sys.stderr.write('Try finding prep5 masks.\n')
+#                     fp = DataManager.get_thumbnail_mask_filename_v3(stack=stack, section=section, fn=fn, prep_id=5)
+#                     # download_from_s3(fp, local_root=THUMBNAIL_DATA_ROOTDIR)
+#                     mask_prep5 = imread(fp).astype(np.bool)
+
+#                     xmin,xmax,ymin,ymax = DataManager.load_cropbox_v2_relative(stack=stack, prep_id=prep_id, wrt_prep_id=5, out_resolution='down32')
+#                     mask_prep2 = mask_prep5[ymin:ymax+1, xmin:xmax+1].copy()
+#                     return mask_prep2
+#                 except:
+#                     # get prep 2 masks directly from prep 1 masks.
+#                     sys.stderr.write('Cannot load mask %s, section=%s, fn=%s, prep=%s\n' % (stack, section, fn, prep_id))
+#                     sys.stderr.write('Try finding prep1 masks.\n')
+#                     fp = DataManager.get_thumbnail_mask_filename_v3(stack=stack, section=section, fn=fn, prep_id=1)
+#                     # download_from_s3(fp, local_root=THUMBNAIL_DATA_ROOTDIR)
+#                     mask_prep1 = imread(fp).astype(np.bool)
+
+#                     xmin,xmax,ymin,ymax = DataManager.load_cropbox_v2(stack=stack, prep_id=prep_id, return_dict=False, only_2d=True)
+#                     mask_prep2 = mask_prep1[ymin:ymax+1, xmin:xmax+1].copy()
+#                     return mask_prep2
+
+
+    # @staticmethod
+    # def load_thumbnail_mask_v3(stack, prep_id, section=None, fn=None):
+    #     if stack in ['MD589', 'MD585', 'MD594']:
+    #         fp = DataManager.get_thumbnail_mask_filename_v2(stack=stack, section=section, fn=fn, prep_id=prep_id)
+    #     else:
+    #         fp = DataManager.get_thumbnail_mask_filename_v3(stack=stack, section=section, fn=fn, prep_id=prep_id)
+    #     download_from_s3(fp)
+    #     mask = imread(fp).astype(np.bool)
+    #     return mask
+
+    # @staticmethod
+    # def load_thumbnail_mask_v3(stack, section=None, fn=None, version='aligned_cropped'):
+    #     if stack in ['MD589', 'MD585', 'MD594']:
+    #         fp = DataManager.get_thumbnail_mask_filename_v2(stack=stack, section=section, fn=fn, version=version)
+    #     else:
+    #         fp = DataManager.get_thumbnail_mask_filename_v3(stack=stack, section=section, fn=fn, version=version)
+    #     download_from_s3(fp)
+    #     mask = imread(fp).astype(np.bool)
+    #     return mask
+
+    # @staticmethod
+    # def load_thumbnail_mask_v2(stack, section=None, fn=None, version='aligned_cropped'):
+    #     fp = DataManager.get_thumbnail_mask_filename_v2(stack=stack, section=section, fn=fn, version=version)
+    #     download_from_s3(fp, local_root=DATA_ROOTDIR)
+    #     mask = DataManager.load_data(fp, filetype='image').astype(np.bool)
+    #     return mask
+    #
+    # @staticmethod
+    # def get_thumbnail_mask_dir_v2(stack, version='aligned_cropped'):
+    #     anchor_fn = metadata_cache['anchor_fn'][stack]
+    #     if version == 'aligned_cropped':
+    #         mask_dir = os.path.join(THUMBNAIL_DATA_DIR, stack, stack + '_masks_alignedTo_' + anchor_fn + '_cropped')
+    #     elif version == 'aligned':
+    #         mask_dir = os.path.join(THUMBNAIL_DATA_DIR, stack, stack + '_masks_alignedTo_' + anchor_fn)
+    #     else:
+    #         raise Exception("version %s not recognized." % version)
+    #     return mask_dir
+    #
+    # @staticmethod
+    # def get_thumbnail_mask_filename_v2(stack, section=None, fn=None, version='aligned_cropped'):
+    #     anchor_fn = metadata_cache['anchor_fn'][stack]
+    #     sections_to_filenames = metadata_cache['sections_to_filenames'][stack]
+    #     if fn is None:
+    #         fn = sections_to_filenames[section]
+    #     mask_dir = DataManager.get_thumbnail_mask_dir_v2(stack=stack, version=version)
+    #     if version == 'aligned_cropped':
+    #         fp = os.path.join(mask_dir, fn + '_mask_alignedTo_' + anchor_fn + '_cropped.png')
+    #     elif version == 'aligned':
+    #         fp = os.path.join(mask_dir, fn + '_mask_alignedTo_' + anchor_fn + '.png')
+    #     else:
+    #         raise Exception("version %s not recognized." % version)
+    #     return fp
+
+    ###################################
 
     @staticmethod
     def get_region_labels_filepath(stack, sec=None, fn=None):
@@ -4498,7 +5411,7 @@ class DataManager(object):
     def load_datasets_bp(dataset_ids, labels_to_sample=None, clf_rootdir=CLF_ROOTDIR):
         """
         Load multiple datasets, returns both features and addresses.
-        Assume the features are stored as patch_features_<name>.npy; addresses are stored as patch_addresses_<name>.npy.
+        Assume the features are stored as patch_features_<name>.bp; addresses are stored as patch_addresses_<name>.bp.
 
         Args:
             labels_to_sample (list of str): e.g. VCA_surround_500_VCP. If this is not given, use all labels in the associated dataset directory.
@@ -4518,7 +5431,7 @@ class DataManager(object):
                     dataset_dir = DataManager.get_dataset_dir(dataset_id=dataset_id)
                     #download_from_s3(dataset_dir, is_dir=True)
                     for fn in os.listdir(dataset_dir):
-                        g = re.match('patch_features_(.*).npy', fn).groups()
+                        g = re.match('patch_features_(.*).bp', fn).groups()
                         if len(g) > 0:
                             labels_to_sample.append(g[0])
 
@@ -4569,15 +5482,15 @@ class DataManager(object):
                 return 'F'
 
 ##################################################
-
+    
     @staticmethod
     def get_czi_output_filepath_root(stack):
-        return os.path.join( DataManager.get_images_root_folder(stack), 'czi_raw_output/' )
+        return os.path.join( os.environ['ROOT_DIR'], stack, 'images', 'czi_raw_output/' )
 
     @staticmethod
     def get_czi_output_filepath(stack, section=None, fn=None):
         return get_czi_output_filepath_root(stack)
-
+    
     @staticmethod
     def get_ndpi_output_filepath_root(stack):
         return os.path.join( os.environ['ROOT_DIR'], stack, 'images', 'ndpi_raw_output/' )
@@ -4622,14 +5535,14 @@ def generate_metadata_cache():
     metadata_cache['valid_sections_all'] = {}
     metadata_cache['valid_filenames_all'] = {}
     for stack in all_stacks:
-
+        
         # Don't print out long error messages if base folder not found
-        if not os.path.exists( DataManager.get_images_root_folder(stack) ):
+        if not os.path.exists(os.environ['ROOT_DIR']+'CSHL_data_processed/'+stack+'/'):
             #sys.stderr.write("Folder for stack %s not found, skipping.\n" % (stack))
             continue
         # Try to load metadata_cache.json file before doing anything else
         try:
-            with open(os.environ['ROOT_DIR']+'CSHL_data_processed/'+stack+'/'+stack+'_metadata_cache.json') as json_file:
+            with open(os.environ['ROOT_DIR']+'CSHL_data_processed/'+stack+'/'+stack+'_metadata_cache.json') as json_file:  
                 saved_metadata = json.load(json_file)
             for key in saved_metadata.keys():
                 # The metadata_cache json file has extraneous keys. (currently only "stack")
@@ -4643,7 +5556,7 @@ def generate_metadata_cache():
             continue
         except:
             pass
-
+        
 
         try:
             metadata_cache['anchor_fn'][stack] = DataManager.load_anchor_filename(stack)
@@ -4668,7 +5581,7 @@ def generate_metadata_cache():
         except Exception as e:
             #sys.stderr.write("Failed to cache %s filenames_to_sections: %s\n" % (stack, e.message))
             pass
-
+                    
         try:
             metadata_cache['section_limits'][stack] = DataManager.load_section_limits_v2(stack, prep_id=2)
         except Exception as e:
@@ -4745,7 +5658,7 @@ def resolve_actual_setting(setting, stack, fn=None, sec=None):
 # Creates input_spec.ini file
 def create_input_spec_ini( name, image_name_list, stack, prep_id, version, resol  ):
     f = open(name, "w")
-
+    
     f.write('[DEFAULT]\n')
     f.write('image_name_list = '+image_name_list[0]+'\n')
     for i in range ( 1 , len(image_name_list) ):
@@ -4754,17 +5667,17 @@ def create_input_spec_ini( name, image_name_list, stack, prep_id, version, resol
     f.write('prep_id = '+prep_id+'\n')
     f.write('version = '+version+'\n')
     f.write('resol = '+resol+'\n')
-
+    
 def create_input_spec_ini_all( name, stack, prep_id, version, resol  ):
     f = open(name, "w")
-
+    
     f.write('[DEFAULT]\n')
     f.write('image_name_list = all\n')
     f.write('stack = '+stack+'\n')
     f.write('prep_id = '+prep_id+'\n')
     f.write('version = '+version+'\n')
     f.write('resol = '+resol+'\n')
-
+    
 def get_fn_list_from_sorted_filenames( stack):
     '''
         get_fn_list_from_sorted_filenames( stack ) returns a list of all the valid
@@ -4772,11 +5685,11 @@ def get_fn_list_from_sorted_filenames( stack):
     '''
     fp = os.environ['DATA_ROOTDIR']+'CSHL_data_processed/'+stack+'/'
     fn = stack+'_sorted_filenames.txt'
-
+    
     file0 = open( fp+fn, 'r')
     section_names = []
 
-    for line in file0:
+    for line in file0: 
         if 'Placeholder' in line:
             #print line
             continue

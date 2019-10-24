@@ -12,7 +12,7 @@ import numpy as np
 sys.path.append(os.environ['REPO_DIR'] + '/utilities')
 from utilities2015 import *
 from metadata import *
-from data_manager import *
+from data_manager_v2 import *
 
 from registration_utilities import *
 
@@ -106,7 +106,7 @@ mid_z_wrt_wholebrainWithMargin = manual_points['z_midline']
 
 atlas_spec = dict(name='atlasV7',
                    vol_type='score'    ,               
-                    resolution='10.0um'
+                   resolution='10.0um'
                    )
 
 atlas_structures_wrt_canonicalAtlasSpace_atlasResol = \
