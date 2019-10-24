@@ -17,4 +17,4 @@ Associated Neuroglancer viewer of the three foundational thionin brains availabl
 
 ## Active Atlas Information
 
-  * __[Information Document]__(./doc/information.md)
+  * __[Information Document](./doc/information.md):__
