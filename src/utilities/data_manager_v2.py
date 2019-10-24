@@ -2114,7 +2114,7 @@ class DataManager(object):
 
         sparse_scores_fp = DataManager.get_sparse_scores_filepath(**locals())
         # download_from_s3(sparse_scores_fp)
-        return DataManager.load_data(sparse_scores_fp, filetype='bp')
+        return DataManager.load_data(sparse_scores_fp, filetype='npy')
 
     @staticmethod
     def get_sparse_scores_filepath(stack, structure, detector_id, prep_id=2, sec=None, fn=None):
@@ -2130,7 +2130,7 @@ class DataManager(object):
     @staticmethod
     def load_intensity_volume(stack, downscale=32):
         fn = DataManager.get_intensity_volume_filepath(stack=stack, downscale=downscale)
-        return DataManager.load_data(fn, filetype='bp')
+        return DataManager.load_data(fn, filetype='npy')
 
     @staticmethod
     def load_intensity_volume_v2(stack, downscale=32, prep_id=2):
@@ -2139,7 +2139,7 @@ class DataManager(object):
         """
         fn = DataManager.get_intensity_volume_filepath_v2(stack=stack, downscale=downscale, prep_id=prep_id)
         # download_from_s3(fn)
-        return DataManager.load_data(fn, filetype='bp')
+        return DataManager.load_data(fn, filetype='npy')
 
     @staticmethod
     def load_intensity_volume_v3(stack, prep_id=2, downscale=32, return_origin_instead_of_bbox=False):
@@ -2150,7 +2150,7 @@ class DataManager(object):
 
         fn = DataManager.get_intensity_volume_filepath_v2(stack=stack, prep_id=prep_id, downscale=downscale)
         # download_from_s3(fn)
-        vol = DataManager.load_data(fn, filetype='bp')
+        vol = DataManager.load_data(fn, filetype='npy')
 
         bbox_fp = DataManager.get_intensity_volume_bbox_filepath_v2(stack=stack, prep_id=prep_id, downscale=downscale)
         bbox_wrt_wholebrain = np.loadtxt(bbox_fp, dtype=np.int)
@@ -2208,7 +2208,7 @@ class DataManager(object):
     @staticmethod
     def load_annotation_as_score_volume(stack, downscale, structure):
         fn = DataManager.get_annotation_as_score_volume_filepath(**locals())
-        return DataManager.load_data(fn, filetype='bp')
+        return DataManager.load_data(fn, filetype='npy')
 
     @staticmethod
     def get_annotation_as_score_volume_filepath(stack, downscale, structure):
@@ -2220,7 +2220,7 @@ class DataManager(object):
     def load_annotation_volume(stack, downscale):
         fp = DataManager.get_annotation_volume_filepath(**locals())
         # download_from_s3(fp)
-        return DataManager.load_data(fp, filetype='bp')
+        return DataManager.load_data(fp, filetype='npy')
 
     @staticmethod
     def get_annotation_volume_filepath(stack, downscale):
@@ -2586,7 +2586,7 @@ class DataManager(object):
                                                                 resolution=resolution,
                                                                 structure=structure))
             # download_from_s3(fp)
-            # vol = DataManager.load_data(fp, filetype='bp')
+            # vol = DataManager.load_data(fp, filetype='npy')
 
             # bbox_fp = DataManager.get_transformed_volume_bbox_filepath_v2(wrt='fixedWholebrain',
             #                                                              alignment_spec=alignment_spec,
@@ -2622,7 +2622,7 @@ class DataManager(object):
                                 trial_idx=None):
         fp = DataManager.get_transformed_volume_filepath(**locals())
         # download_from_s3(fp)
-        return DataManager.load_data(fp, filetype='bp')
+        return DataManager.load_data(fp, filetype='npy')
 
 
     @staticmethod
@@ -3418,7 +3418,7 @@ class DataManager(object):
 
         vol_fp = DataManager.get_original_volume_filepath_v2(stack_spec=stack_spec, structure=structure, resolution=resolution)
         # download_from_s3(vol_fp, is_dir=False)
-        volume = DataManager.load_data(vol_fp, filetype='bp')
+        volume = DataManager.load_data(vol_fp, filetype='npy')
 
         # bbox_fp = DataManager.get_original_volume_bbox_filepath_v2(stack_spec=stack_spec, structure=structure,
         #                                                            resolution=resolution, wrt=bbox_wrt)
@@ -3622,7 +3622,7 @@ class DataManager(object):
             raise Exception('No scoremap for image %s (section %d) for label %s\n' % \
             (metadata_cache['sections_to_filenames'][stack][section], section, structure))
 
-        scoremap_downscaled = DataManager.load_data(scoremap_bp_filepath, filetype='bp')
+        scoremap_downscaled = DataManager.load_data(scoremap_bp_filepath, filetype='npy')
         return scoremap_downscaled
 
     @staticmethod
