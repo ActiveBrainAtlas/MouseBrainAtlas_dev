@@ -1025,7 +1025,10 @@ class DataManager(object):
             sys.stderr.write('File does not exist: %s\n' % filepath)
 
         if filetype == 'bp':
+            import bloscpack as bp
             return bp.unpack_ndarray_file(filepath)
+        elif filetype == 'npy':
+            return np.load(filepath)
         elif filetype == 'image':
             return imread(filepath)
         elif filetype == 'hdf':
