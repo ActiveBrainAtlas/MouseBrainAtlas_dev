@@ -14,3 +14,7 @@ Associated Neuroglancer viewer of the three foundational thionin brains availabl
 
   * __[User Guide](./doc/docker/README.md):__   This document will walk through how to start running a brain through the pipeline, and how to continue running the pipeline.
   * __[GUI-based User Guide](./doc/pipeline/user_guide_GUI_v2.md):__ This document explains how to set up and run the project's Docker Image, as well as how to run the GUI-based pipeline.
+
+## Active Atlas Information
+
+  * __[Information Document]__(./doc/information.md)
