@@ -7,7 +7,6 @@
   * __[Atlas Scripts in-depth](./running_scripts/README.md):__
   * __[Information on Detectors, Classifiers, and Windows](./classifiers_and_detectors.md):__
   * __[List of all structures in the Active Atlas](./structures.md):__
-  * __[Information Document](./Foundational_Brains.md):__
   
   ## List of Info Folders
   
