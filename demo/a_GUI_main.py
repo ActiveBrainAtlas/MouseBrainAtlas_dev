@@ -300,7 +300,7 @@ class init_GUI(QWidget):
 and all local alignment scripts will be run. This will take a long time.")
                 
                 detector = stain_to_metainfo[self.stain]["detector_id"]
-                subprocess.call(['python','a_script_processing.py', self.stack, self.stain, str(detector) ])
+                subprocess.call(['python','a_script_processing.py', str(self.stack), str(self.stain), str(detector) ])
                 
             except Exception as e:
                 sys.stderr.write( str(e) )
@@ -312,7 +312,8 @@ and all local alignment scripts will be run. This will take a long time.")
         Secondary button callback function
         """
         if button == self.b_exit:
-            close_main_gui( ex, reopen=False )
+            #close_main_gui( ex, reopen=False )
+            close_main_gui( app, reopen=False )
         elif button==self.b_prevStep:
             pass
         elif button == self.b_neuroglancer:
