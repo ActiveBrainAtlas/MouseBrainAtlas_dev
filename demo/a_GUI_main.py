@@ -299,7 +299,7 @@ class init_GUI(QWidget):
                 QMessageBox.about(self, "Popup Message", "The GUI window is not completely finished. A classifier will be chosen automatically \
 and all local alignment scripts will be run. This will take a long time.")
                 
-                detector = stain_to_metainfo[self.stain]["detector_id"]
+                detector = stain_to_metainfo[self.stain.lower()]["detector_id"]
                 subprocess.call(['python','a_script_processing.py', str(self.stack), str(self.stain), str(detector) ])
                 
             except Exception as e:
