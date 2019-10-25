@@ -303,7 +303,7 @@ and all local alignment scripts will be run. This will take a long time.")
                 subprocess.call(['python','a_script_processing.py', self.stack, self.stain, str(detector) ])
                 
             except Exception as e:
-                sys.stderr.write( e )
+                sys.stderr.write( str(e) )
         
         self.format_grid_buttons()
             
