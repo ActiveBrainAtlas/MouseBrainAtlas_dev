@@ -300,7 +300,7 @@ class init_GUI(QWidget):
 and all local alignment scripts will be run. This will take a long time.")
                 
                 detector = stain_to_metainfo[self.stain.lower()]["detector_id"]
-                subprocess.call(['python','a_script_processing.py', str(self.stack), str(self.stain), str(detector) ])
+                subprocess.call(['python','a_script_processing.py', str(self.stack), str(self.stain.lower()), str(detector) ])
                 
             except Exception as e:
                 sys.stderr.write( str(e) )
