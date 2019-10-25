@@ -16,8 +16,6 @@ stain = args.stain
 id_detector = args.id_detector
 structure = args.structure
 
-win_id = detector_settings.to_dict()['windowing_id'][int(id_detector)]
-
 # Import other modules and packages
 import os
 import subprocess
@@ -33,6 +31,7 @@ from annotation_utilities import *
 from data_manager_v2 import DataManager
 from a_driver_utilities import *
 
+win_id = detector_settings.to_dict()['windowing_id'][int(id_detector)]
 
 if stain == 'NTB':
     img_version = 'NtbNormalizedAdaptiveInvertedGamma'
