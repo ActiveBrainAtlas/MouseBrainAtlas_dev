@@ -198,6 +198,7 @@ def copy_extracted_tiffs_to_proper_locations( stack, tiff_target_folder, main_ch
 def extract_tiff_from_czi_all_channels( fn_czi, tiff_target_folder, series_i ):
     # The name of the tiff file
     # %t is time, %z is z height, %s is series #, %c is channel #
+    #target_tiff_fn = os.path.join( tiff_target_folder, '%n_C%c_W%w.tif' )
     target_tiff_fn = os.path.join( tiff_target_folder, '%n_C%c_W%w.tif' )
     
     command = ['bfconvert', '-bigtiff', '-compression', 'LZW', '-separate', 
@@ -209,7 +210,8 @@ def extract_tiff_from_czi_all_channels( fn_czi, tiff_target_folder, series_i ):
 def extract_tiff_from_czi( fn_czi, tiff_target_folder, series_i, channel ):
     # The name of the tiff file
     # %t is time, %z is z height, %s is series #, %c is channel #
-    target_tiff_fn = os.path.join( tiff_target_folder, '%n_S%s_C%c_%w.tif' )
+    #target_tiff_fn = os.path.join( tiff_target_folder, '%n_S%s_C%c_%w.tif' )
+    target_tiff_fn = os.path.join( tiff_target_folder, '%n_C%c_%w.tif' )
     
     #command = ['bfconvert', '-bigtiff', '-compression', 'LZW', '-separate', 
     #           '-series', str(series_i), '-channel', str(channel), fn_czi, target_tiff_fn]

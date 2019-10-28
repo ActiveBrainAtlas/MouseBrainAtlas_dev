@@ -407,9 +407,9 @@ class init_GUI(QWidget):
                 self.curr_section = self.getNextValidSection( self.curr_section )
                 
             elif button==self.b_addPlaceholder:
-                
+                pass
             elif button==self.b_remove:
-                
+                pass
                 
             # Update the Viewer info and displayed image
             self.setCurrSection(self.curr_section)
@@ -554,13 +554,13 @@ def main():
         # Yes
         if ret==1:
             fp = get_selected_fp( default_filetype=[("text files","*.txt"),("all files","*.*")] )
-            self.filepath_sfns = fp
-            self.filepath_sfns_folder = fp[0:max(loc for loc, val in enumerate(fp) if val == '/')]
+            filepath_sfns = fp
+            filepath_sfns_folder = fp[0:max(loc for loc, val in enumerate(fp) if val == '/')]
             validated, err_msg = validate_sorted_filenames( fp )
             
             if validated:
                 copy_over_sorted_filenames( stack, fp )
-                sys.stderr.write( '\nCopying sorted filenames was successfu!\n' )
+                sys.stderr.write( '\nCopying sorted filenames was successful!\n' )
             else:
                 sys.stderr.write( '\n'+err_msg+'\n' )
             
@@ -600,8 +600,7 @@ def validate_sorted_filenames( fp ):
 def copy_over_sorted_filenames( stack, sfns_input_fp ):
     correct_sorted_fns_fp = DataManager.get_sorted_filenames_filename(stack)
     command = ["cp", sfns_input_fp, correct_sorted_fns_fp]
-    completion_message = 'Successfully copied sorted_filenames.txt over.'
-    subprocess.call( command, completion_message=completion_message)
+    subprocess.call( command )
     
 def load_sorted_filenames( fp ):
     '''
