@@ -34,25 +34,23 @@ Resolution simply describes whether this image is in full resolution or thumbnai
 ### version
 Encodes information about the stain used to dye the brain, and what channels are extracted.
 
-- Possible values for stain Thionin:
+- Possible values for ANY stain:
   - ""
       - Unprocessed
   - "mask"
       - Binary mask marks 1 if pixel is on the brain, 0 if pixel is part of the background
+  - "autoSubmask"
+      - Auto generated masks
+  - "userModifiedSubmasks"
+      - Auto generated masks that have been manually corrected by the user (overrides "autoSubmask"s)
+
+- Possible values for stain Thionin:
   - "gray"
       - Image converted to grayscale
   - "grayJpeg"
       - Grayscale image converted from.tif to .jpg
 
 - Possible values for stain NTB:
-  - ""
-      - Unprocessed
-  - "mask"
-      - Binary mask marks 1 if pixel is on the brain, 0 if pixel is part of the background
-  - "autoSubmask"
-      - Ignore
-  - "userModifiedSubmasks"
-      - Ignore
   - "Ntb"
       - Blue channel extracted from the image
   - "NtbNormalized"
@@ -61,8 +59,6 @@ Encodes information about the stain used to dye the brain, and what channels are
       - Inverted gamma of "NtbNormalized"
   - "NtbNormalizedAdaptiveInvertedGammaJpeg"
       - Converted "NtbNormalizedAdaptiveInvertedGamma" from .tif to .jpg
-  - "userModifiedSubmasks"
-      - Can be ignored
 
 ---
 
