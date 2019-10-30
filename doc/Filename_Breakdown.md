@@ -28,6 +28,8 @@ Resolution simply describes whether this image is in full resolution or thumbnai
 - Possible values:
   - "raw"
       - Image is at full resolution
+  - "lossless"
+      - Image is at full resolution (identical to "raw")
   - "thumbnail"
       - Image has been downsampled by 32x
 
