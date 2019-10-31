@@ -534,7 +534,10 @@ def write_results_to_sorted_filenames( sections_to_filenames, fn_to_quality ):
     sfns_text = ""
     sfns_till_alignment_text = ""
     for section, fn in sections_to_filenames.items():
-        quality = fn_to_quality[fn]
+        if fn=='Placeholder':
+            quality = 'unuseable'
+        else:
+            quality = fn_to_quality[fn]
         
         # section_str is the section encoded as a string, padded with zeros
         section_str = str(section+1).zfill(3)
