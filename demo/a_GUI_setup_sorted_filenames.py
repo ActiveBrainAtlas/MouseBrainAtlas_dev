@@ -499,7 +499,7 @@ class init_GUI(QWidget):
         
     def updateCurrHeaderFields(self):
         self.e4.setText( str(self.sections_to_filenames[self.curr_section]) )
-        self.e5.setText( str(self.curr_section+1) )
+        self.e5.setText( str(self.curr_section) )
         
     def updateQualityField(self):
         curr_fn = self.sections_to_filenames[ int(self.curr_section) ]
