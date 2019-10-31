@@ -227,22 +227,6 @@ class init_GUI(QWidget):
         
         ### Grid BODY UPPER ###
         # Static Text Field
-        self.e2 = QLineEdit()
-        self.e2.setAlignment(Qt.AlignCenter)
-        self.e2.setFont( self.font_p1 )
-        self.e2.setReadOnly( True )
-        self.e2.setText( "Filename: " )
-        #self.e2.setStyleSheet("color: rgb(50,50,250); background-color: rgb(250,250,250);")
-        #self.grid_body_upper.addWidget( self.e2, 0, 0)
-        # Static Text Field
-        self.e3 = QLineEdit()
-        self.e3.setAlignment(Qt.AlignCenter)
-        self.e3.setFont( self.font_p1 )
-        self.e3.setReadOnly( True )
-        self.e3.setText( "Section: " )
-        self.e3.setStyleSheet("color: rgb(50,50,250); background-color: rgb(250,250,250);")
-        #self.grid_body_upper.addWidget( self.e3, 0, 1)
-        # Static Text Field
         self.e4 = QLineEdit()
         self.e4.setAlignment(Qt.AlignCenter)
         self.e4.setFont( self.font_p1 )
@@ -445,8 +429,8 @@ class init_GUI(QWidget):
         return prev_section
         
     def updateCurrHeaderFields(self):
-        self.e2.setText( str(self.sections_to_filenames[self.curr_section]) )
-        self.e3.setText( str(self.curr_section) )
+        self.e4.setText( str(self.sections_to_filenames[self.curr_section]) )
+        self.e5.setText( str(self.curr_section) )
         
     def transform_images( self, transform_type, degrees=0, only_on_current_img=False):
         """
