@@ -55,6 +55,7 @@ queued_transformations = []
 def get_grayscale_thumbnail_img( section ):
     fn = section_to_fn[ int(section) ]
     img_fp = os.path.join( DataManager.setup_get_thumbnail_fp(stack), fn)
+    print img_fp
     img = cv2.imread(img_fp, -1)
     img = img_as_ubyte(rgb2gray(img))
     return img

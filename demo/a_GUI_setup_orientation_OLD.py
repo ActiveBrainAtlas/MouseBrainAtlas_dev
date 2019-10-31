@@ -31,10 +31,19 @@ args = parser.parse_args()
 stack = args.stack
 
 # Cannot assume we have the sorted_filenames file. Load images a different way
-thumbnail_folder = DataManager.setup_get_thumbnail_fp(stack)
-section_to_fn = {}
-for i, img_name in enumerate(os.listdir( thumbnail_folder )):
-    section_to_fn[i] = img_name
+#thumbnail_folder = DataManager.setup_get_thumbnail_fp(stack)
+#section_to_fn = {}
+#fn_list = os.listdir( thumbnail_folder )
+#fn_list.sort()
+#for i, img_name in enumerate( fn_list ):
+#    section_to_fn[i] = img_name
+    
+# Assume we have the sorted_filenames file. Load images a different way
+if os.path.exists( DataManager.get_sorted_filenames_filename(stack=stack) ) or \
+os.path.exists( os.path.join( '/mnt/computer_root/'+DataManager.get_sorted_filenames_filename(stack=stack)) ):
+    section_to_fn = metadata_cache['sections_to_filenames'][stack]
+    fn_list = metadata_cache['filenames_to_sections'][stack].keys()
+    fn_list.sort()
     
 # Queued transformations keeps track of each transformation the user wants to perform
 #   on ALL the images. The transformations are applied to the large "raw" files after
@@ -146,7 +155,22 @@ class ImageViewer( QGraphicsView):
         if self._photo.isUnderMouse():
             self.photoClicked.emit( QPoint(event.pos()) )
         super(ImageViewer, self).mousePressEvent(event)
-
+        
+class QHLine(QFrame):
+    def __init__(self):
+        # https://doc.qt.io/qt-5/qframe.html
+        # https://stackoverflow.com/questions/5671354/how-to-programmatically-make-a-horizontal-line-in-qt
+        super(QHLine, self).__init__()
+        self.setFrameShape(QFrame.HLine)
+        self.setFrameShadow(QFrame.Plain)
+        self.setLineWidth(5)
+        
+class QVLine(QFrame):
+    def __init__(self):
+        super(QVLine, self).__init__()
+        self.setFrameShape(QFrame.VLine)
+        self.setFrameShadow(QFrame.Plain)
+        self.setLineWidth(5)
         
 class init_GUI(QWidget):
     
@@ -236,27 +260,27 @@ class init_GUI(QWidget):
         # Custom VIEWER
         self.grid_body.addWidget( self.viewer, 0, 0)
         
-        ### Grid BODY LOWER (align mode only) ###
+        ### Grid BODY LOWER ###
         # Button Text Field
         self.b1 = QPushButton("Flip image(s) across central vertical line")
         self.b1.setDefault(True)
         self.b1.setEnabled(True)
         self.b1.clicked.connect(lambda:self.buttonPress(self.b1))
-        self.b1.setStyleSheet("color: rgb(0,0,0); background-color: rgb(250,250,250);")
+        self.b1.setStyleSheet("color: rgb(0,0,0); background-color: rgb(250,250,200);")
         self.grid_body_lower.addWidget(self.b1, 0, 0)
         # Button Text Field
         self.b2 = QPushButton("Flop image(s) across central horozontal line")
         self.b2.setDefault(True)
         self.b2.setEnabled(True)
         self.b2.clicked.connect(lambda:self.buttonPress(self.b2))
-        self.b2.setStyleSheet("color: rgb(0,0,0); background-color: rgb(250,250,250);")
+        self.b2.setStyleSheet("color: rgb(0,0,0); background-color: rgb(250,250,200);")
         self.grid_body_lower.addWidget(self.b2, 1, 0)
         # Button Text Field
         self.b3 = QPushButton("Rotate Image(s)")
         self.b3.setDefault(True)
         self.b3.setEnabled(True)
         self.b3.clicked.connect(lambda:self.buttonPress(self.b3))
-        self.b3.setStyleSheet("color: rgb(0,0,0); background-color: rgb(250,250,250);")
+        self.b3.setStyleSheet("color: rgb(0,0,0); background-color: rgb(250,200,250);")
         self.grid_body_lower.addWidget(self.b3, 0, 1, 1, 2)
         # Checkbox
         self.cb_1 = QCheckBox("Apply transformation to ALL images")
@@ -264,6 +288,7 @@ class init_GUI(QWidget):
         self.grid_body_lower.addWidget(self.cb_1, 0, 3)
         # Static Text Field
         self.e6 = QLineEdit()
+        self.e6.setMaximumWidth(250)
         self.e6.setAlignment(Qt.AlignRight)
         self.e6.setReadOnly( True )
         self.e6.setText( "Degrees to rotate (clockwise!): " )
@@ -285,15 +310,19 @@ class init_GUI(QWidget):
         # Grid stretching
         #self.grid_body_upper.setColumnStretch(0, 2)
         self.grid_body_upper.setColumnStretch(2, 2)
-        self.grid_body_lower.setColumnStretch(3, 0.3)
+        #self.grid_body_lower.setColumnStretch(3, 1)
         
         ### SUPERGRID ###
         self.supergrid = QGridLayout()
         self.supergrid.addLayout( self.grid_top, 0, 0)
         self.supergrid.addLayout( self.grid_body_upper, 1, 0)
         self.supergrid.addLayout( self.grid_body, 2, 0)
-        self.supergrid.addLayout( self.grid_body_lower, 3, 0)
-        self.supergrid.addLayout( self.grid_bottom, 4, 0)
+        #self.supergrid.addLayout( self.grid_body_lower, 4, 0)
+        self.supergrid.addWidget(QHLine(), 6, 0, 1, 2)
+        #self.supergrid.addLayout( self.grid_bottom, 6, 0)
+        self.supergrid.addLayout( self.grid_body_lower, 7, 0)
+        self.supergrid.addWidget(QHLine(), 8, 0, 1, 2)
+        
         
         # Set layout and window title
         self.setLayout( self.supergrid )
