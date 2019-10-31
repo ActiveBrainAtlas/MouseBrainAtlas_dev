@@ -39,7 +39,8 @@ stack = args.stack
 #    section_to_fn[i] = img_name
     
 # Assume we have the sorted_filenames file. Load images a different way
-if os.path.exists( DataManager.get_sorted_filenames_filename(stack=stack) )
+if os.path.exists( DataManager.get_sorted_filenames_filename(stack=stack) ) or \
+os.path.exists( os.path.join( '/mnt/computer_root/'+DataManager.get_sorted_filenames_filename(stack=stack)) ):
     section_to_fn = metadata_cache['sections_to_filenames'][stack]
     fn_list = metadata_cache['filenames_to_sections'][stack].keys()
     fn_list.sort()
