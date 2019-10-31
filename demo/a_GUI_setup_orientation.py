@@ -31,12 +31,18 @@ args = parser.parse_args()
 stack = args.stack
 
 # Cannot assume we have the sorted_filenames file. Load images a different way
-thumbnail_folder = DataManager.setup_get_thumbnail_fp(stack)
-section_to_fn = {}
-fn_list = os.listdir( thumbnail_folder )
-fn_list.sort()
-for i, img_name in enumerate( fn_list ):
-    section_to_fn[i] = img_name
+#thumbnail_folder = DataManager.setup_get_thumbnail_fp(stack)
+#section_to_fn = {}
+#fn_list = os.listdir( thumbnail_folder )
+#fn_list.sort()
+#for i, img_name in enumerate( fn_list ):
+#    section_to_fn[i] = img_name
+    
+# Assume we have the sorted_filenames file. Load images a different way
+if os.path.exists( DataManager.get_sorted_filenames_filename(stack=stack) )
+    section_to_fn = metadata_cache['sections_to_filenames'][stack]
+    fn_list = metadata_cache['filenames_to_sections'][stack].keys()
+    fn_list.sort()
     
 # Queued transformations keeps track of each transformation the user wants to perform
 #   on ALL the images. The transformations are applied to the large "raw" files after
