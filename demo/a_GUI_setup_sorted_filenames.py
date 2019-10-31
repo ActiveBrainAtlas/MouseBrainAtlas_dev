@@ -248,14 +248,14 @@ class init_GUI(QWidget):
         self.b_remove.setEnabled(False)
         self.b_remove.clicked.connect(lambda:self.buttonPress(self.b_remove))
         self.b_remove.setStyleSheet("color: rgb(0,0,0); background-color: #C91B1B;")
-        self.grid_body_lower.addWidget(self.b_remove, 1, 0)
+        self.grid_body_lower.addWidget(self.b_remove, 2, 1)
         # Button Text Field
         self.b_addPlaceholder = QPushButton("Add Placeholder as prev section")
         self.b_addPlaceholder.setDefault(True)
         self.b_addPlaceholder.setEnabled(False)
         self.b_addPlaceholder.clicked.connect(lambda:self.buttonPress(self.b_addPlaceholder))
         self.b_addPlaceholder.setStyleSheet("color: rgb(0,0,0); background-color: #41C91B;")
-        self.grid_body_lower.addWidget(self.b_addPlaceholder, 1, 1)
+        self.grid_body_lower.addWidget(self.b_addPlaceholder, 2, 2)
         # Button Text Field
         self.b_left = QPushButton("<--   Move Section Left   <--")
         self.b_left.setDefault(True)
