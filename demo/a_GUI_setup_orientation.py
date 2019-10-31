@@ -389,7 +389,6 @@ class init_GUI(QWidget):
         self.next_section = self.getNextValidSection( self.curr_section )
         # Update the section and filename at the top
         self.updateCurrHeaderFields()
-        self.updatePrevHeaderFields()
         
         self.curr_img_multiplier = 1
             
@@ -443,12 +442,8 @@ class init_GUI(QWidget):
         return prev_section
         
     def updateCurrHeaderFields(self):
-        self.e4.setText( str(self.sections_to_filenames[self.curr_section]) )
-        self.e5.setText( str(self.curr_section) )
-        
-    def updatePrevHeaderFields(self):
-        self.e2.setText( str(self.sections_to_filenames[self.prev_section]) )
-        self.e3.setText( str(self.prev_section) )
+        self.e2.setText( str(self.sections_to_filenames[self.curr_section]) )
+        self.e3.setText( str(self.curr_section) )
         
     def transform_images( self, transform_type, degrees=0, only_on_current_img=False):
         """
