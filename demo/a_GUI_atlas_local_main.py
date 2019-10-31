@@ -161,7 +161,7 @@ class init_GUI(QWidget):
 
         # Set layout and window title
         self.setLayout( self.supergrid )
-        self.setWindowTitle("Running CLassifiers")
+        self.setWindowTitle("Running Classifiers")
 
         # Update interactive windows
         self.updateFields()

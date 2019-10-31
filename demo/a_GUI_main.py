@@ -315,7 +315,10 @@ and all local alignment scripts will be run. This will take a long time.")
             #close_main_gui( ex, reopen=False )
             close_main_gui( app, reopen=False )
         elif button==self.b_prevStep:
-            pass
+            subprocess.call(['python','a_GUI_prev_step.py', str(self.stack) ])
+        
+            # Update interactive windows
+            self.updateFields()
         elif button == self.b_neuroglancer:
             pass
         elif button == self.b_datajoint:

@@ -45,7 +45,30 @@ def set_step_completed_in_progress_ini( stack, step ):
     progress_dict = DataManager.get_brain_info_progress( stack )
     progress_dict[step] = True
     
-    # Dave PROGRESS ini
+    # Save PROGRESS ini
+    progress_ini_to_save = {}
+    progress_ini_to_save['DEFAULT'] = progress_dict
+    
+    # Get filepath and save ini
+    fp = DataManager.get_brain_info_progress_fp( stack )
+    save_dict_as_ini( progress_ini_to_save, fp )
+    
+def revert_to_prev_step( stack, target_step ):
+    progress_dict = {}
+    
+    passed_target_step = False
+    for step in ordered_pipeline_steps:
+        # Set all steps before "target_step" as completed, all after as incomplete
+        if passed_target_step:
+            progress_dict[step] = False
+        else:
+            if step==target_step:
+                progress_dict[step] = False
+                passed_target_step = True
+            else:
+                progress_dict[step] = True
+    
+    # Save PROGRESS ini
     progress_ini_to_save = {}
     progress_ini_to_save['DEFAULT'] = progress_dict
     
