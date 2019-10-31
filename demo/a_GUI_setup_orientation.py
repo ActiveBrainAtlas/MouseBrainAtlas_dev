@@ -345,6 +345,7 @@ class init_GUI(QWidget):
         # Get filepath of "curr_section" and set it as viewer's photo
         fn = section_to_fn[ int(self.curr_section) ]
         img_fp = os.path.join( DataManager.setup_get_thumbnail_fp(stack), fn)
+        print img_fp
         self.viewer.setPhoto( QPixmap( img_fp ) )
         
     def photoClicked(self, pos):
