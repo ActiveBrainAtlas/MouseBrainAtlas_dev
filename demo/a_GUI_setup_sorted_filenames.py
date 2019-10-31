@@ -337,10 +337,21 @@ class init_GUI(QWidget):
         self.setCurrSection( self.curr_section )
         
     def loadImage(self):
-        # Get filepath of "curr_section" and set it as viewer's photo
-        img_fp = get_thumbnail_img_fp_from_section( 
-            self.sections_to_filenames[ int(self.curr_section) ] )
-        self.viewer.setPhoto( QPixmap( img_fp ) )
+        curr_fn = self.sections_to_filenames[ int(self.curr_section) ] 
+        
+        if curr_fn == 'Placeholder':
+            # Set a blank image if it is a placeholder
+            img = np.zeros(100,150)
+        
+            height, width, channel = img.shape
+            bytesPerLine = 3 * width
+            qImg = QImage(img.data, width, height, bytesPerLine, QImage.Format_RGB888)
+
+            self.viewer.setPhoto( QPixmap( qImg ) )
+        else:
+            # Get filepath of "curr_section" and set it as viewer's photo
+            img_fp = get_thumbnail_img_fp_from_section( curr_fn )
+            self.viewer.setPhoto( QPixmap( img_fp ) )
         
     def photoClicked(self, pos):
         if self.viewer.dragMode() == QGraphicsView.NoDrag:
@@ -407,14 +418,19 @@ class init_GUI(QWidget):
                 self.curr_section = self.getNextValidSection( self.curr_section )
                 
             elif button==self.b_addPlaceholder:
+                # Set this current slice as a placeholder
+                self.insertPlaceholder()
                 pass
+            
             elif button==self.b_remove:
+                # Totally remove the current slice
+                self.removeCurrSection()
                 pass
                 
             # Update the Viewer info and displayed image
             self.setCurrSection(self.curr_section)
             
-        elif button == self.b_done:            
+        elif button == self.b_done:
             self.finished()
         
     def getNextValidSection(self, section):
@@ -432,10 +448,58 @@ class init_GUI(QWidget):
             prev_section_index = len(self.valid_sections)-1
         prev_section = self.valid_sections[ prev_section_index ]
         return prev_section
+    
+    def removeCurrSection(self):
+        msgBox = QMessageBox()
+        text = 'Are you sure you want to totally remove this section from this brain?\n\n'
+        text += 'Warning: The image will be marked as irrelevant to the current brain!'
+        msgBox.setText( text )
+        msgBox.addButton( QPushButton('Cancel'), QMessageBox.RejectRole)
+        msgBox.addButton( QPushButton('No'), QMessageBox.NoRole)
+        msgBox.addButton( QPushButton('Yes'), QMessageBox.YesRole)
+        ret = msgBox.exec_()
+        # Cancel
+        if ret==0:
+            pass
+        # No
+        elif ret==1:
+            pass
+        # Yes
+        elif ret==2:
+            curr_fn = self.sections_to_filenames[ int(self.curr_section) ]
+            # Remove the current section from "self.valid_sections
+            self.valid_sections.remove( curr_fn )
+            
+            new_sections_to_filenames = {}
+            # Copy all "self.sections_to_filenames" info into "new_sections_to_filenames", skip the cur_section
+            for i in range( len(self.sections_to_filenames)-1 ):
+                # Directly copy sections if it is before the section to be removed
+                if i<self.curr_section:
+                    new_sections_to_filenames[i] = self.sections_to_filenames[i]
+                else:
+                    new_sections_to_filenames[i] = self.sections_to_filenames[i+1]
+            # Save changes
+            self.sections_to_filenames = new_sections_to_filenames
+            
+    def insertPlaceholder(self):
+        new_sections_to_filenames = {}
+        # Iterate through all sections
+        for i in range( len(self.sections_to_filenames)+1 ):
+            # If before the current section
+            if i<self.curr_section:
+                new_sections_to_filenames[i] = self.sections_to_filenames[i]
+            # If on the current section
+            elif i==self.curr_section:
+                new_sections_to_filenames[i] = 'Placeholder'
+            # If after the current section
+            else:
+                new_sections_to_filenames[i] = self.sections_to_filenames[i-1]
+        # Save changes
+        self.sections_to_filenames = new_sections_to_filenames
         
     def updateCurrHeaderFields(self):
         self.e4.setText( str(self.sections_to_filenames[self.curr_section]) )
-        self.e5.setText( str(self.curr_section) )
+        self.e5.setText( str(self.curr_section+1) )
         
     def updateQualityField(self):
         curr_fn = self.sections_to_filenames[ int(self.curr_section) ]

@@ -828,43 +828,39 @@ def extract_patches_given_locations(patch_size,
 
     if img is None:
         t = time.time()
+        
+        stain = stack_metadata[stack]['stain']
+        version = stain_to_metainfo[stain.lower()]['img_version_2']
 
-        if is_nissl is None:
-            if sec is not None:
-                fn = metadata_cache['sections_to_filenames'][stack][sec]                  
-            else:
-                assert fn is not None, fn
-                
-            if stack in all_nissl_stacks:
-                is_nissl = True
-            else:
-                is_nissl = fn.split('-')[1][0] == 'N'
-                
-                # raise Exception("Must specify whether image is Nissl by providing is_nissl.")
+        if is_thionin is None:
+            if stain == 'Thionin':
+                is_thionin = True
+            elif stain == 'NTB':
+                is_thionin = True
                 
         try:
-            img = DataManager.load_image_v2(stack=stack, section=sec, fn=fn, prep_id=prep_id, version='NtbNormalizedAdaptiveInvertedGamma')
-        except:
-            print('')
+            img = DataManager.load_image_v2(stack=stack, section=sec, fn=fn, prep_id=prep_id, version=version)
+        except Exception as e:
+            print(str(e))
 
-        if stack in ['CHATM2', 'CHATM3', 'MD661', 'MD662', 'MD658'] or 'UCSD' in stack:
-            img = DataManager.load_image_v2(stack=stack, section=sec, fn=fn, prep_id=prep_id, version='NtbNormalizedAdaptiveInvertedGamma')
-        elif stack in all_nissl_stacks:
-            # img = img_as_ubyte(rgb2gray(DataManager.load_image_v2(stack=stack, section=sec, fn=fn, prep_id=prep_id, version=version)))
-            img = DataManager.load_image_v2(stack=stack, section=sec, fn=fn, prep_id=prep_id, version='gray')
-        else:
-            if is_nissl:
-                # if version is None:
-                #     img = DataManager.load_image_v2(stack=stack, section=sec, fn=fn, prep_id=prep_id, version='grayJpeg')
-                # else:
-                img = DataManager.load_image_v2(stack=stack, section=sec, fn=fn, prep_id=prep_id, version=version)
-                if img.ndim == 3:
-                    # img = img[...,2] # use blue channel of nissl
-                    img = img_as_ubyte(rgb2gray(img)) # convert grayscale
-            else:
-                img = DataManager.load_image_v2(stack=stack, section=sec, fn=fn, prep_id=prep_id, version=version)
-                if img.ndim == 3:
-                    img = img[...,2] # use blue channel of neurotrace
+        #if stack in ['CHATM2', 'CHATM3', 'MD661', 'MD662', 'MD658'] or 'UCSD' in stack:
+        #    img = DataManager.load_image_v2(stack=stack, section=sec, fn=fn, prep_id=prep_id, version='NtbNormalizedAdaptiveInvertedGamma')
+        #elif stack in all_nissl_stacks:
+        #    # img = img_as_ubyte(rgb2gray(DataManager.load_image_v2(stack=stack, section=sec, fn=fn, prep_id=prep_id, version=version)))
+        #    img = DataManager.load_image_v2(stack=stack, section=sec, fn=fn, prep_id=prep_id, version='gray')
+        #else:
+        #    if is_thionin:
+        #        # if version is None:
+        #        #     img = DataManager.load_image_v2(stack=stack, section=sec, fn=fn, prep_id=prep_id, version='grayJpeg')
+        #        # else:
+        #        img = DataManager.load_image_v2(stack=stack, section=sec, fn=fn, prep_id=prep_id, version=version)
+        #        if img.ndim == 3:
+        #            # img = img[...,2] # use blue channel of nissl
+        #            img = img_as_ubyte(rgb2gray(img)) # convert grayscale
+        #    else:
+        #        img = DataManager.load_image_v2(stack=stack, section=sec, fn=fn, prep_id=prep_id, version=version)
+        #        if img.ndim == 3:
+        #            img = img[...,2] # use blue channel of neurotrace
 
         sys.stderr.write('Load image: %.2f seconds.\n' % (time.time() - t))
 
@@ -882,7 +878,7 @@ def extract_patches_given_locations(patch_size,
         if stack in all_nissl_stacks:
             img = rescale_intensity_v2(img, img.min(), img.max())
         else:
-            if is_nissl:
+            if is_thionin:
                 img = rescale_intensity_v2(img, img.min(), img.max())
             else:
                 img = rescale_intensity_v2(img, img.max(), img.min())
@@ -906,7 +902,7 @@ def extract_patches_given_locations(patch_size,
                 if stack in all_nissl_stacks:
                     p_normalized_uint8 = rescale_intensity_v2(p_normalized, -9, 1)
                 else:
-                    if is_nissl:
+                    if is_thionin:
                         p_normalized_uint8 = rescale_intensity_v2(p_normalized, -9, 1)
                     else:
                         p_normalized_uint8 = rescale_intensity_v2(p_normalized, 9, -1)
@@ -938,7 +934,7 @@ def extract_patches_given_locations(patch_size,
 #             if stack in all_nissl_stacks:
 #                 patches_flattened = rescale_intensity_v2(patches_flattened, -6, 1)
 #             else:
-#                 if is_nissl:
+#                 if is_thionin:
 #                     patches_flattened = rescale_intensity_v2(patches_flattened, -6, 1)
 #                 else:
 #                     patches_flattened = rescale_intensity_v2(patches_flattened, 6, -1)
@@ -958,7 +954,7 @@ def extract_patches_given_locations(patch_size,
                 if stack in all_nissl_stacks:
                     p_normalized_uint8 = rescale_intensity_v2(p_normalized, -6, 1)
                 else:
-                    if is_nissl:
+                    if is_thionin:
                         p_normalized_uint8 = rescale_intensity_v2(p_normalized, -6, 1)
                     else:
                         p_normalized_uint8 = rescale_intensity_v2(p_normalized, 6, -1)
@@ -979,7 +975,7 @@ def extract_patches_given_locations(patch_size,
                 if stack in all_nissl_stacks:
                     p_normalized_uint8 = rescale_intensity_v2(p_normalized, -6, 1)
                 else:
-                    if is_nissl:
+                    if is_thionin:
                         p_normalized_uint8 = rescale_intensity_v2(p_normalized, -6, 1)
                     else:
                         p_normalized_uint8 = rescale_intensity_v2(p_normalized, 6, -1)
@@ -997,7 +993,7 @@ def extract_patches_given_locations(patch_size,
             if stack in all_nissl_stacks:
                 patches = [rescale_intensity_v2(p, p.min(), p.max()) for p in patches]
             else:
-                if is_nissl:
+                if is_thionin:
                     patches = [rescale_intensity_v2(p, p.min(), p.max()) for p in patches]
                 else:
                     patches = [rescale_intensity_v2(p, p.max(), p.min()) for p in patches]

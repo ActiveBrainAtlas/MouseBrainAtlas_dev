@@ -23,6 +23,9 @@ from preprocess_utilities import *
 from a_driver_utilities import *
 sys.path.append(os.path.join(os.environ['REPO_DIR'], 'web_services'))
 
+import tkFileDialog as filedialog
+from Tkinter import *
+
 parser = argparse.ArgumentParser(
         formatter_class=argparse.RawDescriptionHelpFormatter,
         description='Mask Editing GUI')
@@ -40,27 +43,18 @@ quality_options = ['unusable', 'blurry', 'good']
 
 # Cannot assume we have the sorted_filenames file. Load images a different way
 thumbnail_folder = DataManager.setup_get_thumbnail_fp(stack)
-#section_to_fn = {}
-valid_sections = []
-fn_to_data = {}
-for i, img_name in enumerate(os.listdir( thumbnail_folder )):
-    #section_to_fn[i] = img_name
-    fn_to_data[img_name] = {
-        'section': i,
-        'quality': 'good'}
-    valid_sections.append(i)
+sections_to_fns = {}
+fn_to_quality = {}
+fn_list = os.listdir( thumbnail_folder )
+fn_list.sort()
+for i, img_name in enumerate( fn_list ):
+    img_name = img_name.replace('_raw.tiff','').replace('_raw.tif','')
+    sections_to_fns[i] = img_name
+    fn_to_quality[img_name] ='good'
 
-def section_to_fn(section):
-    for fn in fn_to_data.keys():
-        if section == int(fn_to_data[fn]['section']):
-            return fn
-        
-def get_grayscale_thumbnail_img( section ):
-    fn = section_to_fn( int(section) )
-    img_fp = os.path.join( DataManager.setup_get_thumbnail_fp(stack), fn)
-    img = cv2.imread(img_fp, -1)
-    img = img_as_ubyte(rgb2gray(img))
-    return img
+def get_thumbnail_img_fp_from_section( fn ):
+    img_fp = os.path.join( DataManager.setup_get_thumbnail_fp(stack), fn+'_raw.tif')
+    return img_fp
 
 class ImageViewer( QGraphicsView):
     photoClicked = pyqtSignal( QPoint )
@@ -167,13 +161,13 @@ class init_GUI(QWidget):
         self.font_p1 = QFont("Arial",16)
         
         #self.valid_sections = metadata_cache['valid_sections_all'][stack]
-        self.valid_sections = valid_sections
+        self.valid_sections = sections_to_fns.keys()
         #self.sections_to_filenames = metadata_cache['sections_to_filenames'][stack]
-        self.sections_to_filenames = section_to_fn
+        self.sections_to_filenames = sections_to_fns
         self.curr_section = self.valid_sections[ len(self.valid_sections)/2 ]
         self.prev_section = self.getPrevValidSection( self.curr_section )
         self.next_section = self.getNextValidSection( self.curr_section )
-                
+                        
         self.initUI()
         
     def initUI(self):
@@ -232,66 +226,60 @@ class init_GUI(QWidget):
         self.grid_body.addWidget( self.viewer, 0, 0)
         
         ### Grid BODY LOWER ###
+        # Vertical line
+        self.grid_body_lower.addWidget(QVLine(), 0, 0, 1, 1)
         # Static Text Field
         self.e7 = QLineEdit()
         self.e7.setMaximumWidth(250)
         self.e7.setAlignment(Qt.AlignRight)
         self.e7.setReadOnly( True )
         self.e7.setText( "Select section quality:" )
-        self.grid_body_lower.addWidget( self.e7, 0, 0)
-        # Vertical line
-        self.grid_body_lower.addWidget(QVLine(), 0, 1, 1, 1)
-        
-        # Checkbox
-        self.cb_good = QCheckBox("Good Quality")
-        self.cb_good.setMaximumWidth(140)
-        self.cb_good.setChecked(False)
-        #self.cb_good.setStyleSheet("border: 2px solid black;")
-        #self.grid_body_lower.addWidget(self.cb_good, 0, 2)
-        # Checkbox
-        self.cb_blurry = QCheckBox("Intact + Blurry")
-        self.cb_blurry.setMaximumWidth(150)
-        self.cb_blurry.setChecked(False)
-        #self.grid_body_lower.addWidget(self.cb_blurry, 0, 3)
-        # Checkbox
-        self.cb_unusable = QCheckBox("Unuseably Blurry/Torn")
-        self.cb_unusable.setMaximumWidth(190)
-        self.cb_unusable.setChecked(False)
-        #self.grid_body_lower.addWidget(self.cb_unusable, 0, 4)
-        
+        self.grid_body_lower.addWidget( self.e7, 0, 1)
         # Dropbown Menu (ComboBox) for selecting Stack
-        self.cb = QComboBox()
-        self.cb.addItems( quality_options )
-        self.grid_body_lower.addWidget( self.cb, 0, 2)
-        
+        self.dd = QComboBox()
+        self.dd.addItems( quality_options )
+        self.dd.currentIndexChanged.connect( self.updateDropdown )
+        self.grid_body_lower.addWidget( self.dd, 0, 2)
         # Vertical line
-        self.grid_body_lower.addWidget(QVLine(), 0, 5, 1, 1)
+        self.grid_body_lower.addWidget(QVLine(), 0, 3, 1, 1)
+        # Button Text Field
+        self.b_remove = QPushButton("Remove section")
+        self.b_remove.setDefault(True)
+        self.b_remove.setEnabled(False)
+        self.b_remove.clicked.connect(lambda:self.buttonPress(self.b_remove))
+        self.b_remove.setStyleSheet("color: rgb(0,0,0); background-color: #C91B1B;")
+        self.grid_body_lower.addWidget(self.b_remove, 1, 0)
+        # Button Text Field
+        self.b_addPlaceholder = QPushButton("Add Placeholder as prev section")
+        self.b_addPlaceholder.setDefault(True)
+        self.b_addPlaceholder.setEnabled(False)
+        self.b_addPlaceholder.clicked.connect(lambda:self.buttonPress(self.b_addPlaceholder))
+        self.b_addPlaceholder.setStyleSheet("color: rgb(0,0,0); background-color: #41C91B;")
+        self.grid_body_lower.addWidget(self.b_addPlaceholder, 1, 1)
         # Button Text Field
         self.b_left = QPushButton("<--   Move Section Left   <--")
         self.b_left.setDefault(True)
         self.b_left.setEnabled(True)
         self.b_left.clicked.connect(lambda:self.buttonPress(self.b_left))
         self.b_left.setStyleSheet("color: rgb(0,0,0); background-color: rgb(200,250,250);")
-        self.grid_body_lower.addWidget(self.b_left, 0, 6)
+        self.grid_body_lower.addWidget(self.b_left, 0, 5)
         # Button Text Field
         self.b_right = QPushButton("-->   Move Section Right   -->")
         self.b_right.setDefault(True)
         self.b_right.setEnabled(True)
         self.b_right.clicked.connect(lambda:self.buttonPress(self.b_right))
         self.b_right.setStyleSheet("color: rgb(0,0,0); background-color: rgb(200,250,250);")
-        self.grid_body_lower.addWidget(self.b_right, 0, 7)
+        self.grid_body_lower.addWidget(self.b_right, 0, 6)
         # Horozontal Line
-        self.grid_body_lower.addWidget(QHLine(), 1, 0, 1, 8)
+        self.grid_body_lower.addWidget(QHLine(), 1, 0, 1, 7)
         # Button Text Field
         self.b_done = QPushButton("Finished")
         self.b_done.setDefault(True)
         self.b_done.setEnabled(True)
         self.b_done.clicked.connect(lambda:self.buttonPress(self.b_done))
         self.b_done.setStyleSheet("color: rgb(0,0,0); background-color: #dfbb19;")
-        self.grid_body_lower.addWidget(self.b_done, 2, 7)
-        
-        ### GRID BOTOM ###
-        
+        self.grid_body_lower.addWidget(self.b_done, 2, 6)
+                
         
         # Grid stretching
         #self.grid_body_upper.setColumnStretch(0, 2)
@@ -313,11 +301,10 @@ class init_GUI(QWidget):
         self.setLayout( self.supergrid )
         self.setWindowTitle("Q")
         
-        self.update_fields()
+        self.setCurrSection( self.curr_section )
         
         # Loads self.curr_section as the current image and sets all fields appropriatly
         #self.setCurrSection( self.curr_section )
-        
         
         
     def help_button_press(self, button):
@@ -327,22 +314,32 @@ class init_GUI(QWidget):
         
         QMessageBox.information( self, "Empty Field",
                     info_text)
-        
-    def update_fields(self):
-        self.setCurrSection( self.curr_section )
-        pass
+    
+    def updateDropdown(self):
+        # Get dropdown selection
+        dropdown_selection = self.dd.currentText()
+        curr_fn = self.sections_to_filenames[ int(self.curr_section) ]
+        fn_to_quality[ curr_fn ] = dropdown_selection
     
     def load_sorted_filenames(self):
+        print stack
         self.valid_sections = metadata_cache['valid_sections_all'][stack]
         self.sections_to_filenames = metadata_cache['sections_to_filenames'][stack]
         self.curr_section = self.valid_sections[ len(self.valid_sections)/2 ]
         self.prev_section = self.getPrevValidSection( self.curr_section )
         self.next_section = self.getNextValidSection( self.curr_section )
         
+        # Repopulate "fn_to_quality"
+        fn_to_quality = {}
+        for section, img_name in self.sections_to_filenames.items():
+            fn_to_quality[img_name] = 'good'
+        
+        self.setCurrSection( self.curr_section )
+        
     def loadImage(self):
         # Get filepath of "curr_section" and set it as viewer's photo
-        fn = section_to_fn( int(self.curr_section) )
-        img_fp = os.path.join( DataManager.setup_get_thumbnail_fp(stack), fn)
+        img_fp = get_thumbnail_img_fp_from_section( 
+            self.sections_to_filenames[ int(self.curr_section) ] )
         self.viewer.setPhoto( QPixmap( img_fp ) )
         
     def photoClicked(self, pos):
@@ -382,36 +379,42 @@ class init_GUI(QWidget):
         self.next_section = self.getNextValidSection( self.curr_section )
         # Update the section and filename at the top
         self.updateCurrHeaderFields()
+        # Update the quality selection in the bottom left
+        self.updateQualityField()
                     
         self.loadImage()
             
     def buttonPress(self, button):
         # Brighten an image
-        if button in [self.b1, self.b2, self.b3]:
-            # Check whether to apply transform to ALL images according to checkbox value
-            if self.cb_1.isChecked():
-                only_on_current_img = False
-            else:
-                only_on_current_img = True
+        if button in [self.b_left, self.b_right]:
+            # Get all relevant filenames
+            curr_fn = self.sections_to_filenames[ int(self.curr_section) ]
+            prev_fn = self.sections_to_filenames[ int(self.prev_section) ]
+            next_fn = self.sections_to_filenames[ int(self.next_section) ]
             
-            # "Flip image(s) across central vertical line"
-            if button==self.b1:
-                self.transform_images( 'flip', 
-                                               only_on_current_img=only_on_current_img)
-            # "Flop image(s) across central horozontal line"
-            elif button==self.b2:
-                self.transform_images( 'flop', 
-                                               only_on_current_img=only_on_current_img)
-            # "Rotate Image(s)"
-            elif button==self.b3:
-                self.transform_images( 'rotate', 
-                                               degrees=str(self.cb.currentText()), 
-                                               only_on_current_img=only_on_current_img)
+            # Move fn behind one section (100 -> 99)
+            if button==self.b_left:
+                # Swap mappings of 'curr_fn' and 'prev_fn'
+                self.sections_to_filenames[ int(self.prev_section) ] = curr_fn
+                self.sections_to_filenames[ int(self.curr_section) ] = prev_fn
+                self.curr_section = self.getPrevValidSection( self.curr_section )
+                
+            # Move fn ahead one section (100 -> 101)
+            elif button==self.b_right:
+                # Swap mappings of 'curr_fn' and 'next_fn'
+                self.sections_to_filenames[ int(self.next_section) ] = curr_fn
+                self.sections_to_filenames[ int(self.curr_section) ] = next_fn
+                self.curr_section = self.getNextValidSection( self.curr_section )
+                
+            elif button==self.b_addPlaceholder:
+                pass
+            elif button==self.b_remove:
+                pass
+                
             # Update the Viewer info and displayed image
             self.setCurrSection(self.curr_section)
-        elif button == self.b_done:
-            #QMessageBox.about(self, "Popup Message", "Done.")
             
+        elif button == self.b_done:            
             self.finished()
         
     def getNextValidSection(self, section):
@@ -431,11 +434,20 @@ class init_GUI(QWidget):
         return prev_section
         
     def updateCurrHeaderFields(self):
-        #self.e4.setText( str(self.sections_to_filenames[self.curr_section]) )
+        self.e4.setText( str(self.sections_to_filenames[self.curr_section]) )
         self.e5.setText( str(self.curr_section) )
+        
+    def updateQualityField(self):
+        curr_fn = self.sections_to_filenames[ int(self.curr_section) ]
+        text = fn_to_quality[ curr_fn ]
+        index = self.dd.findText(text, Qt.MatchFixedString)
+        if index >= 0:
+             self.dd.setCurrentIndex(index)
                 
     def finished(self):
-        set_step_completed_in_progress_ini( stack, '1-5_setup_orientations')
+        set_step_completed_in_progress_ini( stack, '1-4_setup_sorted_filenames')
+        
+        write_results_to_sorted_filenames( self.sections_to_filenames, fn_to_quality )
         
         #close_main_gui( ex )
         sys.exit( app.exec_() )
@@ -443,6 +455,56 @@ class init_GUI(QWidget):
 def close_gui():
     #ex.hide()
     sys.exit( app.exec_() )
+    
+def write_results_to_sorted_filenames( sections_to_filenames, fn_to_quality ):
+    """
+    Create the sorted_filenames.txt file from the user's "sections_to_filenames".
+    Determine quality of each slice from "fn_to_quality".
+    
+    Quality levels:
+        - unusable: Mark as placeholder
+        - good: Write to the file as usual
+        - blurry: Write to a special file meant to be used until intra-stack alignment, ignored after
+    """
+    
+    sfns_text = ""
+    sfns_till_alignment_text = ""
+    for section, fn in sections_to_filenames.items():
+        quality = fn_to_quality[fn]
+        
+        # section_str is the section encoded as a string, padded with zeros
+        section_str = str(section+1).zfill(3)
+        
+        # If section is marked "unusable"
+        if quality == 'unusable':
+            sfns_text += 'Placeholder '+section_str+'\n'
+            sfns_till_alignment_text += 'Placeholder '+section_str+'\n'
+            continue
+        elif quality == 'good':
+            sfns_text += fn+' '+section_str+'\n'
+            sfns_till_alignment_text += fn+' '+section_str+'\n'
+            continue
+        elif quality == 'blurry':
+            sfns_text += 'Placeholder '+section_str+'\n'
+            sfns_till_alignment_text += fn+' '+section_str+'\n'
+            continue
+    # Remove trailing '\n' at the end of each file
+    sfns_text = sfns_text[:-1]
+    sfns_till_alignment_text = sfns_till_alignment_text[:-1]
+    
+    # Save the "sorted_filenames_till_alignment" as the active sfns file
+    with open(sfns_fp, 'w') as f:
+        f.write( sfns_till_alignment_text )
+        
+    # Write the "post alignment" version
+    sfns_post_alignment_fp = sfns_fp.replace( '_sorted_filenames', '_sorted_filenames_post_slice_alignment')
+    with open(sfns_post_alignment_fp, 'w') as f:
+        f.write( sfns_text )
+        
+    # Write the "pre alignment" version
+    sfns_till_alignment_fp = sfns_fp.replace( '_sorted_filenames', '_sorted_filenames_till_slice_alignment')
+    with open(sfns_till_alignment_fp, 'w') as f:
+        f.write( sfns_till_alignment_text )
 
 def main():
     global app 
@@ -466,9 +528,14 @@ def main():
             return None
         # No
         elif ret==1:
+            # Run GUI as usual
             ex.show()
+            #Simulate a user's keypress because otherwise the autozoom is weird
+            ex.keyPressEvent(91)
+            sys.exit( app.exec_() )
         # Yes
         elif ret==2:
+            # Load in information on current sorted_filenames
             ex.load_sorted_filenames()
             ex.show()
             #Simulate a user's keypress because otherwise the autozoom is weird
@@ -476,10 +543,96 @@ def main():
             sys.exit( app.exec_() )
     # If sorted_filenames does NOT exist, we must make a new one
     else:
-        ex.show()
-        # Simulate a user's keypress because otherwise the autozoom is weird
-        ex.keyPressEvent(91)
-        sys.exit( app.exec_() )
+        msgBox = QMessageBox()
+        text = 'Do you want to load a sorted_filenames text file that has already been made?\n\n'
+        text += 'If you select no, you will need to create one using a custom GUI.'
+        msgBox.setText( text )
+        msgBox.addButton( QPushButton('No'), QMessageBox.NoRole)
+        msgBox.addButton( QPushButton('Yes'), QMessageBox.YesRole)
+        ret = msgBox.exec_()
+        print ret
+        # Yes
+        if ret==1:
+            fp = get_selected_fp( default_filetype=[("text files","*.txt"),("all files","*.*")] )
+            filepath_sfns = fp
+            filepath_sfns_folder = fp[0:max(loc for loc, val in enumerate(fp) if val == '/')]
+            validated, err_msg = validate_sorted_filenames( fp )
+            
+            if validated:
+                copy_over_sorted_filenames( stack, fp )
+                sys.stderr.write( '\nCopying sorted filenames was successful!\n' )
+            else:
+                sys.stderr.write( '\n'+err_msg+'\n' )
+            
+            sys.exit( app.exec_() )
+        # No
+        elif ret==0:
+            # Run GUI as usual
+            ex.show()
+            #Simulate a user's keypress because otherwise the autozoom is weird
+            ex.keyPressEvent(91)
+            sys.exit( app.exec_() )
+
+### All functions below this point are meant for copying over an existing sorted_filenames file
+def get_selected_fp( initialdir='/', default_filetype=("jp2 files","*.jp2") ):
+    # initialdir=os.environ['ROOT_DIR'
+    # Use tkinter to ask user for filepath to jp2 images
+    #from tkinter import filedialog
+    #from tkinter import *
+    root = Tk()
+    root.filename = filedialog.askopenfilename(initialdir = initialdir,\
+                                                title = "Select file",\
+                                                filetypes = default_filetype)
+    fn = root.filename
+    root.destroy()
+    return fn
+
+def validate_sorted_filenames( fp ):
+    section_names, section_numbers = load_sorted_filenames( fp )
+    
+    if len(section_names) != len(set(section_names)):
+        return False, "Error: A section name appears multiple times"
+    if len(section_numbers) != len(set(section_numbers)):
+        return False, "Error: A section number appears multiple times"
+    
+    return True, ""
+
+def copy_over_sorted_filenames( stack, sfns_input_fp ):
+    correct_sorted_fns_fp = DataManager.get_sorted_filenames_filename(stack)
+    command = ["cp", sfns_input_fp, correct_sorted_fns_fp]
+    subprocess.call( command )
+    
+def load_sorted_filenames( fp ):
+    '''
+        load_sorted_filenames( stack ) returns a list of section names
+        and their associated section numbers
+    '''
+    #fn = stack+'_sorted_filenames.txt'
+    
+    file_sfns = open( fp, 'r')
+    section_names = []
+    section_numbers = []
+
+    for line in file_sfns: 
+        if 'Placeholder' in line:
+            continue
+        elif line == '':
+            continue
+        elif line == '\n':
+            continue
+        else:
+            try:
+                space_index = line.index(" ")
+            except Exception as e:
+                print(e)
+                print('ignoring the line with this error')
+                continue
+            section_name = line[ 0 : space_index ]
+            section_number = line[ space_index+1 : ]
+            section_names.append( section_name )
+            section_numbers.append( section_number )
+    return section_names, section_numbers
 
 if __name__ == '__main__':
     main()
+    
