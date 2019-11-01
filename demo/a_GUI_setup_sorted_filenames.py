@@ -480,6 +480,7 @@ class init_GUI(QWidget):
                     new_sections_to_filenames[i] = self.sections_to_filenames[i+1]
             # Save changes
             self.sections_to_filenames = new_sections_to_filenames
+            self.valid_sections = self.sections_to_filenames.keys()
             
     def insertPlaceholder(self):
         new_sections_to_filenames = {}
@@ -496,6 +497,7 @@ class init_GUI(QWidget):
                 new_sections_to_filenames[i] = self.sections_to_filenames[i-1]
         # Save changes
         self.sections_to_filenames = new_sections_to_filenames
+        self.valid_sections = self.sections_to_filenames.keys()
         
     def updateCurrHeaderFields(self):
         self.e4.setText( str(self.sections_to_filenames[self.curr_section]) )
