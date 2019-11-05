@@ -79,9 +79,6 @@ class init_GUI(QWidget):
         # Set layout and window title
         self.setLayout( self.grid )
         self.setWindowTitle("Align to Active Brainstem Atlas - Main Page")
-
-        # Update interactive windows
-        self.updateFields()
         
         # Center the GUI
         self.center()
