@@ -72,7 +72,7 @@ class init_GUI(QWidget):
         self.grid.addWidget(self.cb, 1, 0)
         # Button
         self.b_done = QPushButton("Done")
-        format_grid_button_initial( self.b_done )
+        #format_grid_button_initial( self.b_done )
         self.b_done.clicked.connect( lambda:self.button_push(self.b_done) )
         self.grid.addWidget( self.b_done, 2, 0)
 
