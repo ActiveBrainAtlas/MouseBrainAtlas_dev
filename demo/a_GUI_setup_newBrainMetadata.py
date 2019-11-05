@@ -49,7 +49,7 @@ class init_GUI(QWidget):
         self.cutting_plane_options = ['sagittal', 'horozontal', 'coronal']
         self.cutting_planar_resolution_options = [0.46, 0.325]
         self.section_thickness_options = [20]
-        self.input_filetype_options = ['tiff', 'jp2', 'czi', 'ndpi']
+        self.input_filetype_options = ['tiff', 'jp2', 'czi', 'ndpi', 'ngr']
         
         self.initUI()
         #self.updateFields()

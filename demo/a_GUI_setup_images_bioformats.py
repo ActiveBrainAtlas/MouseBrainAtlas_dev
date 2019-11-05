@@ -418,6 +418,9 @@ def get_selected_file( initialdir='/', default_filetype=("jp2 files","*.jp2") ):
     # Use tkinter to ask user for filepath to jp2 images
     import tkFileDialog as filedialog
     
+    if ON_DOCKER:
+        initialdir = '/mnt/computer_root/'
+    
     root = Tk()
     root.filename = filedialog.askopenfilename(initialdir = initialdir,\
                                                 title = "Select file",\
@@ -430,6 +433,9 @@ def get_selected_folder( initialdir='/' ):
     # initialdir=os.environ['ROOT_DIR'
     # Use tkinter to ask user for filepath to jp2 images
     import tkFileDialog as filedialog
+    
+    if ON_DOCKER:
+        initialdir = '/mnt/computer_root/'
     
     root = Tk()
     root.filename = filedialog.askdirectory(initialdir = initialdir,\

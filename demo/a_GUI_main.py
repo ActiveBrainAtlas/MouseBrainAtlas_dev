@@ -313,7 +313,8 @@ and all local alignment scripts will be run. This will take a long time.")
         """
         if button == self.b_exit:
             #close_main_gui( ex, reopen=False )
-            close_main_gui( app, reopen=False )
+            #close_main_gui( app, reopen=False )
+            sys.exit( app.exec_() )
         elif button==self.b_prevStep:
             subprocess.call(['python','a_GUI_prev_step.py', str(self.stack) ])
         
@@ -343,7 +344,8 @@ and all local alignment scripts will be run. This will take a long time.")
         self.updateFields()
         
     def closeEvent(self, event):
-        close_main_gui( app, reopen=True )
+        #close_main_gui( app, reopen=True )
+        sys.exit( app.exec_() )
         
 def main():
     global app 

@@ -26,8 +26,10 @@ else:
     ENABLE_DOWNLOAD_S3 = False
     #sys.stderr.write("ENABLE_DOWNLOAD_S3 is not set, default to False.\n")
 
+ON_DOCKER = False
 if hostname == 'atlasDocker':
     print 'Setting environment for the Docker Container'
+    ON_DOCKER = True
     
     try:
         ROOT_DIR = os.environ['ROOT_DIR']

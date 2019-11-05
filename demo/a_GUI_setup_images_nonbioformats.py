@@ -201,7 +201,8 @@ class init_GUI(QWidget):
             self.e3.setText( self.filepath_img_folder ) 
             
     def closeEvent(self, event):
-        close_main_gui( ex )
+        #close_main_gui( ex )
+        sys.exit( app.exec_() )
         
     def finished(self):
         if self.filepath_sfns != "":
@@ -321,6 +322,9 @@ def get_selected_fp( initialdir='/', default_filetype=("jp2 files","*.jp2") ):
     # Use tkinter to ask user for filepath to jp2 images
     #from tkinter import filedialog
     #from tkinter import *
+    if ON_DOCKER:
+        initialdir = '/mnt/computer_root/'
+        
     root = Tk()
     root.filename = filedialog.askopenfilename(initialdir = initialdir,\
                                                 title = "Select file",\

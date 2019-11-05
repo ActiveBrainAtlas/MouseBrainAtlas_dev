@@ -648,6 +648,9 @@ def get_selected_fp( initialdir='/', default_filetype=("jp2 files","*.jp2") ):
     # Use tkinter to ask user for filepath to jp2 images
     #from tkinter import filedialog
     #from tkinter import *
+    if ON_DOCKER:
+        initialdir = '/mnt/computer_root/'
+    
     root = Tk()
     root.filename = filedialog.askopenfilename(initialdir = initialdir,\
                                                 title = "Select file",\
