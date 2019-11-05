@@ -15,6 +15,8 @@ import sys
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 
+import argparse
+
 parser = argparse.ArgumentParser(
         formatter_class=argparse.RawDescriptionHelpFormatter,
         description='Select a step to reqind to')
