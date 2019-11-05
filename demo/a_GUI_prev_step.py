@@ -102,7 +102,8 @@ class init_GUI(QWidget):
             
             # Yes
             if ret==1:
-                subprocess.call(['python', 'revert_to_prev_step.py', stack, step_selection])
+                #subprocess.call(['python', 'revert_to_prev_step.py', stack, step_selection)])
+                revert_to_prev_step(stack, step_selection)
                 sys.exit( app.exec_() )
             # No
             elif ret==0:
