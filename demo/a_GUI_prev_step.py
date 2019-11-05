@@ -24,7 +24,7 @@ parser.add_argument("stack", type=str, help="stack name")
 args = parser.parse_args()
 stack = args.stack
 
-curr_step = get_current_step_from_progress_ini( self.stack )
+curr_step = get_current_step_from_progress_ini( stack )
 prev_steps = []
 
 for step in ordered_pipeline_steps:
