@@ -130,7 +130,7 @@ class init_GUI(QWidget):
         self.b_crop.clicked.connect( lambda:self.button_grid_push(self.b_crop) )
         self.grid_buttons.addWidget( self.b_crop, 1, 0)
         # Button
-        self.b_globalFit = QPushButton("Global Atlas Fit")
+        self.b_globalFit = QPushButton("Rough Atlas Fit")
         format_grid_button_initial( self.b_globalFit )
         self.b_globalFit.clicked.connect( lambda:self.button_grid_push(self.b_globalFit) )
         self.grid_buttons.addWidget( self.b_globalFit, 1, 1)
@@ -147,20 +147,25 @@ class init_GUI(QWidget):
         self.b_newBrain.clicked.connect(lambda:self.button_push(self.b_newBrain))
         self.grid_bottom.addWidget(self.b_newBrain, 0, 1)
         # Button Text Field
+        self.b_prevStep = QPushButton("Go to Previous Step")
+        self.b_prevStep.setDefault(True)
+        self.b_prevStep.clicked.connect(lambda:self.button_push(self.b_prevStep))
+        self.grid_bottom.addWidget(self.b_prevStep, 0, 2)
+        # Button Text Field
         self.b_neuroglancer = QPushButton("Neuroglancer Utilities")
         self.b_neuroglancer.setDefault(True)
         self.b_neuroglancer.clicked.connect(lambda:self.button_push(self.b_neuroglancer))
-        self.grid_bottom.addWidget(self.b_neuroglancer, 0, 2)
+        self.grid_bottom.addWidget(self.b_neuroglancer, 0, 3)
         # Button Text Field
         self.b_datajoint = QPushButton("Datajoint Utilities")
         self.b_datajoint.setDefault(True)
         self.b_datajoint.clicked.connect(lambda:self.button_push(self.b_datajoint))
-        self.grid_bottom.addWidget(self.b_datajoint, 0, 3)
+        self.grid_bottom.addWidget(self.b_datajoint, 0, 4)
         # Button Text Field
         self.b_exit = QPushButton("Exit")
         self.b_exit.setDefault(True)
         self.b_exit.clicked.connect(lambda:self.button_push(self.b_exit))
-        self.grid_bottom.addWidget(self.b_exit, 0, 4)
+        self.grid_bottom.addWidget(self.b_exit, 0, 5)
 
         #self.grid_buttons.setColumnStretch(1, 3)
         #self.grid_buttons.setRowStretch(1, 2)
@@ -289,9 +294,16 @@ class init_GUI(QWidget):
         # 6) Fit atlas local
         elif button == self.b_localFit:
             try:
-                subprocess.call(['python','a_GUI_atlas_local_main.py', self.stack])
+                #subprocess.call(['python','a_GUI_atlas_local_main.py', self.stack])
+                
+                QMessageBox.about(self, "Popup Message", "The GUI window is not completely finished. A classifier will be chosen automatically \
+and all local alignment scripts will be run. This will take a long time.")
+                
+                detector = stain_to_metainfo[self.stain.lower()]["detector_id"]
+                subprocess.call(['python','a_script_processing.py', str(self.stack), str(self.stain), str(detector) ])
+                
             except Exception as e:
-                sys.stderr.write( e )
+                sys.stderr.write( str(e) )
         
         self.format_grid_buttons()
             
@@ -300,7 +312,13 @@ class init_GUI(QWidget):
         Secondary button callback function
         """
         if button == self.b_exit:
-            close_main_gui( ex, reopen=False )
+            #close_main_gui( ex, reopen=False )
+            close_main_gui( app, reopen=False )
+        elif button==self.b_prevStep:
+            subprocess.call(['python','a_GUI_prev_step.py', str(self.stack) ])
+        
+            # Update interactive windows
+            self.updateFields()
         elif button == self.b_neuroglancer:
             pass
         elif button == self.b_datajoint:
