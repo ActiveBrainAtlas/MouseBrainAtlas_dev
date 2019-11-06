@@ -51,7 +51,8 @@ class init_GUI(QWidget):
         # Set Layout and Geometry of Window
         self.grid = QGridLayout()
         
-        self.setFixedSize(400, 200)
+        #self.setFixedSize(400, 200)
+        self.resize(400, 200)
 
         ### Grid Top (1 row) ###
         # Static Text Field

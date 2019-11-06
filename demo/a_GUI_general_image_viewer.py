@@ -134,7 +134,8 @@ class init_GUI(QWidget):
         self.grid_body = QGridLayout()
         self.grid_bottom = QGridLayout()
         
-        self.setFixedSize(1500, 1000)
+        #self.setFixedSize(1500, 1000)
+        self.resize(1500, 1000)
         
         ### VIEWER ### (Grid Body)
         self.viewer = ImageViewer(self)

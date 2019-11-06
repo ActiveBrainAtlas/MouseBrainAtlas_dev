@@ -54,7 +54,8 @@ class init_GUI(QWidget):
         self.grid_top = QGridLayout()
         self.grid_body = QGridLayout()
         
-        self.setFixedSize(800, 350)
+        #self.setFixedSize(800, 350)
+        self.resize(800, 350)
         
         ### Grid TOP (1 row) ###
         # Static Text Field
