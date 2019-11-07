@@ -398,7 +398,7 @@ class init_GUI(QWidget):
             
     def buttonPress(self, button):
         # Brighten an image
-        if button in [self.b_left, self.b_right]:
+        if button in [self.b_left, self.b_right, self.b_addPlaceholder, self.b_remove]:
             # Get all relevant filenames
             curr_fn = self.sections_to_filenames[ int(self.curr_section) ]
             prev_fn = self.sections_to_filenames[ int(self.prev_section) ]
