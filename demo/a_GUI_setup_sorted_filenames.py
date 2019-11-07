@@ -650,7 +650,7 @@ def main():
             else:
                 sys.stderr.write( '\n'+err_msg+'\n' )
             
-            sys.exit( app.exec_() )
+            #sys.exit( app.exec_() )
         # No
         elif ret==0:
             # Run GUI as usual
