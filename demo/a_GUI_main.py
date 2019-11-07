@@ -86,7 +86,7 @@ class init_GUI(QWidget):
         self.cb = QComboBox()
         self.cb.addItems( all_stacks )
         self.cb.setFont( self.font1 )
-        self.cb.currentIndexChanged.connect( self.updateFields )
+        self.cb.currentIndexChanged.connect( self.newDropdownSelection )
         self.grid_top.addWidget(self.cb, 0, 1)
         # Static Text Field
         self.e2 = QLineEdit()
@@ -187,7 +187,7 @@ class init_GUI(QWidget):
         # Center the GUI
         self.center()
             
-    def updateFields(self):
+    def updateFields(self, update_dropdown=True):
         # Get dropdown selection
         dropdown_selection = self.cb.currentText()
         dropdown_selection_str = str(dropdown_selection.toUtf8())
@@ -205,14 +205,20 @@ class init_GUI(QWidget):
             self.curr_step = get_current_step_from_progress_ini( self.stack )
             # Disable all grid buttons except for the one corresponding to our current step
             self.format_grid_buttons()
-            # Update the dropdown stack list in case there's a new stack
-            self.updateStackDropdownMenu()
+            
+            if update_dropdown:
+                # Update the dropdown stack list in case there's a new stack
+                # Recursion error if combobox callback activates this so it is behind an if statement
+                self.updateStackDropdownMenu()
             
         # If there are no stacks/brains that have been started
         except KeyError:
             for grid_button in [self.b_setup, self.b_align, self.b_mask, self.b_crop, 
                             self.b_globalFit, self.b_localFit]:
                 format_grid_button_cantStart( grid_button )
+                
+    def newDropdownSelection(self):
+        self.updateFields( update_dropdown=False )
     
     def updateStackDropdownMenu(self):
         new_stacks = []
