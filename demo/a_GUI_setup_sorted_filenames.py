@@ -506,7 +506,10 @@ class init_GUI(QWidget):
         
     def updateQualityField(self):
         curr_fn = self.sections_to_filenames[ int(self.curr_section) ]
-        text = fn_to_quality[ curr_fn ]
+        if curr_fn=='Placeholder':
+            text = 'unusable'
+        else:
+            text = fn_to_quality[ curr_fn ]
         index = self.dd.findText(text, Qt.MatchFixedString)
         if index >= 0:
              self.dd.setCurrentIndex(index)
