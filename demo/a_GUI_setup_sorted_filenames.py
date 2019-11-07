@@ -604,7 +604,7 @@ def main():
 
     if sfns_already_exists:
         msgBox = QMessageBox()
-        text = 'Sorted_filenames already exists, Do you want to load it?\n\n'
+        text = 'The sorted_filenames seems to already exist in the right place, Do you want to load it?\n\n'
         text += 'Warning: If you select no, it will be overwritten!'
         msgBox.setText( text )
         msgBox.addButton( QPushButton('Cancel'), QMessageBox.RejectRole)
@@ -647,6 +647,7 @@ def main():
             if validated:
                 copy_over_sorted_filenames( stack, fp )
                 sys.stderr.write( '\nCopying sorted filenames was successful!\n' )
+                set_step_completed_in_progress_ini( stack, '1-4_setup_sorted_filenames')
             else:
                 sys.stderr.write( '\n'+err_msg+'\n' )
             
