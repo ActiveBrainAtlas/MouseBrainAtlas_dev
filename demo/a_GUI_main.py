@@ -228,7 +228,6 @@ class init_GUI(QWidget):
                 # Add a brain to "new_stack" list if it is found and is not a part of "all_stacks"
                 new_stacks.append( brain_name )
         if not new_stacks==[]:
-            self.cb.addItems( ['a','b'] )
             self.cb.addItems( new_stacks )
         
     def format_grid_buttons(self):
