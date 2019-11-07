@@ -311,7 +311,8 @@ class init_GUI(QWidget):
     def help_button_press(self, button):
         info_text = "This GUI is used to align slices to each other. The shortcut commands are as follows: \n\n\
     -  `[`: Go back one section. \n\
-    -  `]`: Go forward one section."
+    -  `]`: Go forward one section. \n\n"
+        info_text += "Use the buttons on the bottom panel to move"
         
         QMessageBox.information( self, "Empty Field",
                     info_text)
@@ -422,6 +423,8 @@ class init_GUI(QWidget):
             elif button==self.b_addPlaceholder:
                 # Set this current slice as a placeholder
                 self.insertPlaceholder()
+                # Go one section to the right
+                self.keyPressEvent(93)
                 pass
             
             elif button==self.b_remove:
@@ -470,7 +473,7 @@ class init_GUI(QWidget):
         elif ret==2:
             curr_fn = self.sections_to_filenames[ int(self.curr_section) ]
             # Remove the current section from "self.valid_sections
-            self.valid_sections.remove( curr_fn )
+            self.valid_sections.remove( int(self.curr_section) )
             
             new_sections_to_filenames = {}
             # Copy all "self.sections_to_filenames" info into "new_sections_to_filenames", skip the cur_section
