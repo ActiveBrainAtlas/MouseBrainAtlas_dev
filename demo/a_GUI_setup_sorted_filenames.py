@@ -541,11 +541,9 @@ def write_results_to_sorted_filenames( sections_to_filenames, fn_to_quality ):
     sfns_text = ""
     sfns_till_alignment_text = ""
     for section, fn in sections_to_filenames.items():
-        print section
-        print fn
         
         if fn=='Placeholder':
-            quality = 'unuseable'
+            quality = 'unusable'
         else:
             quality = fn_to_quality[fn]
         
