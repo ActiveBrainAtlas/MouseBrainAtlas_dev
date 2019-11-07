@@ -594,6 +594,9 @@ def main():
     
     global ex
     ex = init_GUI()
+    
+    # If True, then the sorted filenames DOES exist but the user does NOT want to load it
+    not_loading_curr_sfns = False
 
     if sfns_already_exists:
         msgBox = QMessageBox()
@@ -611,9 +614,10 @@ def main():
         # No
         elif ret==1:
             # Run GUI as usual
-            ex.show()
+            #ex.show()
             #Simulate a user's keypress because otherwise the autozoom is weird
-            ex.keyPressEvent(91)
+            #ex.keyPressEvent(91)
+            not_loading_curr_sfns = True
             sys.exit( app.exec_() )
         # Yes
         elif ret==2:
@@ -624,7 +628,7 @@ def main():
             ex.keyPressEvent(91)
             sys.exit( app.exec_() )
     # If sorted_filenames does NOT exist, we must make a new one
-    else:
+    if (not sfns_already_exists) or (not_loading_curr_sfns):
         msgBox = QMessageBox()
         text = 'Do you want to load a sorted_filenames text file that has already been made?\n\n'
         text += 'If you select no, you will need to create one using a custom GUI.'
