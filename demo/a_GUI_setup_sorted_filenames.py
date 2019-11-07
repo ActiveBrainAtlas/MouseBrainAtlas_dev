@@ -345,7 +345,7 @@ class init_GUI(QWidget):
             img = np.zeros((100,150))
             img = np.array(img, dtype=np.uint8)
         
-            height, width, channel = img.shape
+            height, width = img.shape
             bytesPerLine = 3 * width
             qImg = QImage(img.data, width, height, bytesPerLine, QImage.Format_RGB888)
 
