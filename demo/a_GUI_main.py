@@ -186,6 +186,8 @@ class init_GUI(QWidget):
         
         # Center the GUI
         self.center()
+        
+        self.cb.addItems( 'testtesttest' )
     
     def updateFields(self):
         # Get dropdown selection
