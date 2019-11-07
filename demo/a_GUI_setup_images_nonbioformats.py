@@ -206,8 +206,8 @@ class init_GUI(QWidget):
         sys.exit( app.exec_() )
         
     def finished(self):
-        if self.filepath_sfns != "":
-            set_step_completed_in_progress_ini( stack, '1-4_setup_sorted_filenames')
+        #if self.filepath_sfns != "":
+            #set_step_completed_in_progress_ini( stack, '1-4_setup_sorted_filenames')
         
         subprocess.call( ['python', 'a_script_preprocess_setup.py', stack, 'unknown'] )
         

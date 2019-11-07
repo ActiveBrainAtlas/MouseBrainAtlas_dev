@@ -297,7 +297,7 @@ You can choose to convert just the selected file, or all files in its folder usi
                 pass
             
             subprocess.call(['cp', fp, destination_fp])
-            set_step_completed_in_progress_ini( stack, '1-4_setup_sorted_filenames')
+            #set_step_completed_in_progress_ini( stack, '1-4_setup_sorted_filenames')
             
             
         # Button: "Convert CZI File(s) to TIFF"

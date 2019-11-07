@@ -205,11 +205,30 @@ class init_GUI(QWidget):
             self.curr_step = get_current_step_from_progress_ini( self.stack )
             # Disable all grid buttons except for the one corresponding to our current step
             self.format_grid_buttons()
+            # Update the dropdown stack list in case there's a new stack
+            self.updateStackDropdownMenu()
+            
         # If there are no stacks/brains that have been started
         except KeyError:
             for grid_button in [self.b_setup, self.b_align, self.b_mask, self.b_crop, 
                             self.b_globalFit, self.b_localFit]:
                 format_grid_button_cantStart( grid_button )
+    
+    def updateStackDropdownMenu(self):
+        new_stacks = []
+        if os.path.exists( BRAINS_INFO_DIR ):
+            for brain_ini in os.listdir( BRAINS_INFO_DIR ):
+                # Two kinds of brain_ini files: 'progress' and 'metadata'
+                if 'progress' in brain_ini:
+                    continue
+
+                brain_name = os.path.splitext(brain_ini)[0].replace('_metadata', '')
+                if brain_name in all_stacks:
+                    continue
+                # Add a brain to "new_stack" list if it is found and is not a part of "all_stacks"
+                new_stacks.append( brain_name )
+        if not new_stacks==[]:    
+            self.cb.addItems( new_stacks )
         
     def format_grid_buttons(self):
         """
@@ -343,12 +362,6 @@ and all local alignment scripts will be run. This will take a long time.")
         
     def mouseMoveEvent(self, event):
         self.updateFields()
-        
-    def focusInEvent(self, event):
-        print('Got focus')
-
-    def focusOutEvent(self, event):
-        print('Lost focus')
         
     def closeEvent(self, event):
         #close_main_gui( app, reopen=True )
