@@ -618,7 +618,7 @@ def main():
             #Simulate a user's keypress because otherwise the autozoom is weird
             #ex.keyPressEvent(91)
             not_loading_curr_sfns = True
-            sys.exit( app.exec_() )
+            #sys.exit( app.exec_() )
         # Yes
         elif ret==2:
             # Load in information on current sorted_filenames
