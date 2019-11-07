@@ -487,10 +487,9 @@ class init_GUI(QWidget):
             self.sections_to_filenames = new_sections_to_filenames
             self.valid_sections = self.sections_to_filenames.keys()
             
+            # Go back a section if you deleted the last section
             if int(self.curr_section)==len(self.valid_sections):
                 self.curr_section = self.curr_section-1
-                # Go back a section if you deleted the last section
-                self.keyPressEvent(91)
             
     def insertPlaceholder(self):
         new_sections_to_filenames = {}
