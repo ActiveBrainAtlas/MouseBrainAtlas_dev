@@ -325,8 +325,9 @@ class init_GUI(QWidget):
     
     def load_sorted_filenames(self):
         print stack
-        self.valid_sections = metadata_cache['valid_sections_all'][stack]
+        #self.valid_sections = metadata_cache['valid_sections_all'][stack]
         self.sections_to_filenames = metadata_cache['sections_to_filenames'][stack]
+        self.valid_sections = self.sections_to_filenames.keys()
         self.curr_section = self.valid_sections[ len(self.valid_sections)/2 ]
         self.prev_section = self.getPrevValidSection( self.curr_section )
         self.next_section = self.getNextValidSection( self.curr_section )
@@ -613,12 +614,8 @@ def main():
             return None
         # No
         elif ret==1:
-            # Run GUI as usual
-            #ex.show()
-            #Simulate a user's keypress because otherwise the autozoom is weird
-            #ex.keyPressEvent(91)
+            # Ask the user if they want to load one that already exists
             not_loading_curr_sfns = True
-            #sys.exit( app.exec_() )
         # Yes
         elif ret==2:
             # Load in information on current sorted_filenames
