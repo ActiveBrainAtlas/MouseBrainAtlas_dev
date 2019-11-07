@@ -488,6 +488,7 @@ class init_GUI(QWidget):
             self.valid_sections = self.sections_to_filenames.keys()
             
             if int(self.curr_section)==len(self.valid_sections):
+                self.curr_section = self.curr_section-1
                 # Go back a section if you deleted the last section
                 self.keyPressEvent(91)
             
