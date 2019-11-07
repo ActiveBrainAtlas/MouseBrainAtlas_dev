@@ -344,6 +344,12 @@ and all local alignment scripts will be run. This will take a long time.")
     def mouseMoveEvent(self, event):
         self.updateFields()
         
+    def focusInEvent(self, event):
+        print('Got focus')
+
+    def focusOutEvent(self, event):
+        print('Lost focus')
+        
     def closeEvent(self, event):
         #close_main_gui( app, reopen=True )
         sys.exit( app.exec_() )
