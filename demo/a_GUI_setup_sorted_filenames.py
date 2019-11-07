@@ -546,6 +546,9 @@ def write_results_to_sorted_filenames( sections_to_filenames, fn_to_quality ):
         - blurry: Write to a special file meant to be used until intra-stack alignment, ignored after
     """
     
+    first_section = min( sections_to_filenames.keys() )
+    offset = 1-first_section 
+    
     sfns_text = ""
     sfns_till_alignment_text = ""
     for section, fn in sections_to_filenames.items():
@@ -556,7 +559,7 @@ def write_results_to_sorted_filenames( sections_to_filenames, fn_to_quality ):
             quality = fn_to_quality[fn]
         
         # section_str is the section encoded as a string, padded with zeros
-        section_str = str(section+1).zfill(3)
+        section_str = str(section+offset).zfill(3)
         
         # If section is marked "unusable"
         if quality == 'unusable':
@@ -680,6 +683,8 @@ def validate_sorted_filenames( fp ):
         return False, "Error: A section name appears multiple times"
     if len(section_numbers) != len(set(section_numbers)):
         return False, "Error: A section number appears multiple times"
+    if len(section_numbers) != len(section_names):
+        return False, "Error: Every Section name must have a corresponding section number"
     
     return True, ""
 
