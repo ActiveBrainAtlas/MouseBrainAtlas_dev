@@ -236,7 +236,8 @@ class init_GUI(QWidget):
                 
         if not new_stacks==[]:
             self.cb.clear( )
-            self.cb.addItems( QstringList(all_stacks + new_stacks) )
+            #self.cb.addItems( QstringList(all_stacks + new_stacks) )
+            self.cb.addItems( all_stacks + new_stacks )
         
     def format_grid_buttons(self):
         """
