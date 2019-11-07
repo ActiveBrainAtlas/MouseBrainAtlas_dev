@@ -187,8 +187,9 @@ class init_GUI(QWidget):
         # Center the GUI
         self.center()
         
-        self.cb.addItems( 'testtesttest' )
-    
+        self.cb.clear( )
+        self.cb.addItems( [all_stacks,'testestetestst'] )
+            
     def updateFields(self):
         # Get dropdown selection
         dropdown_selection = self.cb.currentText()
@@ -229,8 +230,10 @@ class init_GUI(QWidget):
                     continue
                 # Add a brain to "new_stack" list if it is found and is not a part of "all_stacks"
                 new_stacks.append( brain_name )
+                
         if not new_stacks==[]:
-            self.cb.addItems( new_stacks )
+            self.cb.clear( )
+            self.cb.addItems( [all_stacks,new_stacks] )
         
     def format_grid_buttons(self):
         """
