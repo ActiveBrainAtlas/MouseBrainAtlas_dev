@@ -342,7 +342,8 @@ class init_GUI(QWidget):
         
         if curr_fn == 'Placeholder':
             # Set a blank image if it is a placeholder
-            img = np.zeros(100,150, dtype=np.uint8)
+            img = np.zeros(100,150)
+            img = np.array(img, dtype=np.uint8)
         
             height, width, channel = img.shape
             bytesPerLine = 3 * width
