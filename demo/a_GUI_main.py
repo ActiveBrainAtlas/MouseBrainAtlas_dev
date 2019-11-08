@@ -108,6 +108,11 @@ class init_GUI(QWidget):
         self.e3.setText( "" )
         self.e3.setFrame( False )
         self.grid_top.addWidget( self.e3, 0, 3)
+        # Button Text Field
+        self.b_refresh = QPushButton("Refresh")
+        self.b_refresh.setDefault(True)
+        self.b_refresh.clicked.connect(lambda:self.button_push(self.b_refresh))
+        self.grid_top.addWidget(self.b_refresh, 0, 4)
 
         ### Grid Buttons ###
         # Button
@@ -354,6 +359,8 @@ and all local alignment scripts will be run. This will take a long time.")
             pass
         elif button == self.b_newBrain:
             subprocess.call(['python','a_GUI_setup_newBrainMetadata.py'])
+        elif button == self.b_refresh:
+            self.updateFields()
      
     def center(self):
         """
