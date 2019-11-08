@@ -11,7 +11,7 @@ The preprocessing stage of the code can be broken down into the following 7-8 st
 6) [While-Slice Brain Crop](#whole-slice-crop)
 7) [Brainstem Crop](#brainstem-crop)
 
-### Processing (Local or Cloud)
+### Processing (Local or Butt)
 0) [Simple Global Alignment](#optional-obtain-a-simple-global-alignment)
 1) [Generate intensity volume](#generate-intensity-volume)
 2) [Compute Patch Features](#compute-patch-features)
@@ -111,6 +111,11 @@ A download script is then used to download from S3 the full set of outputs that 
 Draw initial snake contours.
 	- Output:
 	```
+	DATA_ROOTDIR/
+	└── CSHL_data_processed
+	    └── STACK
+	    	├── STACK_prep1_thumbnail_initSnakeContours.pkl
+		└── STACK_prep1_thumbnail_anchorInitSnakeContours.pkl
 	```
 - Create `input_spec.ini` as (alignedPadded,NtbNormalized,thumbnail). `python masking.py input_spec.ini demo_data/CSHL_data_processed/STACK/STACK_prep1_thumbnail_initSnakeContours.pkl`
 	- Output:
