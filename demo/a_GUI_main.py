@@ -112,7 +112,7 @@ class init_GUI(QWidget):
         self.b_refresh = QPushButton("Refresh")
         self.b_refresh.setDefault(True)
         self.b_refresh.clicked.connect(lambda:self.button_push(self.b_refresh))
-        self.grid_top.addWidget(self.b_refresh, 0, 4)
+        self.grid_top.addWidget( self.b_refresh, 0, 4)
 
         ### Grid Buttons ###
         # Button

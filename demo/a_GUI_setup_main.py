@@ -230,9 +230,16 @@ class init_GUI(QWidget):
                 subprocess.call(['python','a_script_preprocess_1.py', self.stack, self.stain])
                 subprocess.call(['python','a_script_preprocess_2.py', self.stack, self.stain])
                 
+                time.sleep(5)
                 pipeline_status = get_pipeline_status( self.stack )
                 if not 'preprocess_1' in pipeline_status and \
                    not 'preprocess_2' in pipeline_status and not 'setup' in pipeline_status:
+                    set_step_completed_in_progress_ini( self.stack, '1-6_setup_scripts')
+                    sys.exit( app.exec_() )
+                    
+                time.sleep(1)
+                pipeline_status = get_pipeline_status( self.stack )
+                if pipeline_status == 'a_script_preprocess_3':
                     set_step_completed_in_progress_ini( self.stack, '1-6_setup_scripts')
                     sys.exit( app.exec_() )
                 #else:

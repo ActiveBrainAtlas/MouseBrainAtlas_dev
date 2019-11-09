@@ -626,6 +626,7 @@ def main():
             ex.show()
             #Simulate a user's keypress because otherwise the autozoom is weird
             ex.keyPressEvent(91)
+            #set_step_completed_in_progress_ini( stack, '1-4_setup_sorted_filenames')
             sys.exit( app.exec_() )
     # If sorted_filenames does NOT exist, we must make a new one
     if (not sfns_already_exists) or (not_loading_curr_sfns):
