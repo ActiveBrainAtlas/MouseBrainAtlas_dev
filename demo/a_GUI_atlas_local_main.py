@@ -125,7 +125,7 @@ class init_GUI(QWidget):
         
         # Dropbown Menu (ComboBox) for selecting Structure
         self.dd1 = QComboBox()
-        self.dd1.addItems( ['ALL', structures_sided_sorted_by_rostral_caudal_position] )
+        self.dd1.addItems( ['ALL'] + structures_sided_sorted_by_rostral_caudal_position )
         self.dd1.setFont( self.font1 )
         self.dd1.currentIndexChanged.connect( self.dd1_selection )
         self.dd1.setEnabled(False)
