@@ -32,7 +32,7 @@ class init_GUI(QWidget):
 
         # Stack specific info, determined from dropdown menu selection
         self.stack = stack
-        self.stain = stack_metadata[stack]
+        self.stain = stack_metadata[stack]['stain']
         self.detector_id = ""
         self.img_version_1 = ""
         self.img_version_2 = ""
