@@ -176,7 +176,7 @@ class init_GUI(QWidget):
         print selected_detector
         
         # Set stack-specific variables
-        self.stack = dropdown_selection_str
+        #self.stack = dropdown_selection_str
         self.stain = stack_metadata[ self.stack ]['stain']
         self.detector_id = stain_to_metainfo[ self.stain.lower() ]['detector_id']
         self.img_version_1 = stain_to_metainfo[ self.stain.lower() ]['img_version_1']
