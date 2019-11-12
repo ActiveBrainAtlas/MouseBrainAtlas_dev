@@ -132,6 +132,7 @@ class init_GUI(QWidget):
         self.grid_rightCol.addWidget(self.dd1, 0, 0)
         # Dropbown Menu (ComboBox) for selecting Detector ID
         self.dd2 = QComboBox()
+        print(detector_settings.to_dict()['comments'].keys())
         self.dd2.addItems( detector_settings.to_dict()['comments'].keys() )
         self.dd2.setFont( self.font1 )
         self.dd2.currentIndexChanged.connect( self.dd2_selection )
