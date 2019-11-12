@@ -170,7 +170,8 @@ class init_GUI(QWidget):
     def updateFields(self):
         # Get dropdown selection
         selected_structure = str( self.dd1.currentText() )
-        selected_detector = int( self.dd2.toUtf8() )
+        selected_detector = int( self.dd2.currentText() )
+        #selected_detector = int( self.dd2.toUtf8() )
         print selected_structure
         print selected_detector
         
