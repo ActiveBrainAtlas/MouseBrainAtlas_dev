@@ -243,15 +243,15 @@ class init_GUI(QWidget):
                                        prep_id='alignedBrainstemCrop', \
                                        version=self.img_version_2,\
                                        resol='raw')
-            command = [ 'python', 'demo_compute_features_v2.py', 'input_spec.ini','--win_id', self.win_id]
+            command = [ 'python', 'demo_compute_features_v2.py', 'input_spec.ini','--win_id', str(self.win_id)]
             completion_message = 'Finished generating patch features.'
             call_and_time( command, completion_message=completion_message)
         elif button == self.b_prob_vols:
             # Generate Probability Volumes
             if self.chosen_structure=='ALL':
-                command = [ 'python', 'generate_prob_volumes.py', stack, id_detector, img_version]
+                command = [ 'python', 'generate_prob_volumes.py', self.stack, str(self.detector_id), str(self.img_version_2)]
             else:
-                command = [ 'python', 'generate_prob_volumes.py', stack, id_detector, img_version, '-s', '[\"'+self.chosen_structure+'\"]']
+                command = [ 'python', 'generate_prob_volumes.py', self.stack, str(self.detector_id), str(self.img_version_2), '-s', '[\"'+self.chosen_structure+'\"]']
             completion_message = 'Finished generating probability volumes.'
             call_and_time( command, completion_message=completion_message)
         elif button == self.b_registration:
