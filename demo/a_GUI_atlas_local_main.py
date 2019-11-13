@@ -241,7 +241,7 @@ class init_GUI(QWidget):
             create_input_spec_ini_all( name='input_spec.ini', 
                                        stack=self.stack, \
                                        prep_id='alignedBrainstemCrop', \
-                                       version=img_version,\
+                                       version=self.img_version_2,\
                                        resol='raw')
             command = [ 'python', 'demo_compute_features_v2.py', 'input_spec.ini','--win_id', self.win_id]
             completion_message = 'Finished generating patch features.'
