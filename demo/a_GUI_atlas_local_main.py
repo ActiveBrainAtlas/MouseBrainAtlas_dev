@@ -24,6 +24,32 @@ parser.add_argument("stack", type=str, help="stack name")
 args = parser.parse_args()
 stack = args.stack
 
+def format_grid_button_initial( button ):
+    button.setDefault( True )
+    button.setEnabled(True)
+    button.setStyleSheet('QPushButton { \
+                          background-color: #FDB0B0; \
+                          color: black; \
+                          border-radius: 15px; \
+                          font-size: 26px;}')
+    button.setMinimumSize(QSize(150, 150))
+    
+def format_grid_button_cantStart( button ):
+    button.setEnabled(False)
+    button.setStyleSheet('QPushButton { \
+                          background-color: #868686; \
+                          color: black; \
+                          border-radius: 15px; \
+                          font-size: 26px;}')
+
+def format_grid_button_completed( button ):
+    button.setEnabled(False)
+    button.setStyleSheet('QPushButton { \
+                          background-color: #B69696; \
+                          color: black; \
+                          border-radius: 15px; \
+                          font-size: 26px;}')
+
 class init_GUI(QWidget):
     def __init__(self, parent = None):
         super(init_GUI, self).__init__(parent)
@@ -44,9 +70,7 @@ class init_GUI(QWidget):
     def initUI(self):
         # Set Layout and Geometry of Window
         self.grid_top = QGridLayout()
-        self.grid_leftCol = QGridLayout()
-        self.grid_rightCol = QGridLayout()
-        self.grid_textField = QGridLayout()
+        self.grid_body = QGridLayout()
         self.grid_bottom = QGridLayout()
         
         #self.setFixedSize(1000, 500)
@@ -118,7 +142,7 @@ class init_GUI(QWidget):
         self.dd1.setFont( self.font1 )
         self.dd1.currentIndexChanged.connect( self.dd1_selection )
         self.dd1.setEnabled(True)
-        self.grid_top.addWidget(self.dd1, 1, 30)
+        self.grid_top.addWidget(self.dd1, 1, 3)
         # Dropbown Menu (ComboBox) for selecting Detector ID
         self.dd2 = QComboBox()
         self.dd2.addItems( map(str, detector_settings.to_dict()['comments'].keys()) )
@@ -127,16 +151,33 @@ class init_GUI(QWidget):
         self.dd2.setEnabled(True)
         self.grid_top.addWidget(self.dd2, 1, 1)
         
+        ### Grid Body ###
+        # Button
+        self.b_patch_features = QPushButton("Patch Features")
+        format_grid_button_initial( self.b_patch_features )
+        self.b_patch_features.clicked.connect( lambda:self.buttonPress(self.b_patch_features) )
+        self.grid_body.addWidget( self.b_patch_features, 0, 0)
+        # Button
+        self.b_prob_vols = QPushButton("Generate Probability Volumes")
+        format_grid_button_initial( self.b_prob_vols )
+        self.b_prob_vols.clicked.connect( lambda:self.buttonPress(self.b_prob_vols) )
+        self.grid_body.addWidget( self.b_prob_vols, 1, 0)
+        # Button
+        self.b_registration = QPushButton("Registration")
+        format_grid_button_initial( self.b_registration )
+        self.b_registration.clicked.connect( lambda:self.buttonPress(self.b_registration) )
+        self.grid_body.addWidget( self.b_registration, 2, 0)
+        
         ### Grid Bottom ###
         # Button Text Field
-        self.bR = QPushButton("Run")
-        self.bR.setDefault(True)
-        self.bR.clicked.connect(lambda:self.buttonPressRunCommand(self.bR))
-        self.grid_bottom.addWidget(self.bR, 0, 1)
+        #self.bR = QPushButton("Run")
+        #self.bR.setDefault(True)
+        #self.bR.clicked.connect(lambda:self.buttonPress(self.bR))
+        #self.grid_bottom.addWidget(self.bR, 0, 1)
         # Button Text Field
         self.bZ = QPushButton("Exit")
         self.bZ.setDefault(True)
-        self.bZ.clicked.connect(lambda:self.buttonPressFinished(self.bZ))
+        self.bZ.clicked.connect(lambda:self.buttonPress(self.bZ))
         self.grid_bottom.addWidget(self.bZ, 0, 2)
 
         #self.grid_buttons.setColumnStretch(1, 3)
@@ -145,8 +186,7 @@ class init_GUI(QWidget):
         ### SUPERGRID ###
         self.supergrid = QGridLayout()
         self.supergrid.addLayout( self.grid_top, 0, 0)
-        self.supergrid.addLayout( self.grid_leftCol, 1, 0)
-        self.supergrid.addLayout( self.grid_rightCol, 1, 1)
+        self.supergrid.addLayout( self.grid_body, 1, 0)
         self.supergrid.addLayout( self.grid_bottom, 2, 0)
 
         # Set layout and window title
@@ -193,6 +233,12 @@ class init_GUI(QWidget):
     def buttonPress(self, button):
         if button == self.bZ:
             close_gui()
+        elif button == self.b_patch_features:
+            pass
+        elif button == self.b_prob_vols:
+            pass
+        elif button == self.b_registration:
+            pass
             
     def closeEvent(self, event):
         close_gui()
