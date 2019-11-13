@@ -93,50 +93,39 @@ class init_GUI(QWidget):
         self.e4.setFrame( False )
         self.grid_top.addWidget( self.e4, 0, 3)
         
-        ### Grid Column Left ###
+        ### Grid Top ###
         # Static Text Field
         self.e5 = QLineEdit()
         self.e5.setValidator( QIntValidator() )
         self.e5.setAlignment(Qt.AlignLeft)
         self.e5.setFont( self.font1 )
         self.e5.setReadOnly( True )
-        self.e5.setText( "Structure to run:" )
+        self.e5.setText( "Structure:" )
         self.e5.setFrame( False )
-        self.grid_leftCol.addWidget( self.e5, 0, 0)
+        self.grid_top.addWidget( self.e5, 1, 2)
         # Static Text Field
         self.e6 = QLineEdit()
         self.e6.setValidator( QIntValidator() )
         self.e6.setAlignment(Qt.AlignLeft)
         self.e6.setFont( self.font1 )
         self.e6.setReadOnly( True )
-        self.e6.setText( "Detector ID number:" )
+        self.e6.setText( "Detector-ID:" )
         self.e6.setFrame( False )
-        self.grid_leftCol.addWidget( self.e6, 1, 0)
-        # Static Text Field
-        self.e7 = QLineEdit()
-        self.e7.setValidator( QIntValidator() )
-        self.e7.setAlignment(Qt.AlignLeft)
-        self.e7.setFont( self.font1 )
-        self.e7.setReadOnly( True )
-        self.e7.setText( "" )
-        self.e7.setFrame( False )
-        self.grid_leftCol.addWidget( self.e7, 2, 0)
-        
-        
+        self.grid_top.addWidget( self.e6, 1, 0)
         # Dropbown Menu (ComboBox) for selecting Structure
         self.dd1 = QComboBox()
         self.dd1.addItems( ['ALL'] + structures_sided_sorted_by_rostral_caudal_position )
         self.dd1.setFont( self.font1 )
         self.dd1.currentIndexChanged.connect( self.dd1_selection )
-        self.dd1.setEnabled(False)
-        self.grid_rightCol.addWidget(self.dd1, 0, 0)
+        self.dd1.setEnabled(True)
+        self.grid_top.addWidget(self.dd1, 1, 30)
         # Dropbown Menu (ComboBox) for selecting Detector ID
         self.dd2 = QComboBox()
         self.dd2.addItems( map(str, detector_settings.to_dict()['comments'].keys()) )
         self.dd2.setFont( self.font1 )
         self.dd2.currentIndexChanged.connect( self.dd2_selection )
-        self.dd2.setEnabled(False)
-        self.grid_rightCol.addWidget(self.dd2, 1, 0)
+        self.dd2.setEnabled(True)
+        self.grid_top.addWidget(self.dd2, 1, 1)
         
         ### Grid Bottom ###
         # Button Text Field
