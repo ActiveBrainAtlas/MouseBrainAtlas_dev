@@ -32,7 +32,7 @@ def format_grid_button_initial( button ):
                           color: black; \
                           border-radius: 15px; \
                           font-size: 26px;}')
-    button.setMinimumSize(QSize(150, 50))
+    button.setMinimumSize(QSize(50, 40))
     
 def format_grid_button_cantStart( button ):
     button.setEnabled(False)
@@ -234,9 +234,20 @@ class init_GUI(QWidget):
         if button == self.bZ:
             close_gui()
         elif button == self.b_patch_features:
-            pass
+            # Compute patch features
+            create_input_spec_ini_all( name='input_spec.ini', stack=stack, \
+                                       prep_id='alignedBrainstemCrop', \
+                                       version=img_version,\
+                                       resol='raw')
+            command = [ 'python', 'demo_compute_features_v2.py', 'input_spec.ini','--win_id','7']
+            completion_message = 'Finished generating patch features.'
+            call_and_time( command, completion_message=completion_message)
         elif button == self.b_prob_vols:
-            pass
+            # Generate Probability Volumes
+            command = [ 'python', 'generate_prob_volumes.py', stack, id_detector, img_version]
+            #command = [ 'python', 'generate_prob_volumes.py', stack, id_detector, img_version, '-s', "[\"SNR\"]"]
+            completion_message = 'Finished generating probability volumes.'
+            call_and_time( command, completion_message=completion_message)
         elif button == self.b_registration:
             pass
             

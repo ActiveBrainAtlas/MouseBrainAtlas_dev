@@ -9,12 +9,10 @@ parser = argparse.ArgumentParser(
 parser.add_argument("stack", type=str, help="The name of the stack")
 parser.add_argument("stain", type=str, help="Either \'NTB\' or \'Thionin\'.")
 parser.add_argument("id_detector", type=str, help="A number indicating the detector settings you want.")
-parser.add_argument('--structure', default="ALL", type=str)
 args = parser.parse_args()
 stack = args.stack
 stain = args.stain
 id_detector = args.id_detector
-structure = args.structure
 
 # Import other modules and packages
 import os
@@ -31,16 +29,11 @@ from annotation_utilities import *
 from data_manager_v2 import DataManager
 from a_driver_utilities import *
 
-win_id = detector_settings.to_dict()['windowing_id'][int(id_detector)]
 
 if stain == 'NTB':
     img_version = 'NtbNormalizedAdaptiveInvertedGamma'
 if stain == 'Thionin':
     img_version = 'gray'
-    
-if structure=='ALL':
-    structure_list = structures_sided_sorted_by_rostral_caudal_position
-    structure_list_unsided = structures_unsided_sorted_by_rostral_caudal_position
     
 
 # Compute patch features
@@ -48,7 +41,7 @@ create_input_spec_ini_all( name='input_spec.ini', stack=stack, \
                            prep_id='alignedBrainstemCrop', \
                            version=img_version,\
                            resol='raw')
-command = [ 'python', 'demo_compute_features_v2.py', 'input_spec.ini','--win_id',str(win_id)]
+command = [ 'python', 'demo_compute_features_v2.py', 'input_spec.ini','--win_id','7']
 completion_message = 'Finished generating patch features.'
 call_and_time( command, completion_message=completion_message)
 
