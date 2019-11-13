@@ -831,6 +831,13 @@ def extract_patches_given_locations(patch_size,
         
         stain = stack_metadata[stack]['stain']
         version = stain_to_metainfo[stain.lower()]['img_version_2']
+        
+        if stain.lower()=='ntb':
+            is_thionin = False
+        elif stain.lower()=='thionin':
+            is_thionin = True
+        else:
+            sys.stderr.write('Unknown stain: '+stain)
 
         if is_thionin is None:
             if stain == 'Thionin':
