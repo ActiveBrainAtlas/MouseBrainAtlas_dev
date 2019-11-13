@@ -32,7 +32,7 @@ def format_grid_button_initial( button ):
                           color: black; \
                           border-radius: 15px; \
                           font-size: 26px;}')
-    button.setMinimumSize(QSize(150, 150))
+    button.setMinimumSize(QSize(150, 50))
     
 def format_grid_button_cantStart( button ):
     button.setEnabled(False)
