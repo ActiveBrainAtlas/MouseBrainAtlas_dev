@@ -62,6 +62,8 @@ class init_GUI(QWidget):
         self.detector_id = ""
         self.img_version_1 = ""
         self.img_version_2 = ""
+        self.chosen_structure = ""
+        self.win_id = -1
         
         self.curr_script_name = ""
         
@@ -207,10 +209,11 @@ class init_GUI(QWidget):
         # Set stack-specific variables
         #self.stack = dropdown_selection_str
         self.stain = stack_metadata[ self.stack ]['stain']
-        #self.detector_id = stain_to_metainfo[ self.stain.lower() ]['detector_id']
         self.detector_id = selected_detector
         self.img_version_1 = stain_to_metainfo[ self.stain.lower() ]['img_version_1']
         self.img_version_2 = stain_to_metainfo[ self.stain.lower() ]['img_version_1']
+        self.chosen_structure = selected_structure
+        self.win_id = detector_settings.loc[ self.detector_id ]['windowing_id']
         
         self.updatePipelineStatus( )
 
@@ -235,17 +238,20 @@ class init_GUI(QWidget):
             close_gui()
         elif button == self.b_patch_features:
             # Compute patch features
-            create_input_spec_ini_all( name='input_spec.ini', stack=stack, \
+            create_input_spec_ini_all( name='input_spec.ini', 
+                                       stack=self.stack, \
                                        prep_id='alignedBrainstemCrop', \
                                        version=img_version,\
                                        resol='raw')
-            command = [ 'python', 'demo_compute_features_v2.py', 'input_spec.ini','--win_id','7']
+            command = [ 'python', 'demo_compute_features_v2.py', 'input_spec.ini','--win_id', self.win_id]
             completion_message = 'Finished generating patch features.'
             call_and_time( command, completion_message=completion_message)
         elif button == self.b_prob_vols:
             # Generate Probability Volumes
-            command = [ 'python', 'generate_prob_volumes.py', stack, id_detector, img_version]
-            #command = [ 'python', 'generate_prob_volumes.py', stack, id_detector, img_version, '-s', "[\"SNR\"]"]
+            if self.chosen_structure=='ALL':
+                command = [ 'python', 'generate_prob_volumes.py', stack, id_detector, img_version]
+            else:
+                command = [ 'python', 'generate_prob_volumes.py', stack, id_detector, img_version, '-s', '[\"'+self.chosen_structure+'\"]']
             completion_message = 'Finished generating probability volumes.'
             call_and_time( command, completion_message=completion_message)
         elif button == self.b_registration:
