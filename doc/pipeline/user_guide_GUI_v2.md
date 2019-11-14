@@ -10,7 +10,9 @@ Running the Docker will automatically open the GUI interface, rendering the firs
 
 Using the Docker terminal Ensure you are in the "demo" folder of this repository on your computer, if you are not then use the "cd" command to navigate to the demo folder.
 
-Run the following command to start up the GUI interface: `python a_GUI_main.py`
+How will you know if you are in the Docker? The Docker's terminal will look like any other terminal, however at the start it will say "root@atlasDocker" if it is not running any GUIs. You can close all of the GUIs and check this at any time.
+
+To update the code and rerun the pipeline from the main page, run the following command after closing out of all of the GUI windows: `python a_GUI_main.py`
 
 ### How to run the GUIs
 
