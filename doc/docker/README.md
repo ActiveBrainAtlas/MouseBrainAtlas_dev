@@ -14,7 +14,7 @@ Here is an example of a good DATA_DIRECTORY: `/media/john/external_drive_1/atlas
 
 ## Download the initial script
 
-Enter in the multiline command below into your linux terminal while you are logged into your user account (you can copy and paste the entire chunk). It will create a directory called "atlas_docker_demo" in your home folder and copy the shell script "run_docker.sh" into it.
+Open a new terminal window. Enter in the commands below into your terminal while you are logged into your user account and push enter after each line. It will create a directory called "atlas_docker_demo" in your home folder and copy the shell script "run_docker.sh" into it.
 
 __Command 1:__
 
