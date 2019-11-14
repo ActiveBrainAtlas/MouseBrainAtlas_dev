@@ -40,7 +40,13 @@ stack = args.stack
     
 # Assume we have the sorted_filenames file. Load images a different way
 if os.path.exists( DataManager.get_sorted_filenames_filename(stack=stack) ):
-    section_to_fn_sfns = metadata_cache['sections_to_filenames'][stack]
+    try:
+        section_to_fn_sfns = metadata_cache['sections_to_filenames'][stack]
+    except Exception as e:
+        print('\n********************************************************\n')
+        print('Sorted Filenames appears to have issues')
+        print('Please go back a step and ensure it is formatted properly')
+        print('\n********************************************************\n')
     section_to_fn = {}
     for sec in section_to_fn_sfns.keys():
         if section_to_fn_sfns[sec]=='Placeholder':
