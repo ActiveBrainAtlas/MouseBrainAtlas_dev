@@ -25,7 +25,7 @@ Throughout this document there are a few shorthand representations for various e
 - List of abbreviations:
 	- `STACK`: The name of the stack you are running through the pipeline.
 		- example: 'MD585'
-	- `SLICE`: The name of an individual slice in the stack. Varies 
+	- `SECTION`: The name of an individual slice in the stack. Varies 
 		- example: 'slide074_2018_09_04-S3'
 	- `STR`: The name of any one of the 28 structures in the brainstem.
 		- example: '5N'
@@ -70,7 +70,7 @@ A download script is then used to download from S3 the full set of outputs that 
 	```
 	DATA_ROOTDIR/
         └── STACK_thumbnail_NtbNormalized
-            └── SLICE_thumbnail_NtbNormalized.tif
+            └── SECTION_thumbnail_NtbNormalized.tif
 	```
 
 ### Intra-stack align
@@ -83,7 +83,7 @@ A download script is then used to download from S3 the full set of outputs that 
 	└── CSHL_data_processed
 	    └── STACK
 		├── STACK_elastix_output
-		│   └── SLICE1_to_SLICE2
+		│   └── SECTION1_to_SECTION2
 		│       ├── elastix.log
 		│       ├── IterationInfo.0.R0.txt
 		│       ├── IterationInfo.0.R1.txt
@@ -102,7 +102,7 @@ A download script is then used to download from S3 the full set of outputs that 
 	└── CSHL_data_processed
 	    └── STACK
 		└── STACK_prep1_thumbnail_NtbNormalized
-		    └── SLICE_prep1_thumbnail_NtbNormalized.tif
+		    └── SECTION_prep1_thumbnail_NtbNormalized.tif
 	```
 - **(HUMAN)** Inspect aligned images using preprocessGUI `preprocess_tool_v3.py`, correct pairwise transforms and check each image's order in stack. `python preprocess_tool_v3.py STACK --tb_version NtbNormalized`
 
@@ -124,9 +124,9 @@ Draw initial snake contours.
 	└── CSHL_data_processed
 	    └── STACK
 		└── STACK_prep1_thumbnail_autoSubmasks
-		    └── SLICE
-			├── SLICE_prep1_thumbnail_autoSubmask_0.png
-			└── SLICE_prep1_thumbnail_autoSubmaskDecisions.csv
+		    └── SECTION
+			├── SECTION_prep1_thumbnail_autoSubmask_0.png
+			└── SECTION_prep1_thumbnail_autoSubmaskDecisions.csv
 	```
 - **(HUMAN)** Return to masking GUI to inspect and correct the automatically generated masks.
 	- Output after correcting masks & exporting as PNG:
@@ -135,11 +135,11 @@ Draw initial snake contours.
 	└── CSHL_data_processed
 	    └── STACK
 		└── STACK_prep1_thumbnail_userModifiedSubmasks
-		    └── SLICE
-			├── SLICE_prep1_thumbnail_userModifiedParameters.json
-			├── SLICE_prep1_thumbnail_userModifiedSubmask_0.png
-			├── SLICE_prep1_thumbnail_userModifiedSubmaskContourVertices.pkl
-			└── SLICE_prep1_thumbnail_userModifiedSubmaskDecisions.csv
+		    └── SECTION
+			├── SECTION_prep1_thumbnail_userModifiedParameters.json
+			├── SECTION_prep1_thumbnail_userModifiedSubmask_0.png
+			├── SECTION_prep1_thumbnail_userModifiedSubmaskContourVertices.pkl
+			└── SECTION_prep1_thumbnail_userModifiedSubmaskDecisions.csv
 	```
 - Create `input_spec.ini` as (None,NtbNormalized,thumbnail). `python generate_original_image_crop_csv.py --input_spec input_spec.ini`. This creates `DEMO998_original_image_crop.csv` under data dir. In this file each row is x,y,width,height in thumbnail resolution.
 	- Output:
@@ -148,8 +148,8 @@ Draw initial snake contours.
 	└── CSHL_data_processed
 	    └── STACK
 		└── STACK_prep1_thumbnail_masks
-		    └── SLICE
-			└── SLICE_prep1_thumbnail_mask.png
+		    └── SECTION
+			└── SECTION_prep1_thumbnail_mask.png
 	```
 - Create `input_spec.ini` as (alignedPadded,mask,thumbnail). Copy template `from_padded_to_none.ini`. Copy and modify operation `crop_orig.ini`. `python warp_crop.py --input_spec input_spec.ini --op_id from_padded_to_none`.
 	- Output:
@@ -158,7 +158,7 @@ Draw initial snake contours.
 	└── CSHL_data_processed
 	    └── STACK
 		└── STACK_thumbnail_mask
-		    └── SLICE_thumbnail_mask.png
+		    └── SECTION_thumbnail_mask.png
 	```
  
 ### Local adaptive intensity normalization
@@ -169,17 +169,17 @@ Draw initial snake contours.
 	└── CSHL_data_processed
 		└── STACK_intensity_normalization_results
 		    ├── floatHistogram
-		    │   └── SLICE_raw_floatHistogram.png
+		    │   └── SECTION_raw_floatHistogram.png
 		    ├── meanMap
-		    │   └── SLICE_raw_meanMap.bp
+		    │   └── SECTION_raw_meanMap.bp
 		    ├── meanStdAllRegions
-		    │   └── SLICE_raw_meanStdAllRegions.bp
+		    │   └── SECTION_raw_meanStdAllRegions.bp
 		    ├── normalizedFloatMap
-		    │   └── SLICE_raw_normalizedFloatMap.bp
+		    │   └── SECTION_raw_normalizedFloatMap.bp
 		    ├── regionCenters
-		    │   └── SLICE_raw_regionCenters.bp
+		    │   └── SECTION_raw_regionCenters.bp
 		    └── stdMap
-			└── SLICE_raw_stdMap.bp
+			└── SECTION_raw_stdMap.bp
 	```
 
 ### Whole-slice crop
@@ -193,7 +193,7 @@ Draw initial snake contours.
 	DATA_ROOTDIR/
 	└── CSHL_data_processed
 		└── STACK_prep5_raw_NtbNormalizedAdaptiveInvertedGamma
-		    └── SLICE_prep5_raw_NtbNormalizedAdaptiveInvertedGamma.tif
+		    └── SECTION_prep5_raw_NtbNormalizedAdaptiveInvertedGamma.tif
 	```
 - Create `input_spec.ini` as (alignedWithMargin,NtbNormalizedAdaptiveInvertedGamma,raw). `python rescale.py input_spec.ini thumbnail -f 0.03125`
 	- Output:
@@ -201,7 +201,7 @@ Draw initial snake contours.
 	DATA_ROOTDIR/
 	└── CSHL_data_processed
 		└── STACK_prep5_thumbnail_NtbNormalizedAdaptiveInvertedGamma
-		    └── SLICE_prep5_thumbnail_NtbNormalizedAdaptiveInvertedGamma.tif
+		    └── SECTION_prep5_thumbnail_NtbNormalizedAdaptiveInvertedGamma.tif
 	```
 
 ### Brainstem crop
@@ -218,7 +218,7 @@ Draw initial snake contours.
 	DATA_ROOTDIR/
 	└── CSHL_data_processed
 		└── STACK_prep2_raw_NtbNormalizedAdaptiveInvertedGamma
-		    └── SLICE_prep2_raw_NtbNormalizedAdaptiveInvertedGamma.tif
+		    └── SECTION_prep2_raw_NtbNormalizedAdaptiveInvertedGamma.tif
 	```
 - Create `input_spec.ini` as (alignedBrainstemCrop,NtbNormalizedAdaptiveInvertedGamma,raw). `python rescale.py input_spec.ini thumbnail -f 0.03125`
 	- Output:
@@ -226,7 +226,7 @@ Draw initial snake contours.
 	DATA_ROOTDIR/
 	└── CSHL_data_processed
 		└── STACK_prep2_thumbnail_NtbNormalizedAdaptiveInvertedGamma
-		    └── SLICE_prep2_thumbnail_NtbNormalizedAdaptiveInvertedGamma.tif
+		    └── SECTION_prep2_thumbnail_NtbNormalizedAdaptiveInvertedGamma.tif
 	```
 - Use the same `input_spec.ini` as previous step. `python compress_jpeg.py input_spec.ini`
 	- Output:
@@ -234,7 +234,7 @@ Draw initial snake contours.
 	DATA_ROOTDIR/
 	└── CSHL_data_processed
 		└── STACK_prep2_raw_NtbNormalizedAdaptiveInvertedGammaJpeg
-		    └── SLICE_prep2_raw_NtbNormalizedAdaptiveInvertedGammaJpeg.jpg
+		    └── SECTION_prep2_raw_NtbNormalizedAdaptiveInvertedGammaJpeg.jpg
 	```
 
 ## Generate intensity volume
@@ -250,7 +250,7 @@ Draw initial snake contours.
 					└── STACK_wholebrainWithMargin_10.0um_intensityVolume_origin_wrt_wholebrain.txt
 	```
 
-## (Optional) Obtain a simple global alignment
+## Obtain a simple global alignment
 ---
 Description: The user inputs the center of the `12N` and `3N_R` structures. These structures are fairly far apart and are located on the sagittal centerline. An affine transformation is made on the Atlas, aligned the `12N` and `3N_R` of the Atlas to the target brain. This gives a simple, fast alignment along the centerline and is used as a basis for the structure-specific alignment in the registration step.
 
@@ -295,8 +295,8 @@ This can serve two purposes:
 		└── inception-bn-blue
 			└── STACK
 				└── STACK_prep2_none_win7
-					├── SLICE_prep2_none_win7_inception-bn-blue_features.bp
-					└── SLICE_prep2_none_win7_inception-bn-blue_locations.bp
+					├── SECTION_prep2_none_win7_inception-bn-blue_features.bp
+					└── SECTION_prep2_none_win7_inception-bn-blue_locations.bp
 	```
 
 ## Generate probability volumes
@@ -312,15 +312,15 @@ This can serve two purposes:
 	│	└── 10.0um
 	│		└── STACK
 	│			└── STACK_prep2_10.0um_detector799
-	│				└── STACK_SLICE_prep2_10.0um_detector799
-	│					└── STACK_SLICE_prep2_10.0um_detector799_STR_scoremap.bp
+	│				└── STACK_SECTION_prep2_10.0um_detector799
+	│					└── STACK_SECTION_prep2_10.0um_detector799_STR_scoremap.bp
 	└── CSHL_scoremap_Viz
 		└── 10.0um
 			└── STR
 				└── STACK
 					└── detector799
 						└── prep2
-							└── STACK_SLICE_prep2_10.0um_STR_detector799_STR_scoremapViz.jpg
+							└── STACK_SECTION_prep2_10.0um_STR_detector799_STR_scoremapViz.jpg
 	```
 	- Output:
 	```
