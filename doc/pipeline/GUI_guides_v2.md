@@ -5,7 +5,9 @@
 3) [Alignment: Step 1, Correct Automatic ALignments](#alignment-gui)
 4) [Masking: Step 1, Create Initial Masks](#initial-mask-contours)
 5) [Masking: Step 3, Correct Automatic Masks](#correct-auto-generated-masks)
-6) [Annotation GUI](#annotation-gui)
+6) [Cropping: Step 1, Brainstem Crop](#choose-brainstem-cropping-box)
+7) [Rough Global Fit: Step 1, Select Centers of 12N and 3N_R](#select-structure-centers)
+8) [Annotation GUI](#annotation-gui)
 
 # Setup GUIs:
 
@@ -87,6 +89,10 @@ Working in the bottom-left image field:
     - Push `export masks as PNG for all sections`
   - Close the GUI
     - Note: this GUI will bring up a tiny, blank window that also needs to be closed
+
+## Choose Brainstem Cropping Box
+
+## Select Structure Centers
 
 
 # Annotation GUI
