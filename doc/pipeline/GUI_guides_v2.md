@@ -98,10 +98,14 @@ Using this GUI, you need to set 6 parameters in the 6 text boxes on the footer o
 
 For the Rostral/Caudal/Dorsal/Ventral limits, simply click on the button labeled as one of these limits, and then click on the image where the limit is. For example, for the dorsal limi, I would click the button labeled "Dorsal Limit:" and then I would click any pixel just above the highest part of the brain, ensuring to not cut any tissue off of any of the sections. A line will appear showing where each limit has been placed. You can always tweak the limits by typing a new limit into the associated text box and pushing "enter" on your keyboard.
 
-For the z limits, the first/last slices with brainstem, simply navigate to the 
+For the z limits, the first/last slices with brainstem, simply navigate to the first/slice slice that contains the brainstem and click the associated button.
 
 ## Select Structure Centers
+Two dots should be displayed, a red dot and a blue dot, corresponding to the structures labeled "12N" and "3N" respectively. The GUI will automatically display an image close to the midline, you should keep close to the midline throughout using this GUI.
 
+Pick a structure to work on first, let's say 12N. Locate the two text boxes on the bottom pane of the GUI, they should be the same color and labeled "X" and "Y" where X is the horozontal coordinate and y is the vertical coordinate (y=0 is the top of the image). Type in the X and Y values for the centerpoint of 12N, push enter after each time, and the dot should move accordingly.
+
+Once the centerpoint of both 12N and 3N appear to be correct (does not have to be perfect, but should be close) push Enter and wait for the automatic scripts to finish.
 
 # Annotation GUI
 Command: `python $REPO_DIR/gui/brain_labeling_gui_v28.py $stack --prep 2 --img_version $img_version_2`
