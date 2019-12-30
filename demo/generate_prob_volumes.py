@@ -9,7 +9,7 @@ from multiprocess import Pool
 sys.path.append(os.path.join(os.environ['REPO_DIR'], 'utilities'))
 from utilities2015 import *
 from metadata import *
-from data_manager import *
+from data_manager_v2 import *
 from learning_utilities import *
 
 parser = argparse.ArgumentParser(
@@ -82,7 +82,7 @@ simple_global_bbox_fp = os.path.join(DATA_ROOTDIR, 'CSHL_simple_global_registrat
         stack + '_registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners.json')
 
 print('HARD STOP 1')
-return None
+sys.exit(1)
 
 # Try to load the XY cropping boxes for each structure, generated from Global Alignment
 try:
