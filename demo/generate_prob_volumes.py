@@ -263,8 +263,7 @@ for name_u in structure_list:
             sys.stderr.write('Scoremap generation FAILED: %s\n' % e)
             continue
 
-print('HARD STOP 1')
-sys.exit(1)
+# Takes ~2 hours to get to this point
 
 ######### Generate score volumes ##########
 print('\n\nGenerating score volumes:')
