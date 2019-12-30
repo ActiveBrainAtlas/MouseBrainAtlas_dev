@@ -189,9 +189,6 @@ for name_u in structure_list:
                 xmax, ymax = np.max(bboxes, axis=0)[[1,3]]
                 registered_atlas_structures_wrt_wholebrainXYcropped_bboxes_perSection[name_u][sec] = (xmin, xmax, ymin, ymax)
 
-print('HARD STOP 1')
-sys.exit(1)
-
 ######### Generate score maps ###########
 print('\n\nGenerating scoremaps:')
 print('____________________________________________________\n')
