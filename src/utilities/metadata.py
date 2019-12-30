@@ -63,7 +63,7 @@ if hostname == 'atlasDocker':
 
     ANNOTATION_ROOTDIR =  os.path.join(ROOT_DIR, 'CSHL_labelings_v3')
     ANNOTATION_THALAMUS_ROOTDIR = os.path.join(ROOT_DIR, 'CSHL_labelings_thalamus')
-    CLF_ROOTDIR =  os.path.join(DATA_ROOTDIR, 'CSHL_classifiers')
+    CLF_ROOTDIR =  os.path.join(DATA_ROOTDIR, 'classifiers')
 
     REGISTRATION_PARAMETERS_ROOTDIR = os.path.join(ROOT_DIR, 'CSHL_registration_parameters')
     REGISTRATION_VIZ_ROOTDIR = os.path.join(ROOT_DIR, 'CSHL_registration_visualization')

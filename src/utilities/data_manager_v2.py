@@ -2092,6 +2092,11 @@ class DataManager(object):
     def get_classifier_filepath(structure, classifier_id):
         clf_fp = os.path.join(CLF_ROOTDIR, 'setting_%(setting)s', 'classifiers', '%(structure)s_clf_setting_%(setting)d.dump') % {'structure': structure, 'setting':classifier_id}
         return clf_fp
+    
+    @staticmethod
+    def get_classifier_filepath_v2(structure, classifier_id):
+        clf_fp = os.path.join(CLF_ROOTDIR.replace('classifiers','CSHL_classifiers'), 'setting_%(setting)s', 'classifiers', '%(structure)s_clf_setting_%(setting)d.dump') % {'structure': structure, 'setting':classifier_id}
+        return clf_fp
 
     @staticmethod
     def load_classifiers(classifier_id, structures=all_known_structures):
@@ -2101,12 +2106,17 @@ class DataManager(object):
         clf_allClasses = {}
         for structure in structures:
             clf_fp = DataManager.get_classifier_filepath(structure=structure, classifier_id=classifier_id)
+            clf_fp_v2 = DataManager.get_classifier_filepath_v2(structure=structure, classifier_id=classifier_id)
             # download_from_s3(clf_fp)
+            
             if os.path.exists(clf_fp):
                 clf_allClasses[structure] = joblib.load(clf_fp)
+            elif os.path.exists(clf_fp_v2):
+                clf_allClasses[structure] = joblib.load(clf_fp_v2)
             else:
                 sys.stderr.write('Setting %d: No classifier found for %s.\n' % (classifier_id, structure))
                 sys.stderr.write('Checked the following fp: %s.\n' % (clf_fp))
+                sys.stderr.write('Checked the following fp: %s.\n' % (clf_fp_v2))
 
         return clf_allClasses
 
