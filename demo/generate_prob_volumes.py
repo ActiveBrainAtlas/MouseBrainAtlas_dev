@@ -81,9 +81,6 @@ valid_secmax = np.max(metadata_cache['valid_sections'][stack])
 simple_global_bbox_fp = os.path.join(DATA_ROOTDIR, 'CSHL_simple_global_registration',
         stack + '_registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners.json')
 
-print('HARD STOP 1')
-sys.exit(1)
-
 # Try to load the XY cropping boxes for each structure, generated from Global Alignment
 try:
     registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners = load_json( simple_global_bbox_fp )
@@ -105,6 +102,9 @@ except:
     for structure in all_structures_total:
         registered_atlas_structures_wrt_wholebrainXYcropped_xysecTwoCorners[structure] = [[0, 0, 0], [img_x_len, img_y_len, num_images]]
 
+print('HARD STOP 1')
+sys.exit(1)
+        
 ######## Identify ROI based on simple global alignment ########
 print('\n\nIdentifying ROIs based on simple global alignment:')
 print('____________________________________________________\n')
