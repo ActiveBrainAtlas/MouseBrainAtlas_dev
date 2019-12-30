@@ -263,6 +263,8 @@ for name_u in structure_list:
             sys.stderr.write('Scoremap generation FAILED: %s\n' % e)
             continue
 
+print('HARD STOP 1')
+sys.exit(1)
 
 ######### Generate score volumes ##########
 print('\n\nGenerating score volumes:')
