@@ -38,7 +38,7 @@ for img_name in os.listdir( raw_folder ):
     except:
         pass
     # Create thumbnails
-    execute_command("convert \""+input_fp+"\" -resize 4% -auto-level -normalize \
+    execute_command("convert \""+input_fp+"\" -resize 3.125% -auto-level -normalize \
                     -compress lzw \""+output_fp+"\"")
     
 ## Downsample and normalize all secondary-channel images in the "_raw_C#" folders
@@ -60,5 +60,5 @@ for channel_i in range(0,8):
         except:
             pass
         # Create thumbnails for secondary channels
-        execute_command("convert \""+input_fp+"\" -resize 4% -auto-level -normalize \
+        execute_command("convert \""+input_fp+"\" -resize 3.125% -auto-level -normalize \
                     -compress lzw \""+output_fp+"\"")
