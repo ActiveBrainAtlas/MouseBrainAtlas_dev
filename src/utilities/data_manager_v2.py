@@ -2106,6 +2106,7 @@ class DataManager(object):
                 clf_allClasses[structure] = joblib.load(clf_fp)
             else:
                 sys.stderr.write('Setting %d: No classifier found for %s.\n' % (classifier_id, structure))
+                sys.stderr.write('Checked the following fp: %s.\n' % (clf_fp))
 
         return clf_allClasses
 
