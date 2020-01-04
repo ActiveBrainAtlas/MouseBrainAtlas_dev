@@ -1,5 +1,5 @@
 ### GUI Steps (Local)
-
+1) Convert raw slides into tiff for each secion and placeholders.
 1) [Setup: Step 3, Create Sorted Filenames](#create-sorted-filenames-gui)
 2) [Setup: Step 4, Orient Images](#orient-images-gui)
 3) [Alignment: Step 1, Correct Automatic ALignments](#alignment-gui)
