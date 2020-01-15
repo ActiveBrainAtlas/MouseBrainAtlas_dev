@@ -49,6 +49,15 @@ def format_grid_button_completed( button ):
                           color: black; \
                           border-radius: 15px; \
                           font-size: 26px;}')
+    
+def patch_features_finished():
+    return False
+    
+def probability_volumes_finished():
+    return False
+    
+def registration_finished():
+    return False
 
 class init_GUI(QWidget):
     def __init__(self, parent = None):
