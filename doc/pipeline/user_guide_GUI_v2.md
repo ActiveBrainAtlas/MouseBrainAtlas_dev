@@ -2,7 +2,7 @@
 
 ## Docker setup and start
 
-[Link to Docker setup guide](../docker/README.md)
+**[Link to Docker setup guide](../docker/README.md)**
 
 Running the Docker will automatically open the GUI interface, rendering the first few steps of the "running the pipeline" section obsolete.
 
