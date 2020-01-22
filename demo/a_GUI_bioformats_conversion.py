@@ -222,32 +222,48 @@ You can choose to convert just the selected file, or all files in its folder usi
             
             czi_file_list = get_list_of_czis_in_folder( self.filepath_czi_folder )
             
+            # Iterate through every CZI file found in the input filepath. Convert 1 by 1
             for i, czi_file in enumerate(czi_file_list):
                 full_czi_fn = os.path.join( self.filepath_czi_folder, czi_file)
                 
-                print_stars()
-                print_stars()
-                print('  Extracting czi file '+str(i+1)+' out of '+str(len(czi_file_list)) )
-                print_stars()
-                print_stars()
+                # Printing statements [czi filename]
                 print('\n')
+                print_stars()
+                print('Extracting czi file '+str(i+1)+' out of '+str(len(czi_file_list)) )
+                print('CZI filename: '+full_czi_fn)
                 
                 # Retrieve metadata of the czi as a dictionary of relevant values
                 metadata_dict = get_czi_metadata( full_czi_fn )
-                # Retrieves indices of proper fullres tissue images
-                self.fullres_series_indices = get_fullres_series_indices(metadata_dict)
-                del metadata_dict
+                #print metadata_dict.keys()
+                print_stars()
+
+                # Retrieves indices of proper fullres tissue images.
+                # i.e. 0 and 4 may be true indices of the tissues, 1,2,3 and 5,6,7 may be downsampled images
+                # rather than new pieces of tissue so we make a list of the true fullres indices
+                fullres_series_indices = get_fullres_series_indices(metadata_dict)
                 
                 for ii, series_index in enumerate(self.fullres_series_indices):
-                    print_stars()
-                    print('  Extracting scene: '+str(ii+1)+' out of '+str(len(self.fullres_series_indices)) )
-                    print_stars()
-                    print('\n')
+                    # Printing statements [scene number]
+                    print('')
+                    print_dashes()
+                    print_dashes()
+                    print('    Extracting scene: '+str(ii+1)+' out of '+str(len(fullres_series_indices)) )
+                    print_dashes()
+
+                    num_channels = metadata_dict[series_index]['channels']
+
+                    # First section is section 0, next one, regardless of its official section number, is section 1
+                    iterative_section_num = fullres_series_indices.index( series_index )
+                    
                     for channel in self.channels_to_extract:
-                        print('Extracting channel: '+str(channel) )
+                        # Printing statements [channel number]
+                        print_dashes()
+                        print('      - Extracting channel: '+str(channel)+' -' )
+                        print_dashes()
                         
                         # Extract file by file, section by section, channel by channel
-                        extract_tiff_from_czi( full_czi_fn, self.tiff_destination, series_index, channel )
+                        extract_tiff_from_czi( full_czi_fn, self.tiff_destination, \
+                                              series_index, channel, fullres_series_indices, auto_rename=True )
                         
         # If we are converting ONLY 1 czi file
         else:
@@ -257,7 +273,7 @@ You can choose to convert just the selected file, or all files in its folder usi
             print_stars()
             print('\n')
             
-            # Each channel of each series takes 2min 7min 
+            # Each channel of each series takes 2min-12min 
             for series_index in self.fullres_series_indices:
                 print_stars()
                 print('Converting scene '+str(self.fullres_series_indices.index(series_index))+ \
@@ -265,8 +281,17 @@ You can choose to convert just the selected file, or all files in its folder usi
                 print_stars()
                 print('\n')
                 
+                # First section is section 0, next one, regardless of its official section number, is section 1
+                iterative_section_num = fullres_series_indices.index( series_index )
+                                
                 for channel in self.channels_to_extract:
-                    extract_tiff_from_czi( self.filepath_czi, self.tiff_destination, series_index, channel )
+                    # Printing statements [channel number]
+                    print_dashes()
+                    print('      - Extracting channel: '+str(channel)+' -' )
+                    print_dashes()
+                        
+                    extract_tiff_from_czi( self.filepath_czi, self.tiff_destination, \
+                                          series_index, channel, fullres_series_indices, auto_rename=True )
         
     def validate_selections(self):
         # Check that CZI input folder and TIFF output folder are selected

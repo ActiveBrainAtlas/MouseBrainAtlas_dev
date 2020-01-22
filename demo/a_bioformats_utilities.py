@@ -155,6 +155,9 @@ def get_list_of_czis_in_folder( folder ):
 def print_stars():
     print '********************************'
     
+def print_dashes():
+    print '--------------------------------'
+    
 def copy_extracted_tiffs_to_proper_locations( stack, tiff_target_folder, main_channel):
     # "Ancillary Channel list contains all possible channel numbers except for the main channel
     ancillary_channel_list = []
@@ -211,17 +214,59 @@ def extract_tiff_from_czi( fn_czi, tiff_target_folder, series_i, channel ):
     # The name of the tiff file
     # %t is time, %z is z height, %s is series #, %c is channel #
     #target_tiff_fn = os.path.join( tiff_target_folder, '%n_S%s_C%c_%w.tif' )
+    #target_tiff_fn = os.path.join( tiff_target_folder, '%n_C%c_%w.tif' )
     target_tiff_fn = os.path.join( tiff_target_folder, '%n_C%c_%w.tif' )
     
-    #command = ['bfconvert', '-bigtiff', '-compression', 'LZW', '-separate', 
-    #           '-series', str(series_i), '-channel', str(channel), fn_czi, target_tiff_fn]
-    
-    command = ['bfconvert', '-compression', 'LZW', '-separate', 
+    command = ['bfconvert', '-bigtiff', '-compression', 'LZW', '-separate', 
                '-series', str(series_i), '-channel', str(channel), fn_czi, target_tiff_fn]
-    
+    print('        Command: `'+' '.join(command)+'`\n')
     subprocess.call( command )
     
-    clean_up_tiff_directory( tiff_target_folder )
+    if auto_rename and fullres_series_indices>=0:
+        # We will search for a tiff file that contains partial_target_tiff_fn in its name
+        partial_target_tiff_fn = os.path.basename(target_tiff_fn)
+        partial_target_tiff_fn = partial_target_tiff_fn.replace('%n', os.path.basename(fn_czi)+' #'+str(series_i+1).zfill(2))
+        partial_target_tiff_fn = partial_target_tiff_fn.replace('%c', str(channel)).replace('%w.tif', '')
+        
+        # The name of the corresponding tiff file
+        curr_tiff_filename = get_tiff_fp_from_matching_str( tiff_target_folder, str_to_match=partial_target_tiff_fn )
+        print(curr_tiff_filename)
+        old_tif_fp = os.path.join( tiff_target_folder, curr_tiff_filename)
+        print(old_tif_fp)
+        new_tif_fp = old_tif_fp.replace( '.czi #'+str(series_i+1).zfill(2), \
+                                        '_S'+str(fullres_series_indices.index(series_i)+1).zfill(2) )
+        print( 'Converting '+old_tif_fp+' to '+new_tif_fp )
+        
+        # Read the image we just extracted
+        #img = cv2.imread( old_tif_fp )
+        from skimage.io import imread
+        img = imread( old_tif_fp )
+        
+        # If image is shaped oddly (i.e. (1,1,1,Y,X) ) run this instead
+        if len(img.shape)==5:
+            try:
+                # If Image shape is (1,1,1,Y,X) (UNKNOWN AS TO WHY IT IS THIS SHAPE)
+                if img.shape[0]==img.shape[1] and img.shape[0]==img.shape[2] and img.shape[0]==1:
+                    img = img[0,0,0,:,:]
+                    cv2.imwrite( new_tif_fp, img )
+                    del img
+                    os.remove( old_tif_fp )
+                    return
+            except Exception as e:
+                print(str(e))
+                
+        # If image is shaped properly
+        elif len(img.shape)==3:
+            try:
+                # Save the image as a gray image, takes less space
+                cv2.imwrite( new_tif_fp, img[:,:,0] )
+                del img
+                os.remove( old_tif_fp )
+            except Exception as e:
+                print(old_fn)
+                print(str(e))
+    
+    #clean_up_tiff_directory( tiff_target_folder )
     
 def clean_up_tiff_directory( tiff_target_folder ):
     # Create path if it doesn't exist
