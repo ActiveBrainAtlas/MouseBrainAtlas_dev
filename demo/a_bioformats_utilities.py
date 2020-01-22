@@ -158,6 +158,28 @@ def print_stars():
 def print_dashes():
     print '--------------------------------'
     
+def get_tiff_fp_from_matching_str( folder, str_to_match ):
+    command = ['ls', folder]
+
+    possible_tif_files = subprocess.check_output( command ).split( '\n' )
+    possible_tif_files.remove('')
+    
+    tif_files = []
+
+    for file_to_check in possible_tif_files:
+        if '.tif' not in file_to_check:
+            continue
+        else:
+            tif_files.append(file_to_check)
+            
+    
+    for tif_file in tif_files:
+        if str_to_match in tif_file:
+            #print(str_to_match)
+            #print(tif_file)
+            return tif_file
+    return None
+    
 def copy_extracted_tiffs_to_proper_locations( stack, tiff_target_folder, main_channel):
     # "Ancillary Channel list contains all possible channel numbers except for the main channel
     ancillary_channel_list = []
