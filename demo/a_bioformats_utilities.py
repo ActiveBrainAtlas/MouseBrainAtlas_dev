@@ -290,7 +290,18 @@ def extract_tiff_from_czi( fn_czi, tiff_target_folder, series_i, channel, fullre
         #img = cv2.imread( old_tif_fp )
         
         from skimage.io import imread
-        img = imread( old_tif_fp )
+        try:
+            print('- Loading image using skimage.io.imread -')
+            img = imread( old_tif_fp )
+        except Exception as e:
+            print(str(e))
+            try:
+                print('- Loading image using cv2.imread -')
+                cv2.imread( old_tif_fp )
+            except Exception as e:
+                print(str(e))
+                print('Aborting the loading/renaming process')
+                return
         
         # If image is shaped properly
         if len(img.shape)==3:
