@@ -382,6 +382,14 @@ You can choose to convert just the selected file, or all files in its folder usi
             print_stars()
             print('\n')
             
+            # Retrieve metadata of the czi as a dictionary of relevant values
+            metadata_dict = get_czi_metadata( full_czi_fn )
+            
+            # Retrieves indices of proper fullres tissue images.
+            # i.e. 0 and 4 may be true indices of the tissues, 1,2,3 and 5,6,7 may be downsampled images
+            # rather than new pieces of tissue so we make a list of the true fullres indices
+            fullres_series_indices = get_fullres_series_indices(metadata_dict)
+            
             # Each channel of each series takes 2min 7min 
             for series_index in self.fullres_series_indices:
                 print_stars()
