@@ -8,6 +8,7 @@ import cv2
 sys.path.append(os.path.join(os.environ['REPO_DIR'], 'utilities'))
 from data_manager_v2 import DataManager
 
+os.environ['OPENCV_IO_MAX_IMAGE_PIXELS']=str(2**64)
 
 def get_czi_metadata( czi_fp, get_full_metadata=False ):
     command = ['showinf', '-nopix', czi_fp ]
