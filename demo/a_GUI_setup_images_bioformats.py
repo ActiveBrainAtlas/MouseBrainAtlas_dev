@@ -383,7 +383,7 @@ You can choose to convert just the selected file, or all files in its folder usi
             print('\n')
             
             # Retrieve metadata of the czi as a dictionary of relevant values
-            metadata_dict = get_czi_metadata( full_czi_fn )
+            metadata_dict = get_czi_metadata( self.filepath_czi )
             
             # Retrieves indices of proper fullres tissue images.
             # i.e. 0 and 4 may be true indices of the tissues, 1,2,3 and 5,6,7 may be downsampled images
