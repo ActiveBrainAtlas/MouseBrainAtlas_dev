@@ -250,8 +250,6 @@ You can choose to convert just the selected file, or all files in its folder usi
                     print('    Extracting scene: '+str(ii+1)+' out of '+str(len(fullres_series_indices)) )
                     print_dashes()
 
-                    num_channels = metadata_dict[series_index]['channels']
-
                     # First section is section 0, next one, regardless of its official section number, is section 1
                     iterative_section_num = fullres_series_indices.index( series_index )
                     
@@ -290,6 +288,7 @@ You can choose to convert just the selected file, or all files in its folder usi
                     print('      - Extracting channel: '+str(channel)+' -' )
                     print_dashes()
                         
+                    # Extract section by section, channel by channel
                     extract_tiff_from_czi( self.filepath_czi, self.tiff_destination, \
                                           series_index, channel, fullres_series_indices, auto_rename=True )
         
