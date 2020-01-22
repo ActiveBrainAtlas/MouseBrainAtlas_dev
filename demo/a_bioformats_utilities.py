@@ -297,7 +297,7 @@ def extract_tiff_from_czi( fn_czi, tiff_target_folder, series_i, channel, fullre
             print(str(e))
             try:
                 print('- Loading image using cv2.imread -')
-                cv2.imread( old_tif_fp )
+                img = cv2.imread( old_tif_fp )
             except Exception as e:
                 print(str(e))
                 print('Aborting the loading/renaming process')
