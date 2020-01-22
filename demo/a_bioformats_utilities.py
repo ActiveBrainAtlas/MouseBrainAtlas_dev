@@ -259,7 +259,14 @@ def extract_tiff_from_czi( fn_czi, tiff_target_folder, series_i, channel, fullre
         print('_____*')
         
         # The name of the corresponding tiff file
-        curr_tiff_filename = get_tiff_fp_from_matching_str( tiff_target_folder, str_to_match=partial_target_tiff_fn )
+        try:
+            curr_tiff_filename = get_tiff_fp_from_matching_str( tiff_target_folder, str_to_match=partial_target_tiff_fn )
+        except:
+            # Same operation as above on failure, except we pad the section number ( using zfill(2) )
+            # We will search for a tiff file that contains partial_target_tiff_fn in its name
+            partial_target_tiff_fn = os.path.basename(target_tiff_fn)
+            partial_target_tiff_fn = partial_target_tiff_fn.replace('%n', os.path.basename(fn_czi)+' #'+str(series_i+1).zfill(2))
+            partial_target_tiff_fn = partial_target_tiff_fn.replace('%c', str(channel)).replace('%w.tif', '')
         print(curr_tiff_filename)
         old_tif_fp = os.path.join( tiff_target_folder, curr_tiff_filename)
         print(old_tif_fp)
