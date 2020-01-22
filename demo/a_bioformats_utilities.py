@@ -249,7 +249,8 @@ def extract_tiff_from_czi( fn_czi, tiff_target_folder, series_i, channel, fullre
     if auto_rename and fullres_series_indices>=0:
         # We will search for a tiff file that contains partial_target_tiff_fn in its name
         partial_target_tiff_fn = os.path.basename(target_tiff_fn)
-        partial_target_tiff_fn = partial_target_tiff_fn.replace('%n', os.path.basename(fn_czi)+' #'+str(series_i+1).zfill(2))
+        #partial_target_tiff_fn = partial_target_tiff_fn.replace('%n', os.path.basename(fn_czi)+' #'+str(series_i+1).zfill(2))
+        partial_target_tiff_fn = partial_target_tiff_fn.replace('%n', os.path.basename(fn_czi)+' #'+str(series_i+1) )
         partial_target_tiff_fn = partial_target_tiff_fn.replace('%c', str(channel)).replace('%w.tif', '')
         
         print('_____*')
