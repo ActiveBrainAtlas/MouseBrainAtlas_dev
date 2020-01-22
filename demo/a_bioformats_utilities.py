@@ -253,9 +253,15 @@ def extract_tiff_from_czi( fn_czi, tiff_target_folder, series_i, channel, fullre
         #partial_target_tiff_fn = partial_target_tiff_fn.replace('%n', os.path.basename(fn_czi)+' #'+str(series_i+1).zfill(2))
         partial_target_tiff_fn = partial_target_tiff_fn.replace('%n', os.path.basename(fn_czi)+' #'+str(series_i+1) )
         partial_target_tiff_fn = partial_target_tiff_fn.replace('%c', str(channel)).replace('%w.tif', '')
+        section_num_padded_zeros = False
         
         # The name of the corresponding tiff file
         curr_tiff_filename = get_tiff_fp_from_matching_str( tiff_target_folder, str_to_match=partial_target_tiff_fn )
+        
+        print('---*')
+        print(curr_tiff_filename)
+        print(partial_target_tiff_fn)
+        print('---*')
         
         if curr_tiff_filename==None:
             # Same operation as above on failure, except we pad the section number ( using zfill(2) )
@@ -265,12 +271,17 @@ def extract_tiff_from_czi( fn_czi, tiff_target_folder, series_i, channel, fullre
             partial_target_tiff_fn = partial_target_tiff_fn.replace('%c', str(channel)).replace('%w.tif', '')
             # The name of the corresponding tiff file
             curr_tiff_filename = get_tiff_fp_from_matching_str( tiff_target_folder, str_to_match=partial_target_tiff_fn )
+            section_num_padded_zeros = True
             
         print(curr_tiff_filename)
         old_tif_fp = os.path.join( tiff_target_folder, curr_tiff_filename)
         print(old_tif_fp)
-        new_tif_fp = old_tif_fp.replace( '.czi #'+str(series_i+1).zfill(2), \
-                                        '_S'+str(fullres_series_indices.index(series_i)+1).zfill(2) )
+        if section_num_padded_zeros:
+            new_tif_fp = old_tif_fp.replace( '.czi #'+str(series_i+1).zfill(2), \
+                                            '_S'+str(fullres_series_indices.index(series_i)+1).zfill(2) )
+        if not section_num_padded_zeros:
+            new_tif_fp = old_tif_fp.replace( '.czi #'+str(series_i+1), \
+                                            '_S'+str(fullres_series_indices.index(series_i)+1).zfill(2) )
         print( 'Converting '+old_tif_fp+' to '+new_tif_fp )
         
         # Read the image we just extracted
@@ -278,8 +289,19 @@ def extract_tiff_from_czi( fn_czi, tiff_target_folder, series_i, channel, fullre
         #from skimage.io import imread
         img = cv2.imread( old_tif_fp )
         
+        # If image is shaped properly
+        if len(img.shape)==3:
+            try:
+                # Save the image as a gray image, takes less space
+                cv2.imwrite( new_tif_fp, img[:,:,0] )
+                del img
+                os.remove( old_tif_fp )
+            except Exception as e:
+                print(old_fn)
+                print(str(e))
+        
         # If image is shaped oddly (i.e. (1,1,1,Y,X) ) run this instead
-        if len(img.shape)==5:
+        elif len(img.shape)==5:
             try:
                 # If Image shape is (1,1,1,Y,X) (UNKNOWN AS TO WHY IT IS THIS SHAPE)
                 if img.shape[0]==img.shape[1] and img.shape[0]==img.shape[2] and img.shape[0]==1:
@@ -291,17 +313,6 @@ def extract_tiff_from_czi( fn_czi, tiff_target_folder, series_i, channel, fullre
             except Exception as e:
                 print(str(e))
                 
-        # If image is shaped properly
-        elif len(img.shape)==3:
-            try:
-                # Save the image as a gray image, takes less space
-                cv2.imwrite( new_tif_fp, img[:,:,0] )
-                del img
-                os.remove( old_tif_fp )
-            except Exception as e:
-                print(old_fn)
-                print(str(e))
-    
     #clean_up_tiff_directory( tiff_target_folder )
     
 def clean_up_tiff_directory( tiff_target_folder ):

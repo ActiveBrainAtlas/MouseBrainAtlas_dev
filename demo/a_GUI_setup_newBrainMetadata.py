@@ -207,6 +207,9 @@ class init_GUI(QWidget):
         self.setLayout( self.supergrid )
         self.setWindowTitle("Setup new brain metadata")
         
+        # Center the GUI
+        self.center()
+        
         #########################################################
         #self.buttonPressSubmit(self.b1)
         #########################################################
@@ -310,6 +313,16 @@ class init_GUI(QWidget):
                                       entered_stack, entered_input_filetype] )
                     
                 sys.exit( app.exec_() )
+                
+    def center(self):
+        """
+        This function simply aligns the GUI to the center of your monitor.
+        """
+        frameGm = self.frameGeometry()
+        screen = QApplication.desktop().screenNumber( QApplication.desktop().cursor().pos())
+        centerPoint = QApplication.desktop().screenGeometry(screen).center()
+        frameGm.moveCenter(centerPoint)
+        self.move(frameGm.topLeft())
                 
     def closeEvent(self, event):
         sys.exit( app.exec_() )

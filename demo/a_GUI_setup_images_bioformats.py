@@ -184,6 +184,9 @@ You can choose to convert just the selected file, or all files in its folder usi
         self.setLayout( self.supergrid )
         self.setWindowTitle("Extract tiffs using bioformats tools")
         
+        # Center the GUI
+        self.center()
+        
     def display_grid_body_lower(self):
         # Add left column checkboxes
         self.grid_body_lower.addWidget(self.cb_c_all, 0, 0)
@@ -432,6 +435,16 @@ You can choose to convert just the selected file, or all files in its folder usi
         assert len(self.channels_to_extract) > 0
                     
         return True
+    
+    def center(self):
+        """
+        This function simply aligns the GUI to the center of your monitor.
+        """
+        frameGm = self.frameGeometry()
+        screen = QApplication.desktop().screenNumber( QApplication.desktop().cursor().pos())
+        centerPoint = QApplication.desktop().screenGeometry(screen).center()
+        frameGm.moveCenter(centerPoint)
+        self.move(frameGm.topLeft())
     
     def closeEvent(self, event):
         #close_main_gui( ex )
