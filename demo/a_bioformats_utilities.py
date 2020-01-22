@@ -252,6 +252,11 @@ def extract_tiff_from_czi( fn_czi, tiff_target_folder, series_i, channel, fullre
         partial_target_tiff_fn = partial_target_tiff_fn.replace('%n', os.path.basename(fn_czi)+' #'+str(series_i+1).zfill(2))
         partial_target_tiff_fn = partial_target_tiff_fn.replace('%c', str(channel)).replace('%w.tif', '')
         
+        print('_____*')
+        print(tiff_target_folder)
+        print(partial_target_tiff_fn)
+        print('_____*')
+        
         # The name of the corresponding tiff file
         curr_tiff_filename = get_tiff_fp_from_matching_str( tiff_target_folder, str_to_match=partial_target_tiff_fn )
         print(curr_tiff_filename)
