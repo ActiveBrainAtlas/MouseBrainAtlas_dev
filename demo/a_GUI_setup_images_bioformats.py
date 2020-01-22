@@ -302,6 +302,8 @@ You can choose to convert just the selected file, or all files in its folder usi
             subprocess.call(['cp', fp, destination_fp])
             #set_step_completed_in_progress_ini( stack, '1-4_setup_sorted_filenames')
             
+            self.b2.setStyleSheet('QPushButton {background-color: #cacaca; color: black;}')
+            
             
         # Button: "Convert CZI File(s) to TIFF"
         if button == self.b3:
@@ -317,6 +319,7 @@ You can choose to convert just the selected file, or all files in its folder usi
                 print('===================================================================')
                 print 'Seconds taken to convert to TIFF: '+str(time.time()-t)
                 print('===================================================================')
+                sys.exit( app.exec_() )
             
     def convertFiles(self):
         
@@ -369,7 +372,7 @@ You can choose to convert just the selected file, or all files in its folder usi
                         
                         # Extract file by file, section by section, channel by channel
                         extract_tiff_from_czi( full_czi_fn, self.tiff_destination, \
-                                              series_index, channel, fullres_series_indices, auto_rename=True )
+                                              series_index, channel, fullres_series_indices, auto_rename=False )
                         #if ii==0 and channel==0:
                         #    extract_tiff_from_czi( full_czi_fn, self.tiff_destination, series_index, channel )
                         
@@ -412,7 +415,7 @@ You can choose to convert just the selected file, or all files in its folder usi
                     
                     # Extract section by section, channel by channel
                     extract_tiff_from_czi( self.filepath_czi, self.tiff_destination, \
-                                          series_index, channel, fullres_series_indices, auto_rename=True )
+                                          series_index, channel, fullres_series_indices, auto_rename=False )
         
     def validate_selections(self):
         # Check that CZI input folder and TIFF output folder are selected

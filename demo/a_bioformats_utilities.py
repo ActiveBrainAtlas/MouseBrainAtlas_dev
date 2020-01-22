@@ -233,7 +233,7 @@ def extract_tiff_from_czi_all_channels( fn_czi, tiff_target_folder, series_i ):
     subprocess.call( command )
 
 
-def extract_tiff_from_czi( fn_czi, tiff_target_folder, series_i, channel, fullres_series_indices=-1, auto_rename=True ):
+def extract_tiff_from_czi( fn_czi, tiff_target_folder, series_i, channel, fullres_series_indices=-1, auto_rename=False ):
     # The name of the tiff file
     # %t is time, %z is z height, %s is series #, %c is channel #
     #target_tiff_fn = os.path.join( tiff_target_folder, '%n_S%s_C%c_%w.tif' )
@@ -257,11 +257,6 @@ def extract_tiff_from_czi( fn_czi, tiff_target_folder, series_i, channel, fullre
         
         # The name of the corresponding tiff file
         curr_tiff_filename = get_tiff_fp_from_matching_str( tiff_target_folder, str_to_match=partial_target_tiff_fn )
-        
-        print('---*')
-        print(curr_tiff_filename)
-        print(partial_target_tiff_fn)
-        print('---*')
         
         if curr_tiff_filename==None:
             # Same operation as above on failure, except we pad the section number ( using zfill(2) )
