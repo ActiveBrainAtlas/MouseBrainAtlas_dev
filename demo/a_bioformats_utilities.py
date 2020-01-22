@@ -259,10 +259,9 @@ def extract_tiff_from_czi( fn_czi, tiff_target_folder, series_i, channel, fullre
         print('_____*')
         
         # The name of the corresponding tiff file
-        try:
-            curr_tiff_filename = get_tiff_fp_from_matching_str( tiff_target_folder, str_to_match=partial_target_tiff_fn )
-        except Exception as e:
-            print('\n'+str(e)+'\n\n')
+        curr_tiff_filename = get_tiff_fp_from_matching_str( tiff_target_folder, str_to_match=partial_target_tiff_fn )
+        if curr_tiff_filename==None:
+            #print('\n'+str(e)+'\n\n')
             # Same operation as above on failure, except we pad the section number ( using zfill(2) )
             # We will search for a tiff file that contains partial_target_tiff_fn in its name
             partial_target_tiff_fn = os.path.basename(target_tiff_fn)
