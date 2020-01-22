@@ -222,6 +222,8 @@ def extract_tiff_from_czi( fn_czi, tiff_target_folder, series_i, channel, fullre
     print('        Command: `'+' '.join(command)+'`\n')
     subprocess.call( command )
     
+    print(fullres_series_indices)
+    
     if auto_rename and fullres_series_indices>=0:
         # We will search for a tiff file that contains partial_target_tiff_fn in its name
         partial_target_tiff_fn = os.path.basename(target_tiff_fn)
