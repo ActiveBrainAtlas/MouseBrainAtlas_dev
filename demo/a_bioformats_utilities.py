@@ -287,7 +287,10 @@ def extract_tiff_from_czi( fn_czi, tiff_target_folder, series_i, channel, fullre
         # Read the image we just extracted
         #img = cv2.imread( old_tif_fp )
         #from skimage.io import imread
-        img = cv2.imread( old_tif_fp )
+        #img = cv2.imread( old_tif_fp )
+        
+        from skimage.io import imread
+        img = imread( old_tif_fp )
         
         # If image is shaped properly
         if len(img.shape)==3:
