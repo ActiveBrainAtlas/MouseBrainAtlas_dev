@@ -362,7 +362,10 @@ You can choose to convert just the selected file, or all files in its folder usi
                     print_dashes()
                     
                     # First section is section 0, next one, regardless of its official section number, is section 1
-                    iterative_section_num = fullres_series_indices.index( series_index )
+                    try:
+                        iterative_section_num = fullres_series_indices.index( series_index )
+                    except:
+                        pass
                     
                     for channel in self.channels_to_extract:
                         # Printing statements [channel number]
@@ -405,7 +408,10 @@ You can choose to convert just the selected file, or all files in its folder usi
                 print('\n')
                 
                 # First section is section 0, next one, regardless of its official section number, is section 1
-                iterative_section_num = fullres_series_indices.index( series_index )
+                try:
+                    iterative_section_num = fullres_series_indices.index( series_index )
+                except:
+                    pass
                 
                 for channel in self.channels_to_extract:
                     # Printing statements [channel number]
