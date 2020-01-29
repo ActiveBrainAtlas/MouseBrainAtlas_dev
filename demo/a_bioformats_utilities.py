@@ -14,7 +14,7 @@ def get_czi_metadata( czi_fp, get_full_metadata=False ):
     command = ['showinf', '-nopix', czi_fp ]
     print czi_fp
     # "showinf -nopix" will return the metadata of a CZI file
-    czi_metadata_full = subprocess.check_output( command ).decode("utf-8")
+    czi_metadata_full = subprocess.check_output( command )
     
     if get_full_metadata:
         return czi_metadata_full
@@ -230,7 +230,7 @@ def extract_tiff_from_czi_all_channels( fn_czi, tiff_target_folder, series_i ):
     command = ['bfconvert', '-bigtiff', '-compression', 'LZW', '-separate', 
                '-series', str(series_i), fn_czi, target_tiff_fn]
     
-    subprocess.call( command, shell=True )
+    subprocess.call( command )
 
 
 def extract_tiff_from_czi( fn_czi, tiff_target_folder, series_i, channel, fullres_series_indices=-1, auto_rename=False ):
@@ -243,7 +243,7 @@ def extract_tiff_from_czi( fn_czi, tiff_target_folder, series_i, channel, fullre
     command = ['bfconvert', '-bigtiff', '-compression', 'LZW', '-separate', 
                '-series', str(series_i), '-channel', str(channel), fn_czi, target_tiff_fn]
     print('        Command: `'+' '.join(command)+'`\n')
-    subprocess.call( command, shell=True )
+    subprocess.call( command )
     
     #print(fullres_series_indices)
     
