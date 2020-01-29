@@ -14,7 +14,7 @@ def get_czi_metadata( czi_fp, get_full_metadata=False ):
     command = ['showinf', '-nopix', czi_fp ]
     print czi_fp
     # "showinf -nopix" will return the metadata of a CZI file
-    czi_metadata_full = subprocess.check_output( command )
+    czi_metadata_full = subprocess.check_output( command ).decode("utf-8")
     
     if get_full_metadata:
         return czi_metadata_full
