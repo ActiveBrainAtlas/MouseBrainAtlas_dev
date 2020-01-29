@@ -230,7 +230,7 @@ def extract_tiff_from_czi_all_channels( fn_czi, tiff_target_folder, series_i ):
     command = ['bfconvert', '-bigtiff', '-compression', 'LZW', '-separate', 
                '-series', str(series_i), fn_czi, target_tiff_fn]
     
-    subprocess.call( command )
+    subprocess.call( command, shell=True )
 
 
 def extract_tiff_from_czi( fn_czi, tiff_target_folder, series_i, channel, fullres_series_indices=-1, auto_rename=False ):
@@ -243,9 +243,9 @@ def extract_tiff_from_czi( fn_czi, tiff_target_folder, series_i, channel, fullre
     command = ['bfconvert', '-bigtiff', '-compression', 'LZW', '-separate', 
                '-series', str(series_i), '-channel', str(channel), fn_czi, target_tiff_fn]
     print('        Command: `'+' '.join(command)+'`\n')
-    subprocess.call( command )
+    subprocess.call( command, shell=True )
     
-    print(fullres_series_indices)
+    #print(fullres_series_indices)
     
     if auto_rename and fullres_series_indices>=0:
         # We will search for a tiff file that contains partial_target_tiff_fn in its name
