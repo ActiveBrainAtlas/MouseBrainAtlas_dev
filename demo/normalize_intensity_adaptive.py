@@ -41,6 +41,7 @@ for image_name in image_name_list2:
         print('SKIPPING THE FOLLOWING FILE: '+image_name)
         #image_name_list.remove(image_name)
     else:
+        print(image_name)
         image_name_list.append(image_name)
 ###################################################################################
 
