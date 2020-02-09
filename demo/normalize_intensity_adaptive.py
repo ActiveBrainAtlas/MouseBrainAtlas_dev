@@ -32,14 +32,16 @@ if version == 'None':
 
 image_name_list = input_spec['image_name_list']
 if image_name_list == 'all':
-    image_name_list = DataManager.load_sorted_filenames(stack=stack)[0].keys()
+    image_name_list2 = DataManager.load_sorted_filenames(stack=stack)[0].keys()
 
 ###################################################################################
-image_name_list_copy = image_name_list.copy()
-for image_name in image_name_list_copy:
+image_name_list = []
+for image_name in image_name_list2:
     if os.path.exists('/data2/DK39_test/CSHL_data_processed/DK39/DK39_intensity_normalization_results/floatHistogram/'+image_name+'_raw_floatHistogram.png'):
         print('SKIPPING THE FOLLOWING FILE: '+image_name)
-        image_name_list.remove(image_name)
+        #image_name_list.remove(image_name)
+    else:
+        image_name_list.append(image_name)
 ###################################################################################
 
 from scipy.ndimage.interpolation import map_coordinates
