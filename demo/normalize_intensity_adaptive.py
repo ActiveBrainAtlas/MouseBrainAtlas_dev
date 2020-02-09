@@ -42,6 +42,7 @@ for image_name in image_name_list2:
         #image_name_list.remove(image_name)
     else:
         print(image_name)
+        print('Cant find: /data2/DK39_test/CSHL_data_processed/DK39/DK39_intensity_normalization_results/floatHistogram/DK39_'+image_name+'_raw_floatHistogram.png')
         image_name_list.append(image_name)
 ###################################################################################
 
