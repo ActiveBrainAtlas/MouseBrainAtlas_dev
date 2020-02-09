@@ -37,7 +37,7 @@ if image_name_list == 'all':
 ###################################################################################
 image_name_list = []
 for image_name in image_name_list2:
-    if os.path.exists('/data2/DK39_test/CSHL_data_processed/DK39/DK39_intensity_normalization_results/floatHistogram/'+image_name+'_raw_floatHistogram.png'):
+    if os.path.exists('/data2/DK39_test/CSHL_data_processed/DK39/DK39_intensity_normalization_results/floatHistogram/DK39_'+image_name+'_raw_floatHistogram.png'):
         print('SKIPPING THE FOLLOWING FILE: '+image_name)
         #image_name_list.remove(image_name)
     else:
