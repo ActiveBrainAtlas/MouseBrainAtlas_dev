@@ -1,8 +1,10 @@
 #!/bin/bash
 
 # User should change the PROJECT_DIR and ROOT_DIR as specified on the Github page
+#export PROJECT_DIR=/home/adnewber/brainDev
+#export ROOT_DIR=/data2/Atlas_Root_Dirs/Beta_Testing/
 export PROJECT_DIR=/home/adnewber/brainDev
-export ROOT_DIR=/data2/Atlas_Root_Dirs/Beta_Testing/
+export ROOT_DIR=/nfs/birdstore/Active_Atlas_Data/copied_local_folders/BethTest/
 #export ROOT_DIR=/data2/BethTest/
 # export ROOT_DIR=/media/alexn/BstemAtlasDataBackup/ucsd_brain/
 # export ROOT_DIR=/media/alexn/Data_2/Atlas_Root_Dirs/Beta_Testing/

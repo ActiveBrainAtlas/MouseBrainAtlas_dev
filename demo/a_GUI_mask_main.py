@@ -224,7 +224,7 @@ class init_GUI(QWidget):
             try:
                 QMessageBox.about(self, "Popup Message", "This operation is expected to take at least 12 hours.")
                 # Run script 4
-                subprocess.call(['python','a_script_preprocess_4.py', self.stack, self.stain])
+             #   subprocess.call(['python','a_script_preprocess_4.py', self.stack, self.stain])
                 # Run script 5 (automatically finds the bounds first)
                 rostral_lim, caudal_lim, dorsal_lim, ventral_lim = get_prep5_limits_from_prep1_thumbnail_masks(self.stack)
                 command = ['python', 'a_script_preprocess_5.py', self.stack, self.stain, '-l', 
