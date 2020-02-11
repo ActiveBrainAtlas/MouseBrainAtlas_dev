@@ -54,7 +54,7 @@ from skimage.transform import rotate
 # for section in metadata_cache['valid_sections'][stack]:
 
 for image_name in image_name_list:
-
+    break
 #     print "Section", section
     
     t = time.time()
