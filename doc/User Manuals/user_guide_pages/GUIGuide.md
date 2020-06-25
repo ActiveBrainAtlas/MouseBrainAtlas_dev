@@ -14,6 +14,6 @@ Click "Save contours". All contours currently loaded are saved into the file `AN
 
 Results are at `<stack>_annotation_structuresHanddrawn_<timestamp>.hdf`
 
-Also see [explanation of annotation file](FileOrganization.md)
+Also see [explanation of annotation file](DataDescription.md#annotation)
 
 ## Method 2: Manual adjustment of pre-built atlas structures.
