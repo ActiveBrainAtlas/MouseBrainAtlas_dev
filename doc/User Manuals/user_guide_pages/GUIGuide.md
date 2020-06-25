@@ -12,7 +12,7 @@ Click "Save contours". All contours currently loaded are saved into `ANNOTATION_
 
 ### Saving 3-D structures
 
-3-D structures are saved at `<stack>_annotation_structuresHanddrawn_<timestamp>.hdf`
+3-D structures are saved at `ANNOTATION_DIR/<stack>/<stack>_annotation_structuresHanddrawn_<timestamp>.hdf`
 
 Also see [explanation of annotation file](DataDescription.md#annotation)
 
