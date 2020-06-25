@@ -2,7 +2,7 @@
 
 There are two ways to place annotation on images.
 
-## Method 1: Manually draw contours and reconstruct 3-D structure from them.
+## Method 1: Draw contours on images and reconstruct 3-D structure from contours.
 
 Create or edit contours. For complete instructions on how to interact with GUI, see [User Interface README](gui/README.md).
 
